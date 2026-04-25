@@ -19,7 +19,8 @@
   body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:420px;margin:0 auto;transition:background .3s,color .3s}
 
   .header{position:sticky;top:0;z-index:50;background:rgba(8,11,18,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:16px 20px}
-  body.light .header{background:rgba(255,255,255,.96)}
+  body.light .bottom-nav { background: rgba(255,255,255,.97); }
+  body.light .header { background: rgba(255,255,255,.96); }
   .page-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800}
   .page-title span{color:var(--accent)}
 
@@ -101,6 +102,12 @@
 </style>
 </head>
 <body>
+<script>
+(function(){
+  var cfg = JSON.parse(localStorage.getItem('streamdesk_config') || '{}');
+  if (cfg.darkMode === false) document.body.classList.add('light');
+})();
+</script>
 
 <div class="saved-toast" id="toast">✓ Salvo!</div>
 
