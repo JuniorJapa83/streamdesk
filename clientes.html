@@ -524,10 +524,20 @@ function deleteClient(id){
   if(confirm('Tem certeza que deseja remover este cliente?')){ clientes=clientes.filter(c=>c.id!=id); if(openCardId===id) openCardId=null; saveClientes(); render(); }
 }
 function sendWA(id){
-  const c=clientes.find(c=>c.id==id), s=getStatus(c.vencimento);
-  const msg=s==='vencido'?`Olá ${c.nome.split(' ')[0]}! 👋 Seu plano IPTV (${c.plataforma}) venceu em ${formatDate(c.vencimento)}. Entre em contato para renovar! 🙏`:s==='hoje'?`Olá ${c.nome.split(' ')[0]}! 👋 Seu plano IPTV (${c.plataforma}) vence HOJE. Renove para não ficar sem sinal! 📺`:`Olá ${c.nome.split(' ')[0]}! 👋 Lembrando que seu plano IPTV (${c.plataforma}) vence em ${formatDate(c.vencimento)}. Qualquer dúvida, estou à disposição!`;
-  const phone=c.contato?c.contato.replace(/\D/g,''):'';
-  window.open(phone?`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`:`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank');
+  const c = clientes.find(c=>c.id==id);
+  const s = getStatus(c.vencimento);
+  const cfg = JSON.parse(localStorage.getItem('streamdesk_config') || '{}');
+  const nome = c.nome.split(' ')[0];
+
+  const tplHoje   = cfg.msgHoje    || 'Olá {nome}! 👋 Seu plano IPTV ({servidor}) vence HOJE. Renove para não ficar sem sinal! 📺';
+  const tplAmanha = cfg.msgAmanha  || 'Olá {nome}! 👋 Lembrando que seu plano IPTV ({servidor}) vence amanhã. Renove com antecedência! 😊';
+  const tplVenc   = cfg.msgVencido || 'Olá {nome}! 👋 Seu plano IPTV ({servidor}) está vencido. Entre em contato para renovar! 🙏';
+
+  let tpl = s==='vencido' ? tplVenc : s==='hoje' ? tplHoje : tplAmanha;
+  const msg = tpl.replace(/{nome}/g, nome).replace(/{servidor}/g, c.plataforma);
+
+  const phone = c.contato ? c.contato.replace(/\D/g,'') : '';
+  window.open(phone ? `https://wa.me/${phone}?text=${encodeURIComponent(msg)}` : `https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
 }
 
 function openRenew(id){

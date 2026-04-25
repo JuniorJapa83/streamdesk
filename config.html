@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>StreamDesk — Configurações</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#080b12;--surface:#0e1220;--card:#131825;--card2:#161c2c;
+    --border:#1c2236;--accent:#00d4ff;--red:#ff3b5c;--green:#00e096;
+    --yellow:#ffbb00;--purple:#a78bfa;--text:#e4e8f4;--muted:#5a6480;--radius:16px;
+  }
+  body.light {
+    --bg:#f0f4f8;--surface:#ffffff;--card:#ffffff;--card2:#f7f9fc;
+    --border:#e2e8f0;--text:#1a202c;--muted:#718096;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:420px;margin:0 auto;transition:background .3s,color .3s}
+
+  .header{position:sticky;top:0;z-index:50;background:rgba(8,11,18,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:16px 20px}
+  body.light .header{background:rgba(255,255,255,.96)}
+  .page-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800}
+  .page-title span{color:var(--accent)}
+
+  .content{padding:16px 20px 110px;display:flex;flex-direction:column;gap:6px}
+
+  /* SECTION */
+  .sec-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin:16px 0 8px 4px;display:flex;align-items:center;gap:8px}
+  .sec-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+  /* GROUP */
+  .group{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+  .row{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border)}
+  .row:last-child{border-bottom:none}
+  .row-icon{font-size:20px;flex-shrink:0;width:32px;text-align:center}
+  .row-body{flex:1;min-width:0}
+  .row-label{font-size:14px;font-weight:500}
+  .row-sub{font-size:12px;color:var(--muted);margin-top:2px}
+  .row-right{flex-shrink:0;display:flex;align-items:center;gap:8px}
+  .row-val{font-size:13px;color:var(--muted)}
+  .row-arrow{color:var(--muted);font-size:16px}
+
+  /* INPUT INLINE */
+  .row-input{width:100%;background:none;border:none;outline:none;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;font-weight:500}
+  .row-input::placeholder{color:var(--muted)}
+
+  /* TOGGLE */
+  .tog{width:44px;height:24px;border-radius:50px;position:relative;border:1px solid var(--border);background:var(--card2);transition:background .3s,border-color .3s;cursor:pointer;flex-shrink:0}
+  .tog.on{background:rgba(0,224,150,.15);border-color:var(--green)}
+  .tog-thumb{position:absolute;top:4px;left:4px;width:14px;height:14px;border-radius:50%;background:var(--muted);transition:left .3s,background .3s}
+  .tog.on .tog-thumb{left:24px;background:var(--green)}
+
+  /* BUTTONS */
+  .btn-row{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;border-bottom:1px solid var(--border);transition:background .2s}
+  .btn-row:last-child{border-bottom:none}
+  .btn-row:active{background:var(--card2)}
+  .btn-accent{color:var(--accent)}
+  .btn-red{color:var(--red)}
+  .btn-green{color:var(--green)}
+  .btn-yellow{color:var(--yellow)}
+
+  /* SAVE INDICATOR */
+  .saved-toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);background:rgba(0,224,150,.15);border:1px solid var(--green);color:var(--green);border-radius:50px;padding:8px 20px;font-size:13px;font-weight:600;opacity:0;transition:opacity .3s;pointer-events:none;z-index:100}
+  .saved-toast.show{opacity:1}
+
+  /* TEXTAREA */
+  .msg-area{width:100%;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;resize:none;outline:none;min-height:80px;line-height:1.5;transition:border .2s;margin-top:8px}
+  .msg-area:focus{border-color:var(--accent)}
+  .msg-hint{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.4}
+
+  /* SUPPORT MODAL */
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:200;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .3s}
+  .overlay.open{opacity:1;pointer-events:all}
+  .modal{background:var(--surface);border-radius:24px 24px 0 0;padding:24px 20px 40px;width:100%;max-height:88vh;overflow-y:auto;transform:translateY(100%);transition:transform .35s cubic-bezier(.32,.72,0,1);border-top:1px solid var(--border)}
+  .overlay.open .modal{transform:translateY(0)}
+  .mhandle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 20px}
+  .mtitle{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:6px}
+  .msub{font-size:13px;color:var(--muted);margin-bottom:20px}
+  .fg{margin-bottom:14px}
+  .fl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;display:block}
+  .fi{width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border .2s;appearance:none}
+  .fi:focus{border-color:var(--accent)}
+  .fi-area{min-height:100px;resize:none;line-height:1.5}
+  .btn-save{width:100%;background:var(--accent);color:#000;border:none;border-radius:12px;padding:14px;font-family:'Syne',sans-serif;font-weight:700;font-size:16px;cursor:pointer;margin-top:8px}
+  .btn-save:active{transform:scale(.97)}
+  .btn-cancel{width:100%;background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:12px;padding:12px;font-family:'DM Sans',sans-serif;font-size:15px;cursor:pointer;margin-top:8px}
+
+  /* VERSION BADGE */
+  .version-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.15);border-radius:50px;padding:3px 10px;font-size:11px;color:var(--accent);font-weight:600}
+
+  /* BOTTOM NAV */
+  .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:420px;background:rgba(14,18,32,.97);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;padding:10px 0 24px;z-index:50}
+  .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:4px 0}
+  .nav-icon{font-size:20px;transition:transform .2s}
+  .nav-label{font-size:8px;color:var(--muted);font-weight:500}
+  .nav-item.active .nav-label{color:var(--accent)}
+  .nav-item.active .nav-icon{transform:translateY(-2px)}
+  .nav-dot{width:4px;height:4px;border-radius:50%;background:var(--accent);margin-top:-2px;opacity:0}
+  .nav-item.active .nav-dot{opacity:1}
+</style>
+</head>
+<body>
+
+<div class="saved-toast" id="toast">✓ Salvo!</div>
+
+<div class="header">
+  <div class="page-title">Config<span>.</span></div>
+</div>
+
+<div class="content">
+
+  <!-- PERFIL -->
+  <div class="sec-label">👤 Perfil do Usuário</div>
+  <div class="group">
+    <div class="row">
+      <div class="row-icon">🧑</div>
+      <div class="row-body">
+        <div class="row-label">Nome</div>
+        <input class="row-input" id="cfgNome" placeholder="Seu nome" onchange="saveConfig()">
+      </div>
+    </div>
+    <div class="row">
+      <div class="row-icon">📧</div>
+      <div class="row-body">
+        <div class="row-label">E-mail</div>
+        <input class="row-input" id="cfgEmail" placeholder="seu@email.com" type="email" onchange="saveConfig()">
+      </div>
+    </div>
+    <div class="btn-row btn-accent" onclick="openModal('ovSenha')">
+      <div class="row-icon">🔐</div>
+      <div class="row-body"><div class="row-label">Alterar Senha</div></div>
+      <div class="row-arrow">›</div>
+    </div>
+  </div>
+
+  <!-- APARÊNCIA -->
+  <div class="sec-label">🎨 Aparência</div>
+  <div class="group">
+    <div class="row">
+      <div class="row-icon">🌙</div>
+      <div class="row-body">
+        <div class="row-label">Tema Escuro</div>
+        <div class="row-sub" id="themeLabel">Ativado</div>
+      </div>
+      <div class="row-right">
+        <div class="tog on" id="themeToggle" onclick="toggleTheme()">
+          <div class="tog-thumb"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESPOSTAS RÁPIDAS -->
+  <div class="sec-label">💬 Respostas Rápidas</div>
+  <div class="group">
+    <div class="btn-row btn-accent" onclick="openModal('ovRespostas')">
+      <div class="row-icon">✏️</div>
+      <div class="row-body">
+        <div class="row-label">Editar Mensagens do WhatsApp</div>
+        <div class="row-sub">Vence hoje, amanhã e vencido</div>
+      </div>
+      <div class="row-arrow">›</div>
+    </div>
+  </div>
+
+  <!-- DADOS -->
+  <div class="sec-label">💾 Dados</div>
+  <div class="group">
+    <div class="btn-row btn-green" onclick="exportCSV()">
+      <div class="row-icon">📤</div>
+      <div class="row-body">
+        <div class="row-label">Exportar Clientes em CSV</div>
+        <div class="row-sub">Baixar todos os clientes cadastrados</div>
+      </div>
+      <div class="row-arrow">›</div>
+    </div>
+  </div>
+
+  <!-- SUPORTE -->
+  <div class="sec-label">🆘 Suporte</div>
+  <div class="group">
+    <div class="btn-row btn-yellow" onclick="openModal('ovSuporte')">
+      <div class="row-icon">💬</div>
+      <div class="row-body">
+        <div class="row-label">Abrir Chamado</div>
+        <div class="row-sub">Relate um problema ou envie sugestão</div>
+      </div>
+      <div class="row-arrow">›</div>
+    </div>
+  </div>
+
+  <!-- SOBRE -->
+  <div class="sec-label">📱 Sobre o App</div>
+  <div class="group">
+    <div class="row">
+      <div class="row-icon">📡</div>
+      <div class="row-body">
+        <div class="row-label">StreamDesk</div>
+        <div class="row-sub">Gestão de clientes IPTV</div>
+      </div>
+      <div class="row-right"><span class="version-badge">v 1.0</span></div>
+    </div>
+    <div class="row">
+      <div class="row-icon">👨‍💻</div>
+      <div class="row-body">
+        <div class="row-label">Desenvolvido com</div>
+        <div class="row-sub">Claude AI + HTML/JS</div>
+      </div>
+      <div class="row-right"><span style="font-size:18px">❤️</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <div class="nav-item" onclick="location.href='index.html'"><div class="nav-icon">🏠</div><div class="nav-label">Início</div><div class="nav-dot"></div></div>
+  <div class="nav-item" onclick="location.href='clientes.html'"><div class="nav-icon">👥</div><div class="nav-label">Clientes</div><div class="nav-dot"></div></div>
+  <div class="nav-item" onclick="location.href='servidor.html'"><div class="nav-icon">🖥️</div><div class="nav-label">Servidor</div><div class="nav-dot"></div></div>
+  <div class="nav-item" onclick="location.href='financas.html'"><div class="nav-icon">💰</div><div class="nav-label">Finanças</div><div class="nav-dot"></div></div>
+  <div class="nav-item" onclick="location.href='avisos.html'"><div class="nav-icon">📢</div><div class="nav-label">Avisos</div><div class="nav-dot"></div></div>
+  <div class="nav-item active"><div class="nav-icon">⚙️</div><div class="nav-label">Config.</div><div class="nav-dot"></div></div>
+</div>
+
+<!-- MODAL RESPOSTAS RÁPIDAS -->
+<div class="overlay" id="ovRespostas" onclick="if(event.target===this)closeModal('ovRespostas')">
+  <div class="modal">
+    <div class="mhandle"></div>
+    <div class="mtitle">✏️ Respostas Rápidas</div>
+    <div class="msub">Edite as mensagens enviadas pelo WhatsApp. Use <strong style="color:var(--accent)">{nome}</strong> e <strong style="color:var(--accent)">{servidor}</strong> como variáveis.</div>
+
+    <div class="fg">
+      <label class="fl">🟡 Vence Hoje</label>
+      <textarea class="fi fi-area" id="mHoje"></textarea>
+    </div>
+    <div class="fg">
+      <label class="fl">🟠 Vence Amanhã</label>
+      <textarea class="fi fi-area" id="mAmanha"></textarea>
+    </div>
+    <div class="fg">
+      <label class="fl">🔴 Vencido</label>
+      <textarea class="fi fi-area" id="mVencido"></textarea>
+    </div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:16px;line-height:1.5">
+      💡 <strong>{nome}</strong> = primeiro nome do cliente &nbsp;|&nbsp; <strong>{servidor}</strong> = plataforma do cliente
+    </div>
+    <button class="btn-save" onclick="salvarRespostas()">💾 Salvar Mensagens</button>
+    <button class="btn-cancel" onclick="closeModal('ovRespostas')">Cancelar</button>
+  </div>
+</div>
+
+<!-- MODAL SENHA -->
+<div class="overlay" id="ovSenha" onclick="if(event.target===this)closeModal('ovSenha')">
+  <div class="modal">
+    <div class="mhandle"></div>
+    <div class="mtitle">🔐 Alterar Senha</div>
+    <div class="msub">Digite sua nova senha abaixo</div>
+    <div class="fg"><label class="fl">Senha Atual</label><input class="fi" id="senhaAtual" type="password" placeholder="••••••••"></div>
+    <div class="fg"><label class="fl">Nova Senha</label><input class="fi" id="senhaNova" type="password" placeholder="••••••••"></div>
+    <div class="fg"><label class="fl">Confirmar Nova Senha</label><input class="fi" id="senhaConfirm" type="password" placeholder="••••••••"></div>
+    <button class="btn-save" onclick="salvarSenha()">✓ Salvar Senha</button>
+    <button class="btn-cancel" onclick="closeModal('ovSenha')">Cancelar</button>
+  </div>
+</div>
+
+<!-- MODAL SUPORTE -->
+<div class="overlay" id="ovSuporte" onclick="if(event.target===this)closeModal('ovSuporte')">
+  <div class="modal">
+    <div class="mhandle"></div>
+    <div class="mtitle">💬 Abrir Chamado</div>
+    <div class="msub">Descreva seu problema ou sugestão</div>
+    <div class="fg"><label class="fl">Assunto</label>
+      <select class="fi" id="supAssunto">
+        <option>🐛 Reportar um bug</option>
+        <option>💡 Sugestão de melhoria</option>
+        <option>❓ Dúvida sobre o app</option>
+        <option>🔧 Problema técnico</option>
+        <option>📋 Outro</option>
+      </select>
+    </div>
+    <div class="fg"><label class="fl">Mensagem</label>
+      <textarea class="fi fi-area" id="supMsg" placeholder="Descreva com detalhes..."></textarea>
+    </div>
+    <div class="fg"><label class="fl">Seu E-mail (para resposta)</label>
+      <input class="fi" id="supEmail" type="email" placeholder="seu@email.com">
+    </div>
+    <button class="btn-save" onclick="enviarChamado()">📲 Enviar via WhatsApp</button>
+    <button class="btn-cancel" onclick="closeModal('ovSuporte')">Cancelar</button>
+  </div>
+</div>
+
+<script>
+var CFG_KEY      = 'streamdesk_config';
+var CLIENT_KEY   = 'iptv_clientes_v3';
+var SUPORTE_WHATSAPP = ''; // coloque seu número aqui ex: 5511999999999
+
+var DEFAULT_MSG_HOJE   = 'Olá {nome}! 👋 Seu plano IPTV ({servidor}) vence HOJE. Renove para não ficar sem sinal! 📺';
+var DEFAULT_MSG_AMANHA = 'Olá {nome}! 👋 Lembrando que seu plano IPTV ({servidor}) vence amanhã. Renove com antecedência! 😊';
+var DEFAULT_MSG_VENC   = 'Olá {nome}! 👋 Seu plano IPTV ({servidor}) está vencido. Entre em contato para renovar! 🙏';
+
+function loadConfig() {
+  return JSON.parse(localStorage.getItem(CFG_KEY) || '{}');
+}
+function saveConfig() {
+  var cfg = {
+    nome:       document.getElementById('cfgNome').value,
+    email:      document.getElementById('cfgEmail').value,
+    darkMode:   document.getElementById('themeToggle').classList.contains('on'),
+    msgHoje:    document.getElementById('mHoje') ? document.getElementById('mHoje').value : (loadConfig().msgHoje || DEFAULT_MSG_HOJE),
+    msgAmanha:  document.getElementById('mAmanha') ? document.getElementById('mAmanha').value : (loadConfig().msgAmanha || DEFAULT_MSG_AMANHA),
+    msgVencido: document.getElementById('mVencido') ? document.getElementById('mVencido').value : (loadConfig().msgVencido || DEFAULT_MSG_VENC),
+  };
+  localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
+}
+
+function loadPage() {
+  var cfg = loadConfig();
+  document.getElementById('cfgNome').value    = cfg.nome    || '';
+  document.getElementById('cfgEmail').value   = cfg.email   || '';
+  // Messages are loaded when modal opens
+
+  var dark = cfg.darkMode !== false; // default dark
+  applyTheme(dark);
+}
+
+function applyTheme(dark) {
+  var tog = document.getElementById('themeToggle');
+  var lbl = document.getElementById('themeLabel');
+  if (dark) {
+    document.body.classList.remove('light');
+    tog.classList.add('on');
+    lbl.textContent = 'Ativado';
+  } else {
+    document.body.classList.add('light');
+    tog.classList.remove('on');
+    lbl.textContent = 'Desativado';
+  }
+}
+
+function toggleTheme() {
+  var isLight = document.body.classList.contains('light');
+  applyTheme(isLight); // if light, go dark; if dark, go light
+  saveConfig();
+}
+
+function showToast() {
+  var t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 2000);
+}
+
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+function openModal(id) {
+  // If opening respostas modal, populate fields first
+  if (id === 'ovRespostas') {
+    var cfg = loadConfig();
+    document.getElementById('mHoje').value    = cfg.msgHoje    || DEFAULT_MSG_HOJE;
+    document.getElementById('mAmanha').value  = cfg.msgAmanha  || DEFAULT_MSG_AMANHA;
+    document.getElementById('mVencido').value = cfg.msgVencido || DEFAULT_MSG_VENC;
+  }
+  document.getElementById(id).classList.add('open');
+}
+
+function salvarRespostas() {
+  var cfg = loadConfig();
+  cfg.msgHoje    = document.getElementById('mHoje').value.trim()    || DEFAULT_MSG_HOJE;
+  cfg.msgAmanha  = document.getElementById('mAmanha').value.trim()  || DEFAULT_MSG_AMANHA;
+  cfg.msgVencido = document.getElementById('mVencido').value.trim() || DEFAULT_MSG_VENC;
+  localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
+  closeModal('ovRespostas');
+  showToast();
+}
+
+function salvarSenha() {
+  var nova    = document.getElementById('senhaNova').value;
+  var confirm = document.getElementById('senhaConfirm').value;
+  if (!nova)           { alert('Informe a nova senha!'); return; }
+  if (nova !== confirm) { alert('As senhas não coincidem!'); return; }
+  if (nova.length < 6) { alert('A senha deve ter pelo menos 6 caracteres!'); return; }
+  // Save hashed (simple base64 for now — real hash needs backend)
+  var cfg = loadConfig();
+  cfg.senha = btoa(nova);
+  localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
+  closeModal('ovSenha');
+  document.getElementById('senhaAtual').value = '';
+  document.getElementById('senhaNova').value = '';
+  document.getElementById('senhaConfirm').value = '';
+  showToast();
+}
+
+function exportCSV() {
+  var clientes = JSON.parse(localStorage.getItem(CLIENT_KEY) || '[]');
+  if (!clientes.length) { alert('Nenhum cliente para exportar!'); return; }
+  var rows = [['Nome','Servidor','Plano','Vencimento','País','Contato','Observações']];
+  clientes.forEach(function(c) {
+    var venc = c.vencimento ? c.vencimento.split('-').reverse().join('/') : '';
+    rows.push([c.nome||'', c.plataforma||'', c.plano||'', venc, c.pais||'', c.contato||'', c.obs||'']);
+  });
+  var csv = '\uFEFF' + rows.map(function(r) {
+    return r.map(function(v) { return '"' + String(v).replace(/"/g,'""') + '"'; }).join(',');
+  }).join('\n');
+  var blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'clientes_streamdesk.csv';
+  a.click();
+}
+
+function enviarChamado() {
+  var assunto = document.getElementById('supAssunto').value;
+  var msg     = document.getElementById('supMsg').value.trim();
+  var email   = document.getElementById('supEmail').value.trim();
+  if (!msg) { alert('Descreva seu problema ou sugestão!'); return; }
+  var cfg = loadConfig();
+  var texto = '📋 *Chamado StreamDesk*\n\n' +
+    '*Assunto:* ' + assunto + '\n' +
+    '*Mensagem:* ' + msg + '\n' +
+    (email ? '*E-mail:* ' + email : '') + '\n' +
+    (cfg.nome ? '*Usuário:* ' + cfg.nome : '');
+  var url = SUPORTE_WHATSAPP
+    ? 'https://wa.me/' + SUPORTE_WHATSAPP + '?text=' + encodeURIComponent(texto)
+    : 'https://wa.me/?text=' + encodeURIComponent(texto);
+  window.open(url, '_blank');
+  closeModal('ovSuporte');
+  document.getElementById('supMsg').value = '';
+}
+
+loadPage();
+</script>
+</body>
+</html>
