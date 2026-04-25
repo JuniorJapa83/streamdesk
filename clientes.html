@@ -146,7 +146,7 @@
 <body><script>
 (function(){
   var cfg = JSON.parse(localStorage.getItem('streamdesk_config') || '{}');
-  if (cfg.darkMode === false) document.body.classList.add('light');
+  if (cfg.darkMode !== true) document.body.classList.add('light');
 })();
 </script>
 
@@ -588,7 +588,7 @@ function confirmRenew(){
 document.addEventListener('visibilitychange', function() {
   if (document.visibilityState === 'visible') {
     var cfg2 = JSON.parse(localStorage.getItem('streamdesk_config') || '{}');
-    if (cfg2.darkMode === false) { document.body.classList.add('light'); }
+    if (cfg2.darkMode !== true) { document.body.classList.add('light'); }
     else { document.body.classList.remove('light'); }
     clientes   = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
     financas   = JSON.parse(localStorage.getItem(FINANCE_KEY) || '[]');

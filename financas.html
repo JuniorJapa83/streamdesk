@@ -117,7 +117,7 @@
 <body><script>
 (function(){
   var cfg = JSON.parse(localStorage.getItem('streamdesk_config') || '{}');
-  if (cfg.darkMode === false) document.body.classList.add('light');
+  if (cfg.darkMode !== true) document.body.classList.add('light');
 })();
 </script>
 

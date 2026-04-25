@@ -105,7 +105,7 @@
 <script>
 (function(){
   var cfg = JSON.parse(localStorage.getItem('streamdesk_config') || '{}');
-  if (cfg.darkMode === false) document.body.classList.add('light');
+  if (cfg.darkMode !== true) document.body.classList.add('light');
 })();
 </script>
 
@@ -148,10 +148,10 @@
       <div class="row-icon">🌙</div>
       <div class="row-body">
         <div class="row-label">Tema Escuro</div>
-        <div class="row-sub" id="themeLabel">Ativado</div>
+        <div class="row-sub" id="themeLabel">Desativado</div>
       </div>
       <div class="row-right">
-        <div class="tog on" id="themeToggle" onclick="toggleTheme()">
+        <div class="tog" id="themeToggle" onclick="toggleTheme()">
           <div class="tog-thumb"></div>
         </div>
       </div>
@@ -327,7 +327,7 @@ function loadPage() {
   document.getElementById('cfgEmail').value   = cfg.email   || '';
   // Messages are loaded when modal opens
 
-  var dark = cfg.darkMode !== false; // default dark
+  var dark = cfg.darkMode === true; // default light
   applyTheme(dark);
 }
 
