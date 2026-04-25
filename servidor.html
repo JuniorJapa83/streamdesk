@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>StreamDesk — Servidores</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#080b12;--surface:#0e1220;--card:#131825;--card2:#161c2c;
+    --border:#1c2236;--accent:#00d4ff;--red:#ff3b5c;--yellow:#ffbb00;
+    --green:#00e096;--text:#e4e8f4;--muted:#5a6480;--radius:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:420px;margin:0 auto}
+
+  .header{position:sticky;top:0;z-index:50;background:rgba(8,11,18,0.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:16px 20px;display:flex;align-items:center;justify-content:space-between}
+  .page-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800}
+  .page-title span{color:var(--accent)}
+  .add-btn{display:flex;align-items:center;gap:6px;background:var(--accent);color:#000;border:none;border-radius:50px;padding:9px 18px;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:all .2s}
+  .add-btn:active{transform:scale(.95)}
+
+  .content{padding:16px 20px 110px;display:flex;flex-direction:column;gap:10px}
+
+  .srv-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+
+  .card-main{display:flex;align-items:center;gap:12px;padding:16px;cursor:pointer;transition:background .2s;user-select:none}
+  .card-main:active{background:var(--card2)}
+
+  .dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+  .srv-info{flex:1;min-width:0}
+  .srv-name{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;margin-bottom:4px}
+  .status-pill{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:50px}
+  .online{background:rgba(0,224,150,.12);color:var(--green)}
+  .offline{background:rgba(255,59,92,.12);color:var(--red)}
+
+  .mini{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
+  .mini-row{display:flex;gap:6px}
+  .chip{font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px;white-space:nowrap}
+  .ct{background:rgba(0,212,255,.1);color:var(--accent)}
+  .ck{background:rgba(0,224,150,.1);color:var(--green)}
+  .cv{background:rgba(255,59,92,.1);color:var(--red)}
+
+  .chev{color:var(--muted);font-size:16px;flex-shrink:0;margin-left:4px;transition:transform .3s;display:inline-block}
+
+  /* detail hidden by default */
+  .card-detail{display:none;background:var(--card2);border-top:1px solid var(--border)}
+  .detail-inner{padding:16px}
+
+  .bar-wrap{margin-bottom:14px}
+  .bar-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:6px}
+  .bar-track{height:6px;background:var(--border);border-radius:50px;overflow:hidden}
+  .bar-fill{height:100%;border-radius:50px}
+
+  .drow{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-top:1px solid var(--border)}
+  .drow-lbl{font-size:12px;color:var(--muted)}
+  .drow-val{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--yellow)}
+
+  /* toggle */
+  .tog-wrap{display:flex;align-items:center;gap:8px;cursor:pointer;padding:4px}
+  .tog-txt{font-size:12px;font-weight:700}
+  .tog-track{width:44px;height:24px;border-radius:50px;position:relative;border:1px solid var(--border);background:var(--card);transition:background .3s,border-color .3s}
+  .tog-track.is-on{background:rgba(0,224,150,.15);border-color:var(--green)}
+  .tog-thumb{position:absolute;top:4px;left:4px;width:14px;height:14px;border-radius:50%;background:var(--muted);transition:left .3s,background .3s}
+  .tog-track.is-on .tog-thumb{left:24px;background:var(--green)}
+
+  .dactions{display:flex;border-top:1px solid var(--border);margin-top:4px}
+  .dact{flex:1;padding:13px;border:none;background:none;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+  .dact:active{opacity:.6}
+  .dact.e{color:var(--accent);border-right:1px solid var(--border)}
+  .dact.d{color:var(--red)}
+
+  .empty{text-align:center;padding:60px 20px;color:var(--muted)}
+  .empty-icon{font-size:48px;margin-bottom:12px}
+  .empty-txt{font-size:14px;margin-bottom:20px}
+  .empty-btn{background:var(--accent);color:#000;border:none;border-radius:50px;padding:12px 24px;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;cursor:pointer}
+
+  /* modal */
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:200;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .3s}
+  .modal-overlay.open{opacity:1;pointer-events:all}
+  .modal{background:var(--surface);border-radius:24px 24px 0 0;padding:24px 20px 40px;width:100%;max-height:88vh;overflow-y:auto;transform:translateY(100%);transition:transform .35s cubic-bezier(.32,.72,0,1);border-top:1px solid var(--border)}
+  .modal-overlay.open .modal{transform:translateY(0)}
+  .modal-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 20px}
+  .modal-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:20px}
+
+  .fg{margin-bottom:14px}
+  .fl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;display:block}
+  .fi{width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border .2s}
+  .fi:focus{border-color:var(--accent)}
+
+  .color-grid{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+  .color-opt{width:32px;height:32px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:all .2s;flex-shrink:0}
+  .color-opt.sel{border-color:#fff;transform:scale(1.15)}
+
+  .form-tog-row{display:flex;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px 14px;cursor:pointer}
+
+  .save-btn{width:100%;background:var(--accent);color:#000;border:none;border-radius:12px;padding:14px;font-family:'Syne',sans-serif;font-weight:700;font-size:16px;cursor:pointer;margin-top:8px}
+  .save-btn:active{transform:scale(.97)}
+  .cancel-btn{width:100%;background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:12px;padding:12px;font-family:'DM Sans',sans-serif;font-size:15px;cursor:pointer;margin-top:8px}
+
+  .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:420px;background:rgba(14,18,32,.97);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;padding:10px 0 24px;z-index:50}
+  .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:4px 0}
+  .nav-icon{font-size:20px;transition:transform .2s}
+  .nav-label{font-size:9px;color:var(--muted);font-weight:500}
+  .nav-item.active .nav-label{color:var(--accent)}
+  .nav-item.active .nav-icon{transform:translateY(-2px)}
+  .nav-dot{width:4px;height:4px;border-radius:50%;background:var(--accent);margin-top:-2px;opacity:0}
+  .nav-item.active .nav-dot{opacity:1}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="page-title">Servidores<span>.</span></div>
+  <button class="add-btn" onclick="openModal()">＋ Servidor</button>
+</div>
+
+<div class="content" id="srvList"></div>
+
+<div class="bottom-nav">
+  <div class="nav-item" onclick="location.href='index.html'"><div class="nav-icon">🏠</div><div class="nav-label">Início</div><div class="nav-dot"></div></div>
+  <div class="nav-item" onclick="location.href='clientes.html'"><div class="nav-icon">👥</div><div class="nav-label">Clientes</div><div class="nav-dot"></div></div>
+  <div class="nav-item active"><div class="nav-icon">🖥️</div><div class="nav-label">Servidor</div><div class="nav-dot"></div></div>
+  <div class="nav-item" onclick="location.href='financas.html'"><div class="nav-icon">💰</div><div class="nav-label">Finanças</div><div class="nav-dot"></div></div>
+  <div class="nav-item" onclick="location.href='config.html'"><div class="nav-icon">⚙️</div><div class="nav-label">Config.</div><div class="nav-dot"></div></div>
+</div>
+
+<!-- DELETE CONFIRM MODAL -->
+<div class="modal-overlay" id="deleteOverlay">
+  <div class="modal" style="padding:28px 20px 40px">
+    <div class="modal-handle"></div>
+    <div style="font-size:32px;text-align:center;margin-bottom:12px">🗑️</div>
+    <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;text-align:center;margin-bottom:12px">Excluir Servidor</div>
+    <div id="deleteMsg" style="font-size:14px;color:var(--muted);text-align:center;margin-bottom:24px;line-height:1.5"></div>
+    <button onclick="confirmDelete()" style="width:100%;background:var(--red);color:#fff;border:none;border-radius:12px;padding:14px;font-family:'Syne',sans-serif;font-weight:700;font-size:16px;cursor:pointer;margin-bottom:10px">Sim, excluir</button>
+    <button onclick="cancelDelete()" style="width:100%;background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:12px;padding:12px;font-family:'DM Sans',sans-serif;font-size:15px;cursor:pointer">Cancelar</button>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeOutside(event)">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modalTitle">Novo Servidor</div>
+    <input type="hidden" id="editIdx">
+    <div class="fg"><label class="fl">Nome do Servidor</label><input class="fi" id="fNome" placeholder="Ex: IPTV FIVE"></div>
+    <div class="fg"><label class="fl">Custo por Crédito (R$)</label><input class="fi" id="fCusto" type="number" placeholder="0,00" step="0.01" min="0"></div>
+    <div class="fg"><label class="fl">Cor de Identificação</label><div class="color-grid" id="colorGrid"></div></div>
+    <div class="fg">
+      <label class="fl">Status Inicial</label>
+      <div class="form-tog-row" onclick="toggleFormStatus()">
+        <span id="fStatusLabel">🟢 Online</span>
+        <div class="tog-track is-on" id="fTogTrack"><div class="tog-thumb"></div></div>
+      </div>
+      <input type="hidden" id="fStatus" value="online">
+    </div>
+    <button class="save-btn" onclick="saveServidor()">✓ Salvar Servidor</button>
+    <button class="cancel-btn" onclick="closeModal()">Cancelar</button>
+  </div>
+</div>
+
+<script>
+const SRV_KEY    = 'iptv_servidores_v1';
+const CLIENT_KEY = 'iptv_clientes_v3';
+const COLORS     = ['#00d4ff','#a78bfa','#00e096','#ff3b5c','#ff7b00','#ffbb00','#f472b6','#34d399','#60a5fa','#fb923c','#e879f9','#e2e8f0'];
+
+let servidores = JSON.parse(localStorage.getItem(SRV_KEY) || 'null');
+if (!servidores) {
+  servidores = [
+    {nome:'IPTV FIVE',    custo:15, cor:'#00d4ff', status:'online'},
+    {nome:'IPTV HPLUS',   custo:18, cor:'#a78bfa', status:'online'},
+    {nome:'IPTV BLADE',   custo:12, cor:'#ff3b5c', status:'online'},
+    {nome:'P2P FIVE',     custo:14, cor:'#ff7b00', status:'online'},
+    {nome:'HIBRIDO FIVE', custo:16, cor:'#00e096', status:'online'},
+  ];
+  localStorage.setItem(SRV_KEY, JSON.stringify(servidores));
+}
+
+// Load clientes — seed with default data if empty (same as clientes.html)
+let clientes = JSON.parse(localStorage.getItem(CLIENT_KEY) || 'null');
+if (!clientes || clientes.length === 0) {
+  clientes = [
+    {id:1,  nome:'Ana Paulo (Loss)',    plataforma:'P2P FIVE',     plano:'Integral',    vencimento:'2026-03-19', pais:'🇧🇷', contato:'', obs:''},
+    {id:2,  nome:'Wanderson',           plataforma:'HIBRIDO FIVE', plano:'Integral',    vencimento:'2026-04-04', pais:'🇧🇷', contato:'', obs:''},
+    {id:3,  nome:'Raphael',             plataforma:'HIBRIDO FIVE', plano:'Integral',    vencimento:'2026-04-05', pais:'🇧🇷', contato:'', obs:''},
+    {id:4,  nome:'Pr Jhony',            plataforma:'IPTV HPLUS',   plano:'Integral',    vencimento:'2026-04-08', pais:'🇪🇸', contato:'', obs:''},
+    {id:5,  nome:'Misael',              plataforma:'HIBRIDO FIVE', plano:'Integral',    vencimento:'2026-04-09', pais:'🇧🇷', contato:'', obs:''},
+    {id:6,  nome:'Andressa Rios',       plataforma:'IPTV FIVE',    plano:'Integral',    vencimento:'2026-04-11', pais:'🇧🇷', contato:'', obs:''},
+    {id:7,  nome:'Fabio Jr (Rodney)',   plataforma:'IPTV FIVE',    plano:'Promocional', vencimento:'2026-04-18', pais:'🇧🇷', contato:'', obs:''},
+    {id:8,  nome:'Nayara',              plataforma:'IPTV FIVE',    plano:'Integral',    vencimento:'2026-04-18', pais:'🇪🇸', contato:'', obs:''},
+    {id:9,  nome:'Ellen (Rodney)',      plataforma:'IPTV HPLUS',   plano:'Promocional', vencimento:'2026-04-22', pais:'🇧🇷', contato:'', obs:''},
+    {id:10, nome:'Melissa',             plataforma:'IPTV FIVE',    plano:'Integral',    vencimento:'2026-04-24', pais:'🇧🇷', contato:'', obs:''},
+    {id:11, nome:'George',              plataforma:'P2P FIVE',     plano:'Integral',    vencimento:'2026-04-25', pais:'🇧🇷', contato:'', obs:'FP'},
+    {id:12, nome:'Gabriela',            plataforma:'IPTV FIVE',    plano:'Integral',    vencimento:'2026-04-25', pais:'🇧🇷', contato:'', obs:''},
+    {id:13, nome:'Rodney (Denis)',      plataforma:'IPTV BLADE',   plano:'Promocional', vencimento:'2026-04-25', pais:'🇵🇹', contato:'', obs:''},
+    {id:14, nome:'Matheus Leornardeli', plataforma:'P2P FIVE',     plano:'Integral',    vencimento:'2026-04-26', pais:'🇪🇸', contato:'', obs:''},
+    {id:15, nome:'Rafael Rodrigues',    plataforma:'P2P FIVE',     plano:'Integral',    vencimento:'2026-04-26', pais:'🇪🇸', contato:'', obs:''},
+    {id:16, nome:'Marcelo',             plataforma:'IPTV FIVE',    plano:'Integral',    vencimento:'2026-04-26', pais:'🇵🇹', contato:'', obs:''},
+    {id:17, nome:'Edson',               plataforma:'IPTV HPLUS',   plano:'Integral',    vencimento:'2026-04-26', pais:'🇪🇸', contato:'', obs:''},
+    {id:18, nome:'Welinton',            plataforma:'IPTV HPLUS',   plano:'Integral',    vencimento:'2026-04-26', pais:'🇪🇸', contato:'', obs:''},
+    {id:19, nome:'Carol',               plataforma:'IPTV FIVE',    plano:'Integral',    vencimento:'2026-04-27', pais:'🇧🇷', contato:'', obs:''},
+  ];
+  localStorage.setItem(CLIENT_KEY, JSON.stringify(clientes));
+}
+let selectedColor = COLORS[0];
+
+function saveAll() { localStorage.setItem(SRV_KEY, JSON.stringify(servidores)); }
+function today()   { return new Date().toISOString().split('T')[0]; }
+
+function getStats(nome) {
+  const list     = clientes.filter(c => c.plataforma === nome);
+  const total    = list.length;
+  const t        = today();
+  const vencidos = list.filter(c => c.vencimento < t).length;
+  const emDia    = total - vencidos;
+  const pct      = total > 0 ? Math.round((emDia / total) * 100) : 0;
+  return {total, vencidos, emDia, pct};
+}
+
+// ── render ──────────────────────────────────────────────
+function render() {
+  const el = document.getElementById('srvList');
+
+  if (!servidores.length) {
+    el.innerHTML = `<div class="empty"><div class="empty-icon">🖥️</div><div class="empty-txt">Nenhum servidor cadastrado ainda</div><button class="empty-btn" onclick="openModal()">＋ Adicionar Servidor</button></div>`;
+    return;
+  }
+
+  // Build each card as a real DOM node so event listeners bind correctly
+  el.innerHTML = '';
+
+  servidores.forEach(function(s, idx) {
+    const st       = getStats(s.nome);
+    const isOn     = s.status === 'online';
+    const barColor = st.pct >= 70 ? '#00e096' : st.pct >= 40 ? '#ffbb00' : '#ff3b5c';
+
+    // ── card wrapper
+    const card = document.createElement('div');
+    card.className = 'srv-card';
+    card.style.animationDelay = (idx * 0.07) + 's';
+
+    // ── always-visible top row
+    card.innerHTML = `
+      <div class="card-main">
+        <div class="dot" style="background:${s.cor};box-shadow:0 0 8px ${s.cor}60"></div>
+        <div class="srv-info">
+          <div class="srv-name">${s.nome}</div>
+          <span class="status-pill ${isOn ? 'online' : 'offline'}">${isOn ? '● Online' : '● Offline'}</span>
+        </div>
+        <div class="mini">
+          <div class="mini-row"><span class="chip ct">${st.total} total</span></div>
+          <div class="mini-row">
+            <span class="chip ck">${st.emDia} ok</span>
+            <span class="chip cv">${st.vencidos} venc.</span>
+          </div>
+        </div>
+        <span class="chev">›</span>
+      </div>
+
+      <div class="card-detail">
+        <div class="detail-inner">
+          <div class="bar-wrap">
+            <div class="bar-labels">
+              <span>${st.vencidos} vencido${st.vencidos !== 1 ? 's' : ''}</span>
+              <span style="color:${barColor}">${st.pct}% em dia</span>
+            </div>
+            <div class="bar-track"><div class="bar-fill" style="width:${st.pct}%;background:${barColor}"></div></div>
+          </div>
+          <div class="drow">
+            <span class="drow-lbl">💸 Custo por crédito</span>
+            <span class="drow-val">R$ ${parseFloat(s.custo).toFixed(2)}</span>
+          </div>
+          <div class="drow">
+            <span class="drow-lbl">Status do servidor</span>
+            <div class="tog-wrap">
+              <span class="tog-txt" style="color:${isOn ? 'var(--green)' : 'var(--red)'}">${isOn ? 'Online' : 'Offline'}</span>
+              <div class="tog-track ${isOn ? 'is-on' : ''}"><div class="tog-thumb"></div></div>
+            </div>
+          </div>
+          <div class="dactions">
+            <button class="dact e">✏️ Editar</button>
+            <button class="dact d">🗑️ Excluir</button>
+          </div>
+        </div>
+      </div>`;
+
+    el.appendChild(card);
+
+    // ── grab internal elements AFTER appending
+    const mainRow  = card.querySelector('.card-main');
+    const detail   = card.querySelector('.card-detail');
+    const chev     = card.querySelector('.chev');
+    const togWrap  = card.querySelector('.tog-wrap');
+    const togTrack = card.querySelector('.tog-track');
+    const togThumb = card.querySelector('.tog-thumb');
+    const togTxt   = card.querySelector('.tog-txt');
+    const pill     = card.querySelector('.status-pill');
+    const btnEdit  = card.querySelector('.dact.e');
+    const btnDel   = card.querySelector('.dact.d');
+
+    // ── expand / collapse
+    mainRow.addEventListener('click', function() {
+      const isOpen = detail.style.display === 'block';
+
+      // close all
+      document.querySelectorAll('.card-detail').forEach(function(d) {
+        d.style.display = 'none';
+      });
+      document.querySelectorAll('.chev').forEach(function(c) {
+        c.style.transform = 'rotate(0deg)';
+      });
+
+      if (!isOpen) {
+        detail.style.display  = 'block';
+        chev.style.transform  = 'rotate(90deg)';
+      }
+    });
+
+    // ── toggle online/offline (only on toggle area, not whole card)
+    togWrap.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const nowOn = servidores[idx].status !== 'online';
+      // Block going offline if has active clients
+      if (!nowOn) {
+        const t = today();
+        const ativos = clientes.filter(function(c){ return c.plataforma === servidores[idx].nome && c.vencimento >= t; }).length;
+        if (ativos > 0) {
+          alert('⚠️ Não é possível colocar "' + servidores[idx].nome + '" offline pois há ' + ativos + ' cliente(s) ativo(s) neste servidor.');
+          return;
+        }
+      }
+      servidores[idx].status = nowOn ? 'online' : 'offline';
+      saveAll();
+
+      // update toggle visual
+      if (nowOn) {
+        togTrack.classList.add('is-on');
+        togTxt.textContent  = 'Online';
+        togTxt.style.color  = 'var(--green)';
+        pill.textContent    = '● Online';
+        pill.className      = 'status-pill online';
+      } else {
+        togTrack.classList.remove('is-on');
+        togTxt.textContent  = 'Offline';
+        togTxt.style.color  = 'var(--red)';
+        pill.textContent    = '● Offline';
+        pill.className      = 'status-pill offline';
+      }
+    });
+
+    btnEdit.addEventListener('click', function(e) {
+      e.stopPropagation();
+      openModal(idx);
+    });
+
+    (function(nomeRef, totalRef) {
+      btnDel.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (totalRef > 0) {
+          alert('Nao e possivel excluir "' + nomeRef + '" pois ha ' + totalRef + ' cliente(s) vinculado(s). Migre ou remova os clientes antes.');
+          return;
+        }
+        pendingDeleteNome  = nomeRef;
+        pendingDeleteTotal = totalRef;
+        showDeleteConfirm(nomeRef, totalRef);
+      });
+    })(s.nome, st.total);
+  });
+}
+
+let pendingDeleteNome  = null;
+let pendingDeleteTotal = 0;
+
+function showDeleteConfirm(nome, total) {
+  const msg = document.getElementById('deleteMsg');
+  msg.textContent = total > 0
+    ? '⚠️ "' + nome + '" tem ' + total + ' cliente(s) vinculado(s). Deseja excluir mesmo assim?'
+    : 'Deseja excluir o servidor "' + nome + '"?';
+  document.getElementById('deleteOverlay').classList.add('open');
+}
+
+function confirmDelete() {
+  if (!pendingDeleteNome) return;
+  servidores = servidores.filter(function(x) { return x.nome !== pendingDeleteNome; });
+  pendingDeleteNome  = null;
+  pendingDeleteTotal = 0;
+  saveAll();
+  document.getElementById('deleteOverlay').classList.remove('open');
+  render();
+}
+
+function cancelDelete() {
+  pendingDeleteNome  = null;
+  pendingDeleteTotal = 0;
+  document.getElementById('deleteOverlay').classList.remove('open');
+}
+
+// ── modal ────────────────────────────────────────────────
+function buildColorGrid(sel) {
+  selectedColor = sel;
+  document.getElementById('colorGrid').innerHTML = COLORS.map(c =>
+    `<div class="color-opt ${c === sel ? 'sel' : ''}" style="background:${c}" onclick="selectColor('${c}')"></div>`
+  ).join('');
+}
+
+function selectColor(c) { selectedColor = c; buildColorGrid(c); }
+
+function setFormToggle(isOn) {
+  const trk = document.getElementById('fTogTrack');
+  document.getElementById('fStatus').value       = isOn ? 'online' : 'offline';
+  document.getElementById('fStatusLabel').textContent = isOn ? '🟢 Online' : '🔴 Offline';
+  if (isOn) trk.classList.add('is-on'); else trk.classList.remove('is-on');
+}
+
+function toggleFormStatus() {
+  setFormToggle(document.getElementById('fStatus').value !== 'online');
+}
+
+function openModal(idx) {
+  // idx === undefined means NEW server; use -1 as sentinel
+  const isNew = idx === undefined;
+  const srv   = isNew ? null : servidores[idx];
+
+  document.getElementById('editIdx').value          = isNew ? '-1' : String(idx);
+  document.getElementById('modalTitle').textContent = isNew ? 'Novo Servidor' : 'Editar Servidor';
+  document.getElementById('fNome').value            = srv ? srv.nome  : '';
+  document.getElementById('fCusto').value           = srv ? srv.custo : '';
+  setFormToggle(srv ? srv.status === 'online' : true);
+  buildColorGrid(srv ? srv.cor : COLORS[0]);
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal()    { document.getElementById('modalOverlay').classList.remove('open'); }
+function closeOutside(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); }
+
+function saveServidor() {
+  const nome  = document.getElementById('fNome').value.trim();
+  const custo = document.getElementById('fCusto').value;
+  if (!nome)             { alert('Informe o nome do servidor!'); return; }
+  if (custo === '' || isNaN(+custo)) { alert('Informe o custo do crédito!'); return; }
+
+  const data = {
+    nome,
+    custo:  parseFloat(custo),
+    cor:    selectedColor,
+    status: document.getElementById('fStatus').value,
+  };
+
+  const editIdx = parseInt(document.getElementById('editIdx').value);
+
+  if (editIdx >= 0) {
+    // editing existing
+    servidores[editIdx] = data;
+  } else {
+    // new server
+    servidores.push(data);
+  }
+
+  saveAll();
+  closeModal();
+  render();
+}
+
+// Reload clientes every time user returns to this page
+document.addEventListener('visibilitychange', function() {
+  if (document.visibilityState === 'visible') {
+    clientes = JSON.parse(localStorage.getItem(CLIENT_KEY) || '[]');
+    render();
+  }
+});
+
+render();
+</script>
+</body>
+</html>

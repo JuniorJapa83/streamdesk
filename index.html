@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>StreamDesk — Home</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080b12;
+    --surface: #0e1220;
+    --card: #131825;
+    --card2: #161c2c;
+    --border: #1c2236;
+    --accent: #00d4ff;
+    --accent-glow: rgba(0,212,255,0.15);
+    --red: #ff3b5c;
+    --red-glow: rgba(255,59,92,0.12);
+    --yellow: #ffbb00;
+    --yellow-glow: rgba(255,187,0,0.12);
+    --orange: #ff7b00;
+    --orange-glow: rgba(255,123,0,0.12);
+    --green: #00e096;
+    --green-glow: rgba(0,224,150,0.12);
+    --text: #e4e8f4;
+    --muted: #5a6480;
+    --radius: 16px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    max-width: 420px;
+    margin: 0 auto;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Background mesh */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -100px; right: -100px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(0,212,255,0.05) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* HEADER */
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(8,11,18,0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    animation: slideDown 0.4s ease;
+  }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .logo-wrap { display: flex; flex-direction: column; }
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 21px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+  .logo-icon {
+    width: 26px; height: 26px;
+    background: var(--accent);
+    border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    margin-right: 6px;
+    flex-shrink: 0;
+  }
+  .logo span { color: var(--accent); }
+  .logo-sub { font-size: 11px; color: var(--muted); margin-top: 2px; letter-spacing: 0.3px; }
+
+  .add-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    border-radius: 50px;
+    padding: 9px 18px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(0,212,255,0.3);
+    transition: all 0.2s;
+  }
+  .add-btn:active { transform: scale(0.95); box-shadow: 0 0 10px rgba(0,212,255,0.2); }
+  .plus-icon { font-size: 18px; line-height: 1; }
+
+  /* SCROLL CONTENT */
+  .content {
+    padding: 20px 20px 100px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* SECTION LABEL */
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    margin-top: 22px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* STATUS CARDS */
+  .status-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    animation: fadeUp 0.5s ease 0.1s both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .status-card {
+    border-radius: var(--radius);
+    padding: 14px 12px;
+    text-align: center;
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s;
+  }
+  .status-card:active { transform: scale(0.96); }
+  .status-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.06;
+  }
+  .status-card.red { background: var(--card); border-color: rgba(255,59,92,0.2); }
+  .status-card.red::before { background: var(--red); }
+  .status-card.yellow { background: var(--card); border-color: rgba(255,187,0,0.2); }
+  .status-card.yellow::before { background: var(--yellow); }
+  .status-card.green { background: var(--card); border-color: rgba(0,224,150,0.2); }
+  .status-card.green::before { background: var(--green); }
+
+  .status-icon { font-size: 20px; margin-bottom: 6px; }
+  .status-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .status-card.red .status-num { color: var(--red); }
+  .status-card.yellow .status-num { color: var(--yellow); }
+  .status-card.green .status-num { color: var(--green); }
+  .status-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.3; }
+
+  /* SERVER CARDS */
+  .server-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    animation: fadeUp 0.5s ease 0.2s both;
+  }
+
+  .server-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.2s;
+  }
+  .server-card:active { transform: scale(0.98); }
+
+  .server-left { display: flex; align-items: center; gap: 10px; }
+  .server-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .server-name { font-size: 14px; font-weight: 500; }
+  .server-count {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .server-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .server-word { font-size: 12px; color: var(--muted); }
+
+  .server-bar-wrap {
+    width: 60px;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-left: 12px;
+  }
+  .server-bar {
+    height: 100%;
+    border-radius: 2px;
+    background: var(--accent);
+  }
+
+  /* ATTENTION LIST */
+  .attention-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    animation: fadeUp 0.5s ease 0.3s both;
+  }
+
+  .attention-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    border-left: 4px solid transparent;
+    border-top: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    transition: all 0.2s;
+  }
+  .attention-card:active { transform: scale(0.98); }
+  .attention-card.hoje { border-left-color: var(--yellow); }
+  .attention-card.amanha { border-left-color: var(--orange); }
+
+  .att-row1 { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .att-name { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; }
+  .att-badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 50px;
+  }
+  .badge-hoje { background: var(--yellow-glow); color: var(--yellow); }
+  .badge-amanha { background: var(--orange-glow); color: var(--orange); }
+
+  .att-row2 { display: flex; align-items: center; justify-content: space-between; }
+  .att-info { display: flex; gap: 10px; align-items: center; }
+  .att-chip {
+    font-size: 11px;
+    color: var(--muted);
+    background: var(--card2);
+    padding: 3px 8px;
+    border-radius: 6px;
+  }
+  .att-flag { font-size: 14px; }
+
+  .wa-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(37,211,102,0.12);
+    color: #25d366;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .wa-btn:active { transform: scale(0.95); }
+
+  /* BOTTOM NAV */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 420px;
+    background: rgba(14,18,32,0.97);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border);
+    display: flex;
+    padding: 10px 0 24px;
+    z-index: 50;
+  }
+
+  .nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    padding: 4px 0;
+  }
+  .nav-icon {
+    font-size: 22px;
+    transition: transform 0.2s;
+  }
+  .nav-label { font-size: 10px; color: var(--muted); font-weight: 500; letter-spacing: 0.3px; }
+  .nav-item.active .nav-label { color: var(--accent); }
+  .nav-item.active .nav-icon { transform: translateY(-2px); }
+
+  .nav-indicator {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--accent);
+    margin-top: -2px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .nav-item.active .nav-indicator { opacity: 1; }
+
+  /* GREETING */
+  .greeting {
+    margin-bottom: 20px;
+    animation: fadeUp 0.4s ease both;
+  }
+  .greeting-hi { font-size: 13px; color: var(--muted); }
+  .greeting-name { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; margin-top: 2px; }
+  .greeting-name span { color: var(--accent); }
+
+  /* EMPTY STATE */
+  .empty-att {
+    text-align: center;
+    padding: 24px;
+    background: var(--card);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo-wrap">
+    <div class="logo"><div class="logo-icon">📡</div>Stream<span>Desk</span></div>
+    <div class="logo-sub">Olá, Admin 👋</div>
+  </div>
+  <button class="add-btn" onclick="location.href='clientes.html'">
+    <span class="plus-icon">＋</span> Cliente
+  </button>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- STATUS CARDS -->
+  <div class="section-label">Resumo Geral</div>
+  <div class="status-grid">
+    <div class="status-card red">
+      <div class="status-icon">🔴</div>
+      <div class="status-num" id="numVencido">0</div>
+      <div class="status-label">Vencidos</div>
+    </div>
+    <div class="status-card yellow">
+      <div class="status-icon">🟡</div>
+      <div class="status-num" id="numHoje">0</div>
+      <div class="status-label">Vencem Hoje</div>
+    </div>
+    <div class="status-card green">
+      <div class="status-icon">🟢</div>
+      <div class="status-num" id="numEmDia">0</div>
+      <div class="status-label">Em Dia</div>
+    </div>
+  </div>
+
+  <!-- SERVERS -->
+  <div class="section-label">Clientes por Servidor</div>
+  <div class="server-list" id="serverList"></div>
+
+  <!-- ATTENTION -->
+  <div class="section-label">⚠️ Atenção Urgente</div>
+  <div class="attention-list" id="attentionList"></div>
+
+</div>
+
+<script>
+const CLIENT_KEY = 'iptv_clientes_v3';
+const SRV_KEY    = 'iptv_servidores_v1';
+
+const DEFAULT_CLIENTS = [
+  {id:1,  nome:'Ana Paulo (Loss)',    plataforma:'P2P FIVE',     plano:'Integral',    vencimento:'2026-03-19', pais:'🇧🇷', contato:'', obs:''},
+  {id:2,  nome:'Wanderson',           plataforma:'HIBRIDO FIVE', plano:'Integral',    vencimento:'2026-04-04', pais:'🇧🇷', contato:'', obs:''},
+  {id:3,  nome:'Raphael',             plataforma:'HIBRIDO FIVE', plano:'Integral',    vencimento:'2026-04-05', pais:'🇧🇷', contato:'', obs:''},
+  {id:4,  nome:'Pr Jhony',            plataforma:'IPTV HPLUS',   plano:'Integral',    vencimento:'2026-04-08', pais:'🇪🇸', contato:'', obs:''},
+  {id:5,  nome:'Misael',              plataforma:'HIBRIDO FIVE', plano:'Integral',    vencimento:'2026-04-09', pais:'🇧🇷', contato:'', obs:''},
+  {id:6,  nome:'Andressa Rios',       plataforma:'IPTV FIVE',    plano:'Integral',    vencimento:'2026-04-11', pais:'🇧🇷', contato:'', obs:''},
+  {id:7,  nome:'Fabio Jr (Rodney)',   plataforma:'IPTV FIVE',    plano:'Promocional', vencimento:'2026-04-18', pais:'🇧🇷', contato:'', obs:''},
+  {id:8,  nome:'Nayara',              plataforma:'IPTV FIVE',    plano:'Integral',    vencimento:'2026-04-18', pais:'🇪🇸', contato:'', obs:''},
+  {id:9,  nome:'Ellen (Rodney)',      plataforma:'IPTV HPLUS',   plano:'Promocional', vencimento:'2026-04-22', pais:'🇧🇷', contato:'', obs:''},
+  {id:10, nome:'Melissa',             plataforma:'IPTV FIVE',    plano:'Integral',    vencimento:'2026-04-24', pais:'🇧🇷', contato:'', obs:''},
+  {id:11, nome:'George',              plataforma:'P2P FIVE',     plano:'Integral',    vencimento:'2026-04-25', pais:'🇧🇷', contato:'', obs:'FP'},
+  {id:12, nome:'Gabriela',            plataforma:'IPTV FIVE',    plano:'Integral',    vencimento:'2026-04-25', pais:'🇧🇷', contato:'', obs:''},
+  {id:13, nome:'Rodney (Denis)',      plataforma:'IPTV BLADE',   plano:'Promocional', vencimento:'2026-04-25', pais:'🇵🇹', contato:'', obs:''},
+  {id:14, nome:'Matheus Leornardeli', plataforma:'P2P FIVE',     plano:'Integral',    vencimento:'2026-04-26', pais:'🇪🇸', contato:'', obs:''},
+  {id:15, nome:'Rafael Rodrigues',    plataforma:'P2P FIVE',     plano:'Integral',    vencimento:'2026-04-26', pais:'🇪🇸', contato:'', obs:''},
+  {id:16, nome:'Marcelo',             plataforma:'IPTV FIVE',    plano:'Integral',    vencimento:'2026-04-26', pais:'🇵🇹', contato:'', obs:''},
+  {id:17, nome:'Edson',               plataforma:'IPTV HPLUS',   plano:'Integral',    vencimento:'2026-04-26', pais:'🇪🇸', contato:'', obs:''},
+  {id:18, nome:'Welinton',            plataforma:'IPTV HPLUS',   plano:'Integral',    vencimento:'2026-04-26', pais:'🇪🇸', contato:'', obs:''},
+  {id:19, nome:'Carol',               plataforma:'IPTV FIVE',    plano:'Integral',    vencimento:'2026-04-27', pais:'🇧🇷', contato:'', obs:''},
+];
+
+const DEFAULT_SERVERS = [
+  {nome:'IPTV FIVE',    custo:15, cor:'#00d4ff', status:'online'},
+  {nome:'IPTV HPLUS',   custo:18, cor:'#a78bfa', status:'online'},
+  {nome:'IPTV BLADE',   custo:12, cor:'#ff3b5c', status:'online'},
+  {nome:'P2P FIVE',     custo:14, cor:'#ff7b00', status:'online'},
+  {nome:'HIBRIDO FIVE', custo:16, cor:'#00e096', status:'online'},
+];
+
+function today()    { return new Date().toISOString().split('T')[0]; }
+function tomorrow() { const d=new Date(); d.setDate(d.getDate()+1); return d.toISOString().split('T')[0]; }
+function formatDate(d) { if(!d) return '-'; const [y,m,day]=d.split('-'); return `${day}/${m}/${y}`; }
+
+function sendWA(nome, plataforma, vencimento, contato) {
+  const t = today();
+  let msg = '';
+  if (vencimento < t) msg = `Olá ${nome.split(' ')[0]}! 👋 Seu plano IPTV (${plataforma}) venceu em ${formatDate(vencimento)}. Entre em contato para renovar! 🙏`;
+  else if (vencimento === t) msg = `Olá ${nome.split(' ')[0]}! 👋 Seu plano IPTV (${plataforma}) vence HOJE. Renove para não ficar sem sinal! 📺`;
+  else msg = `Olá ${nome.split(' ')[0]}! 👋 Seu plano IPTV (${plataforma}) vence amanhã. Renove para não ficar sem sinal! 📺`;
+  const phone = contato ? contato.replace(/\D/g,'') : '';
+  window.open(phone ? `https://wa.me/${phone}?text=${encodeURIComponent(msg)}` : `https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+function render() {
+  let clientes   = JSON.parse(localStorage.getItem(CLIENT_KEY) || 'null');
+  let servidores = JSON.parse(localStorage.getItem(SRV_KEY)    || 'null');
+  if (!clientes   || clientes.length   === 0) { clientes   = DEFAULT_CLIENTS; localStorage.setItem(CLIENT_KEY, JSON.stringify(clientes)); }
+  if (!servidores || servidores.length === 0) { servidores = DEFAULT_SERVERS; localStorage.setItem(SRV_KEY,    JSON.stringify(servidores)); }
+
+  const t  = today();
+  const tm = tomorrow();
+
+  // Status counts
+  const vencidos = clientes.filter(c => c.vencimento < t).length;
+  const hoje     = clientes.filter(c => c.vencimento === t).length;
+  const emDia    = clientes.filter(c => c.vencimento > t).length;
+
+  document.getElementById('numVencido').textContent = vencidos;
+  document.getElementById('numHoje').textContent    = hoje;
+  document.getElementById('numEmDia').textContent   = emDia;
+
+  // Server list
+  const onlineServers = servidores.filter(s => s.status !== 'offline');
+  const maxClientes = Math.max(...onlineServers.map(s => clientes.filter(c => c.plataforma === s.nome).length), 1);
+  document.getElementById('serverList').innerHTML = onlineServers.map(s => {
+    const count = clientes.filter(c => c.plataforma === s.nome).length;
+    const pct   = Math.round((count / maxClientes) * 100);
+    return `
+    <div class="server-card">
+      <div class="server-left">
+        <div class="server-dot" style="background:${s.cor}"></div>
+        <div class="server-name">${s.nome}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="server-bar-wrap"><div class="server-bar" style="width:${pct}%;background:${s.cor}"></div></div>
+        <div class="server-count">
+          <span class="server-num" style="color:${s.cor}">${count}</span>
+          <span class="server-word">${count === 1 ? 'cliente' : 'clientes'}</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Attention: vence hoje e amanhã
+  const urgent = clientes.filter(c => c.vencimento === t || c.vencimento === tm)
+    .sort((a,b) => a.vencimento.localeCompare(b.vencimento));
+
+  if (urgent.length === 0) {
+    document.getElementById('attentionList').innerHTML = `<div style="text-align:center;padding:24px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);color:var(--muted);font-size:13px">✅ Nenhum cliente vencendo hoje ou amanhã</div>`;
+    return;
+  }
+
+  document.getElementById('attentionList').innerHTML = urgent.map(c => {
+    const isHoje = c.vencimento === t;
+    return `
+    <div class="attention-card ${isHoje ? 'hoje' : 'amanha'}">
+      <div class="att-row1">
+        <div class="att-name">${c.pais} ${c.nome}</div>
+        <span class="att-badge ${isHoje ? 'badge-hoje' : 'badge-amanha'}">${isHoje ? 'Vence Hoje' : 'Vence Amanhã'}</span>
+      </div>
+      <div class="att-row2">
+        <div class="att-info">
+          <span class="att-chip">${c.plataforma}</span>
+          <span class="att-chip">${c.plano}</span>
+        </div>
+        <button class="wa-btn" onclick="sendWA('${c.nome}','${c.plataforma}','${c.vencimento}','${c.contato||''}')">📲 WhatsApp</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// Reload when returning to page
+document.addEventListener('visibilitychange', function() {
+  if (document.visibilityState === 'visible') render();
+});
+
+render();
+</script>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <div class="nav-item active" onclick="location.href='index.html'">
+    <div class="nav-icon">🏠</div>
+    <div class="nav-label">Início</div>
+    <div class="nav-indicator"></div>
+  </div>
+  <div class="nav-item" onclick="location.href='clientes.html'">
+    <div class="nav-icon">👥</div>
+    <div class="nav-label">Clientes</div>
+    <div class="nav-indicator"></div>
+  </div>
+  <div class="nav-item" onclick="location.href='servidor.html'">
+    <div class="nav-icon">🖥️</div>
+    <div class="nav-label">Servidor</div>
+    <div class="nav-indicator"></div>
+  </div>
+  <div class="nav-item" onclick="location.href='financas.html'">
+    <div class="nav-icon">💰</div>
+    <div class="nav-label">Finanças</div>
+    <div class="nav-indicator"></div>
+  </div>
+  <div class="nav-item" onclick="location.href='config.html'">
+    <div class="nav-icon">⚙️</div>
+    <div class="nav-label">Config.</div>
+    <div class="nav-indicator"></div>
+  </div>
+</div>
+
+</body>
