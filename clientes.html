@@ -349,6 +349,7 @@ function toggleOcultarVencidos() {
   localStorage.setItem('ocultarVencidos', ocultarVencidos);
   updateOcultarBtn();
   openCardId = null;
+  currentClientPage = 0;
   render();
 }
 
@@ -392,6 +393,10 @@ function renderClientPage() {
   const el = document.getElementById('clientList');
   const total = filteredList.length;
   const pages = Math.ceil(total / CLIENT_PAGE_SIZE);
+
+  // Clamp page if list shrunk
+  if (currentClientPage >= pages) currentClientPage = Math.max(0, pages - 1);
+
   const start = currentClientPage * CLIENT_PAGE_SIZE;
   const end   = Math.min(start + CLIENT_PAGE_SIZE, total);
   const page  = filteredList.slice(start, end);
