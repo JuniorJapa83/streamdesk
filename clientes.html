@@ -134,9 +134,21 @@
   .fab { position: fixed; bottom: 92px; right: calc(50% - 210px + 16px); width: 52px; height: 52px; background: var(--accent); border: none; border-radius: 50%; font-size: 24px; color: #000; cursor: pointer; box-shadow: 0 4px 20px rgba(0,212,255,0.4); transition: all 0.2s; display: flex; align-items: center; justify-content: center; z-index: 49; }
   .fab:active { transform: scale(0.92); }
   @media (max-width: 420px) { .fab { right: 16px; } }
+
+  body.light {
+    --bg:#f0f4f8;--surface:#ffffff;--card:#ffffff;--card2:#f7f9fc;
+    --border:#e2e8f0;--text:#1a202c;--muted:#718096;
+  }
+  body.light .header { background: rgba(255,255,255,.96); }
+  body.light .bottom-nav { background: rgba(255,255,255,.97); }
 </style>
 </head>
-<body>
+<body><script>
+(function(){
+  var cfg = JSON.parse(localStorage.getItem('streamdesk_config') || '{}');
+  if (cfg.darkMode === false) document.body.classList.add('light');
+})();
+</script>
 
 <div class="header">
   <div class="header-top">
@@ -575,6 +587,9 @@ function confirmRenew(){
 // Reload data when returning to this page
 document.addEventListener('visibilitychange', function() {
   if (document.visibilityState === 'visible') {
+    var cfg2 = JSON.parse(localStorage.getItem('streamdesk_config') || '{}');
+    if (cfg2.darkMode === false) { document.body.classList.add('light'); }
+    else { document.body.classList.remove('light'); }
     clientes   = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
     financas   = JSON.parse(localStorage.getItem(FINANCE_KEY) || '[]');
     servidores = JSON.parse(localStorage.getItem(SRV_KEY) || 'null') || servidores;

@@ -105,9 +105,21 @@
   .nav-item.active .nav-icon{transform:translateY(-2px)}
   .nav-dot{width:4px;height:4px;border-radius:50%;background:var(--accent);margin-top:-2px;opacity:0}
   .nav-item.active .nav-dot{opacity:1}
+
+  body.light {
+    --bg:#f0f4f8;--surface:#ffffff;--card:#ffffff;--card2:#f7f9fc;
+    --border:#e2e8f0;--text:#1a202c;--muted:#718096;
+  }
+  body.light .header { background: rgba(255,255,255,.96); }
+  body.light .bottom-nav { background: rgba(255,255,255,.97); }
 </style>
 </head>
-<body>
+<body><script>
+(function(){
+  var cfg = JSON.parse(localStorage.getItem('streamdesk_config') || '{}');
+  if (cfg.darkMode === false) document.body.classList.add('light');
+})();
+</script>
 
 <div class="header">
   <div class="header-top">
