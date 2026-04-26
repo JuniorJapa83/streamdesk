@@ -216,9 +216,9 @@ const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
 
-// Admin credentials — hardcoded, only you can access
+// Admin access — uses Firebase Auth directly
+// No plain text credentials stored here
 const ADMIN_EMAIL = "juniorramos.yeshua@gmail.com";
-const ADMIN_PASS  = "Jrsafg12*";
 
 var pendingDelUid = null;
 
@@ -258,8 +258,8 @@ window.doLogin = async function() {
   var err   = document.getElementById('loginErr');
   err.classList.remove('show');
 
-  // Only allow admin credentials
-  if (email !== ADMIN_EMAIL) {
+  // Only allow admin email
+  if (email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
     err.textContent = '⚠️ Acesso negado.';
     err.classList.add('show');
     return;
@@ -270,7 +270,8 @@ window.doLogin = async function() {
   document.getElementById('spinner').style.display = 'block';
 
   try {
-    await signInWithEmailAndPassword(auth, ADMIN_EMAIL, ADMIN_PASS);
+    // Use Firebase Auth with credentials typed by user
+    await signInWithEmailAndPassword(auth, email, senha);
     // onAuthStateChanged will handle showing app
   } catch(e) {
     document.getElementById('btnLogin').disabled = false;
