@@ -187,6 +187,21 @@
   <div class="nav-item " onclick="location.href='config.html'"><div class="nav-icon">⚙️</div><div class="nav-label">Config.</div><div class="nav-dot"></div></div>
 </div>
 
+<!-- MODAL SEM SERVIDOR -->
+<div class="modal-overlay" id="noServerOverlay">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div style="font-size:40px;text-align:center;margin-bottom:12px">🖥️</div>
+    <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;text-align:center;margin-bottom:10px">Nenhum Servidor Cadastrado</div>
+    <div style="font-size:14px;color:var(--muted);text-align:center;margin-bottom:24px;line-height:1.6">
+      Para cadastrar um cliente, você precisa ter ao menos um servidor cadastrado.<br><br>
+      Vá em <strong style="color:var(--accent)">Servidor</strong> no menu e adicione seu primeiro servidor.
+    </div>
+    <button onclick="location.href='servidor.html'" style="width:100%;background:var(--accent);color:#000;border:none;border-radius:12px;padding:14px;font-family:'Syne',sans-serif;font-weight:700;font-size:16px;cursor:pointer;margin-bottom:10px">🖥️ Ir para Servidores</button>
+    <button onclick="closeNoServer()" style="width:100%;background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:12px;padding:12px;font-family:'DM Sans',sans-serif;font-size:15px;cursor:pointer">Fechar</button>
+  </div>
+</div>
+
 <!-- MODAL CADASTRO -->
 <div class="modal-overlay" id="modalOverlay" onclick="closeOutside(event,'modalOverlay')">
   <div class="modal">
@@ -201,7 +216,6 @@
       <div class="form-group">
         <label class="form-label">Servidor</label>
         <select class="form-select" id="fPlataforma">
-          <option>IPTV FIVE</option>
         </select>
       </div>
       <div class="form-group">
@@ -288,13 +302,7 @@ const SRV_KEY     = 'iptv_servidores_v1';
 
 let clientes = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
 let financas   = JSON.parse(localStorage.getItem(FINANCE_KEY) || '[]');
-let servidores = JSON.parse(localStorage.getItem(SRV_KEY) || 'null') || [
-  {nome:'IPTV FIVE',    custo:15, cor:'#00d4ff', status:'online'},
-  {nome:'IPTV HPLUS',   custo:18, cor:'#a78bfa', status:'online'},
-  {nome:'IPTV BLADE',   custo:12, cor:'#ff3b5c', status:'online'},
-  {nome:'P2P FIVE',     custo:14, cor:'#ff7b00', status:'online'},
-  {nome:'HIBRIDO FIVE', custo:16, cor:'#00e096', status:'online'},
-];
+let servidores = JSON.parse(localStorage.getItem(SRV_KEY) || '[]');
 let currentFilter = 'todos', currentServer = 'todos', openCardId = null;
 let ocultarVencidos = localStorage.getItem('ocultarVencidos') === 'true';
 let currentClientPage = 0;
@@ -325,10 +333,8 @@ function statusPill(s) {
 function barClass(s) { return {vencido:'bar-vencido',hoje:'bar-hoje',amanha:'bar-amanha','em-dia':'bar-em-dia'}[s]; }
 
 function buildServerFilters() {
-  // Always read fresh from localStorage so new servers appear instantly
-  servidores = JSON.parse(localStorage.getItem(SRV_KEY) || 'null') || servidores;
+  servidores = JSON.parse(localStorage.getItem(SRV_KEY) || '[]');
   const srvNomes = servidores.map(s => s.nome);
-  // Also include any plataforma already used by clients but not in servidores list
   clientes.forEach(c => { if (!srvNomes.includes(c.plataforma)) srvNomes.push(c.plataforma); });
   const servers = ['todos', ...srvNomes];
   document.getElementById('serverFilters').innerHTML = servers.map(s =>
@@ -466,13 +472,23 @@ function changeClientPage(dir){
 
 function toggleCard(id){ openCardId=openCardId===id?null:id; render(); }
 
-function openModal(client=null){
+function showNoServerAlert() {
+  document.getElementById('noServerOverlay').classList.add('open');
+}
+function closeNoServer() {
+  document.getElementById('noServerOverlay').classList.remove('open');
+}
   document.getElementById('editId').value=client?client.id:'';
   document.getElementById('modalTitle').textContent=client?'Editar Cliente':'Novo Cliente';
   document.getElementById('fNome').value=client?.nome||'';
 
   // Load servidores dynamically from localStorage
-  servidores = JSON.parse(localStorage.getItem(SRV_KEY) || 'null') || servidores;
+  servidores = JSON.parse(localStorage.getItem(SRV_KEY) || '[]');
+  if (servidores.length === 0) {
+    closeModal('modalOverlay');
+    showNoServerAlert();
+    return;
+  }
   const selSrv = document.getElementById('fPlataforma');
   selSrv.innerHTML = servidores.map(s => '<option value="'+s.nome+'">'+s.nome+'</option>').join('');
   selSrv.value = client?.plataforma || (servidores[0]?.nome || '');
@@ -573,7 +589,7 @@ document.addEventListener('visibilitychange', function() {
     else { document.body.classList.remove('light'); }
     clientes   = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
     financas   = JSON.parse(localStorage.getItem(FINANCE_KEY) || '[]');
-    servidores = JSON.parse(localStorage.getItem(SRV_KEY) || 'null') || servidores;
+    servidores = JSON.parse(localStorage.getItem(SRV_KEY) || '[]');
     ocultarVencidos = localStorage.getItem('ocultarVencidos') === 'true';
     updateOcultarBtn();
     render();
