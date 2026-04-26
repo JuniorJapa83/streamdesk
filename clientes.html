@@ -478,6 +478,8 @@ function showNoServerAlert() {
 function closeNoServer() {
   document.getElementById('noServerOverlay').classList.remove('open');
 }
+
+function openModal(client=null){
   document.getElementById('editId').value=client?client.id:'';
   document.getElementById('modalTitle').textContent=client?'Editar Cliente':'Novo Cliente';
   document.getElementById('fNome').value=client?.nome||'';
