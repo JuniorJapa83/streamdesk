@@ -183,7 +183,13 @@ let clientes = JSON.parse(localStorage.getItem(CLIENT_KEY) || '[]');
 let selectedColor = COLORS[0];
 
 function saveAll() { localStorage.setItem(SRV_KEY, JSON.stringify(servidores)); }
-function today()   { return new Date().toISOString().split('T')[0]; }
+function today() {
+  var d = new Date();
+  var y = d.getFullYear();
+  var m = String(d.getMonth()+1).padStart(2,'0');
+  var day = String(d.getDate()).padStart(2,'0');
+  return y+'-'+m+'-'+day;
+}
 
 function getStats(nome) {
   const list     = clientes.filter(c => c.plataforma === nome);

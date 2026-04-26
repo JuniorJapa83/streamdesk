@@ -311,8 +311,21 @@ let filteredList = [];
 
 function saveClientes() { localStorage.setItem(STORAGE_KEY, JSON.stringify(clientes)); }
 function saveFinancas()  { localStorage.setItem(FINANCE_KEY, JSON.stringify(financas)); }
-function today()    { return new Date().toISOString().split('T')[0]; }
-function tomorrow() { const d=new Date(); d.setDate(d.getDate()+1); return d.toISOString().split('T')[0]; }
+function today() {
+  var d = new Date();
+  var y = d.getFullYear();
+  var m = String(d.getMonth()+1).padStart(2,'0');
+  var day = String(d.getDate()).padStart(2,'0');
+  return y+'-'+m+'-'+day;
+}
+function tomorrow() {
+  var d = new Date();
+  d.setDate(d.getDate()+1);
+  var y = d.getFullYear();
+  var m = String(d.getMonth()+1).padStart(2,'0');
+  var day = String(d.getDate()).padStart(2,'0');
+  return y+'-'+m+'-'+day;
+}
 
 function getStatus(v) {
   const t=today(), tm=tomorrow();
