@@ -6,85 +6,63 @@
 <title>StreamDesk — Login</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg:#f0f4f8;--surface:#ffffff;--card:#ffffff;--card2:#f7f9fc;
-    --border:#e2e8f0;--accent:#00d4ff;--red:#ff3b5c;--green:#00e096;
-    --text:#1a202c;--muted:#718096;--radius:16px;
-  }
+  :root{--bg:#f0f4f8;--surface:#fff;--card:#fff;--card2:#f7f9fc;--border:#e2e8f0;--accent:#00d4ff;--red:#ff3b5c;--green:#00e096;--text:#1a202c;--muted:#718096}
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:420px;margin:0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 24px 40px;}
-
-  /* BG DECORATION */
-  body::before{content:'';position:fixed;top:-120px;right:-80px;width:320px;height:320px;background:radial-gradient(circle,rgba(0,212,255,.12) 0%,transparent 70%);pointer-events:none;z-index:0}
-  body::after{content:'';position:fixed;bottom:-80px;left:-80px;width:280px;height:280px;background:radial-gradient(circle,rgba(0,224,150,.08) 0%,transparent 70%);pointer-events:none;z-index:0}
-
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:420px;margin:0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
+  body::before{content:'';position:fixed;top:-120px;right:-80px;width:320px;height:320px;background:radial-gradient(circle,rgba(0,212,255,.12) 0%,transparent 70%);pointer-events:none}
+  body::after{content:'';position:fixed;bottom:-80px;left:-80px;width:280px;height:280px;background:radial-gradient(circle,rgba(0,224,150,.08) 0%,transparent 70%);pointer-events:none}
   .wrap{width:100%;position:relative;z-index:1}
-
-  /* LOGO */
-  .logo-wrap{text-align:center;margin-bottom:40px}
-  .logo-icon{width:72px;height:72px;background:linear-gradient(135deg,#00d4ff,#00e096);border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:34px;margin:0 auto 16px;box-shadow:0 8px 32px rgba(0,212,255,.25)}
-  .logo-name{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--text);letter-spacing:-0.5px}
+  .logo-wrap{text-align:center;margin-bottom:36px}
+  .logo-icon{width:72px;height:72px;background:linear-gradient(135deg,#00d4ff,#00e096);border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:34px;margin:0 auto 14px;box-shadow:0 8px 32px rgba(0,212,255,.25)}
+  .logo-name{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;letter-spacing:-.5px}
   .logo-name span{color:var(--accent)}
-  .logo-sub{font-size:14px;color:var(--muted);margin-top:4px}
-
-  /* CARD */
+  .logo-sub{font-size:13px;color:var(--muted);margin-top:4px}
   .card{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:28px 24px;box-shadow:0 4px 24px rgba(0,0,0,.06)}
-
   .card-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:4px}
-  .card-sub{font-size:13px;color:var(--muted);margin-bottom:24px}
-
-  /* FORM */
-  .fg{margin-bottom:16px}
+  .card-sub{font-size:13px;color:var(--muted);margin-bottom:22px}
+  .fg{margin-bottom:14px}
   .fl{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;display:block}
   .fi-wrap{position:relative}
-  .fi{width:100%;background:var(--card2);border:1.5px solid var(--border);border-radius:12px;padding:13px 44px 13px 16px;color:var(--text);font-size:15px;font-family:'DM Sans',sans-serif;outline:none;transition:all .2s}
+  .fi{width:100%;background:var(--card2);border:1.5px solid var(--border);border-radius:12px;padding:12px 44px 12px 14px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:all .2s}
   .fi:focus{border-color:var(--accent);background:#fff;box-shadow:0 0 0 3px rgba(0,212,255,.1)}
   .fi::placeholder{color:var(--muted)}
-  .fi-icon{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:16px;color:var(--muted);cursor:pointer;user-select:none}
-
-  /* ERROR */
-  .error-msg{display:none;background:rgba(255,59,92,.08);border:1px solid rgba(255,59,92,.2);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--red);margin-bottom:16px;display:none;align-items:center;gap:8px}
-  .error-msg.show{display:flex}
-
-  /* BUTTON */
-  .btn-login{width:100%;background:linear-gradient(135deg,#00d4ff,#00b8e0);color:#000;border:none;border-radius:12px;padding:15px;font-family:'Syne',sans-serif;font-weight:700;font-size:16px;cursor:pointer;transition:all .2s;box-shadow:0 4px 16px rgba(0,212,255,.3);margin-top:4px}
-  .btn-login:active{transform:scale(.97)}
-  .btn-login:disabled{opacity:.6;cursor:not-allowed}
-
-  /* FIRST ACCESS */
-  .first-access{margin-top:20px;text-align:center;font-size:13px;color:var(--muted)}
-  .first-access a{color:var(--accent);font-weight:600;cursor:pointer;text-decoration:none}
-
-  /* SETUP CARD */
-  .setup-card{display:none;background:rgba(0,212,255,.05);border:1px solid rgba(0,212,255,.2);border-radius:16px;padding:20px;margin-top:16px}
-  .setup-card.show{display:block}
-  .setup-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:14px;color:var(--accent)}
-
-  /* VERSION */
-  .version{text-align:center;font-size:11px;color:var(--muted);margin-top:24px}
-  .version span{color:var(--accent);font-weight:600}
-
-  /* LOADING */
-  .loading{display:none;width:20px;height:20px;border:2px solid rgba(0,0,0,.2);border-top-color:#000;border-radius:50%;animation:spin .7s linear infinite;margin:0 auto}
+  .fi-icon{position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--muted);cursor:pointer;user-select:none}
+  .msg{display:none;border-radius:10px;padding:10px 14px;font-size:13px;margin-bottom:14px;align-items:center;gap:8px;line-height:1.4}
+  .msg.show{display:flex}
+  .msg.err{background:rgba(255,59,92,.08);border:1px solid rgba(255,59,92,.2);color:var(--red)}
+  .msg.ok{background:rgba(0,224,150,.08);border:1px solid rgba(0,224,150,.2);color:var(--green)}
+  .btn{width:100%;background:linear-gradient(135deg,#00d4ff,#00b8e0);color:#000;border:none;border-radius:12px;padding:14px;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;cursor:pointer;transition:all .2s;box-shadow:0 4px 16px rgba(0,212,255,.3);margin-top:4px;display:flex;align-items:center;justify-content:center;gap:8px}
+  .btn:active{transform:scale(.97)}
+  .btn:disabled{opacity:.6;cursor:not-allowed}
+  .btn-sec{width:100%;background:var(--card2);color:var(--text);border:1px solid var(--border);border-radius:12px;padding:13px;font-family:'Syne',sans-serif;font-weight:600;font-size:15px;cursor:pointer;margin-top:8px}
+  .spinner{width:16px;height:16px;border:2px solid rgba(0,0,0,.2);border-top-color:#000;border-radius:50%;animation:spin .7s linear infinite;display:none}
   @keyframes spin{to{transform:rotate(360deg)}}
+  .forgot{text-align:right;margin-top:-6px;margin-bottom:12px}
+  .forgot a{font-size:12px;color:var(--accent);cursor:pointer}
+  .link-row{margin-top:20px;text-align:center;font-size:13px;color:var(--muted)}
+  .link-row a{color:var(--accent);font-weight:600;cursor:pointer}
+  .register-card{display:none;background:rgba(0,212,255,.04);border:1px solid rgba(0,212,255,.15);border-radius:16px;padding:20px;margin-top:14px}
+  .register-card.show{display:block}
+  .reg-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:14px;color:var(--accent)}
+  .version{text-align:center;font-size:11px;color:var(--muted);margin-top:20px}
+  .version span{color:var(--accent);font-weight:600}
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <!-- LOGO -->
   <div class="logo-wrap">
     <div class="logo-icon">📡</div>
     <div class="logo-name">Stream<span>Desk</span></div>
     <div class="logo-sub">Gestão de clientes IPTV</div>
   </div>
 
-  <!-- LOGIN CARD -->
   <div class="card">
     <div class="card-title">Bem-vindo! 👋</div>
     <div class="card-sub">Entre com seu e-mail e senha</div>
 
-    <div class="error-msg" id="errorMsg">⚠️ <span id="errorTxt">E-mail ou senha incorretos.</span></div>
+    <div class="msg err" id="msgErr"></div>
+    <div class="msg ok"  id="msgOk"></div>
 
     <div class="fg">
       <label class="fl">E-mail</label>
@@ -93,230 +71,218 @@
         <span class="fi-icon">📧</span>
       </div>
     </div>
-
     <div class="fg">
       <label class="fl">Senha</label>
       <div class="fi-wrap">
-        <input class="fi" id="fSenha" type="password" placeholder="••••••••" autocomplete="current-password">
-        <span class="fi-icon" id="toggleSenha" onclick="togglePwd()">👁️</span>
+        <input class="fi" id="fSenha" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+        <span class="fi-icon" id="eyeLogin" onclick="toggleEye('fSenha','eyeLogin')">👁️</span>
       </div>
     </div>
+    <div class="forgot"><a onclick="doForgot()">Esqueci minha senha</a></div>
 
-    <button class="btn-login" id="btnLogin" onclick="doLogin()">
+    <button class="btn" id="btnLogin" onclick="doLogin()">
       <span id="btnTxt">Entrar</span>
-      <div class="loading" id="loading"></div>
+      <div class="spinner" id="spinner"></div>
     </button>
   </div>
 
-  <!-- PRIMEIRO ACESSO -->
-  <div class="first-access">
-    Primeiro acesso? <a onclick="toggleSetup()">Criar conta</a>
-  </div>
+  <div class="link-row">Primeiro acesso? <a onclick="toggleRegister()">Criar conta</a></div>
 
-  <!-- SETUP CARD -->
-  <div class="setup-card" id="setupCard">
-    <div class="setup-title">✨ Criar sua conta</div>
+  <!-- REGISTER CARD -->
+  <div class="register-card" id="registerCard">
+    <div class="reg-title">✨ Criar sua conta</div>
+
+    <div class="msg err" id="regErr"></div>
 
     <div class="fg">
-      <label class="fl">Seu Nome</label>
-      <input class="fi" id="sNome" placeholder="Ex: Junior">
+      <label class="fl">Nome completo</label>
+      <input class="fi" id="rNome" placeholder="Ex: Junior Ramos">
     </div>
     <div class="fg">
       <label class="fl">E-mail</label>
-      <input class="fi" id="sEmail" type="email" placeholder="seu@email.com">
+      <input class="fi" id="rEmail" type="email" placeholder="seu@email.com">
     </div>
     <div class="fg">
       <label class="fl">WhatsApp <span style="color:var(--red)">*</span></label>
       <div class="fi-wrap">
-        <input class="fi" id="sWhatsApp" type="tel" placeholder="+55 11 99999-9999">
+        <input class="fi" id="rWA" type="tel" placeholder="+55 11 99999-9999">
         <span class="fi-icon">📲</span>
       </div>
     </div>
     <div class="fg">
       <label class="fl">Senha</label>
       <div class="fi-wrap">
-        <input class="fi" id="sSenha" type="password" placeholder="Mínimo 6 caracteres">
+        <input class="fi" id="rSenha" type="password" placeholder="Mínimo 6 caracteres">
+        <span class="fi-icon" id="eyeReg" onclick="toggleEye('rSenha','eyeReg')">👁️</span>
       </div>
     </div>
     <div class="fg">
       <label class="fl">Confirmar Senha</label>
-      <div class="fi-wrap">
-        <input class="fi" id="sConfirm" type="password" placeholder="Repita a senha">
-      </div>
+      <input class="fi" id="rConfirm" type="password" placeholder="Repita a senha">
     </div>
-    <button class="btn-login" onclick="doRegister()">Criar Conta</button>
+
+    <button class="btn" id="btnReg" onclick="doRegister()">
+      <span id="btnRegTxt">Criar Conta</span>
+      <div class="spinner" id="spinnerReg"></div>
+    </button>
+    <button class="btn-sec" onclick="toggleRegister()">Cancelar</button>
   </div>
 
   <div class="version">StreamDesk <span>v1.0</span></div>
-
 </div>
 
-<script>
-var CFG_KEY    = 'streamdesk_config';
-var AUTH_KEY   = 'streamdesk_auth';
-var SESSION_KEY= 'streamdesk_session';
-var USERS_KEY  = 'streamdesk_usuarios';
+<script type="module">
+import { initializeApp }                     from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword,
+         createUserWithEmailAndPassword,
+         sendPasswordResetEmail,
+         onAuthStateChanged }                from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDjh7BrMk1MKkLU9MOYJsI1XxantSt1V1g",
+  authDomain: "streamdesk-5350d.firebaseapp.com",
+  projectId: "streamdesk-5350d",
+  storageBucket: "streamdesk-5350d.firebasestorage.app",
+  messagingSenderId: "36684694847",
+  appId: "1:36684694847:web:0f6f3a27933e3d84cfff8a"
+};
+
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
 
 function todayStr() {
-  var d=new Date(), y=d.getFullYear();
-  var m=String(d.getMonth()+1).padStart(2,'0');
-  var day=String(d.getDate()).padStart(2,'0');
-  return y+'-'+m+'-'+day;
+  var d=new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 }
 
-function registerUserInAdmin(nome, email, whatsapp) {
-  var users = JSON.parse(localStorage.getItem(USERS_KEY) || '[]');
-  var exists = users.find(function(u){ return u.email === email; });
-  if (!exists) {
-    users.push({
-      id: 'u_' + Date.now(),
-      nome: nome,
-      email: email,
-      telefone: whatsapp || '',
-      dataCadastro: todayStr(),
-      status: 'pendente',
-      expiracao: null,
-      ultimoAcesso: todayStr(),
-    });
-    localStorage.setItem(USERS_KEY, JSON.stringify(users));
-  }
-}
-
-function checkUserAccess(email) {
-  var users = JSON.parse(localStorage.getItem(USERS_KEY) || '[]');
-  var user  = users.find(function(u){ return u.email === email; });
-  if (!user) return 'ok'; // no admin system yet, allow
-  if (user.status === 'bloqueado') return 'bloqueado';
-  if (user.status === 'pendente')  return 'pendente';
-  // Check expiration
-  if (user.expiracao) {
-    var diff = Math.round((new Date(user.expiracao) - new Date(todayStr())) / 86400000);
-    if (diff < 0) return 'expirado';
-  }
-  // Update last access
-  user.ultimoAcesso = todayStr();
-  localStorage.setItem(USERS_KEY, JSON.stringify(users));
-  return 'ok';
-}
-
-// Check if already logged in
-(function(){
-  var session = localStorage.getItem(SESSION_KEY);
-  if (session === 'true') {
+// Redirect if already logged in
+onAuthStateChanged(auth, async function(user) {
+  if (!user) return;
+  try {
+    var snap = await getDoc(doc(db, 'usuarios', user.uid));
+    if (!snap.exists()) { location.href = 'index.html'; return; }
+    var data = snap.data();
+    if (data.status === 'bloqueado') {
+      await auth.signOut();
+      showMsg('msgErr', '⚠️ Acesso bloqueado. Entre em contato com o administrador.');
+      return;
+    }
+    if (data.status === 'pendente') {
+      await auth.signOut();
+      showMsg('msgOk', '⏳ Aguardando aprovação. Envie o comprovante de pagamento.');
+      return;
+    }
+    if (data.expiracao && new Date(data.expiracao) < new Date()) {
+      await auth.signOut();
+      showMsg('msgErr', '⚠️ Seu acesso expirou. Entre em contato para renovar.');
+      return;
+    }
+    // Update last access
+    await setDoc(doc(db, 'usuarios', user.uid), { ultimoAcesso: todayStr() }, { merge: true });
     location.href = 'index.html';
-  }
-})();
-
-function showError(msg) {
-  var el = document.getElementById('errorMsg');
-  document.getElementById('errorTxt').textContent = msg;
-  el.classList.add('show');
-}
-function hideError() {
-  document.getElementById('errorMsg').classList.remove('show');
-}
-
-function togglePwd() {
-  var fi = document.getElementById('fSenha');
-  fi.type = fi.type === 'password' ? 'text' : 'password';
-}
-
-function toggleSetup() {
-  var card = document.getElementById('setupCard');
-  card.classList.toggle('show');
-  hideError();
-}
-
-function doLogin() {
-  hideError();
-  var email = document.getElementById('fEmail').value.trim().toLowerCase();
-  var senha = document.getElementById('fSenha').value;
-
-  if (!email) { showError('Informe seu e-mail.'); return; }
-  if (!senha)  { showError('Informe sua senha.'); return; }
-
-  // Get stored auth
-  var auth = JSON.parse(localStorage.getItem(AUTH_KEY) || 'null');
-
-  if (!auth) {
-    showError('Nenhuma conta cadastrada. Clique em "Criar conta" abaixo.');
-    return;
-  }
-
-  if (auth.email !== email) {
-    showError('E-mail não encontrado.');
-    return;
-  }
-
-  if (auth.senha !== btoa(senha)) {
-    showError('Senha incorreta. Tente novamente.');
-    return;
-  }
-
-  // Check user access status
-  var access = checkUserAccess(email);
-  if (access === 'bloqueado') { showError('Seu acesso foi bloqueado. Entre em contato com o administrador.'); return; }
-  if (access === 'pendente')  { showError('Seu acesso está aguardando aprovação. Envie o comprovante de pagamento.'); return; }
-  if (access === 'expirado')  { showError('Seu acesso expirou. Entre em contato para renovar.'); return; }
-
-  // Success — show loading then redirect
-  var btn = document.getElementById('btnLogin');
-  var txt = document.getElementById('btnTxt');
-  var load = document.getElementById('loading');
-  btn.disabled = true;
-  txt.style.display = 'none';
-  load.style.display = 'block';
-
-  localStorage.setItem(SESSION_KEY, 'true');
-  var cfg = JSON.parse(localStorage.getItem(CFG_KEY) || '{}');
-  cfg.nome  = auth.nome;
-  cfg.email = auth.email;
-  localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
-
-  setTimeout(function() {
+  } catch(e) {
     location.href = 'index.html';
-  }, 800);
-}
-
-function doRegister() {
-  hideError();
-  var nome    = document.getElementById('sNome').value.trim();
-  var email   = document.getElementById('sEmail').value.trim().toLowerCase();
-  var whatsapp= document.getElementById('sWhatsApp').value.trim();
-  var senha   = document.getElementById('sSenha').value;
-  var confirm = document.getElementById('sConfirm').value;
-
-  if (!nome)            { showError('Informe seu nome.'); return; }
-  if (!email)           { showError('Informe seu e-mail.'); return; }
-  if (!email.includes('@')) { showError('E-mail inválido.'); return; }
-  if (!whatsapp)        { showError('WhatsApp é obrigatório para contato.'); return; }
-  if (whatsapp.replace(/\D/g,'').length < 10) { showError('Informe um WhatsApp válido com DDD.'); return; }
-  if (!senha)           { showError('Informe uma senha.'); return; }
-  if (senha.length < 6) { showError('A senha deve ter pelo menos 6 caracteres.'); return; }
-  if (senha !== confirm) { showError('As senhas não coincidem.'); return; }
-
-  var auth = { nome: nome, email: email, senha: btoa(senha) };
-  localStorage.setItem(AUTH_KEY, JSON.stringify(auth));
-
-  // Register in admin users list as pendente (with WhatsApp)
-  registerUserInAdmin(nome, email, whatsapp);
-
-  // Don't auto login — show pending message
-  document.getElementById('setupCard').classList.remove('show');
-  showError('✅ Conta criada! Aguarde a aprovação do administrador após enviar o comprovante de pagamento.');
-  document.getElementById('errorMsg').style.background = 'rgba(0,224,150,.08)';
-  document.getElementById('errorMsg').style.borderColor = 'rgba(0,224,150,.2)';
-  document.getElementById('errorMsg').style.color = '#00e096';
-}
-
-// Allow Enter key to submit
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') {
-    var setup = document.getElementById('setupCard');
-    if (setup.classList.contains('show')) doRegister();
-    else doLogin();
   }
 });
+
+function showMsg(id, msg) {
+  document.getElementById('msgErr').classList.remove('show');
+  document.getElementById('msgOk').classList.remove('show');
+  var el = document.getElementById(id);
+  el.textContent = msg;
+  el.classList.add('show');
+}
+function showRegErr(msg) {
+  var el = document.getElementById('regErr');
+  el.textContent = '⚠️ ' + msg;
+  el.classList.add('show');
+}
+
+window.toggleEye = function(inputId, iconId) {
+  var fi = document.getElementById(inputId);
+  fi.type = fi.type === 'password' ? 'text' : 'password';
+};
+window.toggleRegister = function() {
+  document.getElementById('registerCard').classList.toggle('show');
+  document.getElementById('regErr').classList.remove('show');
+};
+
+window.doLogin = async function() {
+  document.getElementById('msgErr').classList.remove('show');
+  document.getElementById('msgOk').classList.remove('show');
+  var email = document.getElementById('fEmail').value.trim();
+  var senha = document.getElementById('fSenha').value;
+  if (!email) { showMsg('msgErr','⚠️ Informe seu e-mail.'); return; }
+  if (!senha)  { showMsg('msgErr','⚠️ Informe sua senha.'); return; }
+
+  var btn = document.getElementById('btnLogin');
+  btn.disabled = true;
+  document.getElementById('btnTxt').style.display = 'none';
+  document.getElementById('spinner').style.display = 'block';
+
+  try {
+    await signInWithEmailAndPassword(auth, email, senha);
+  } catch(e) {
+    btn.disabled = false;
+    document.getElementById('btnTxt').style.display = 'inline';
+    document.getElementById('spinner').style.display = 'none';
+    var msg = 'Erro ao entrar. Tente novamente.';
+    if (e.code==='auth/user-not-found'||e.code==='auth/invalid-credential'||e.code==='auth/wrong-password') msg = 'E-mail ou senha incorretos.';
+    else if (e.code==='auth/too-many-requests') msg = 'Muitas tentativas. Aguarde um momento.';
+    showMsg('msgErr', '⚠️ ' + msg);
+  }
+};
+
+window.doRegister = async function() {
+  document.getElementById('regErr').classList.remove('show');
+  var nome    = document.getElementById('rNome').value.trim();
+  var email   = document.getElementById('rEmail').value.trim();
+  var wa      = document.getElementById('rWA').value.trim();
+  var senha   = document.getElementById('rSenha').value;
+  var confirm = document.getElementById('rConfirm').value;
+
+  if (!nome)                        { showRegErr('Informe seu nome.'); return; }
+  if (!email||!email.includes('@')) { showRegErr('E-mail inválido.'); return; }
+  if (!wa||wa.replace(/\D/g,'').length<10) { showRegErr('WhatsApp obrigatório com DDD.'); return; }
+  if (!senha||senha.length<6)       { showRegErr('Senha: mínimo 6 caracteres.'); return; }
+  if (senha!==confirm)              { showRegErr('As senhas não coincidem.'); return; }
+
+  var btn = document.getElementById('btnReg');
+  btn.disabled = true;
+  document.getElementById('btnRegTxt').style.display = 'none';
+  document.getElementById('spinnerReg').style.display = 'block';
+
+  try {
+    var cred = await createUserWithEmailAndPassword(auth, email, senha);
+    await setDoc(doc(db, 'usuarios', cred.user.uid), {
+      uid: cred.user.uid, nome, email, whatsapp: wa,
+      status: 'pendente', dataCadastro: todayStr(),
+      expiracao: null, ultimoAcesso: todayStr(),
+    });
+    await auth.signOut();
+    document.getElementById('registerCard').classList.remove('show');
+    showMsg('msgOk', '✅ Conta criada! Aguarde aprovação e envie o comprovante ao administrador.');
+  } catch(e) {
+    btn.disabled = false;
+    document.getElementById('btnRegTxt').style.display = 'inline';
+    document.getElementById('spinnerReg').style.display = 'none';
+    var msg = e.code==='auth/email-already-in-use' ? 'Este e-mail já está cadastrado.' : 'Erro: '+e.message;
+    showRegErr(msg);
+  }
+};
+
+window.doForgot = async function() {
+  var email = document.getElementById('fEmail').value.trim();
+  if (!email) { showMsg('msgErr','⚠️ Digite seu e-mail acima primeiro.'); return; }
+  try {
+    await sendPasswordResetEmail(auth, email);
+    showMsg('msgOk', '✅ E-mail de recuperação enviado! Verifique sua caixa de entrada.');
+  } catch(e) {
+    showMsg('msgErr','⚠️ E-mail não encontrado.');
+  }
+};
 </script>
 </body>
 </html>
