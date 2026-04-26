@@ -104,6 +104,7 @@
 <body>
 <script>
 (function(){
+  if (localStorage.getItem('streamdesk_session') !== 'true') { location.href = 'login.html'; return; }
   var cfg = JSON.parse(localStorage.getItem('streamdesk_config') || '{}');
   if (cfg.darkMode !== true) document.body.classList.add('light');
 })();
@@ -192,6 +193,19 @@
       <div class="row-body">
         <div class="row-label">Abrir Chamado</div>
         <div class="row-sub">Relate um problema ou envie sugestão</div>
+      </div>
+      <div class="row-arrow">›</div>
+    </div>
+  </div>
+
+  <!-- SAIR -->
+  <div class="sec-label">🚪 Sessão</div>
+  <div class="group">
+    <div class="btn-row btn-red" onclick="doLogout()">
+      <div class="row-icon">🚪</div>
+      <div class="row-body">
+        <div class="row-label">Sair do App</div>
+        <div class="row-sub">Encerrar sessão atual</div>
       </div>
       <div class="row-arrow">›</div>
     </div>
@@ -432,6 +446,12 @@ function enviarChamado() {
   window.open(url, '_blank');
   closeModal('ovSuporte');
   document.getElementById('supMsg').value = '';
+}
+
+function doLogout() {
+  if (!confirm('Deseja sair do StreamDesk?')) return;
+  localStorage.removeItem('streamdesk_session');
+  location.href = 'login.html';
 }
 
 loadPage();

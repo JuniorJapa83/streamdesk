@@ -117,6 +117,7 @@
 </head>
 <body><script>
 (function(){
+  if (localStorage.getItem('streamdesk_session') !== 'true') { location.href = 'login.html'; return; }
   var cfg = JSON.parse(localStorage.getItem('streamdesk_config') || '{}');
   if (cfg.darkMode !== true) document.body.classList.add('light');
 })();

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>StreamDesk — Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#f0f4f8;--surface:#ffffff;--card:#ffffff;--card2:#f7f9fc;
+    --border:#e2e8f0;--accent:#00d4ff;--red:#ff3b5c;--green:#00e096;
+    --text:#1a202c;--muted:#718096;--radius:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:420px;margin:0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 24px 40px;}
+
+  /* BG DECORATION */
+  body::before{content:'';position:fixed;top:-120px;right:-80px;width:320px;height:320px;background:radial-gradient(circle,rgba(0,212,255,.12) 0%,transparent 70%);pointer-events:none;z-index:0}
+  body::after{content:'';position:fixed;bottom:-80px;left:-80px;width:280px;height:280px;background:radial-gradient(circle,rgba(0,224,150,.08) 0%,transparent 70%);pointer-events:none;z-index:0}
+
+  .wrap{width:100%;position:relative;z-index:1}
+
+  /* LOGO */
+  .logo-wrap{text-align:center;margin-bottom:40px}
+  .logo-icon{width:72px;height:72px;background:linear-gradient(135deg,#00d4ff,#00e096);border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:34px;margin:0 auto 16px;box-shadow:0 8px 32px rgba(0,212,255,.25)}
+  .logo-name{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--text);letter-spacing:-0.5px}
+  .logo-name span{color:var(--accent)}
+  .logo-sub{font-size:14px;color:var(--muted);margin-top:4px}
+
+  /* CARD */
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:28px 24px;box-shadow:0 4px 24px rgba(0,0,0,.06)}
+
+  .card-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:4px}
+  .card-sub{font-size:13px;color:var(--muted);margin-bottom:24px}
+
+  /* FORM */
+  .fg{margin-bottom:16px}
+  .fl{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;display:block}
+  .fi-wrap{position:relative}
+  .fi{width:100%;background:var(--card2);border:1.5px solid var(--border);border-radius:12px;padding:13px 44px 13px 16px;color:var(--text);font-size:15px;font-family:'DM Sans',sans-serif;outline:none;transition:all .2s}
+  .fi:focus{border-color:var(--accent);background:#fff;box-shadow:0 0 0 3px rgba(0,212,255,.1)}
+  .fi::placeholder{color:var(--muted)}
+  .fi-icon{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:16px;color:var(--muted);cursor:pointer;user-select:none}
+
+  /* ERROR */
+  .error-msg{display:none;background:rgba(255,59,92,.08);border:1px solid rgba(255,59,92,.2);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--red);margin-bottom:16px;display:none;align-items:center;gap:8px}
+  .error-msg.show{display:flex}
+
+  /* BUTTON */
+  .btn-login{width:100%;background:linear-gradient(135deg,#00d4ff,#00b8e0);color:#000;border:none;border-radius:12px;padding:15px;font-family:'Syne',sans-serif;font-weight:700;font-size:16px;cursor:pointer;transition:all .2s;box-shadow:0 4px 16px rgba(0,212,255,.3);margin-top:4px}
+  .btn-login:active{transform:scale(.97)}
+  .btn-login:disabled{opacity:.6;cursor:not-allowed}
+
+  /* FIRST ACCESS */
+  .first-access{margin-top:20px;text-align:center;font-size:13px;color:var(--muted)}
+  .first-access a{color:var(--accent);font-weight:600;cursor:pointer;text-decoration:none}
+
+  /* SETUP CARD */
+  .setup-card{display:none;background:rgba(0,212,255,.05);border:1px solid rgba(0,212,255,.2);border-radius:16px;padding:20px;margin-top:16px}
+  .setup-card.show{display:block}
+  .setup-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:14px;color:var(--accent)}
+
+  /* VERSION */
+  .version{text-align:center;font-size:11px;color:var(--muted);margin-top:24px}
+  .version span{color:var(--accent);font-weight:600}
+
+  /* LOADING */
+  .loading{display:none;width:20px;height:20px;border:2px solid rgba(0,0,0,.2);border-top-color:#000;border-radius:50%;animation:spin .7s linear infinite;margin:0 auto}
+  @keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- LOGO -->
+  <div class="logo-wrap">
+    <div class="logo-icon">📡</div>
+    <div class="logo-name">Stream<span>Desk</span></div>
+    <div class="logo-sub">Gestão de clientes IPTV</div>
+  </div>
+
+  <!-- LOGIN CARD -->
+  <div class="card">
+    <div class="card-title">Bem-vindo! 👋</div>
+    <div class="card-sub">Entre com seu e-mail e senha</div>
+
+    <div class="error-msg" id="errorMsg">⚠️ <span id="errorTxt">E-mail ou senha incorretos.</span></div>
+
+    <div class="fg">
+      <label class="fl">E-mail</label>
+      <div class="fi-wrap">
+        <input class="fi" id="fEmail" type="email" placeholder="seu@email.com" autocomplete="email">
+        <span class="fi-icon">📧</span>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="fl">Senha</label>
+      <div class="fi-wrap">
+        <input class="fi" id="fSenha" type="password" placeholder="••••••••" autocomplete="current-password">
+        <span class="fi-icon" id="toggleSenha" onclick="togglePwd()">👁️</span>
+      </div>
+    </div>
+
+    <button class="btn-login" id="btnLogin" onclick="doLogin()">
+      <span id="btnTxt">Entrar</span>
+      <div class="loading" id="loading"></div>
+    </button>
+  </div>
+
+  <!-- PRIMEIRO ACESSO -->
+  <div class="first-access">
+    Primeiro acesso? <a onclick="toggleSetup()">Criar conta</a>
+  </div>
+
+  <!-- SETUP CARD -->
+  <div class="setup-card" id="setupCard">
+    <div class="setup-title">✨ Criar sua conta</div>
+
+    <div class="fg">
+      <label class="fl">Seu Nome</label>
+      <input class="fi" id="sNome" placeholder="Ex: Junior">
+    </div>
+    <div class="fg">
+      <label class="fl">E-mail</label>
+      <input class="fi" id="sEmail" type="email" placeholder="seu@email.com">
+    </div>
+    <div class="fg">
+      <label class="fl">Senha</label>
+      <div class="fi-wrap">
+        <input class="fi" id="sSenha" type="password" placeholder="Mínimo 6 caracteres">
+      </div>
+    </div>
+    <div class="fg">
+      <label class="fl">Confirmar Senha</label>
+      <div class="fi-wrap">
+        <input class="fi" id="sConfirm" type="password" placeholder="Repita a senha">
+      </div>
+    </div>
+    <button class="btn-login" onclick="doRegister()">Criar Conta</button>
+  </div>
+
+  <div class="version">StreamDesk <span>v1.0</span></div>
+
+</div>
+
+<script>
+var CFG_KEY   = 'streamdesk_config';
+var AUTH_KEY  = 'streamdesk_auth';
+var SESSION_KEY = 'streamdesk_session';
+
+// Check if already logged in
+(function(){
+  var session = localStorage.getItem(SESSION_KEY);
+  if (session === 'true') {
+    location.href = 'index.html';
+  }
+})();
+
+function showError(msg) {
+  var el = document.getElementById('errorMsg');
+  document.getElementById('errorTxt').textContent = msg;
+  el.classList.add('show');
+}
+function hideError() {
+  document.getElementById('errorMsg').classList.remove('show');
+}
+
+function togglePwd() {
+  var fi = document.getElementById('fSenha');
+  fi.type = fi.type === 'password' ? 'text' : 'password';
+}
+
+function toggleSetup() {
+  var card = document.getElementById('setupCard');
+  card.classList.toggle('show');
+  hideError();
+}
+
+function doLogin() {
+  hideError();
+  var email = document.getElementById('fEmail').value.trim().toLowerCase();
+  var senha = document.getElementById('fSenha').value;
+
+  if (!email) { showError('Informe seu e-mail.'); return; }
+  if (!senha)  { showError('Informe sua senha.'); return; }
+
+  // Get stored auth
+  var auth = JSON.parse(localStorage.getItem(AUTH_KEY) || 'null');
+
+  if (!auth) {
+    showError('Nenhuma conta cadastrada. Clique em "Criar conta" abaixo.');
+    return;
+  }
+
+  if (auth.email !== email) {
+    showError('E-mail não encontrado.');
+    return;
+  }
+
+  if (auth.senha !== btoa(senha)) {
+    showError('Senha incorreta. Tente novamente.');
+    return;
+  }
+
+  // Success — show loading then redirect
+  var btn = document.getElementById('btnLogin');
+  var txt = document.getElementById('btnTxt');
+  var load = document.getElementById('loading');
+  btn.disabled = true;
+  txt.style.display = 'none';
+  load.style.display = 'block';
+
+  // Save session and user info to config
+  localStorage.setItem(SESSION_KEY, 'true');
+  var cfg = JSON.parse(localStorage.getItem(CFG_KEY) || '{}');
+  cfg.nome  = auth.nome;
+  cfg.email = auth.email;
+  localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
+
+  setTimeout(function() {
+    location.href = 'index.html';
+  }, 800);
+}
+
+function doRegister() {
+  hideError();
+  var nome    = document.getElementById('sNome').value.trim();
+  var email   = document.getElementById('sEmail').value.trim().toLowerCase();
+  var senha   = document.getElementById('sSenha').value;
+  var confirm = document.getElementById('sConfirm').value;
+
+  if (!nome)            { showError('Informe seu nome.'); return; }
+  if (!email)           { showError('Informe seu e-mail.'); return; }
+  if (!email.includes('@')) { showError('E-mail inválido.'); return; }
+  if (!senha)           { showError('Informe uma senha.'); return; }
+  if (senha.length < 6) { showError('A senha deve ter pelo menos 6 caracteres.'); return; }
+  if (senha !== confirm) { showError('As senhas não coincidem.'); return; }
+
+  var auth = { nome: nome, email: email, senha: btoa(senha) };
+  localStorage.setItem(AUTH_KEY, JSON.stringify(auth));
+
+  // Auto login after register
+  localStorage.setItem(SESSION_KEY, 'true');
+  var cfg = JSON.parse(localStorage.getItem(CFG_KEY) || '{}');
+  cfg.nome  = nome;
+  cfg.email = email;
+  localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
+
+  location.href = 'index.html';
+}
+
+// Allow Enter key to submit
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') {
+    var setup = document.getElementById('setupCard');
+    if (setup.classList.contains('show')) doRegister();
+    else doLogin();
+  }
+});
+</script>
+</body>
+</html>
