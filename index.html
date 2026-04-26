@@ -432,35 +432,7 @@
 const CLIENT_KEY = 'iptv_clientes_v3';
 const SRV_KEY    = 'iptv_servidores_v1';
 
-const DEFAULT_CLIENTS = [
-  {id:1,  nome:'Ana Paulo (Loss)',    plataforma:'P2P FIVE',     plano:'Integral',    vencimento:'2026-03-19', pais:'🇧🇷', contato:'', obs:''},
-  {id:2,  nome:'Wanderson',           plataforma:'HIBRIDO FIVE', plano:'Integral',    vencimento:'2026-04-04', pais:'🇧🇷', contato:'', obs:''},
-  {id:3,  nome:'Raphael',             plataforma:'HIBRIDO FIVE', plano:'Integral',    vencimento:'2026-04-05', pais:'🇧🇷', contato:'', obs:''},
-  {id:4,  nome:'Pr Jhony',            plataforma:'IPTV HPLUS',   plano:'Integral',    vencimento:'2026-04-08', pais:'🇪🇸', contato:'', obs:''},
-  {id:5,  nome:'Misael',              plataforma:'HIBRIDO FIVE', plano:'Integral',    vencimento:'2026-04-09', pais:'🇧🇷', contato:'', obs:''},
-  {id:6,  nome:'Andressa Rios',       plataforma:'IPTV FIVE',    plano:'Integral',    vencimento:'2026-04-11', pais:'🇧🇷', contato:'', obs:''},
-  {id:7,  nome:'Fabio Jr (Rodney)',   plataforma:'IPTV FIVE',    plano:'Promocional', vencimento:'2026-04-18', pais:'🇧🇷', contato:'', obs:''},
-  {id:8,  nome:'Nayara',              plataforma:'IPTV FIVE',    plano:'Integral',    vencimento:'2026-04-18', pais:'🇪🇸', contato:'', obs:''},
-  {id:9,  nome:'Ellen (Rodney)',      plataforma:'IPTV HPLUS',   plano:'Promocional', vencimento:'2026-04-22', pais:'🇧🇷', contato:'', obs:''},
-  {id:10, nome:'Melissa',             plataforma:'IPTV FIVE',    plano:'Integral',    vencimento:'2026-04-24', pais:'🇧🇷', contato:'', obs:''},
-  {id:11, nome:'George',              plataforma:'P2P FIVE',     plano:'Integral',    vencimento:'2026-04-25', pais:'🇧🇷', contato:'', obs:'FP'},
-  {id:12, nome:'Gabriela',            plataforma:'IPTV FIVE',    plano:'Integral',    vencimento:'2026-04-25', pais:'🇧🇷', contato:'', obs:''},
-  {id:13, nome:'Rodney (Denis)',      plataforma:'IPTV BLADE',   plano:'Promocional', vencimento:'2026-04-25', pais:'🇵🇹', contato:'', obs:''},
-  {id:14, nome:'Matheus Leornardeli', plataforma:'P2P FIVE',     plano:'Integral',    vencimento:'2026-04-26', pais:'🇪🇸', contato:'', obs:''},
-  {id:15, nome:'Rafael Rodrigues',    plataforma:'P2P FIVE',     plano:'Integral',    vencimento:'2026-04-26', pais:'🇪🇸', contato:'', obs:''},
-  {id:16, nome:'Marcelo',             plataforma:'IPTV FIVE',    plano:'Integral',    vencimento:'2026-04-26', pais:'🇵🇹', contato:'', obs:''},
-  {id:17, nome:'Edson',               plataforma:'IPTV HPLUS',   plano:'Integral',    vencimento:'2026-04-26', pais:'🇪🇸', contato:'', obs:''},
-  {id:18, nome:'Welinton',            plataforma:'IPTV HPLUS',   plano:'Integral',    vencimento:'2026-04-26', pais:'🇪🇸', contato:'', obs:''},
-  {id:19, nome:'Carol',               plataforma:'IPTV FIVE',    plano:'Integral',    vencimento:'2026-04-27', pais:'🇧🇷', contato:'', obs:''},
-];
 
-const DEFAULT_SERVERS = [
-  {nome:'IPTV FIVE',    custo:15, cor:'#00d4ff', status:'online'},
-  {nome:'IPTV HPLUS',   custo:18, cor:'#a78bfa', status:'online'},
-  {nome:'IPTV BLADE',   custo:12, cor:'#ff3b5c', status:'online'},
-  {nome:'P2P FIVE',     custo:14, cor:'#ff7b00', status:'online'},
-  {nome:'HIBRIDO FIVE', custo:16, cor:'#00e096', status:'online'},
-];
 
 function today()    { return new Date().toISOString().split('T')[0]; }
 function tomorrow() { const d=new Date(); d.setDate(d.getDate()+1); return d.toISOString().split('T')[0]; }
