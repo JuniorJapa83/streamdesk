@@ -179,7 +179,7 @@ const CLIENT_KEY = 'iptv_clientes_v3';
 const COLORS     = ['#00d4ff','#a78bfa','#00e096','#ff3b5c','#ff7b00','#ffbb00','#f472b6','#34d399','#60a5fa','#fb923c','#e879f9','#e2e8f0'];
 
 let servidores = JSON.parse(localStorage.getItem(SRV_KEY) || '[]');
-let clientes = JSON.parse(localStorage.getItem(CLIENT_KEY) || '[]');}
+let clientes = JSON.parse(localStorage.getItem(CLIENT_KEY) || '[]');
 let selectedColor = COLORS[0];
 
 function saveAll() { localStorage.setItem(SRV_KEY, JSON.stringify(servidores)); }
