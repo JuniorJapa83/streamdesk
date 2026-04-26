@@ -376,13 +376,7 @@
   body.light .bottom-nav { background: rgba(255,255,255,.97); }
 </style>
 </head>
-<body><script>
-(function(){
-  if (localStorage.getItem('streamdesk_session') !== 'true') { location.href = 'login.html'; return; }
-  var cfg = JSON.parse(localStorage.getItem('streamdesk_config') || '{}');
-  if (cfg.darkMode !== true) document.body.classList.add('light');
-})();
-</script>
+<body>
 
 <!-- HEADER -->
 <div class="header">
@@ -428,113 +422,120 @@
 
 </div>
 
-<script>
-const CLIENT_KEY = 'iptv_clientes_v3';
-const SRV_KEY    = 'iptv_servidores_v1';
+<script type="module">
+import { initializeApp }                        from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+import { getAuth, onAuthStateChanged }          from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+import { getFirestore, collection, getDocs,
+         doc, getDoc }                          from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-
+const firebaseConfig = {
+  apiKey: "AIzaSyDjh7BrMk1MKkLU9MOYJsI1XxantSt1V1g",
+  authDomain: "streamdesk-5350d.firebaseapp.com",
+  projectId: "streamdesk-5350d",
+  storageBucket: "streamdesk-5350d.firebasestorage.app",
+  messagingSenderId: "36684694847",
+  appId: "1:36684694847:web:0f6f3a27933e3d84cfff8a"
+};
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
 
 function today() {
-  var d = new Date();
-  var y = d.getFullYear();
-  var m = String(d.getMonth()+1).padStart(2,'0');
-  var day = String(d.getDate()).padStart(2,'0');
+  var d=new Date(), y=d.getFullYear();
+  var m=String(d.getMonth()+1).padStart(2,'0');
+  var day=String(d.getDate()).padStart(2,'0');
   return y+'-'+m+'-'+day;
 }
 function tomorrow() {
-  var d = new Date();
-  d.setDate(d.getDate()+1);
-  var y = d.getFullYear();
-  var m = String(d.getMonth()+1).padStart(2,'0');
-  var day = String(d.getDate()).padStart(2,'0');
+  var d=new Date(); d.setDate(d.getDate()+1);
+  var y=d.getFullYear();
+  var m=String(d.getMonth()+1).padStart(2,'0');
+  var day=String(d.getDate()).padStart(2,'0');
   return y+'-'+m+'-'+day;
 }
-function formatDate(d) { if(!d) return '-'; const [y,m,day]=d.split('-'); return `${day}/${m}/${y}`; }
-
-function sendWA(nome, plataforma, vencimento, contato) {
-  const t = today();
-  let msg = '';
-  if (vencimento < t) msg = `Olá ${nome.split(' ')[0]}! 👋 Seu plano IPTV (${plataforma}) venceu em ${formatDate(vencimento)}. Entre em contato para renovar! 🙏`;
-  else if (vencimento === t) msg = `Olá ${nome.split(' ')[0]}! 👋 Seu plano IPTV (${plataforma}) vence HOJE. Renove para não ficar sem sinal! 📺`;
-  else msg = `Olá ${nome.split(' ')[0]}! 👋 Seu plano IPTV (${plataforma}) vence amanhã. Renove para não ficar sem sinal! 📺`;
-  const phone = contato ? contato.replace(/\D/g,'') : '';
-  window.open(phone ? `https://wa.me/${phone}?text=${encodeURIComponent(msg)}` : `https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+function formatDate(d) {
+  if(!d) return '-'; var p=d.split('-'); return p[2]+'/'+p[1]+'/'+p[0];
 }
 
-function render() {
-  let clientes   = JSON.parse(localStorage.getItem(CLIENT_KEY) || 'null');
-  let servidores = JSON.parse(localStorage.getItem(SRV_KEY)    || 'null');
-  if (!clientes   || clientes.length   === 0) { clientes   = DEFAULT_CLIENTS; localStorage.setItem(CLIENT_KEY, JSON.stringify(clientes)); }
-  if (!servidores || servidores.length === 0) { servidores = DEFAULT_SERVERS; localStorage.setItem(SRV_KEY,    JSON.stringify(servidores)); }
+// Apply theme
+var cfg2 = JSON.parse(localStorage.getItem('streamdesk_config')||'{}');
+if (cfg2.darkMode !== true) document.body.classList.add('light');
 
-  const t  = today();
-  const tm = tomorrow();
+onAuthStateChanged(auth, async function(user) {
+  if (!user) { location.href='login.html'; return; }
 
-  // Status counts
-  const vencidos = clientes.filter(c => c.vencimento < t).length;
-  const hoje     = clientes.filter(c => c.vencimento === t).length;
-  const emDia    = clientes.filter(c => c.vencimento > t).length;
+  // Load data from Firestore
+  var [clientSnap, srvSnap, cfgSnap] = await Promise.all([
+    getDocs(collection(db,'clientes',user.uid,'lista')),
+    getDocs(collection(db,'servidores',user.uid,'lista')),
+    getDoc(doc(db,'config',user.uid))
+  ]);
+
+  var clientes   = clientSnap.docs.map(d=>({id:d.id,...d.data()}));
+  var servidores = srvSnap.docs.map(d=>({id:d.id,...d.data()}));
+  var config     = cfgSnap.exists() ? cfgSnap.data() : {};
+
+  // Update greeting with user name
+  var nome = config.nome || user.email.split('@')[0];
+  var logoSub = document.querySelector('.logo-sub');
+  if (logoSub) logoSub.textContent = 'Olá, ' + nome + ' 👋';
+
+  render(clientes, servidores, config);
+});
+
+function getWAMsg(nome, plataforma, vencimento, config) {
+  var t = today();
+  var tpl = vencimento < t
+    ? (config.msgVencido || 'Olá {nome}! 👋 Seu plano IPTV ({servidor}) está vencido. Entre em contato para renovar! 🙏')
+    : vencimento === t
+    ? (config.msgHoje    || 'Olá {nome}! 👋 Seu plano IPTV ({servidor}) vence HOJE. Renove para não ficar sem sinal! 📺')
+    : (config.msgAmanha  || 'Olá {nome}! 👋 Seu plano IPTV ({servidor}) vence amanhã. Renove! 😊');
+  return tpl.replace(/{nome}/g, nome.split(' ')[0]).replace(/{servidor}/g, plataforma);
+}
+
+window.sendWA = function(nome, plataforma, vencimento, contato, cfg) {
+  var msg   = getWAMsg(nome, plataforma, vencimento, cfg||{});
+  var phone = contato ? contato.replace(/\D/g,'') : '';
+  window.open(phone ? 'https://wa.me/'+phone+'?text='+encodeURIComponent(msg) : 'https://wa.me/?text='+encodeURIComponent(msg), '_blank');
+};
+
+function render(clientes, servidores, config) {
+  var t  = today(), tm = tomorrow();
+
+  var vencidos = clientes.filter(c=>c.vencimento<t).length;
+  var hoje     = clientes.filter(c=>c.vencimento===t).length;
+  var emDia    = clientes.filter(c=>c.vencimento>t).length;
 
   document.getElementById('numVencido').textContent = vencidos;
   document.getElementById('numHoje').textContent    = hoje;
   document.getElementById('numEmDia').textContent   = emDia;
 
-  // Server list
-  const onlineServers = servidores.filter(s => s.status !== 'offline');
-  const maxClientes = Math.max(...onlineServers.map(s => clientes.filter(c => c.plataforma === s.nome).length), 1);
-  document.getElementById('serverList').innerHTML = onlineServers.map(s => {
-    const count = clientes.filter(c => c.plataforma === s.nome).length;
-    const pct   = Math.round((count / maxClientes) * 100);
-    return `
-    <div class="server-card">
-      <div class="server-left">
-        <div class="server-dot" style="background:${s.cor}"></div>
-        <div class="server-name">${s.nome}</div>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px">
-        <div class="server-bar-wrap"><div class="server-bar" style="width:${pct}%;background:${s.cor}"></div></div>
-        <div class="server-count">
-          <span class="server-num" style="color:${s.cor}">${count}</span>
-          <span class="server-word">${count === 1 ? 'cliente' : 'clientes'}</span>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
+  // Server list — only online
+  var online = servidores.filter(s=>s.status!=='offline');
+  var max    = Math.max.apply(null, online.map(s=>clientes.filter(c=>c.plataforma===s.nome).length).concat([1]));
 
-  // Attention: vence hoje e amanhã
-  const urgent = clientes.filter(c => c.vencimento === t || c.vencimento === tm)
-    .sort((a,b) => a.vencimento.localeCompare(b.vencimento));
-
-  if (urgent.length === 0) {
-    document.getElementById('attentionList').innerHTML = `<div style="text-align:center;padding:24px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);color:var(--muted);font-size:13px">✅ Nenhum cliente vencendo hoje ou amanhã</div>`;
-    return;
+  if (!online.length) {
+    document.getElementById('serverList').innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px">Nenhum servidor cadastrado</div>';
+  } else {
+    document.getElementById('serverList').innerHTML = online.map(function(s) {
+      var count = clientes.filter(c=>c.plataforma===s.nome).length;
+      var pct   = Math.round((count/max)*100);
+      return '<div class="server-card"><div class="server-left"><div class="server-dot" style="background:'+s.cor+'"></div><div class="server-name">'+s.nome+'</div></div><div style="display:flex;align-items:center;gap:10px"><div class="server-bar-wrap"><div class="server-bar" style="width:'+pct+'%;background:'+s.cor+'"></div></div><div class="server-count"><span class="server-num" style="color:'+s.cor+'">'+count+'</span><span class="server-word">'+(count===1?'cliente':'clientes')+'</span></div></div></div>';
+    }).join('');
   }
 
-  document.getElementById('attentionList').innerHTML = urgent.map(c => {
-    const isHoje = c.vencimento === t;
-    return `
-    <div class="attention-card ${isHoje ? 'hoje' : 'amanha'}">
-      <div class="att-row1">
-        <div class="att-name">${c.pais} ${c.nome}</div>
-        <span class="att-badge ${isHoje ? 'badge-hoje' : 'badge-amanha'}">${isHoje ? 'Vence Hoje' : 'Vence Amanhã'}</span>
-      </div>
-      <div class="att-row2">
-        <div class="att-info">
-          <span class="att-chip">${c.plataforma}</span>
-          <span class="att-chip">${c.plano}</span>
-        </div>
-        <button class="wa-btn" onclick="sendWA('${c.nome}','${c.plataforma}','${c.vencimento}','${c.contato||''}')">📲 WhatsApp</button>
-      </div>
-    </div>`;
+  // Urgent list
+  var urgent = clientes.filter(c=>c.vencimento===t||c.vencimento===tm).sort((a,b)=>a.vencimento.localeCompare(b.vencimento));
+  if (!urgent.length) {
+    document.getElementById('attentionList').innerHTML = '<div style="text-align:center;padding:24px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);color:var(--muted);font-size:13px">✅ Nenhum cliente vencendo hoje ou amanhã</div>';
+    return;
+  }
+  document.getElementById('attentionList').innerHTML = urgent.map(function(c) {
+    var isHoje = c.vencimento===t;
+    var cfgStr = JSON.stringify(config).replace(/'/g,"\'");
+    return '<div class="attention-card '+(isHoje?'hoje':'amanha')+'"><div class="att-row1"><div class="att-name">'+(c.pais||'')+" "+c.nome+'</div><span class="att-badge '+(isHoje?'badge-hoje':'badge-amanha')+'">'+(isHoje?'Vence Hoje':'Vence Amanhã')+'</span></div><div class="att-row2"><div class="att-info"><span class="att-chip">'+c.plataforma+'</span><span class="att-chip">'+c.plano+'</span></div><button class="wa-btn" onclick="sendWA(''+c.nome+'',''+c.plataforma+'',''+c.vencimento+'',''+(c.contato||'')+'')">📲 WhatsApp</button></div></div>';
   }).join('');
 }
-
-// Reload when returning to page
-document.addEventListener('visibilitychange', function() {
-  if (document.visibilityState === 'visible') render();
-});
-
-render();
 </script>
 
 <!-- BOTTOM NAV -->
