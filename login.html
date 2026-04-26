@@ -126,6 +126,13 @@
       <input class="fi" id="sEmail" type="email" placeholder="seu@email.com">
     </div>
     <div class="fg">
+      <label class="fl">WhatsApp <span style="color:var(--red)">*</span></label>
+      <div class="fi-wrap">
+        <input class="fi" id="sWhatsApp" type="tel" placeholder="+55 11 99999-9999">
+        <span class="fi-icon">📲</span>
+      </div>
+    </div>
+    <div class="fg">
       <label class="fl">Senha</label>
       <div class="fi-wrap">
         <input class="fi" id="sSenha" type="password" placeholder="Mínimo 6 caracteres">
@@ -145,9 +152,52 @@
 </div>
 
 <script>
-var CFG_KEY   = 'streamdesk_config';
-var AUTH_KEY  = 'streamdesk_auth';
-var SESSION_KEY = 'streamdesk_session';
+var CFG_KEY    = 'streamdesk_config';
+var AUTH_KEY   = 'streamdesk_auth';
+var SESSION_KEY= 'streamdesk_session';
+var USERS_KEY  = 'streamdesk_usuarios';
+
+function todayStr() {
+  var d=new Date(), y=d.getFullYear();
+  var m=String(d.getMonth()+1).padStart(2,'0');
+  var day=String(d.getDate()).padStart(2,'0');
+  return y+'-'+m+'-'+day;
+}
+
+function registerUserInAdmin(nome, email, whatsapp) {
+  var users = JSON.parse(localStorage.getItem(USERS_KEY) || '[]');
+  var exists = users.find(function(u){ return u.email === email; });
+  if (!exists) {
+    users.push({
+      id: 'u_' + Date.now(),
+      nome: nome,
+      email: email,
+      telefone: whatsapp || '',
+      dataCadastro: todayStr(),
+      status: 'pendente',
+      expiracao: null,
+      ultimoAcesso: todayStr(),
+    });
+    localStorage.setItem(USERS_KEY, JSON.stringify(users));
+  }
+}
+
+function checkUserAccess(email) {
+  var users = JSON.parse(localStorage.getItem(USERS_KEY) || '[]');
+  var user  = users.find(function(u){ return u.email === email; });
+  if (!user) return 'ok'; // no admin system yet, allow
+  if (user.status === 'bloqueado') return 'bloqueado';
+  if (user.status === 'pendente')  return 'pendente';
+  // Check expiration
+  if (user.expiracao) {
+    var diff = Math.round((new Date(user.expiracao) - new Date(todayStr())) / 86400000);
+    if (diff < 0) return 'expirado';
+  }
+  // Update last access
+  user.ultimoAcesso = todayStr();
+  localStorage.setItem(USERS_KEY, JSON.stringify(users));
+  return 'ok';
+}
 
 // Check if already logged in
 (function(){
@@ -203,6 +253,12 @@ function doLogin() {
     return;
   }
 
+  // Check user access status
+  var access = checkUserAccess(email);
+  if (access === 'bloqueado') { showError('Seu acesso foi bloqueado. Entre em contato com o administrador.'); return; }
+  if (access === 'pendente')  { showError('Seu acesso está aguardando aprovação. Envie o comprovante de pagamento.'); return; }
+  if (access === 'expirado')  { showError('Seu acesso expirou. Entre em contato para renovar.'); return; }
+
   // Success — show loading then redirect
   var btn = document.getElementById('btnLogin');
   var txt = document.getElementById('btnTxt');
@@ -211,7 +267,6 @@ function doLogin() {
   txt.style.display = 'none';
   load.style.display = 'block';
 
-  // Save session and user info to config
   localStorage.setItem(SESSION_KEY, 'true');
   var cfg = JSON.parse(localStorage.getItem(CFG_KEY) || '{}');
   cfg.nome  = auth.nome;
@@ -227,12 +282,15 @@ function doRegister() {
   hideError();
   var nome    = document.getElementById('sNome').value.trim();
   var email   = document.getElementById('sEmail').value.trim().toLowerCase();
+  var whatsapp= document.getElementById('sWhatsApp').value.trim();
   var senha   = document.getElementById('sSenha').value;
   var confirm = document.getElementById('sConfirm').value;
 
   if (!nome)            { showError('Informe seu nome.'); return; }
   if (!email)           { showError('Informe seu e-mail.'); return; }
   if (!email.includes('@')) { showError('E-mail inválido.'); return; }
+  if (!whatsapp)        { showError('WhatsApp é obrigatório para contato.'); return; }
+  if (whatsapp.replace(/\D/g,'').length < 10) { showError('Informe um WhatsApp válido com DDD.'); return; }
   if (!senha)           { showError('Informe uma senha.'); return; }
   if (senha.length < 6) { showError('A senha deve ter pelo menos 6 caracteres.'); return; }
   if (senha !== confirm) { showError('As senhas não coincidem.'); return; }
@@ -240,14 +298,15 @@ function doRegister() {
   var auth = { nome: nome, email: email, senha: btoa(senha) };
   localStorage.setItem(AUTH_KEY, JSON.stringify(auth));
 
-  // Auto login after register
-  localStorage.setItem(SESSION_KEY, 'true');
-  var cfg = JSON.parse(localStorage.getItem(CFG_KEY) || '{}');
-  cfg.nome  = nome;
-  cfg.email = email;
-  localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
+  // Register in admin users list as pendente (with WhatsApp)
+  registerUserInAdmin(nome, email, whatsapp);
 
-  location.href = 'index.html';
+  // Don't auto login — show pending message
+  document.getElementById('setupCard').classList.remove('show');
+  showError('✅ Conta criada! Aguarde a aprovação do administrador após enviar o comprovante de pagamento.');
+  document.getElementById('errorMsg').style.background = 'rgba(0,224,150,.08)';
+  document.getElementById('errorMsg').style.borderColor = 'rgba(0,224,150,.2)';
+  document.getElementById('errorMsg').style.color = '#00e096';
 }
 
 // Allow Enter key to submit
