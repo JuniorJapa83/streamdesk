@@ -282,12 +282,15 @@ function fmtDate(d) {
 }
 function getCusto(plat) {
   var srvs = loadServidores();
+  // Try exact match first, then case-insensitive
   var s = srvs.find(function(x) { return x.nome === plat; });
-  return s ? (s.custo || 0) : 0;
+  if (!s) s = srvs.find(function(x) { return x.nome.toLowerCase() === (plat||'').toLowerCase(); });
+  return s ? (parseFloat(s.custo) || 0) : 0;
 }
 function getCor(plat) {
   var srvs = loadServidores();
   var s = srvs.find(function(x) { return x.nome === plat; });
+  if (!s) s = srvs.find(function(x) { return x.nome.toLowerCase() === (plat||'').toLowerCase(); });
   return s ? (s.cor || '#5a6480') : '#5a6480';
 }
 
@@ -336,10 +339,10 @@ function renderPizza(pays, totalLiq) {
   pays.forEach(function(f) {
     if (!f.valor || f.valor <= 0) return;
     var l = (f.valor||0) - getCusto(f.plataforma);
-    map[f.plataforma] = (map[f.plataforma]||0) + l;
+    if (!map[f.plataforma]) map[f.plataforma] = 0;
+    map[f.plataforma] += l;
   });
   var entries = Object.keys(map).map(function(k){ return {name:k, val:map[k]}; })
-                .filter(function(e){ return e.val > 0; })
                 .sort(function(a,b){ return b.val - a.val; });
 
   if (!entries.length) {
@@ -347,14 +350,18 @@ function renderPizza(pays, totalLiq) {
     return;
   }
 
+  // Use absolute values for chart proportion, but show real values in legend
+  var totalAbs = entries.reduce(function(s,e){ return s + Math.abs(e.val); }, 0);
+  if (totalAbs === 0) totalAbs = 1;
+
   var SIZE=140, R=52, cx=70, cy=70, TWO_PI=2*Math.PI;
   var angle = -Math.PI/2;
   var slices = '';
 
   entries.forEach(function(e) {
-    e.pct = totalLiq > 0 ? (e.val/totalLiq)*100 : 0;
+    e.pct = totalAbs > 0 ? Math.round((Math.abs(e.val)/totalAbs)*100) : 0;
     e.cor = getCor(e.name);
-    var a = (e.val/totalLiq)*TWO_PI;
+    var a = (Math.abs(e.val)/totalAbs)*TWO_PI;
     var ea = angle + a;
     var x1=cx+R*Math.cos(angle), y1=cy+R*Math.sin(angle);
     var x2=cx+R*Math.cos(ea),   y2=cy+R*Math.sin(ea);
