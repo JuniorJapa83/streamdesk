@@ -59,15 +59,14 @@ const _auth = getAuth(_app);
 onAuthStateChanged(_auth, function(user) { if (!user) location.href='login.html'; });
 </script>
 
-// Apply theme on visibility change (when returning from config)
+// Apply theme
+var _cfg = JSON.parse(localStorage.getItem('streamdesk_config') || '{}');
+if (_cfg.darkMode !== true) document.body.classList.add('light');
+
 document.addEventListener('visibilitychange', function() {
   if (document.visibilityState === 'visible') {
     var cfg = JSON.parse(localStorage.getItem('streamdesk_config') || '{}');
-    if (cfg.darkMode === false) {
-      document.body.classList.add('light');
-    } else {
-      document.body.classList.remove('light');
-    }
+    if (cfg.darkMode !== true) { document.body.classList.add('light'); } else { document.body.classList.remove('light'); }
   }
 });
 </script>

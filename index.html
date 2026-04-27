@@ -460,6 +460,12 @@ function formatDate(d) {
 // Apply theme
 var cfg2 = JSON.parse(localStorage.getItem('streamdesk_config')||'{}');
 if (cfg2.darkMode !== true) document.body.classList.add('light');
+document.addEventListener('visibilitychange', function() {
+  if (document.visibilityState === 'visible') {
+    var cfg = JSON.parse(localStorage.getItem('streamdesk_config') || '{}');
+    if (cfg.darkMode !== true) { document.body.classList.add('light'); } else { document.body.classList.remove('light'); }
+  }
+});
 
 onAuthStateChanged(auth, async function(user) {
   if (!user) { location.href='login.html'; return; }
