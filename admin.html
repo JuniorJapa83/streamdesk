@@ -162,7 +162,7 @@
     <div class="sec">Visão Geral</div>
     <div class="stats-grid">
       <div class="stat-card a"><div class="stat-num" id="cAtivo">0</div><div class="stat-lbl">Ativos</div></div>
-      <div class="stat-card p"><div class="stat-num" id="cPend">0</div><div class="stat-lbl">Pendentes</div></div>
+      <div class="stat-card p"><div class="stat-num" id="cPend">0</div><div class="stat-lbl">Sem Data</div></div>
       <div class="stat-card b"><div class="stat-num" id="cBloq">0</div><div class="stat-lbl">Bloqueados</div></div>
     </div>
     <div class="alert-banner" id="alertBanner">⚠️ <span id="alertTxt"></span></div>
@@ -308,18 +308,18 @@ async function renderUsers() {
   var users = snap.docs.map(function(d){ return Object.assign({uid:d.id},d.data()); });
 
   var ativos    = users.filter(function(u){return u.status==='ativo';});
-  var pendentes = users.filter(function(u){return u.status==='pendente';});
   var bloqueados= users.filter(function(u){return u.status==='bloqueado';});
+  var semData   = ativos.filter(function(u){return !u.expiracao;});
   var expirando = ativos.filter(function(u){
     var d=daysUntil(u.expiracao); return d!==null&&d>=0&&d<=7;
   });
 
   document.getElementById('cAtivo').textContent = ativos.length;
-  document.getElementById('cPend').textContent  = pendentes.length;
+  document.getElementById('cPend').textContent  = semData.length;
   document.getElementById('cBloq').textContent  = bloqueados.length;
 
   var alerts = [];
-  if (pendentes.length) alerts.push(pendentes.length+' aguardando pagamento');
+  if (semData.length)   alerts.push(semData.length+' usuário(s) sem expiração definida');
   if (expirando.length) alerts.push(expirando.length+' expirando em 7 dias');
   var banner = document.getElementById('alertBanner');
   if (alerts.length) { document.getElementById('alertTxt').textContent=alerts.join(' · '); banner.classList.add('show'); }
@@ -331,9 +331,9 @@ async function renderUsers() {
   }
 
   var html = '';
-  if (pendentes.length) html += buildSection('🟡 Aguardando Pagamento', pendentes);
+  if (semData.length)   html += buildSection('⚙️ Sem Expiração Definida', semData);
   if (expirando.length) html += buildSection('🟠 Expirando em 7 dias', expirando);
-  var ativos_ok = ativos.filter(function(u){var d=daysUntil(u.expiracao);return d===null||d>7;});
+  var ativos_ok = ativos.filter(function(u){var d=daysUntil(u.expiracao);return u.expiracao&&d>7;});
   if (ativos_ok.length) html += buildSection('🟢 Ativos', ativos_ok);
   if (bloqueados.length) html += buildSection('🔴 Bloqueados', bloqueados);
 
