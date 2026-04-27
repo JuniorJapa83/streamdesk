@@ -58,7 +58,6 @@
   </div>
 
   <div class="card">
-
     <div class="tabs">
       <button class="tab active" id="tabLogin" onclick="switchTab('login')">Entrar</button>
       <button class="tab" id="tabCadastro" onclick="switchTab('cadastro')">Criar conta</button>
@@ -100,7 +99,6 @@
         <div class="spinner" id="spinnerCadastro"></div>
       </button>
     </div>
-
   </div>
 
   <div class="version">StreamDesk <span>v1.0</span></div>
@@ -109,7 +107,7 @@
 <script type="module">
 import { initializeApp }      from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 import { getAuth, GoogleAuthProvider,
-         signInWithRedirect, getRedirectResult,
+         signInWithPopup, signInWithRedirect, getRedirectResult,
          onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc }
                               from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
@@ -127,6 +125,7 @@ const app      = initializeApp(firebaseConfig);
 const auth     = getAuth(app);
 const db       = getFirestore(app);
 const provider = new GoogleAuthProvider();
+provider.setCustomParameters({ prompt: 'select_account' });
 
 function todayStr() {
   var d = new Date();
@@ -141,99 +140,107 @@ function showMsg(type, msg) {
   el.classList.add('show');
 }
 
-// Tabs
+function setLoading(tipo, on) {
+  var btnId     = tipo === 'login' ? 'btnLogin'     : 'btnCadastro';
+  var txtId     = tipo === 'login' ? 'btnLoginTxt'  : 'btnCadastroTxt';
+  var spinnerId = tipo === 'login' ? 'spinnerLogin' : 'spinnerCadastro';
+  document.getElementById(btnId).disabled            = on;
+  document.getElementById(txtId).style.display       = on ? 'none'  : 'inline';
+  document.getElementById(spinnerId).style.display   = on ? 'block' : 'none';
+}
+
 window.switchTab = function(tab) {
   document.getElementById('msgErr').classList.remove('show');
   document.getElementById('msgOk').classList.remove('show');
-  document.getElementById('tabLogin').classList.toggle('active', tab === 'login');
-  document.getElementById('tabCadastro').classList.toggle('active', tab === 'cadastro');
-  document.getElementById('panelLogin').classList.toggle('active', tab === 'login');
-  document.getElementById('panelCadastro').classList.toggle('active', tab === 'cadastro');
-  sessionStorage.setItem('sd_tab', tab);
+  ['login','cadastro'].forEach(function(t) {
+    document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1)).classList.toggle('active', t === tab);
+    document.getElementById('panel' + t.charAt(0).toUpperCase() + t.slice(1)).classList.toggle('active', t === tab);
+  });
 };
 
-// Restaura aba após redirect
-var savedTab = sessionStorage.getItem('sd_tab');
-if (savedTab) { window.switchTab(savedTab); }
+async function processUser(user, tipo) {
+  var snap = await getDoc(doc(db, 'usuarios', user.uid));
 
-// Processa retorno do redirect Google
+  // Usuário novo
+  if (!snap.exists()) {
+    if (tipo === 'login') {
+      await auth.signOut();
+      showMsg('err', '⚠️ Conta não encontrada. Use "Criar conta" para se registrar.');
+      window.switchTab('cadastro');
+      return;
+    }
+    // Cadastro: cria como ativo
+    await setDoc(doc(db, 'usuarios', user.uid), {
+      uid:          user.uid,
+      nome:         user.displayName || '',
+      email:        user.email || '',
+      foto:         user.photoURL || '',
+      whatsapp:     '',
+      status:       'ativo',
+      dataCadastro: todayStr(),
+      expiracao:    null,
+      ultimoAcesso: todayStr(),
+    });
+    location.href = 'index.html';
+    return;
+  }
+
+  var data = snap.data();
+
+  if (data.status === 'bloqueado') {
+    await auth.signOut();
+    showMsg('err', '⚠️ Acesso bloqueado. Entre em contato com o administrador.');
+    return;
+  }
+  if (data.status === 'pendente') {
+    await auth.signOut();
+    showMsg('ok', '⏳ Aguardando aprovação do administrador.');
+    return;
+  }
+  if (data.expiracao && new Date(data.expiracao) < new Date()) {
+    await auth.signOut();
+    showMsg('err', '⚠️ Seu acesso expirou. Entre em contato para renovar.');
+    return;
+  }
+
+  await setDoc(doc(db, 'usuarios', user.uid), { ultimoAcesso: todayStr() }, { merge: true });
+  location.href = 'index.html';
+}
+
+// Verifica resultado de redirect (caso popup tenha falhado e usado redirect)
 getRedirectResult(auth).then(async function(result) {
   if (!result) return;
-
-  var user = result.user;
-  var tab  = sessionStorage.getItem('sd_tab') || 'login';
-  sessionStorage.removeItem('sd_tab');
-
-  try {
-    var snap = await getDoc(doc(db, 'usuarios', user.uid));
-
-    // Novo usuário (cadastro ou login sem conta) → cria como ativo
-    if (!snap.exists()) {
-      if (tab === 'login') {
-        await auth.signOut();
-        showMsg('err', '⚠️ Conta não encontrada. Use a aba "Criar conta" para se registrar.');
-        window.switchTab('cadastro');
-        return;
-      }
-      await setDoc(doc(db, 'usuarios', user.uid), {
-        uid:          user.uid,
-        nome:         user.displayName || '',
-        email:        user.email || '',
-        foto:         user.photoURL || '',
-        whatsapp:     '',
-        status:       'ativo',
-        dataCadastro: todayStr(),
-        expiracao:    null,
-        ultimoAcesso: todayStr(),
-      });
-      location.href = 'index.html';
-      return;
-    }
-
-    var data = snap.data();
-
-    if (data.status === 'bloqueado') {
-      await auth.signOut();
-      showMsg('err', '⚠️ Acesso bloqueado. Entre em contato com o administrador.');
-      return;
-    }
-    if (data.status === 'pendente') {
-      await auth.signOut();
-      showMsg('ok', '⏳ Aguardando aprovação do administrador.');
-      return;
-    }
-    if (data.expiracao && new Date(data.expiracao) < new Date()) {
-      await auth.signOut();
-      showMsg('err', '⚠️ Seu acesso expirou. Entre em contato para renovar.');
-      return;
-    }
-
-    // Tudo certo — entra
-    await setDoc(doc(db, 'usuarios', user.uid), { ultimoAcesso: todayStr() }, { merge: true });
-    location.href = 'index.html';
-
-  } catch(e) {
-    console.error(e);
-    showMsg('err', '⚠️ Erro ao processar. Tente novamente.');
-  }
-
+  var tipo = sessionStorage.getItem('sd_tipo') || 'login';
+  sessionStorage.removeItem('sd_tipo');
+  setLoading(tipo, false);
+  await processUser(result.user, tipo);
 }).catch(function(e) {
-  console.error(e);
-  if (e.code !== 'auth/cancelled-popup-request') {
-    showMsg('err', '⚠️ Erro ao conectar com Google. Tente novamente.');
-  }
+  console.error('redirect error', e);
 });
 
-// Clique no botão
-window.doGoogle = function(tipo) {
-  sessionStorage.setItem('sd_tab', tipo);
-  var btnId     = tipo === 'login' ? 'btnLogin'     : 'btnCadastro';
-  var spinnerId = tipo === 'login' ? 'spinnerLogin' : 'spinnerCadastro';
-  var txtId     = btnId + 'Txt';
-  document.getElementById(btnId).disabled = true;
-  document.getElementById(txtId).style.display = 'none';
-  document.getElementById(spinnerId).style.display = 'block';
-  signInWithRedirect(auth, provider);
+// Clique no botão — tenta popup primeiro, se falhar usa redirect
+window.doGoogle = async function(tipo) {
+  setLoading(tipo, true);
+  sessionStorage.setItem('sd_tipo', tipo);
+  try {
+    var result = await signInWithPopup(auth, provider);
+    sessionStorage.removeItem('sd_tipo');
+    await processUser(result.user, tipo);
+  } catch(e) {
+    if (
+      e.code === 'auth/popup-blocked' ||
+      e.code === 'auth/popup-closed-by-user' ||
+      e.code === 'auth/cancelled-popup-request' ||
+      e.code === 'auth/operation-not-supported-in-this-environment'
+    ) {
+      // Fallback: redireciona para página do Google
+      signInWithRedirect(auth, provider);
+    } else {
+      setLoading(tipo, false);
+      console.error(e);
+      showMsg('err', '⚠️ Erro ao conectar com Google. Tente novamente.');
+    }
+  }
 };
 </script>
 </body>
