@@ -38,7 +38,6 @@
   .panel.active{display:block}
   .version{text-align:center;font-size:11px;color:var(--muted);margin-top:20px}
   .version span{color:var(--accent);font-weight:600}
-  /* debug box */
   .debug{background:#1a202c;color:#a0aec0;border-radius:8px;padding:10px 12px;font-size:11px;font-family:monospace;margin-top:10px;display:none;word-break:break-all;line-height:1.6}
   .debug.show{display:block}
 </style>
@@ -108,13 +107,15 @@ import { getAuth, GoogleAuthProvider,
 import { getFirestore, doc, setDoc, getDoc }
                               from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
+// Config atualizado do Firebase Console
 const firebaseConfig = {
   apiKey:            "AIzaSyDjh7BrMk1MKkLU9MOYJsI1XxantSt1V1g",
   authDomain:        "streamdesk-5350d.firebaseapp.com",
   projectId:         "streamdesk-5350d",
   storageBucket:     "streamdesk-5350d.firebasestorage.app",
   messagingSenderId: "36684694847",
-  appId:             "1:36684694847:web:0f6f3a27933e3d84cfff8a"
+  appId:             "1:36684694847:web:0f6f3a27933e3d84cfff8a",
+  measurementId:     "G-PN7SZSMQR4"
 };
 
 const app      = initializeApp(firebaseConfig);
@@ -202,13 +203,12 @@ window.doGoogle = async function(tipo) {
     await processUser(result.user, tipo);
   } catch(e) {
     var code = e.code || '';
-    showDebug('popup: ' + code + ' — ' + (e.message || ''));
+    showDebug('popup: ' + code + ' — ' + (e.message||''));
     if (code === 'auth/popup-blocked' || code === 'auth/operation-not-supported-in-this-environment') {
       showMsg('ok', '🔄 Redirecionando para o Google...');
       setTimeout(function(){ signInWithRedirect(auth, provider); }, 800);
     } else if (code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') {
       setLoading(tipo, false);
-      // usuário fechou — sem mensagem de erro
     } else {
       setLoading(tipo, false);
       showMsg('err', '⚠️ ' + (e.message || 'Erro ao conectar com Google.'));
