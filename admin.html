@@ -6,11 +6,14 @@
 <title>StreamDesk — Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root{--bg:#080b12;--surface:#0e1220;--card:#131825;--card2:#161c2c;--border:#1c2236;--accent:#00d4ff;--red:#ff3b5c;--yellow:#ffbb00;--green:#00e096;--orange:#ff7b00;--purple:#a78bfa;--text:#e4e8f4;--muted:#5a6480;--radius:16px}
-  body.light{--bg:#f0f4f8;--surface:#ffffff;--card:#ffffff;--card2:#f7f9fc;--border:#e2e8f0;--text:#1a202c;--muted:#718096}
-  body.light .login-screen::before{background:radial-gradient(circle,rgba(0,212,255,.08) 0%,transparent 70%)}
-  body.light .login-card{box-shadow:0 4px 24px rgba(0,0,0,.06)}
-  body.light .app-header{background:rgba(255,255,255,.96)}
+  :root{--bg:#f0f4f8;--surface:#ffffff;--card:#ffffff;--card2:#f7f9fc;--border:#e2e8f0;--accent:#00d4ff;--red:#ff3b5c;--yellow:#ffbb00;--green:#00e096;--orange:#ff7b00;--purple:#a78bfa;--text:#1a202c;--muted:#718096;--radius:16px}
+  body.dark {
+    --bg:#080b12;--surface:#0e1220;--card:#131825;--card2:#161c2c;
+    --border:#1c2236;--text:#e4e8f4;--muted:#5a6480;
+    --header-bg:rgba(8,11,18,.96);--nav-bg:rgba(14,18,32,.97);
+  }
+  body.dark .login-screen::before{background:radial-gradient(circle,rgba(167,139,250,.08) 0%,transparent 70%)}
+  body.dark .login-card{box-shadow:0 4px 24px rgba(0,0,0,.4)}
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:480px;margin:0 auto}
 
@@ -45,7 +48,7 @@
   .app-screen{display:none}
   .app-screen.show{display:block}
 
-  .header{position:sticky;top:0;z-index:50;background:rgba(8,11,18,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+  .header{position:sticky;top:0;z-index:50;background:var(--header-bg,rgba(255,255,255,.96));backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
   .header-left{display:flex;align-items:center;gap:10px}
   .admin-pill{background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.2);border-radius:50px;padding:3px 10px;font-size:10px;color:var(--purple);font-weight:700;letter-spacing:.5px}
   .page-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:800}
@@ -223,12 +226,12 @@ const db   = getFirestore(app);
 // Apply theme
 (function(){
   var cfg = JSON.parse(localStorage.getItem('streamdesk_config') || '{}');
-  if (cfg.darkMode !== true) document.body.classList.add('light');
+  if (cfg.darkMode === true) document.body.classList.add('dark');
 })();
 document.addEventListener('visibilitychange', function() {
   if (document.visibilityState === 'visible') {
     var cfg = JSON.parse(localStorage.getItem('streamdesk_config') || '{}');
-    if (cfg.darkMode !== true) { document.body.classList.add('light'); } else { document.body.classList.remove('light'); }
+    if (cfg.darkMode === true) { document.body.classList.add('dark'); } else { document.body.classList.remove('dark'); }
   }
 });
 
