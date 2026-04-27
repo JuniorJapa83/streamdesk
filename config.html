@@ -102,9 +102,16 @@
 </style>
 </head>
 <body>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+const _app  = initializeApp({apiKey:"AIzaSyAGHvkDpeSbCTriZCvRf-jJ6z8PQSSWLHI",authDomain:"streamdesk-5350d.firebaseapp.com",projectId:"streamdesk-5350d",storageBucket:"streamdesk-5350d.firebasestorage.app",messagingSenderId:"36684694847",appId:"1:36684694847:web:0f6f3a27933e3d84cfff8a"});
+const _auth = getAuth(_app);
+onAuthStateChanged(_auth, function(user) { if (!user) location.href='login.html'; });
+window._firebaseAuth = _auth;
+</script>
 <script>
 (function(){
-  if (localStorage.getItem('streamdesk_session') !== 'true') { location.href = 'login.html'; return; }
   var cfg = JSON.parse(localStorage.getItem('streamdesk_config') || '{}');
   if (cfg.darkMode !== true) document.body.classList.add('light');
 })();
@@ -442,8 +449,11 @@ function enviarChamado() {
 
 function doLogout() {
   if (!confirm('Deseja sair do StreamDesk?')) return;
-  localStorage.removeItem('streamdesk_session');
-  location.href = 'login.html';
+  if (window._firebaseAuth) {
+    window._firebaseAuth.signOut().then(function(){ location.href = 'login.html'; });
+  } else {
+    location.href = 'login.html';
+  }
 }
 
 loadPage();
