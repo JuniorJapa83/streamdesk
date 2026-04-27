@@ -297,324 +297,325 @@ onAuthStateChanged(_auth, function(user) { if (!user) location.href='login.html'
   </div>
 </div>
 
-<script>
-const STORAGE_KEY = 'iptv_clientes_v3';
-const FINANCE_KEY = 'iptv_financas_v1';
-const SRV_KEY     = 'iptv_servidores_v1';
+<script type="module">
+import { initializeApp }                    from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+import { getAuth, onAuthStateChanged }      from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+import { getFirestore, collection, getDocs,
+         doc, setDoc, addDoc, deleteDoc }   from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-let clientes = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-let financas   = JSON.parse(localStorage.getItem(FINANCE_KEY) || '[]');
-let servidores = JSON.parse(localStorage.getItem(SRV_KEY) || '[]');
-let currentFilter = 'todos', currentServer = 'todos', openCardId = null;
-let ocultarVencidos = localStorage.getItem('ocultarVencidos') === 'true';
-let currentClientPage = 0;
-const CLIENT_PAGE_SIZE = 10;
-let filteredList = [];
+const _app = initializeApp({
+  apiKey:"AIzaSyCkWlpyp2-wTBeOWOHoAMLpVQ4vG61KBsc",
+  authDomain:"streamdesk-5350d.firebaseapp.com",
+  projectId:"streamdesk-5350d",
+  storageBucket:"streamdesk-5350d.firebasestorage.app",
+  messagingSenderId:"36684694847",
+  appId:"1:36684694847:web:0f6f3a27933e3d84cfff8a"
+});
+const auth = getAuth(_app);
+const db   = getFirestore(_app);
 
-function saveClientes() { localStorage.setItem(STORAGE_KEY, JSON.stringify(clientes)); }
-function saveFinancas()  { localStorage.setItem(FINANCE_KEY, JSON.stringify(financas)); }
+var UID = null;
+var clientes   = [];
+var financas   = [];
+var servidores = [];
+var currentFilter  = 'todos';
+var currentServer  = 'todos';
+var openCardId     = null;
+var currentClientPage = 0;
+var CLIENT_PAGE_SIZE  = 10;
+var filteredList      = [];
+var ocultarVencidos   = localStorage.getItem('ocultarVencidos') === 'true';
+
+// ── Firestore helpers ────────────────────────────
+function clientesRef()   { return collection(db,'clientes',UID,'lista'); }
+function financasRef()   { return collection(db,'financas',UID,'lista'); }
+function servidoresRef() { return collection(db,'servidores',UID,'lista'); }
+
+async function loadAll() {
+  var [cs,fs,ss] = await Promise.all([
+    getDocs(clientesRef()),
+    getDocs(financasRef()),
+    getDocs(servidoresRef())
+  ]);
+  clientes   = cs.docs.map(function(d){ return Object.assign({id:d.id},d.data()); });
+  financas   = fs.docs.map(function(d){ return Object.assign({id:d.id},d.data()); });
+  servidores = ss.docs.map(function(d){ return Object.assign({id:d.id},d.data()); });
+}
+
+async function saveCliente(c) {
+  var {id,...data} = c;
+  if (id) { await setDoc(doc(db,'clientes',UID,'lista',id), data); }
+  else    { var r=await addDoc(clientesRef(), data); return r.id; }
+  return id;
+}
+async function removeCliente(id) { await deleteDoc(doc(db,'clientes',UID,'lista',id)); }
+async function saveFinanca(f) {
+  var {id,...data} = f;
+  if (id) await setDoc(doc(db,'financas',UID,'lista',id), data);
+  else    await addDoc(financasRef(), data);
+}
+async function removeFinanca(id) { await deleteDoc(doc(db,'financas',UID,'lista',id)); }
+
+// ── Date helpers ──────────────────────────────────
 function today() {
-  var d = new Date();
-  var y = d.getFullYear();
-  var m = String(d.getMonth()+1).padStart(2,'0');
-  var day = String(d.getDate()).padStart(2,'0');
+  var d=new Date(), y=d.getFullYear();
+  var m=String(d.getMonth()+1).padStart(2,'0');
+  var day=String(d.getDate()).padStart(2,'0');
   return y+'-'+m+'-'+day;
 }
 function tomorrow() {
-  var d = new Date();
-  d.setDate(d.getDate()+1);
-  var y = d.getFullYear();
-  var m = String(d.getMonth()+1).padStart(2,'0');
-  var day = String(d.getDate()).padStart(2,'0');
+  var d=new Date(); d.setDate(d.getDate()+1);
+  var y=d.getFullYear();
+  var m=String(d.getMonth()+1).padStart(2,'0');
+  var day=String(d.getDate()).padStart(2,'0');
   return y+'-'+m+'-'+day;
 }
-
+function formatDate(d) {
+  if(!d) return '-'; var p=d.split('-'); return p[2]+'/'+p[1]+'/'+p[0];
+}
 function getStatus(v) {
-  const t=today(), tm=tomorrow();
+  var t=today(), tm=tomorrow();
   if(v<t) return 'vencido'; if(v===t) return 'hoje'; if(v===tm) return 'amanha'; return 'em-dia';
 }
-function formatDate(d) { if(!d) return '-'; const [y,m,day]=d.split('-'); return `${day}/${m}/${y}`; }
 function getDaysText(v) {
-  const diff=Math.round((new Date(v)-new Date(today()))/86400000);
-  if(diff<0) return `<span style="color:var(--red);font-size:11px">${Math.abs(diff)}d em atraso</span>`;
-  if(diff===0) return `<span style="color:var(--yellow);font-size:11px">Vence hoje!</span>`;
-  if(diff===1) return `<span style="color:var(--orange);font-size:11px">Vence amanhã</span>`;
-  return `<span style="color:var(--muted);font-size:11px">em ${diff} dias</span>`;
+  var diff=Math.round((new Date(v)-new Date(today()))/86400000);
+  if(diff<0) return '<span style="color:var(--red);font-size:11px">'+Math.abs(diff)+'d em atraso</span>';
+  if(diff===0) return '<span style="color:var(--yellow);font-size:11px">Vence hoje!</span>';
+  if(diff===1) return '<span style="color:var(--orange);font-size:11px">Vence amanhã</span>';
+  return '<span style="color:var(--muted);font-size:11px">em '+diff+' dias</span>';
 }
 function statusPill(s) {
-  const m={vencido:['pill-vencido','Vencido'],hoje:['pill-hoje','Hoje'],amanha:['pill-amanha','Amanhã'],'em-dia':['pill-em-dia','Em Dia']};
-  return `<span class="status-pill ${m[s][0]}">${m[s][1]}</span>`;
+  var m={vencido:['pill-vencido','Vencido'],hoje:['pill-hoje','Hoje'],amanha:['pill-amanha','Amanhã'],'em-dia':['pill-em-dia','Em Dia']};
+  return '<span class="status-pill '+m[s][0]+'">'+m[s][1]+'</span>';
 }
 function barClass(s) { return {vencido:'bar-vencido',hoje:'bar-hoje',amanha:'bar-amanha','em-dia':'bar-em-dia'}[s]; }
 
+// ── Server filters ────────────────────────────────
 function buildServerFilters() {
-  servidores = JSON.parse(localStorage.getItem(SRV_KEY) || '[]');
-  const srvNomes = servidores.map(s => s.nome);
-  clientes.forEach(c => { if (!srvNomes.includes(c.plataforma)) srvNomes.push(c.plataforma); });
-  const servers = ['todos', ...srvNomes];
-  document.getElementById('serverFilters').innerHTML = servers.map(s =>
-    `<button class="srv-btn ${s===currentServer?'active':''}" onclick="setServer('${s}',this)">${s==='todos'?'Todos Servidores':s}</button>`
-  ).join('');
+  var srvNomes = servidores.map(function(s){ return s.nome; });
+  clientes.forEach(function(c){ if(!srvNomes.includes(c.plataforma)) srvNomes.push(c.plataforma); });
+  var servers = ['todos'].concat(srvNomes);
+  document.getElementById('serverFilters').innerHTML = servers.map(function(s){
+    return '<button class="srv-btn '+( s===currentServer?'active':'')+'" onclick="setServer(\''+s+'\',this)">'+( s==='todos'?'Todos Servidores':s)+'</button>';
+  }).join('');
 }
-function setServer(s,btn) { currentServer=s; currentClientPage=0; document.querySelectorAll('.srv-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); openCardId=null; render(); }
-function setFilter(f,btn) { currentFilter=f; currentClientPage=0; document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); openCardId=null; render(); }
+window.setServer = function(s,btn) {
+  currentServer=s; currentClientPage=0;
+  document.querySelectorAll('.srv-btn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active'); openCardId=null; render();
+};
+window.setFilter = function(f,btn) {
+  currentFilter=f; currentClientPage=0;
+  document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active'); openCardId=null; render();
+};
 
-function toggleOcultarVencidos() {
-  ocultarVencidos = !ocultarVencidos;
+window.toggleOcultarVencidos = function() {
+  ocultarVencidos=!ocultarVencidos;
   localStorage.setItem('ocultarVencidos', ocultarVencidos);
-  updateOcultarBtn();
-  openCardId = null;
-  currentClientPage = 0;
-  render();
-}
-
+  updateOcultarBtn(); openCardId=null; currentClientPage=0; render();
+};
 function updateOcultarBtn() {
-  const btn = document.getElementById('btnOcultarVencidos');
-  if (!btn) return;
-  if (ocultarVencidos) {
-    btn.textContent = '👁️ Mostrar Vencidos';
-    btn.style.background  = 'rgba(255,59,92,0.15)';
-    btn.style.borderColor = 'var(--red)';
-    btn.style.color       = 'var(--red)';
-    btn.style.fontWeight  = '700';
-  } else {
-    btn.textContent = '👁️ Ocultar Vencidos';
-    btn.style.background  = 'var(--card)';
-    btn.style.borderColor = 'var(--border)';
-    btn.style.color       = 'var(--muted)';
-    btn.style.fontWeight  = '500';
-  }
+  var btn=document.getElementById('btnOcultarVencidos');
+  if(!btn) return;
+  if(ocultarVencidos){ btn.textContent='👁️ Mostrar Vencidos'; btn.style.background='rgba(255,59,92,0.15)'; btn.style.borderColor='var(--red)'; btn.style.color='var(--red)'; btn.style.fontWeight='700'; }
+  else { btn.textContent='👁️ Ocultar Vencidos'; btn.style.background='var(--card)'; btn.style.borderColor='var(--border)'; btn.style.color='var(--muted)'; btn.style.fontWeight='500'; }
 }
 
+// ── Main render ───────────────────────────────────
 function render() {
   buildServerFilters();
-  const q=document.getElementById('searchInput').value.toLowerCase();
-  const order={vencido:0,hoje:1,amanha:2,'em-dia':3};
-  let list=clientes.filter(c=>{
-    const s=getStatus(c.vencimento);
-    if(ocultarVencidos && s==='vencido') return false;
+  var q=document.getElementById('searchInput').value.toLowerCase();
+  var order={vencido:0,hoje:1,amanha:2,'em-dia':3};
+  var list=clientes.filter(function(c){
+    var s=getStatus(c.vencimento);
+    if(ocultarVencidos&&s==='vencido') return false;
     return (currentFilter==='todos'||s===currentFilter)&&(currentServer==='todos'||c.plataforma===currentServer)&&(c.nome.toLowerCase().includes(q)||c.plataforma.toLowerCase().includes(q));
-  }).sort((a,b)=>{ const sa=order[getStatus(a.vencimento)],sb=order[getStatus(b.vencimento)]; return sa!==sb?sa-sb:a.vencimento.localeCompare(b.vencimento); });
-
+  }).sort(function(a,b){
+    var sa=order[getStatus(a.vencimento)],sb=order[getStatus(b.vencimento)];
+    return sa!==sb?sa-sb:a.vencimento.localeCompare(b.vencimento);
+  });
   document.getElementById('totalCount').textContent=clientes.length;
-  const el=document.getElementById('clientList');
-  if(!list.length){ el.innerHTML=`<div class="empty"><div class="empty-icon">📭</div><div>Nenhum cliente encontrado</div></div>`; return; }
-
-  filteredList = list;
+  var el=document.getElementById('clientList');
+  if(!list.length){ el.innerHTML='<div class="empty"><div class="empty-icon">📭</div><div>Nenhum cliente encontrado</div></div>'; return; }
+  filteredList=list;
   renderClientPage();
 }
 
 function renderClientPage() {
-  const el = document.getElementById('clientList');
-  const total = filteredList.length;
-  const pages = Math.ceil(total / CLIENT_PAGE_SIZE);
-
-  // Clamp page if list shrunk
-  if (currentClientPage >= pages) currentClientPage = Math.max(0, pages - 1);
-
-  const start = currentClientPage * CLIENT_PAGE_SIZE;
-  const end   = Math.min(start + CLIENT_PAGE_SIZE, total);
-  const page  = filteredList.slice(start, end);
-
-  const groupLabels={vencido:'🔴 Vencidos',hoje:'🟡 Vencem Hoje',amanha:'🟠 Vencem Amanhã','em-dia':'🟢 Em Dia'};
-  let html='', lastGroup=null;
-
-  page.forEach((c,i)=>{
-    const s=getStatus(c.vencimento);
-    if(currentFilter==='todos'&&s!==lastGroup){ lastGroup=s; html+=`<div class="section-label">${groupLabels[s]}</div>`; }
-    const isOpen=openCardId===c.id;
-    html+=`
-    <div class="client-card ${isOpen?'open':''}" id="card-${c.id}" style="animation-delay:${i*0.04}s">
-      <div class="card-main" onclick="toggleCard(${c.id})">
-        <div class="card-bar ${barClass(s)}"></div>
-        <div class="card-body">
-          <div class="card-top">
-            <div class="client-name">${c.pais} ${c.nome}</div>
-            ${statusPill(s)}
-          </div>
-          <div class="card-mid">
-            <span class="chip">📡 ${c.plataforma}</span>
-            <span class="chip">📦 ${c.plano}</span>
-            ${c.obs?`<span class="chip chip-obs">💬 ${c.obs}</span>`:''}
-          </div>
-          <div class="card-bot">
-            <div class="venc-info"><strong>${formatDate(c.vencimento)}</strong>&nbsp;&nbsp;${getDaysText(c.vencimento)}</div>
-          </div>
-        </div>
-        <span class="card-chevron">›</span>
-      </div>
-      <div class="card-detail">
-        <div class="detail-inner">
-          <div class="detail-grid">
-            <div><div class="detail-label">Servidor</div><div class="detail-value">📡 ${c.plataforma}</div></div>
-            <div><div class="detail-label">Plano</div><div class="detail-value">📦 ${c.plano}</div></div>
-            <div><div class="detail-label">Vencimento</div><div class="detail-value">${formatDate(c.vencimento)}</div></div>
-            <div><div class="detail-label">País</div><div class="detail-value">${c.pais}</div></div>
-            <div><div class="detail-label">Contato</div><div class="detail-value" style="font-size:13px">${c.contato||'—'}</div></div>
-          </div>
-          ${c.obs?`<div class="detail-obs">💬 ${c.obs}</div>`:''}
-          <div class="detail-actions">
-            <button class="det-btn btn-edit" onclick="editClient(${c.id})">✏️ Editar</button>
-            <button class="det-btn btn-wa"   onclick="sendWA(${c.id})">📲 WhatsApp</button>
-            <button class="det-btn btn-del"  onclick="deleteClient(${c.id})">🗑️ Excluir</button>
-            <button class="det-btn btn-renew" onclick="openRenew(${c.id})">🔄 Renovar Plano</button>
-          </div>
-        </div>
-      </div>
-    </div>`;
+  var el=document.getElementById('clientList');
+  var total=filteredList.length;
+  var pages=Math.ceil(total/CLIENT_PAGE_SIZE);
+  if(currentClientPage>=pages) currentClientPage=Math.max(0,pages-1);
+  var start=currentClientPage*CLIENT_PAGE_SIZE;
+  var end=Math.min(start+CLIENT_PAGE_SIZE,total);
+  var page=filteredList.slice(start,end);
+  var groupLabels={vencido:'🔴 Vencidos',hoje:'🟡 Vencem Hoje',amanha:'🟠 Vencem Amanhã','em-dia':'🟢 Em Dia'};
+  var html='', lastGroup=null;
+  page.forEach(function(c,i){
+    var s=getStatus(c.vencimento);
+    if(currentFilter==='todos'&&s!==lastGroup){ lastGroup=s; html+='<div class="section-label">'+groupLabels[s]+'</div>'; }
+    var isOpen=openCardId===c.id;
+    html+='<div class="client-card '+( isOpen?'open':'')+'" id="card-'+c.id+'" style="animation-delay:'+( i*0.04)+'s">'
+      +'<div class="card-main" onclick="toggleCard(\''+c.id+'\')">'
+        +'<div class="card-bar '+barClass(s)+'"></div>'
+        +'<div class="card-body">'
+          +'<div class="card-top"><div class="client-name">'+( c.pais||'')+' '+c.nome+'</div>'+statusPill(s)+'</div>'
+          +'<div class="card-mid"><span class="chip">📡 '+c.plataforma+'</span><span class="chip">📦 '+c.plano+'</span>'+(c.obs?'<span class="chip chip-obs">💬 '+c.obs+'</span>':'')+'</div>'
+          +'<div class="card-bot"><div class="venc-info"><strong>'+formatDate(c.vencimento)+'</strong>&nbsp;&nbsp;'+getDaysText(c.vencimento)+'</div></div>'
+        +'</div>'
+        +'<span class="card-chevron">›</span>'
+      +'</div>'
+      +'<div class="card-detail"><div class="detail-inner">'
+        +'<div class="detail-grid">'
+          +'<div><div class="detail-label">Servidor</div><div class="detail-value">📡 '+c.plataforma+'</div></div>'
+          +'<div><div class="detail-label">Plano</div><div class="detail-value">📦 '+c.plano+'</div></div>'
+          +'<div><div class="detail-label">Vencimento</div><div class="detail-value">'+formatDate(c.vencimento)+'</div></div>'
+          +'<div><div class="detail-label">País</div><div class="detail-value">'+( c.pais||'')+'</div></div>'
+          +'<div><div class="detail-label">Contato</div><div class="detail-value" style="font-size:13px">'+( c.contato||'—')+'</div></div>'
+        +'</div>'
+        +(c.obs?'<div class="detail-obs">💬 '+c.obs+'</div>':'')+
+        '<div class="detail-actions">'
+          +'<button class="det-btn btn-edit" onclick="editClient(\''+c.id+'\')">✏️ Editar</button>'
+          +'<button class="det-btn btn-wa" onclick="sendWA(\''+c.id+'\')">📲 WhatsApp</button>'
+          +'<button class="det-btn btn-del" onclick="deleteClient(\''+c.id+'\')">🗑️ Excluir</button>'
+          +'<button class="det-btn btn-renew" onclick="openRenew(\''+c.id+'\')">🔄 Renovar Plano</button>'
+        +'</div>'
+      +'</div></div>'
+    +'</div>';
   });
-
-  // Pagination controls
-  if(pages > 1){
-    html += `
-    <div class="pagination">
-      <button class="page-btn" onclick="changeClientPage(-1)" ${currentClientPage===0?'disabled':''}>‹ Anterior</button>
-      <span class="page-info">${start+1}–${end} de ${total}</span>
-      <button class="page-btn" onclick="changeClientPage(1)" ${currentClientPage>=pages-1?'disabled':''}>Próximo ›</button>
-    </div>`;
+  if(pages>1){
+    html+='<div class="pagination">'
+      +'<button class="page-btn" onclick="changeClientPage(-1)" '+( currentClientPage===0?'disabled':'')+'>‹ Anterior</button>'
+      +'<span class="page-info">'+( start+1)+'–'+end+' de '+total+'</span>'
+      +'<button class="page-btn" onclick="changeClientPage(1)" '+( currentClientPage>=pages-1?'disabled':'')+'>Próximo ›</button>'
+    +'</div>';
   }
-
   el.innerHTML=html;
 }
 
-function changeClientPage(dir){
-  const pages = Math.ceil(filteredList.length / CLIENT_PAGE_SIZE);
-  currentClientPage = Math.max(0, Math.min(pages-1, currentClientPage+dir));
-  openCardId = null;
-  renderClientPage();
-  document.getElementById('clientList').scrollIntoView({behavior:'smooth', block:'start'});
-}
+window.changeClientPage = function(dir){
+  var pages=Math.ceil(filteredList.length/CLIENT_PAGE_SIZE);
+  currentClientPage=Math.max(0,Math.min(pages-1,currentClientPage+dir));
+  openCardId=null; renderClientPage();
+  document.getElementById('clientList').scrollIntoView({behavior:'smooth',block:'start'});
+};
+window.toggleCard = function(id){ openCardId=openCardId===id?null:id; renderClientPage(); };
 
-function toggleCard(id){ openCardId=openCardId===id?null:id; render(); }
-
-function showNoServerAlert() {
-  document.getElementById('noServerOverlay').classList.add('open');
-}
-function closeNoServer() {
-  document.getElementById('noServerOverlay').classList.remove('open');
-}
-
-function openModal(client=null){
-  document.getElementById('editId').value=client?client.id:'';
-  document.getElementById('modalTitle').textContent=client?'Editar Cliente':'Novo Cliente';
-  document.getElementById('fNome').value=client?.nome||'';
-
-  // Load servidores dynamically from localStorage
-  servidores = JSON.parse(localStorage.getItem(SRV_KEY) || '[]');
-  if (servidores.length === 0) {
-    closeModal('modalOverlay');
-    showNoServerAlert();
-    return;
-  }
-  const selSrv = document.getElementById('fPlataforma');
-  selSrv.innerHTML = servidores.map(s => '<option value="'+s.nome+'">'+s.nome+'</option>').join('');
-  selSrv.value = client?.plataforma || (servidores[0]?.nome || '');
-
-  document.getElementById('fPlano').value=client?.plano||'Integral';
-  document.getElementById('fVencimento').value=client?.vencimento||'';
-  document.getElementById('fPais').value=client?.pais||'🇧🇷';
-  document.getElementById('fContato').value=client?.contato||'';
-  document.getElementById('fObs').value=client?.obs||'';
+// ── CRUD ──────────────────────────────────────────
+window.openModal = function(client) {
+  servidores = servidores.length ? servidores : [];
+  if(!servidores.length){ showNoServerAlert(); return; }
+  document.getElementById('editId').value = client ? client.id : '';
+  document.getElementById('modalTitle').textContent = client ? 'Editar Cliente' : 'Novo Cliente';
+  document.getElementById('fNome').value    = client ? client.nome       : '';
+  document.getElementById('fPlano').value   = client ? client.plano      : 'Integral';
+  document.getElementById('fVencimento').value = client ? client.vencimento : '';
+  document.getElementById('fPais').value    = client ? client.pais       : '🇧🇷';
+  document.getElementById('fContato').value = client ? client.contato    : '';
+  document.getElementById('fObs').value     = client ? client.obs        : '';
   document.getElementById('fValorPago').value = '';
-  // Only show valor pago for NEW clients (not editing)
-  const isNew = !client;
-  document.getElementById('valorPagoGroup').style.display = isNew ? 'block' : 'none';
-  document.getElementById('pagamentoGroup').style.display  = isNew ? 'block' : 'none';
+  var isNew = !client;
+  document.getElementById('valorPagoGroup').style.display = isNew?'block':'none';
+  document.getElementById('pagamentoGroup').style.display  = isNew?'block':'none';
+  var sel=document.getElementById('fPlataforma');
+  sel.innerHTML=servidores.map(function(s){ return '<option value="'+s.nome+'">'+s.nome+'</option>'; }).join('');
+  sel.value = client ? client.plataforma : (servidores[0]?servidores[0].nome:'');
   document.getElementById('modalOverlay').classList.add('open');
-}
-function closeModal(id){ document.getElementById(id).classList.remove('open'); }
-function closeOutside(e,id){ if(e.target===document.getElementById(id)) closeModal(id); }
+};
+window.closeModal = function(id){ document.getElementById(id).classList.remove('open'); };
+window.closeOutside = function(e,id){ if(e.target===document.getElementById(id)) closeModal(id); };
+window.showNoServerAlert = function(){ document.getElementById('noServerOverlay').classList.add('open'); };
+window.closeNoServer = function(){ document.getElementById('noServerOverlay').classList.remove('open'); };
 
-function saveClient(){
-  const nome=document.getElementById('fNome').value.trim();
-  if(!nome){alert('Informe o nome do cliente!');return;}
-  const vencimento=document.getElementById('fVencimento').value;
-  if(!vencimento){alert('Informe a data de vencimento!');return;}
-  const data={nome,plataforma:document.getElementById('fPlataforma').value,plano:document.getElementById('fPlano').value,vencimento,pais:document.getElementById('fPais').value,contato:document.getElementById('fContato').value,obs:document.getElementById('fObs').value};
-  const editId=document.getElementById('editId').value;
-  if(editId){ const idx=clientes.findIndex(c=>c.id==editId); if(idx>=0) clientes[idx]={...clientes[idx],...data}; }
+window.saveClient = async function(){
+  var nome=document.getElementById('fNome').value.trim();
+  if(!nome){ alert('Informe o nome do cliente!'); return; }
+  var vencimento=document.getElementById('fVencimento').value;
+  if(!vencimento){ alert('Informe a data de vencimento!'); return; }
+  var data={nome,plataforma:document.getElementById('fPlataforma').value,plano:document.getElementById('fPlano').value,vencimento,pais:document.getElementById('fPais').value,contato:document.getElementById('fContato').value,obs:document.getElementById('fObs').value};
+  var editId=document.getElementById('editId').value;
+  if(editId){ data.id=editId; await saveCliente(data); }
   else {
-    data.id=Date.now();
-    clientes.push(data);
-    // Register payment in financas if valor provided
-    const val=parseFloat(document.getElementById('fValorPago').value||'0');
+    var newId=await saveCliente(data);
+    // Register payment if valor provided
+    var val=parseFloat(document.getElementById('fValorPago').value||'0');
     if(val>0){
-      financas.push({id:Date.now()+1,data:today(),cliente:nome,plataforma:data.plataforma,valor:val,pagamento:document.getElementById('fPagamento').value,obs:'Ativação'});
-      saveFinancas();
+      await saveFinanca({data:today(),cliente:nome,plataforma:data.plataforma,valor:val,pagamento:document.getElementById('fPagamento').value,obs:'Ativação'});
     }
   }
-  saveClientes(); closeModal('modalOverlay'); render();
-}
-function editClient(id){ openModal(clientes.find(c=>c.id==id)); }
-function deleteClient(id){
-  if(confirm('Tem certeza que deseja remover este cliente?')){ clientes=clientes.filter(c=>c.id!=id); if(openCardId===id) openCardId=null; saveClientes(); render(); }
-}
-function sendWA(id){
-  const c = clientes.find(c=>c.id==id);
-  const s = getStatus(c.vencimento);
-  const cfg = JSON.parse(localStorage.getItem('streamdesk_config') || '{}');
-  const nome = c.nome.split(' ')[0];
+  closeModal('modalOverlay');
+  await loadAll(); render();
+};
 
-  const tplHoje   = cfg.msgHoje    || 'Olá {nome}! 👋 Seu plano IPTV ({servidor}) vence HOJE. Renove para não ficar sem sinal! 📺';
-  const tplAmanha = cfg.msgAmanha  || 'Olá {nome}! 👋 Lembrando que seu plano IPTV ({servidor}) vence amanhã. Renove com antecedência! 😊';
-  const tplVenc   = cfg.msgVencido || 'Olá {nome}! 👋 Seu plano IPTV ({servidor}) está vencido. Entre em contato para renovar! 🙏';
+window.editClient = function(id){ openModal(clientes.find(function(c){return c.id===id;})); };
 
-  let tpl = s==='vencido' ? tplVenc : s==='hoje' ? tplHoje : tplAmanha;
-  const msg = tpl.replace(/{nome}/g, nome).replace(/{servidor}/g, c.plataforma);
+window.deleteClient = async function(id){
+  if(!confirm('Tem certeza que deseja remover este cliente?')) return;
+  await removeCliente(id);
+  if(openCardId===id) openCardId=null;
+  await loadAll(); render();
+};
 
-  const phone = c.contato ? c.contato.replace(/\D/g,'') : '';
-  window.open(phone ? `https://wa.me/${phone}?text=${encodeURIComponent(msg)}` : `https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
-}
+window.sendWA = function(id){
+  var c=clientes.find(function(x){return x.id===id;});
+  var s=getStatus(c.vencimento);
+  var cfg=JSON.parse(localStorage.getItem('streamdesk_config')||'{}')||{};
+  var tplH=cfg.msgHoje   ||'Olá {nome}! 👋 Seu plano IPTV ({servidor}) vence HOJE. Renove! 📺';
+  var tplA=cfg.msgAmanha ||'Olá {nome}! 👋 Seu plano IPTV ({servidor}) vence amanhã. Renove! 😊';
+  var tplV=cfg.msgVencido||'Olá {nome}! 👋 Seu plano IPTV ({servidor}) está vencido. Renove! 🙏';
+  var tpl=s==='vencido'?tplV:s==='hoje'?tplH:tplA;
+  var msg=tpl.replace(/{nome}/g,c.nome.split(' ')[0]).replace(/{servidor}/g,c.plataforma);
+  var phone=c.contato?c.contato.replace(/\D/g,''):'';
+  window.open(phone?'https://wa.me/'+phone+'?text='+encodeURIComponent(msg):'https://wa.me/?text='+encodeURIComponent(msg),'_blank');
+};
 
-function openRenew(id){
-  const c=clientes.find(c=>c.id==id);
+window.openRenew = function(id){
+  var c=clientes.find(function(x){return x.id===id;});
   document.getElementById('renewId').value=id;
   document.getElementById('rVencimento').value='';
   document.getElementById('rValor').value='';
   document.getElementById('rObs').value='';
-  document.getElementById('renewInfo').innerHTML=`
-    <div class="renew-info-name">${c.pais} ${c.nome}</div>
-    <div class="renew-info-sub">${c.plataforma} · ${c.plano} · Vence em <b>${formatDate(c.vencimento)}</b></div>`;
+  document.getElementById('renewInfo').innerHTML='<div class="renew-info-name">'+( c.pais||'')+' '+c.nome+'</div><div class="renew-info-sub">'+c.plataforma+' · '+c.plano+' · Vence em <b>'+formatDate(c.vencimento)+'</b></div>';
   document.getElementById('renewOverlay').classList.add('open');
-}
-function confirmRenew(){
-  const id=document.getElementById('renewId').value;
-  const nov=document.getElementById('rVencimento').value;
-  const val=document.getElementById('rValor').value;
-  const pag=document.getElementById('rPagamento').value;
-  const obs=document.getElementById('rObs').value;
-  if(!nov){alert('Informe a nova data de vencimento!');return;}
-  const c=clientes.find(c=>c.id==id);
-  const anterior=c.vencimento;
-  c.vencimento=nov;
-  saveClientes();
-  if(val&&parseFloat(val)>0){
-    financas.push({id:Date.now(),data:today(),cliente:c.nome,plataforma:c.plataforma,valor:parseFloat(val),pagamento:pag,obs:obs||`Renovação ${formatDate(anterior)} → ${formatDate(nov)}`});
-    saveFinancas();
-  }
-  closeModal('renewOverlay');
-  openCardId=null;
-  render();
-  alert(`✅ Renovado até ${formatDate(nov)}!${val&&parseFloat(val)>0?`\n💰 R$ ${parseFloat(val).toFixed(2)} registrado em Finanças.`:''}`);
-}
+};
 
-// Reload data when returning to this page
-document.addEventListener('visibilitychange', function() {
-  if (document.visibilityState === 'visible') {
-    var cfg2 = JSON.parse(localStorage.getItem('streamdesk_config') || '{}');
-    if (cfg2.darkMode !== true) { document.body.classList.add('light'); }
-    else { document.body.classList.remove('light'); }
-    clientes   = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-    financas   = JSON.parse(localStorage.getItem(FINANCE_KEY) || '[]');
-    servidores = JSON.parse(localStorage.getItem(SRV_KEY) || '[]');
-    ocultarVencidos = localStorage.getItem('ocultarVencidos') === 'true';
-    updateOcultarBtn();
-    render();
+window.confirmRenew = async function(){
+  var id=document.getElementById('renewId').value;
+  var nov=document.getElementById('rVencimento').value;
+  var val=document.getElementById('rValor').value;
+  var pag=document.getElementById('rPagamento').value;
+  var obs=document.getElementById('rObs').value;
+  if(!nov){ alert('Informe a nova data de vencimento!'); return; }
+  var c=clientes.find(function(x){return x.id===id;});
+  var anterior=c.vencimento;
+  var updated=Object.assign({},c,{vencimento:nov});
+  await saveCliente(updated);
+  if(val&&parseFloat(val)>0){
+    await saveFinanca({data:today(),cliente:c.nome,plataforma:c.plataforma,valor:parseFloat(val),pagamento:pag,obs:obs||'Renovação '+formatDate(anterior)+' → '+formatDate(nov)});
   }
+  closeModal('renewOverlay'); openCardId=null;
+  await loadAll(); render();
+  alert('✅ Renovado até '+formatDate(nov)+'!');
+};
+
+// ── INIT ──────────────────────────────────────────
+onAuthStateChanged(auth, async function(user) {
+  if (!user) { location.href='login.html'; return; }
+  UID = user.uid;
+  // Apply theme
+  var cfg=JSON.parse(localStorage.getItem('streamdesk_config')||'{}')||{};
+  if(cfg.darkMode!==true) document.body.classList.add('light');
+  updateOcultarBtn();
+  await loadAll();
+  render();
 });
 
-updateOcultarBtn();
-render();
+document.addEventListener('visibilitychange', async function(){
+  if(document.visibilityState==='visible'&&UID){
+    var cfg2=JSON.parse(localStorage.getItem('streamdesk_config')||'{}')||{};
+    if(cfg2.darkMode!==true){ document.body.classList.add('light'); } else { document.body.classList.remove('light'); }
+    await loadAll(); render();
+  }
+});
 </script>
-</body>
-</html>
