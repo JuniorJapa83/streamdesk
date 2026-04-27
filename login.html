@@ -13,53 +13,36 @@
   body::after{content:'';position:fixed;bottom:-80px;left:-80px;width:280px;height:280px;background:radial-gradient(circle,rgba(0,224,150,.08) 0%,transparent 70%);pointer-events:none}
   .wrap{width:100%;position:relative;z-index:1}
 
-  .logo-wrap{text-align:center;margin-bottom:36px}
+  .logo-wrap{text-align:center;margin-bottom:32px}
   .logo-icon{width:72px;height:72px;background:linear-gradient(135deg,#00d4ff,#00e096);border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:34px;margin:0 auto 14px;box-shadow:0 8px 32px rgba(0,212,255,.25)}
   .logo-name{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;letter-spacing:-.5px}
   .logo-name span{color:var(--accent)}
   .logo-sub{font-size:13px;color:var(--muted);margin-top:4px}
 
-  .card{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:32px 24px;box-shadow:0 4px 24px rgba(0,0,0,.06);text-align:center}
-  .card-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:6px}
-  .card-sub{font-size:13px;color:var(--muted);margin-bottom:28px;line-height:1.5}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:28px 24px;box-shadow:0 4px 24px rgba(0,0,0,.06)}
+  .card-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:4px}
+  .card-sub{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.5}
 
-  .msg{display:none;border-radius:10px;padding:10px 14px;font-size:13px;margin-bottom:16px;align-items:center;gap:8px;line-height:1.4;text-align:left}
+  .msg{display:none;border-radius:10px;padding:10px 14px;font-size:13px;margin-bottom:14px;align-items:center;gap:8px;line-height:1.4}
   .msg.show{display:flex}
   .msg.err{background:rgba(255,59,92,.08);border:1px solid rgba(255,59,92,.2);color:var(--red)}
   .msg.ok{background:rgba(0,224,150,.08);border:1px solid rgba(0,224,150,.2);color:var(--green)}
 
-  /* Botão Google */
-  .btn-google{
-    width:100%;
-    background:#fff;
-    color:#3c4043;
-    border:1.5px solid #dadce0;
-    border-radius:12px;
-    padding:14px 20px;
-    font-family:'Syne',sans-serif;
-    font-weight:700;
-    font-size:15px;
-    cursor:pointer;
-    transition:all .2s;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:10px;
-    box-shadow:0 2px 8px rgba(0,0,0,.08);
-  }
+  .btn-google{width:100%;background:#fff;color:#3c4043;border:1.5px solid #dadce0;border-radius:12px;padding:13px 20px;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
   .btn-google:hover{background:#f8f9fa;box-shadow:0 4px 16px rgba(0,0,0,.12);transform:translateY(-1px)}
   .btn-google:active{transform:scale(.97)}
   .btn-google:disabled{opacity:.6;cursor:not-allowed;transform:none}
   .btn-google svg{width:20px;height:20px;flex-shrink:0}
 
-  .spinner{width:18px;height:18px;border:2px solid rgba(60,64,67,.2);border-top-color:#3c4043;border-radius:50%;animation:spin .7s linear infinite;display:none}
+  .spinner{width:18px;height:18px;border:2px solid rgba(60,64,67,.25);border-top-color:#3c4043;border-radius:50%;animation:spin .7s linear infinite;display:none}
   @keyframes spin{to{transform:rotate(360deg)}}
 
-  .divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--muted);font-size:12px}
-  .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+  .tabs{display:flex;background:var(--card2);border-radius:12px;padding:4px;margin-bottom:22px;gap:4px}
+  .tab{flex:1;padding:9px;border:none;background:transparent;border-radius:9px;font-family:'Syne',sans-serif;font-weight:600;font-size:13px;color:var(--muted);cursor:pointer;transition:all .2s}
+  .tab.active{background:#fff;color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,.08)}
 
-  .info-box{background:rgba(0,212,255,.05);border:1px solid rgba(0,212,255,.15);border-radius:12px;padding:14px 16px;font-size:12px;color:var(--muted);line-height:1.6;text-align:left;margin-top:4px}
-  .info-box strong{color:var(--accent)}
+  .panel{display:none}
+  .panel.active{display:block}
 
   .version{text-align:center;font-size:11px;color:var(--muted);margin-top:20px}
   .version span{color:var(--accent);font-weight:600}
@@ -75,42 +58,61 @@
   </div>
 
   <div class="card">
-    <div class="card-title">Bem-vindo! 👋</div>
-    <div class="card-sub">Acesse sua conta usando o Google.<br>Rápido, seguro e sem senha para lembrar.</div>
+
+    <div class="tabs">
+      <button class="tab active" id="tabLogin" onclick="switchTab('login')">Entrar</button>
+      <button class="tab" id="tabCadastro" onclick="switchTab('cadastro')">Criar conta</button>
+    </div>
 
     <div class="msg err" id="msgErr"></div>
     <div class="msg ok"  id="msgOk"></div>
 
-    <button class="btn-google" id="btnGoogle" onclick="doLoginGoogle()">
-      <!-- Google SVG oficial -->
-      <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-        <path fill="none" d="M0 0h48v48H0z"/>
-      </svg>
-      <span id="btnGoogleTxt">Entrar com Google</span>
-      <div class="spinner" id="spinner"></div>
-    </button>
-
-    <div class="divider">como funciona</div>
-
-    <div class="info-box">
-      🔐 Ao clicar, uma janela do Google abrirá para você escolher sua conta.<br><br>
-      ✅ <strong>Primeiro acesso?</strong> Sua conta é criada automaticamente e o acesso é liberado na hora.
+    <!-- LOGIN -->
+    <div class="panel active" id="panelLogin">
+      <div class="card-title">Bem-vindo! 👋</div>
+      <div class="card-sub">Entre com sua conta Google para acessar o sistema.</div>
+      <button class="btn-google" id="btnLogin" onclick="doGoogle('login')">
+        <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+          <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+          <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+          <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+          <path fill="none" d="M0 0h48v48H0z"/>
+        </svg>
+        <span id="btnLoginTxt">Entrar com Google</span>
+        <div class="spinner" id="spinnerLogin"></div>
+      </button>
     </div>
+
+    <!-- CADASTRO -->
+    <div class="panel" id="panelCadastro">
+      <div class="card-title">Criar conta ✨</div>
+      <div class="card-sub">Use sua conta Google para se cadastrar. O acesso é liberado automaticamente.</div>
+      <button class="btn-google" id="btnCadastro" onclick="doGoogle('cadastro')">
+        <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+          <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+          <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+          <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+          <path fill="none" d="M0 0h48v48H0z"/>
+        </svg>
+        <span id="btnCadastroTxt">Cadastrar com Google</span>
+        <div class="spinner" id="spinnerCadastro"></div>
+      </button>
+    </div>
+
   </div>
 
   <div class="version">StreamDesk <span>v1.0</span></div>
 </div>
 
 <script type="module">
-import { initializeApp }          from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged }
-                                   from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+import { initializeApp }      from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+import { getAuth, GoogleAuthProvider,
+         signInWithRedirect, getRedirectResult,
+         onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc }
-                                   from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+                              from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDjh7BrMk1MKkLU9MOYJsI1XxantSt1V1g",
@@ -131,61 +133,59 @@ function todayStr() {
   return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 }
 
-function showMsg(id, msg) {
+function showMsg(type, msg) {
   document.getElementById('msgErr').classList.remove('show');
   document.getElementById('msgOk').classList.remove('show');
-  var el = document.getElementById(id);
+  var el = document.getElementById(type === 'err' ? 'msgErr' : 'msgOk');
   el.textContent = msg;
   el.classList.add('show');
 }
 
-function setLoading(on) {
-  var btn = document.getElementById('btnGoogle');
-  btn.disabled = on;
-  document.getElementById('btnGoogleTxt').style.display = on ? 'none' : 'inline';
-  document.getElementById('spinner').style.display = on ? 'block' : 'none';
-}
+// Tabs
+window.switchTab = function(tab) {
+  document.getElementById('msgErr').classList.remove('show');
+  document.getElementById('msgOk').classList.remove('show');
+  document.getElementById('tabLogin').classList.toggle('active', tab === 'login');
+  document.getElementById('tabCadastro').classList.toggle('active', tab === 'cadastro');
+  document.getElementById('panelLogin').classList.toggle('active', tab === 'login');
+  document.getElementById('panelCadastro').classList.toggle('active', tab === 'cadastro');
+  sessionStorage.setItem('sd_tab', tab);
+};
 
-// Já logado? Redireciona
-onAuthStateChanged(auth, async function(user) {
-  if (!user) return;
+// Restaura aba após redirect
+var savedTab = sessionStorage.getItem('sd_tab');
+if (savedTab) { window.switchTab(savedTab); }
+
+// Processa retorno do redirect Google
+getRedirectResult(auth).then(async function(result) {
+  if (!result) return;
+
+  var user = result.user;
+  var tab  = sessionStorage.getItem('sd_tab') || 'login';
+  sessionStorage.removeItem('sd_tab');
+
   try {
     var snap = await getDoc(doc(db, 'usuarios', user.uid));
-    if (!snap.exists()) return; // será tratado no login
-    var data = snap.data();
-    if (data.status === 'ativo') {
-      await setDoc(doc(db, 'usuarios', user.uid), { ultimoAcesso: todayStr() }, { merge: true });
-      location.href = 'index.html';
-    } else if (data.status === 'bloqueado') {
-      await auth.signOut();
-      showMsg('msgErr', '⚠️ Acesso bloqueado. Entre em contato com o administrador.');
-    }
-  } catch(e) {
-    // silencioso
-  }
-});
 
-window.doLoginGoogle = async function() {
-  setLoading(true);
-  try {
-    var result = await signInWithPopup(auth, provider);
-    var user   = result.user;
-
-    var snap = await getDoc(doc(db, 'usuarios', user.uid));
-
+    // Novo usuário (cadastro ou login sem conta) → cria como ativo
     if (!snap.exists()) {
-      // Primeiro acesso — cria conta como pendente
+      if (tab === 'login') {
+        await auth.signOut();
+        showMsg('err', '⚠️ Conta não encontrada. Use a aba "Criar conta" para se registrar.');
+        window.switchTab('cadastro');
+        return;
+      }
       await setDoc(doc(db, 'usuarios', user.uid), {
         uid:          user.uid,
         nome:         user.displayName || '',
         email:        user.email || '',
+        foto:         user.photoURL || '',
         whatsapp:     '',
         status:       'ativo',
         dataCadastro: todayStr(),
         expiracao:    null,
         ultimoAcesso: todayStr(),
       });
-      // Já redireciona direto
       location.href = 'index.html';
       return;
     }
@@ -194,40 +194,46 @@ window.doLoginGoogle = async function() {
 
     if (data.status === 'bloqueado') {
       await auth.signOut();
-      setLoading(false);
-      showMsg('msgErr', '⚠️ Acesso bloqueado. Entre em contato com o administrador.');
+      showMsg('err', '⚠️ Acesso bloqueado. Entre em contato com o administrador.');
       return;
     }
     if (data.status === 'pendente') {
       await auth.signOut();
-      setLoading(false);
-      showMsg('msgOk', '⏳ Aguardando aprovação. Envie o comprovante de pagamento.');
+      showMsg('ok', '⏳ Aguardando aprovação do administrador.');
       return;
     }
     if (data.expiracao && new Date(data.expiracao) < new Date()) {
       await auth.signOut();
-      setLoading(false);
-      showMsg('msgErr', '⚠️ Seu acesso expirou. Entre em contato para renovar.');
+      showMsg('err', '⚠️ Seu acesso expirou. Entre em contato para renovar.');
       return;
     }
 
-    // Ativo — atualiza último acesso e redireciona
+    // Tudo certo — entra
     await setDoc(doc(db, 'usuarios', user.uid), { ultimoAcesso: todayStr() }, { merge: true });
     location.href = 'index.html';
 
   } catch(e) {
-    setLoading(false);
-    if (e.code === 'auth/popup-closed-by-user' || e.code === 'auth/cancelled-popup-request') {
-      // usuário fechou o popup — não mostra erro
-      return;
-    }
-    if (e.code === 'auth/popup-blocked') {
-      showMsg('msgErr', '⚠️ Pop-up bloqueado pelo navegador. Permita pop-ups para este site.');
-      return;
-    }
-    showMsg('msgErr', '⚠️ Erro ao entrar. Tente novamente.');
     console.error(e);
+    showMsg('err', '⚠️ Erro ao processar. Tente novamente.');
   }
+
+}).catch(function(e) {
+  console.error(e);
+  if (e.code !== 'auth/cancelled-popup-request') {
+    showMsg('err', '⚠️ Erro ao conectar com Google. Tente novamente.');
+  }
+});
+
+// Clique no botão
+window.doGoogle = function(tipo) {
+  sessionStorage.setItem('sd_tab', tipo);
+  var btnId     = tipo === 'login' ? 'btnLogin'     : 'btnCadastro';
+  var spinnerId = tipo === 'login' ? 'spinnerLogin' : 'spinnerCadastro';
+  var txtId     = btnId + 'Txt';
+  document.getElementById(btnId).disabled = true;
+  document.getElementById(txtId).style.display = 'none';
+  document.getElementById(spinnerId).style.display = 'block';
+  signInWithRedirect(auth, provider);
 };
 </script>
 </body>
