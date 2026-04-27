@@ -7,14 +7,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg:#080b12;--surface:#0e1220;--card:#131825;--card2:#161c2c;
-    --border:#1c2236;--accent:#00d4ff;--red:#ff3b5c;--yellow:#ffbb00;
-    --green:#00e096;--text:#e4e8f4;--muted:#5a6480;--radius:16px;
+    --bg:#f0f4f8;--surface:#ffffff;--card:#ffffff;--card2:#f7f9fc;
+    --border:#e2e8f0;--accent:#00d4ff;--red:#ff3b5c;--yellow:#ffbb00;
+    --green:#00e096;--text:#1a202c;--muted:#718096;--radius:16px;
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:420px;margin:0 auto}
 
-  .header{position:sticky;top:0;z-index:50;background:rgba(8,11,18,0.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:16px 20px;display:flex;align-items:center;justify-content:space-between}
+  .header{position:sticky;top:0;z-index:50;background:var(--header-bg, rgba(255,255,255,.96));backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:16px 20px;display:flex;align-items:center;justify-content:space-between}
   .page-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800}
   .page-title span{color:var(--accent)}
   .add-btn{display:flex;align-items:center;gap:6px;background:var(--accent);color:#000;border:none;border-radius:50px;padding:9px 18px;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:all .2s}
@@ -98,7 +98,7 @@
   .save-btn:active{transform:scale(.97)}
   .cancel-btn{width:100%;background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:12px;padding:12px;font-family:'DM Sans',sans-serif;font-size:15px;cursor:pointer;margin-top:8px}
 
-  .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:420px;background:rgba(14,18,32,.97);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;padding:10px 0 24px;z-index:50}
+  .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:420px;background:var(--nav-bg,rgba(255,255,255,.97));backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;padding:10px 0 24px;z-index:50}
   .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:4px 0}
   .nav-icon{font-size:20px;transition:transform .2s}
   .nav-label{font-size:8px;color:var(--muted);font-weight:500}
@@ -107,12 +107,11 @@
   .nav-dot{width:4px;height:4px;border-radius:50%;background:var(--accent);margin-top:-2px;opacity:0}
   .nav-item.active .nav-dot{opacity:1}
 
-  body.light {
-    --bg:#f0f4f8;--surface:#ffffff;--card:#ffffff;--card2:#f7f9fc;
-    --border:#e2e8f0;--text:#1a202c;--muted:#718096;
+  body.dark {
+    --bg:#080b12;--surface:#0e1220;--card:#131825;--card2:#161c2c;
+    --border:#1c2236;--text:#e4e8f4;--muted:#5a6480;
+    --header-bg:rgba(8,11,18,.96);--nav-bg:rgba(14,18,32,.97);
   }
-  body.light .header { background: rgba(255,255,255,.96); }
-  body.light .bottom-nav { background: rgba(255,255,255,.97); }
 </style>
 </head>
 <body>
@@ -378,13 +377,13 @@ onAuthStateChanged(auth, async function(user){
   if(!user){location.href='login.html';return;}
   UID=user.uid;
   var cfg=JSON.parse(localStorage.getItem('streamdesk_config')||'{}')||{};
-  if(cfg.darkMode!==true) document.body.classList.add('light');
+  if(cfg.darkMode===true) document.body.classList.add('dark');
   await loadAll(); render();
 });
 document.addEventListener('visibilitychange', async function(){
   if(document.visibilityState==='visible'&&UID){
     var cfg2=JSON.parse(localStorage.getItem('streamdesk_config')||'{}')||{};
-    if(cfg2.darkMode!==true){document.body.classList.add('light');}else{document.body.classList.remove('light');}
+    if(cfg2.darkMode===true){document.body.classList.add('dark');}else{document.body.classList.remove('dark');}
     await loadAll(); render();
   }
 });

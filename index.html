@@ -7,11 +7,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #080b12;
-    --surface: #0e1220;
-    --card: #131825;
-    --card2: #161c2c;
-    --border: #1c2236;
+    --bg: #f0f4f8;
+    --surface: #ffffff;
+    --card: #ffffff;
+    --card2: #f7f9fc;
+    --border: #e2e8f0;
     --accent: #00d4ff;
     --accent-glow: rgba(0,212,255,0.15);
     --red: #ff3b5c;
@@ -22,8 +22,8 @@
     --orange-glow: rgba(255,123,0,0.12);
     --green: #00e096;
     --green-glow: rgba(0,224,150,0.12);
-    --text: #e4e8f4;
-    --muted: #5a6480;
+    --text: #1a202c;
+    --muted: #718096;
     --radius: 16px;
   }
 
@@ -56,7 +56,7 @@
     position: sticky;
     top: 0;
     z-index: 50;
-    background: rgba(8,11,18,0.92);
+    background: var(--header-bg, rgba(255,255,255,.96));
     backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--border);
     padding: 16px 20px;
@@ -312,7 +312,7 @@
     transform: translateX(-50%);
     width: 100%;
     max-width: 420px;
-    background: rgba(14,18,32,0.97);
+    background: var(--nav-bg, rgba(255,255,255,.97));
     backdrop-filter: blur(20px);
     border-top: 1px solid var(--border);
     display: flex;
@@ -368,12 +368,11 @@
     font-size: 13px;
   }
 
-  body.light {
-    --bg:#f0f4f8;--surface:#ffffff;--card:#ffffff;--card2:#f7f9fc;
-    --border:#e2e8f0;--text:#1a202c;--muted:#718096;
+  body.dark {
+    --bg:#080b12;--surface:#0e1220;--card:#131825;--card2:#161c2c;
+    --border:#1c2236;--text:#e4e8f4;--muted:#5a6480;
+    --header-bg:rgba(8,11,18,.96);--nav-bg:rgba(14,18,32,.97);
   }
-  body.light .header { background: rgba(255,255,255,.96); }
-  body.light .bottom-nav { background: rgba(255,255,255,.97); }
 </style>
 </head>
 <body>
@@ -459,11 +458,11 @@ function formatDate(d) {
 
 // Apply theme
 var cfg2 = JSON.parse(localStorage.getItem('streamdesk_config')||'{}');
-if (cfg2.darkMode !== true) document.body.classList.add('light');
+if (cfg2.darkMode === true) document.body.classList.add('dark');
 document.addEventListener('visibilitychange', function() {
   if (document.visibilityState === 'visible') {
     var cfg = JSON.parse(localStorage.getItem('streamdesk_config') || '{}');
-    if (cfg.darkMode !== true) { document.body.classList.add('light'); } else { document.body.classList.remove('light'); }
+    if (cfg.darkMode === true) { document.body.classList.add('dark'); } else { document.body.classList.remove('dark'); }
   }
 });
 
