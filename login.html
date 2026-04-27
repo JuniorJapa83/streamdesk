@@ -140,7 +140,7 @@ import { getAuth, signInWithEmailAndPassword,
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCkWlpyp2-wTBeOWOHoAMLpVQ4vG61KBsc",
+  apiKey: "AIzaSyDjh7BrMk1MKkLU9MOYJsI1XxantSt1V1g",
   authDomain: "streamdesk-5350d.firebaseapp.com",
   projectId: "streamdesk-5350d",
   storageBucket: "streamdesk-5350d.firebasestorage.app",
@@ -157,15 +157,9 @@ function todayStr() {
   return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 }
 
-// Redirect if already logged in (but not if coming from a logout)
+// Redirect if already logged in
 onAuthStateChanged(auth, async function(user) {
   if (!user) return;
-  // If the user just logged out intentionally, sign out and stay on login page
-  if (sessionStorage.getItem('sd_logout') === '1') {
-    sessionStorage.removeItem('sd_logout');
-    await auth.signOut();
-    return;
-  }
   try {
     var snap = await getDoc(doc(db, 'usuarios', user.uid));
     if (!snap.exists()) { location.href = 'index.html'; return; }
@@ -175,7 +169,11 @@ onAuthStateChanged(auth, async function(user) {
       showMsg('msgErr', '⚠️ Acesso bloqueado. Entre em contato com o administrador.');
       return;
     }
-    // Auto-approved on register — no pending check needed
+    if (data.status === 'pendente') {
+      await auth.signOut();
+      showMsg('msgOk', '⏳ Aguardando aprovação. Envie o comprovante de pagamento.');
+      return;
+    }
     if (data.expiracao && new Date(data.expiracao) < new Date()) {
       await auth.signOut();
       showMsg('msgErr', '⚠️ Seu acesso expirou. Entre em contato para renovar.');
@@ -260,12 +258,12 @@ window.doRegister = async function() {
     var cred = await createUserWithEmailAndPassword(auth, email, senha);
     await setDoc(doc(db, 'usuarios', cred.user.uid), {
       uid: cred.user.uid, nome, email, whatsapp: wa,
-      status: 'ativo', dataCadastro: todayStr(),
+      status: 'pendente', dataCadastro: todayStr(),
       expiracao: null, ultimoAcesso: todayStr(),
     });
     await auth.signOut();
     document.getElementById('registerCard').classList.remove('show');
-    showMsg('msgOk', '✅ Conta criada com sucesso! Faça login para acessar o app.');
+    showMsg('msgOk', '✅ Conta criada! Aguarde aprovação e envie o comprovante ao administrador.');
   } catch(e) {
     btn.disabled = false;
     document.getElementById('btnRegTxt').style.display = 'inline';

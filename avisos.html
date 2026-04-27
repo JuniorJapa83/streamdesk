@@ -7,18 +7,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg:#f0f4f8;--surface:#ffffff;--card:#ffffff;--card2:#f7f9fc;
-    --border:#e2e8f0;--accent:#00d4ff;--text:#1a202c;--muted:#718096;--radius:16px;
-  }
-  body.dark {
     --bg:#080b12;--surface:#0e1220;--card:#131825;--card2:#161c2c;
-    --border:#1c2236;--text:#e4e8f4;--muted:#5a6480;
+    --border:#1c2236;--accent:#00d4ff;--text:#e4e8f4;--muted:#5a6480;--radius:16px;
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:420px;margin:0 auto;display:flex;flex-direction:column;}
 
-  .header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:16px 20px;display:flex;align-items:center;justify-content:space-between}
-  body.dark .header{background:rgba(8,11,18,.96);}
+  .header{position:sticky;top:0;z-index:50;background:rgba(8,11,18,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:16px 20px;display:flex;align-items:center;justify-content:space-between}
   .page-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800}
   .page-title span{color:var(--accent)}
 
@@ -38,8 +33,7 @@
   .feature-text{font-size:13px;color:var(--muted);line-height:1.4;}
   .feature-text strong{color:var(--text);display:block;margin-bottom:2px;}
 
-  .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:420px;background:rgba(255,255,255,.97);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;padding:10px 0 24px;z-index:50}
-  body.dark .bottom-nav{background:rgba(14,18,32,.97);}
+  .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:420px;background:rgba(14,18,32,.97);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;padding:10px 0 24px;z-index:50}
   .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:4px 0}
   .nav-icon{font-size:20px;transition:transform .2s}
   .nav-label{font-size:8px;color:var(--muted);font-weight:500}
@@ -47,27 +41,33 @@
   .nav-item.active .nav-icon{transform:translateY(-2px)}
   .nav-dot{width:4px;height:4px;border-radius:50%;background:var(--accent);margin-top:-2px;opacity:0}
   .nav-item.active .nav-dot{opacity:1}
+
+  body.light {
+    --bg:#f0f4f8;--surface:#ffffff;--card:#ffffff;--card2:#f7f9fc;
+    --border:#e2e8f0;--text:#1a202c;--muted:#718096;
+  }
+  body.light .header { background: rgba(255,255,255,.96); }
+  body.light .bottom-nav { background: rgba(255,255,255,.97); }
 </style>
 </head>
-<body>
-<script>
-  (function(){
+<body><script>
+(function(){
+  if (localStorage.getItem('streamdesk_session') !== 'true') { location.href = 'login.html'; return; }
+  var cfg = JSON.parse(localStorage.getItem('streamdesk_config') || '{}');
+  if (cfg.darkMode !== true) document.body.classList.add('light');
+})();
+
+// Apply theme on visibility change (when returning from config)
+document.addEventListener('visibilitychange', function() {
+  if (document.visibilityState === 'visible') {
     var cfg = JSON.parse(localStorage.getItem('streamdesk_config') || '{}');
-    if (cfg.darkMode === true) document.body.classList.add('dark');
-  })();
-  document.addEventListener('visibilitychange', function() {
-    if (document.visibilityState === 'visible') {
-      var cfg = JSON.parse(localStorage.getItem('streamdesk_config') || '{}');
-      if (cfg.darkMode === true) { document.body.classList.add('dark'); } else { document.body.classList.remove('dark'); }
+    if (cfg.darkMode === false) {
+      document.body.classList.add('light');
+    } else {
+      document.body.classList.remove('light');
     }
-  });
-</script>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-const _app  = initializeApp({apiKey:"AIzaSyCkWlpyp2-wTBeOWOHoAMLpVQ4vG61KBsc",authDomain:"streamdesk-5350d.firebaseapp.com",projectId:"streamdesk-5350d",storageBucket:"streamdesk-5350d.firebasestorage.app",messagingSenderId:"36684694847",appId:"1:36684694847:web:0f6f3a27933e3d84cfff8a"});
-const _auth = getAuth(_app);
-onAuthStateChanged(_auth, function(user) { if (!user) location.href='login.html'; });
+  }
+});
 </script>
 
 <div class="header">
@@ -84,6 +84,7 @@ onAuthStateChanged(_auth, function(user) { if (!user) location.href='login.html'
     <div class="construction-badge">
       ⏳ Em breve
     </div>
+
     <div class="features-wrap">
       <div class="feature-item">
         <div class="feature-icon">📢</div>

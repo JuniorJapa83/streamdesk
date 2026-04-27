@@ -7,14 +7,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg:#f0f4f8;--surface:#ffffff;--card:#ffffff;--card2:#f7f9fc;
-    --border:#e2e8f0;--accent:#00d4ff;--red:#ff3b5c;--yellow:#ffbb00;
-    --green:#00e096;--text:#1a202c;--muted:#718096;--radius:16px;
+    --bg:#080b12;--surface:#0e1220;--card:#131825;--card2:#161c2c;
+    --border:#1c2236;--accent:#00d4ff;--red:#ff3b5c;--yellow:#ffbb00;
+    --green:#00e096;--text:#e4e8f4;--muted:#5a6480;--radius:16px;
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:420px;margin:0 auto}
 
-  .header{position:sticky;top:0;z-index:50;background:var(--header-bg,rgba(255,255,255,.96));backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:16px 20px}
+  .header{position:sticky;top:0;z-index:50;background:rgba(8,11,18,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:16px 20px}
   .header-top{display:flex;align-items:center;justify-content:space-between}
   .page-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800}
   .page-title span{color:var(--accent)}
@@ -97,7 +97,7 @@
   .btn-del-confirm{width:100%;background:var(--red);color:#fff;border:none;border-radius:12px;padding:14px;font-family:'Syne',sans-serif;font-weight:700;font-size:16px;cursor:pointer;margin-bottom:10px}
   .btn-cancel{width:100%;background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:12px;padding:12px;font-family:'DM Sans',sans-serif;font-size:15px;cursor:pointer;margin-top:8px}
 
-  .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:420px;background:var(--nav-bg,rgba(255,255,255,.97));backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;padding:10px 0 24px;z-index:50}
+  .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:420px;background:rgba(14,18,32,.97);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;padding:10px 0 24px;z-index:50}
   .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:4px 0}
   .nav-icon{font-size:20px;transition:transform .2s}
   .nav-label{font-size:8px;color:var(--muted);font-weight:500}
@@ -106,18 +106,19 @@
   .nav-dot{width:4px;height:4px;border-radius:50%;background:var(--accent);margin-top:-2px;opacity:0}
   .nav-item.active .nav-dot{opacity:1}
 
-  body.dark {
-    --bg:#080b12;--surface:#0e1220;--card:#131825;--card2:#161c2c;
-    --border:#1c2236;--text:#e4e8f4;--muted:#5a6480;
-    --header-bg:rgba(8,11,18,.96);--nav-bg:rgba(14,18,32,.97);
+  body.light {
+    --bg:#f0f4f8;--surface:#ffffff;--card:#ffffff;--card2:#f7f9fc;
+    --border:#e2e8f0;--text:#1a202c;--muted:#718096;
   }
+  body.light .header { background: rgba(255,255,255,.96); }
+  body.light .bottom-nav { background: rgba(255,255,255,.97); }
 </style>
 </head>
 <body>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-const _app  = initializeApp({apiKey:"AIzaSyCkWlpyp2-wTBeOWOHoAMLpVQ4vG61KBsc",authDomain:"streamdesk-5350d.firebaseapp.com",projectId:"streamdesk-5350d",storageBucket:"streamdesk-5350d.firebasestorage.app",messagingSenderId:"36684694847",appId:"1:36684694847:web:0f6f3a27933e3d84cfff8a"});
+const _app  = initializeApp({apiKey:"AIzaSyDjh7BrMk1MKkLU9MOYJsI1XxantSt1V1g",authDomain:"streamdesk-5350d.firebaseapp.com",projectId:"streamdesk-5350d",storageBucket:"streamdesk-5350d.firebasestorage.app",messagingSenderId:"36684694847",appId:"1:36684694847:web:0f6f3a27933e3d84cfff8a"});
 const _auth = getAuth(_app);
 onAuthStateChanged(_auth, function(user) { if (!user) location.href='login.html'; });
 </script>
@@ -191,250 +192,338 @@ onAuthStateChanged(_auth, function(user) { if (!user) location.href='login.html'
   </div>
 </div>
 
-
-<script type="module">
-import { initializeApp }                    from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-import { getAuth, onAuthStateChanged }      from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-import { getFirestore, collection, getDocs,
-         doc, setDoc, addDoc, deleteDoc }   from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
-
-const _app = initializeApp({
-  apiKey:"AIzaSyCkWlpyp2-wTBeOWOHoAMLpVQ4vG61KBsc",
-  authDomain:"streamdesk-5350d.firebaseapp.com",
-  projectId:"streamdesk-5350d",
-  storageBucket:"streamdesk-5350d.firebasestorage.app",
-  messagingSenderId:"36684694847",
-  appId:"1:36684694847:web:0f6f3a27933e3d84cfff8a"
-});
-const auth = getAuth(_app);
-const db   = getFirestore(_app);
-
-var UID = null;
-var financas   = [];
-var servidores = [];
-
+<script>
+// ── KEYS ─────────────────────────────────────────────────
+var FINANCE_KEY = 'iptv_financas_v1';
+var SERVER_KEY  = 'iptv_servidores_v1';
 var MONTHS = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-var currentDate = new Date();
-var currentMonth = currentDate.getMonth();
+var PAGE_SIZE = 10;
+
+// ── STATE ────────────────────────────────────────────────
+var currentDate  = new Date();
 var currentYear  = currentDate.getFullYear();
-var editingId = null;
+var currentMonth = currentDate.getMonth();
+var currentPage  = 0;
+var allPays      = [];
+var editingId    = null;
+var deletingId   = null;
 
-function finRef() { return collection(db,'financas',UID,'lista'); }
-function srvRef() { return collection(db,'servidores',UID,'lista'); }
+// ── MONTH NAV ────────────────────────────────────────────
+document.getElementById('btnPrev').addEventListener('click', function() {
+  currentMonth--;
+  if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+  currentPage = 0;
+  render();
+});
+document.getElementById('btnNext').addEventListener('click', function() {
+  currentMonth++;
+  if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+  currentPage = 0;
+  render();
+});
 
-async function loadAll() {
-  var [fs,ss] = await Promise.all([getDocs(finRef()), getDocs(srvRef())]);
-  financas   = fs.docs.map(function(d){ return Object.assign({id:d.id},d.data()); });
-  servidores = ss.docs.map(function(d){ return Object.assign({id:d.id},d.data()); });
+// ── DELETE MODAL BUTTONS ─────────────────────────────────
+document.getElementById('btnConfirmDel').addEventListener('click', function() {
+  if (deletingId === null) return;
+  var financas = loadFinancas();
+  financas = financas.filter(function(f) { return String(f.id) !== String(deletingId); });
+  saveFinancas(financas);
+  deletingId = null;
+  closeOverlay('ovDel');
+  render();
+});
+document.getElementById('btnCancelDel').addEventListener('click', function() {
+  deletingId = null;
+  closeOverlay('ovDel');
+});
+
+// ── EDIT MODAL BUTTONS ───────────────────────────────────
+document.getElementById('btnSaveEdit').addEventListener('click', function() {
+  if (editingId === null) return;
+  var val = parseFloat(document.getElementById('eValor').value);
+  if (!val || isNaN(val)) { alert('Informe o valor!'); return; }
+  var financas = loadFinancas();
+  var idx = financas.findIndex(function(f) { return String(f.id) === String(editingId); });
+  if (idx < 0) { alert('Pagamento não encontrado!'); return; }
+  financas[idx].cliente    = document.getElementById('eCliente').value.trim();
+  financas[idx].plataforma = document.getElementById('eServidor').value.trim();
+  financas[idx].valor      = val;
+  financas[idx].data       = document.getElementById('eData').value;
+  financas[idx].pagamento  = document.getElementById('ePag').value;
+  financas[idx].obs        = document.getElementById('eObs').value;
+  saveFinancas(financas);
+  editingId = null;
+  closeOverlay('ovEdit');
+  render();
+});
+document.getElementById('btnCancelEdit').addEventListener('click', function() {
+  editingId = null;
+  closeOverlay('ovEdit');
+});
+
+// ── HELPERS ──────────────────────────────────────────────
+function loadFinancas() {
+  return JSON.parse(localStorage.getItem(FINANCE_KEY) || '[]');
 }
-
-async function saveFinanca(f) {
-  var {id,...data} = f;
-  if(id){ await setDoc(doc(db,'financas',UID,'lista',id),data); }
-  else  { await addDoc(finRef(),data); }
+function saveFinancas(f) {
+  localStorage.setItem(FINANCE_KEY, JSON.stringify(f));
 }
-async function removeFinanca(id){ await deleteDoc(doc(db,'financas',UID,'lista',id)); }
+function loadServidores() {
+  return JSON.parse(localStorage.getItem(SERVER_KEY) || '[]');
+}
+function openOverlay(id)  { document.getElementById(id).classList.add('open'); }
+function closeOverlay(id) { document.getElementById(id).classList.remove('open'); }
 
+function fmtR(v) {
+  return 'R$ ' + (v||0).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+}
+function fmtDate(d) {
+  if (!d) return '-';
+  var p = d.split('-');
+  return p[2]+'/'+p[1]+'/'+p[0];
+}
 function getCusto(plat) {
-  var s=servidores.find(function(x){ return x.nome===plat; });
-  if(!s) s=servidores.find(function(x){ return x.nome.toLowerCase()===(plat||'').toLowerCase(); });
-  return s ? (parseFloat(s.custo)||0) : 0;
+  var srvs = loadServidores();
+  // Try exact match first, then case-insensitive
+  var s = srvs.find(function(x) { return x.nome === plat; });
+  if (!s) s = srvs.find(function(x) { return x.nome.toLowerCase() === (plat||'').toLowerCase(); });
+  return s ? (parseFloat(s.custo) || 0) : 0;
 }
 function getCor(plat) {
-  var s=servidores.find(function(x){ return x.nome===plat; });
-  if(!s) s=servidores.find(function(x){ return x.nome.toLowerCase()===(plat||'').toLowerCase(); });
-  return s ? (s.cor||'#5a6480') : '#5a6480';
-}
-function today() {
-  var d=new Date(), y=d.getFullYear();
-  var m=String(d.getMonth()+1).padStart(2,'0');
-  var day=String(d.getDate()).padStart(2,'0');
-  return y+'-'+m+'-'+day;
-}
-function fmtVal(v){ return 'R$ '+parseFloat(v||0).toFixed(2).replace('.',','); }
-
-function getMonthPays() {
-  return financas.filter(function(f){
-    if(!f.data) return false;
-    var p=f.data.split('-');
-    return parseInt(p[1])-1===currentMonth && parseInt(p[0])===currentYear;
-  }).sort(function(a,b){ return b.data.localeCompare(a.data); });
+  var srvs = loadServidores();
+  var s = srvs.find(function(x) { return x.nome === plat; });
+  if (!s) s = srvs.find(function(x) { return x.nome.toLowerCase() === (plat||'').toLowerCase(); });
+  return s ? (s.cor || '#5a6480') : '#5a6480';
 }
 
+// ── MAIN RENDER ──────────────────────────────────────────
 function render() {
-  var pays=getMonthPays();
-  document.getElementById('monthLabel').textContent=MONTHS[currentMonth]+' '+currentYear;
+  var financas = loadFinancas();
+
+  // Month label
+  document.getElementById('monthLabel').textContent = MONTHS[currentMonth].substring(0,3) + ' ' + currentYear;
+
+  // Filter this month
+  var mm = String(currentMonth+1).padStart(2,'0');
+  var prefix = currentYear + '-' + mm;
+  var pays = financas.filter(function(f) { return f.data && f.data.startsWith(prefix); });
+
+  // Sort: newest first by id
+  pays.sort(function(a,b) {
+    var dd = b.data.localeCompare(a.data);
+    return dd !== 0 ? dd : (b.id||0) - (a.id||0);
+  });
 
   // Totals
-  var bruto=0, custo=0;
-  pays.forEach(function(f){ bruto+=parseFloat(f.valor||0); custo+=getCusto(f.plataforma); });
-  var liq=bruto-custo;
-  document.getElementById('totalBruto').textContent=fmtVal(bruto);
-  document.getElementById('totalCusto').textContent=fmtVal(custo);
-  document.getElementById('totalLiq').textContent=fmtVal(liq);
+  var bruto = 0, custo = 0;
+  pays.forEach(function(f) {
+    bruto += f.valor || 0;
+    custo += getCusto(f.plataforma);
+  });
+  var liq = bruto - custo;
 
+  document.getElementById('vBruto').textContent = fmtR(bruto);
+  document.getElementById('vCusto').textContent = fmtR(custo);
+  document.getElementById('vLiq').textContent   = fmtR(liq);
+
+  // Pizza
   renderPizza(pays, liq);
-  renderPayments(pays);
+
+  // Pay list
+  allPays = pays;
+  renderPage();
 }
 
+// ── PIZZA ────────────────────────────────────────────────
 function renderPizza(pays, totalLiq) {
-  var el=document.getElementById('pizzaChart');
-  if(!pays.length){ el.innerHTML='<div class="empty-chart">📊 Sem movimentações neste mês</div>'; return; }
-  var map={};
-  pays.forEach(function(f){
-    if(!f.valor||f.valor<=0) return;
-    var l=(f.valor||0)-getCusto(f.plataforma);
-    if(!map[f.plataforma]) map[f.plataforma]=0;
-    map[f.plataforma]+=l;
+  var el = document.getElementById('chartArea');
+  var map = {};
+  pays.forEach(function(f) {
+    if (!f.valor || f.valor <= 0) return;
+    var l = (f.valor||0) - getCusto(f.plataforma);
+    if (!map[f.plataforma]) map[f.plataforma] = 0;
+    map[f.plataforma] += l;
   });
-  var entries=Object.keys(map).map(function(k){return{name:k,val:map[k]};}).sort(function(a,b){return b.val-a.val;});
-  if(!entries.length){ el.innerHTML='<div class="empty-chart">📊 Sem dados</div>'; return; }
-  var totalAbs=entries.reduce(function(s,e){return s+Math.abs(e.val);},0);
-  if(totalAbs===0) totalAbs=1;
-  var SIZE=140,R=52,cx=70,cy=70,TWO_PI=2*Math.PI,angle=-Math.PI/2,slices='';
-  entries.forEach(function(e){
-    e.pct=totalAbs>0?Math.round((Math.abs(e.val)/totalAbs)*100):0;
-    e.cor=getCor(e.name);
-    var a=(Math.abs(e.val)/totalAbs)*TWO_PI;
-    var x1=cx+R*Math.cos(angle),y1=cy+R*Math.sin(angle);
-    var x2=cx+R*Math.cos(angle+a),y2=cy+R*Math.sin(angle+a);
-    var large=a>Math.PI?1:0;
-    slices+='<path d="M '+cx+' '+cy+' L '+x1+' '+y1+' A '+R+' '+R+' 0 '+large+' 1 '+x2+' '+y2+' Z" fill="'+e.cor+'" opacity="0.9"/>';
-    angle+=a;
-  });
-  var center='<circle cx="'+cx+'" cy="'+cy+'" r="38" fill="var(--card)"/>'
-    +'<text x="'+cx+'" y="'+(cy-6)+'" text-anchor="middle" fill="var(--text)" font-size="11" font-weight="700">R$</text>'
-    +'<text x="'+cx+'" y="'+(cy+10)+'" text-anchor="middle" fill="var(--accent)" font-size="13" font-weight="800">'+parseFloat(totalLiq).toFixed(0).replace('-','')+'</text>'
-    +'<text x="'+cx+'" y="'+(cy+24)+'" text-anchor="middle" fill="var(--muted)" font-size="8">LÍQUIDO</text>';
-  var legend=entries.map(function(e){
-    return '<div class="legend-row"><div class="legend-dot" style="background:'+e.cor+'"></div>'
-      +'<div class="legend-info"><div class="legend-name">'+e.name+'</div><div class="legend-val">'+fmtVal(e.val)+'</div></div>'
-      +'<div class="legend-pct">'+e.pct+'%</div></div>';
-  }).join('');
-  el.innerHTML='<div class="pizza-wrap">'
-    +'<svg viewBox="0 0 '+SIZE+' '+SIZE+'" width="'+SIZE+'" height="'+SIZE+'">'+slices+center+'</svg>'
-    +'<div class="legend">'+legend+'</div></div>';
-}
+  var entries = Object.keys(map).map(function(k){ return {name:k, val:map[k]}; })
+                .sort(function(a,b){ return b.val - a.val; });
 
-var currentPayPage=0;
-var PAY_PAGE_SIZE=10;
-var filteredPays=[];
-
-function renderPayments(pays) {
-  filteredPays=pays;
-  currentPayPage=0;
-  renderPayPage();
-}
-function renderPayPage() {
-  var total=filteredPays.length,pages=Math.ceil(total/PAY_PAGE_SIZE);
-  if(currentPayPage>=pages) currentPayPage=Math.max(0,pages-1);
-  var start=currentPayPage*PAY_PAGE_SIZE,end=Math.min(start+PAY_PAGE_SIZE,total);
-  var page=filteredPays.slice(start,end);
-  var el=document.getElementById('payList');
-  if(!page.length){ el.innerHTML='<div class="empty-payments"><div>💸</div><div>Nenhuma movimentação</div></div>'; return; }
-  el.innerHTML=page.map(function(f){
-    var custo=getCusto(f.plataforma);
-    var liq=(f.valor||0)-custo;
-    var d=f.data?f.data.split('-'):['','',''];
-    var dFmt=d[2]+'/'+d[1]+'/'+d[0];
-    return '<div class="pay-card">'
-      +'<div class="pay-avatar">🧑</div>'
-      +'<div class="pay-info">'
-        +'<div class="pay-name">'+f.cliente+'</div>'
-        +'<div class="pay-sub">'+(f.plataforma||'')+(f.pagamento?' · '+f.pagamento:'')+' · '+dFmt+'</div>'
-      +'</div>'
-      +'<div class="pay-vals">'
-        +'<div class="pay-bruto">'+fmtVal(f.valor)+'</div>'
-        +'<div class="pay-liq">Líq: <b>'+fmtVal(liq)+'</b></div>'
-      +'</div>'
-      +'<div class="pay-actions">'
-        +'<button class="pay-act-btn" onclick="editPay(''+f.id+'')">✏️</button>'
-        +'<button class="pay-act-btn del" onclick="deletePay(''+f.id+'')">🗑️</button>'
-      +'</div>'
-    +'</div>';
-  }).join('');
-  var pagEl=document.getElementById('payPagination');
-  if(pages>1){
-    pagEl.innerHTML='<button class="page-btn" onclick="changePayPage(-1)" '+(currentPayPage===0?'disabled':'')+'>‹</button>'
-      +'<span class="page-info">'+(start+1)+'–'+end+' de '+total+'</span>'
-      +'<button class="page-btn" onclick="changePayPage(1)" '+(currentPayPage>=pages-1?'disabled':'')+'>›</button>';
-  } else { pagEl.innerHTML=''; }
-}
-window.changePayPage=function(dir){
-  var pages=Math.ceil(filteredPays.length/PAY_PAGE_SIZE);
-  currentPayPage=Math.max(0,Math.min(pages-1,currentPayPage+dir));
-  renderPayPage();
-};
-
-window.prevMonth=function(){
-  if(currentMonth===0){currentMonth=11;currentYear--;} else currentMonth--;
-  render();
-};
-window.nextMonth=function(){
-  if(currentMonth===11){currentMonth=0;currentYear++;} else currentMonth++;
-  render();
-};
-
-window.openModal=function(){
-  editingId=null;
-  document.getElementById('modalTitle').textContent='Novo Pagamento';
-  document.getElementById('fData').value=today();
-  document.getElementById('fCliente').value='';
-  document.getElementById('fPlataforma').value='';
-  document.getElementById('fValor').value='';
-  document.getElementById('fPagamento').value='PIX';
-  document.getElementById('fObs').value='';
-  document.getElementById('payOverlay').classList.add('open');
-};
-window.closeModal=function(id){ document.getElementById(id).classList.remove('open'); };
-window.closeOutside=function(e,id){ if(e.target===document.getElementById(id)) closeModal(id); };
-
-window.editPay=function(id){
-  var f=financas.find(function(x){return x.id===id;});
-  if(!f) return;
-  editingId=id;
-  document.getElementById('modalTitle').textContent='Editar Pagamento';
-  document.getElementById('fData').value=f.data||'';
-  document.getElementById('fCliente').value=f.cliente||'';
-  document.getElementById('fPlataforma').value=f.plataforma||'';
-  document.getElementById('fValor').value=f.valor||'';
-  document.getElementById('fPagamento').value=f.pagamento||'PIX';
-  document.getElementById('fObs').value=f.obs||'';
-  document.getElementById('payOverlay').classList.add('open');
-};
-
-window.savePay=async function(){
-  var data=document.getElementById('fData').value;
-  var cliente=document.getElementById('fCliente').value.trim();
-  var plat=document.getElementById('fPlataforma').value.trim();
-  var valor=parseFloat(document.getElementById('fValor').value);
-  if(!data||!cliente||!plat||isNaN(valor)){alert('Preencha todos os campos obrigatórios!');return;}
-  var f={data,cliente,plataforma:plat,valor,pagamento:document.getElementById('fPagamento').value,obs:document.getElementById('fObs').value};
-  if(editingId) f.id=editingId;
-  await saveFinanca(f);
-  closeModal('payOverlay');
-  await loadAll(); render();
-};
-
-window.deletePay=async function(id){
-  if(!confirm('Remover este pagamento?')) return;
-  await removeFinanca(id);
-  await loadAll(); render();
-};
-
-// ── Init ──────────────────────────────────────────
-onAuthStateChanged(auth, async function(user){
-  if(!user){location.href='login.html';return;}
-  UID=user.uid;
-  var cfg=JSON.parse(localStorage.getItem('streamdesk_config')||'{}')||{};
-  if(cfg.darkMode===true) document.body.classList.add('dark');
-  await loadAll(); render();
-});
-document.addEventListener('visibilitychange', async function(){
-  if(document.visibilityState==='visible'&&UID){
-    var cfg2=JSON.parse(localStorage.getItem('streamdesk_config')||'{}')||{};
-    if(cfg2.darkMode===true){document.body.classList.add('dark');}else{document.body.classList.remove('dark');}
-    await loadAll(); render();
+  if (!entries.length) {
+    el.innerHTML = '<div class="empty-chart">📊 Sem movimentações neste mês</div>';
+    return;
   }
+
+  // Use absolute values for chart proportion, but show real values in legend
+  var totalAbs = entries.reduce(function(s,e){ return s + Math.abs(e.val); }, 0);
+  if (totalAbs === 0) totalAbs = 1;
+
+  var SIZE=140, R=52, cx=70, cy=70, TWO_PI=2*Math.PI;
+  var angle = -Math.PI/2;
+  var slices = '';
+
+  entries.forEach(function(e) {
+    e.pct = totalAbs > 0 ? Math.round((Math.abs(e.val)/totalAbs)*100) : 0;
+    e.cor = getCor(e.name);
+    var a = (Math.abs(e.val)/totalAbs)*TWO_PI;
+    var ea = angle + a;
+    var x1=cx+R*Math.cos(angle), y1=cy+R*Math.sin(angle);
+    var x2=cx+R*Math.cos(ea),   y2=cy+R*Math.sin(ea);
+    var ir=32;
+    var ix1=cx+ir*Math.cos(angle), iy1=cy+ir*Math.sin(angle);
+    var ix2=cx+ir*Math.cos(ea),   iy2=cy+ir*Math.sin(ea);
+    var lg = a > Math.PI ? 1 : 0;
+    slices += '<path d="M '+ix1+' '+iy1+' L '+x1+' '+y1+' A '+R+' '+R+' 0 '+lg+' 1 '+x2+' '+y2+' L '+ix2+' '+iy2+' A '+ir+' '+ir+' 0 '+lg+' 0 '+ix1+' '+iy1+' Z" fill="'+e.cor+'" opacity="0.9"/>';
+    angle = ea;
+  });
+
+  var legend = entries.map(function(e) {
+    return '<div class="legend-item"><div class="legend-dot" style="background:'+e.cor+'"></div><div><div class="legend-name">'+e.name+'</div><div class="legend-val">'+fmtR(e.val)+'</div></div><div class="legend-pct">'+e.pct.toFixed(0)+'%</div></div>';
+  }).join('');
+
+  el.innerHTML =
+    '<div class="chart-inner">' +
+      '<div class="pizza-wrap">' +
+        '<svg width="'+SIZE+'" height="'+SIZE+'" viewBox="0 0 '+SIZE+' '+SIZE+'">' +
+          '<circle cx="'+cx+'" cy="'+cy+'" r="'+R+'" fill="#1c2236" opacity="0.5"/>' +
+          slices +
+          '<circle cx="'+cx+'" cy="'+cy+'" r="28" fill="#131825"/>' +
+        '</svg>' +
+        '<div class="pizza-center"><div class="pizza-total">'+fmtR(totalLiq)+'</div><div class="pizza-sub">Líquido</div></div>' +
+      '</div>' +
+      '<div class="legend">'+legend+'</div>' +
+    '</div>';
+}
+
+// ── PAY LIST ─────────────────────────────────────────────
+function renderPage() {
+  var el = document.getElementById('payList');
+  el.innerHTML = '';
+
+  if (!allPays.length) {
+    el.innerHTML = '<div class="no-pay">📭 Nenhum pagamento neste mês</div>';
+    return;
+  }
+
+  var start = currentPage * PAGE_SIZE;
+  var end   = Math.min(start + PAGE_SIZE, allPays.length);
+  var total = allPays.length;
+  var pages = Math.ceil(total / PAGE_SIZE);
+
+  for (var i = start; i < end; i++) {
+    (function(f) {
+      var custo = getCusto(f.plataforma);
+      var liq   = (f.valor||0) - custo;
+      var cor   = getCor(f.plataforma);
+      var fid   = String(f.id);
+
+      var card = document.createElement('div');
+      card.className = 'pay-card';
+
+      var main = document.createElement('div');
+      main.className = 'pay-main';
+      main.innerHTML =
+        '<div class="pay-avatar" style="border:1px solid '+cor+'30;color:'+cor+'">📡</div>' +
+        '<div class="pay-body"><div class="pay-name">'+f.cliente+'</div><div class="pay-meta">'+f.plataforma+' · '+(f.pagamento||'—')+' · '+fmtDate(f.data)+'</div></div>' +
+        '<div class="pay-right"><div class="pay-valor">'+fmtR(f.valor||0)+'</div><div class="pay-liq">Líq: <span>'+fmtR(liq)+'</span></div></div>';
+
+      var btns = document.createElement('div');
+      btns.className = 'pay-btns';
+      btns.style.display = 'none';
+
+      var bEdit = document.createElement('button');
+      bEdit.className = 'pay-btn e';
+      bEdit.textContent = '✏️ Editar';
+
+      var bDel = document.createElement('button');
+      bDel.className = 'pay-btn d';
+      bDel.textContent = '🗑️ Excluir';
+
+      btns.style.display = 'none';
+      btns.appendChild(bEdit);
+      btns.appendChild(bDel);
+      card.appendChild(main);
+      card.appendChild(btns);
+      el.appendChild(card);
+
+      // Toggle buttons row
+      main.addEventListener('click', function() {
+        var open = btns.style.display === 'flex';
+        // close all
+        var all = document.querySelectorAll('.pay-btns');
+        for (var j=0; j<all.length; j++) all[j].style.display = 'none';
+        btns.style.display = open ? 'none' : 'flex';
+      });
+
+      // Edit
+      bEdit.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var financas = loadFinancas();
+        var found = null;
+        for (var j=0; j<financas.length; j++) {
+          if (String(financas[j].id) === fid) { found = financas[j]; break; }
+        }
+        if (!found) { alert('Não encontrado!'); return; }
+        editingId = fid;
+        document.getElementById('eCliente').value  = found.cliente    || '';
+        document.getElementById('eServidor').value = found.plataforma || '';
+        document.getElementById('eValor').value    = found.valor      || '';
+        document.getElementById('eData').value     = found.data       || '';
+        document.getElementById('ePag').value      = found.pagamento  || 'PIX';
+        document.getElementById('eObs').value      = found.obs        || '';
+        openOverlay('ovEdit');
+      });
+
+      // Delete
+      bDel.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var financas = loadFinancas();
+        var found = null;
+        for (var j=0; j<financas.length; j++) {
+          if (String(financas[j].id) === fid) { found = financas[j]; break; }
+        }
+        if (!found) { alert('Não encontrado!'); return; }
+        deletingId = fid;
+        document.getElementById('delMsg').textContent =
+          'Excluir pagamento de ' + fmtR(found.valor||0) + ' de ' + found.cliente + '?';
+        openOverlay('ovDel');
+      });
+
+    })(allPays[i]);
+  }
+
+  // Pagination
+  if (pages > 1) {
+    var pg = document.createElement('div');
+    pg.className = 'pagination';
+
+    var bPrev = document.createElement('button');
+    bPrev.className = 'page-btn';
+    bPrev.textContent = '‹ Anterior';
+    bPrev.disabled = currentPage === 0;
+    bPrev.addEventListener('click', function() { currentPage--; renderPage(); });
+
+    var info = document.createElement('span');
+    info.className = 'page-info';
+    info.textContent = (start+1) + '–' + end + ' de ' + total;
+
+    var bNext = document.createElement('button');
+    bNext.className = 'page-btn';
+    bNext.textContent = 'Próximo ›';
+    bNext.disabled = currentPage >= pages-1;
+    bNext.addEventListener('click', function() { currentPage++; renderPage(); });
+
+    pg.appendChild(bPrev);
+    pg.appendChild(info);
+    pg.appendChild(bNext);
+    el.appendChild(pg);
+  }
+}
+
+// Reload on return
+document.addEventListener('visibilitychange', function() {
+  if (document.visibilityState === 'visible') render();
 });
+
+render();
 </script>
+</body>
+</html>

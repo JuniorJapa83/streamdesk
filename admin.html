@@ -6,24 +6,25 @@
 <title>StreamDesk — Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root{--bg:#f0f4f8;--surface:#ffffff;--card:#ffffff;--card2:#f7f9fc;--border:#e2e8f0;--accent:#00d4ff;--red:#ff3b5c;--yellow:#ffbb00;--green:#00e096;--orange:#ff7b00;--purple:#a78bfa;--text:#1a202c;--muted:#718096;--radius:16px}
-  body.dark {
+  :root {
     --bg:#080b12;--surface:#0e1220;--card:#131825;--card2:#161c2c;
-    --border:#1c2236;--text:#e4e8f4;--muted:#5a6480;
-    --header-bg:rgba(8,11,18,.96);--nav-bg:rgba(14,18,32,.97);
+    --border:#1c2236;--accent:#00d4ff;--red:#ff3b5c;--yellow:#ffbb00;
+    --green:#00e096;--orange:#ff7b00;--purple:#a78bfa;
+    --text:#e4e8f4;--muted:#5a6480;--radius:16px;
   }
-  body.dark .login-screen::before{background:radial-gradient(circle,rgba(167,139,250,.08) 0%,transparent 70%)}
-  body.dark .login-card{box-shadow:0 4px 24px rgba(0,0,0,.4)}
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:480px;margin:0 auto}
 
-  /* LOGIN */
+  /* LOGIN SCREEN */
   .login-screen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;position:relative;overflow:hidden}
-  .login-screen::before{content:'';position:fixed;top:-100px;right:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(167,139,250,.08) 0%,transparent 70%);pointer-events:none}
+  .login-screen::before{content:'';position:fixed;top:-100px;right:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(0,212,255,.08) 0%,transparent 70%);pointer-events:none}
+  .login-screen::after{content:'';position:fixed;bottom:-80px;left:-80px;width:300px;height:300px;background:radial-gradient(circle,rgba(167,139,250,.06) 0%,transparent 70%);pointer-events:none}
+
   .admin-badge{display:flex;align-items:center;gap:8px;background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.2);border-radius:50px;padding:6px 16px;font-size:12px;color:var(--purple);font-weight:700;margin-bottom:24px;letter-spacing:1px;text-transform:uppercase}
   .login-logo{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;letter-spacing:-1px;margin-bottom:6px}
   .login-logo span{color:var(--accent)}
   .login-sub{font-size:14px;color:var(--muted);margin-bottom:32px}
+
   .login-card{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:28px 24px;width:100%;max-width:360px}
   .login-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:20px}
 
@@ -31,67 +32,83 @@
   .fl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;display:block;font-weight:600}
   .fi-wrap{position:relative}
   .fi{width:100%;background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:12px 42px 12px 14px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:all .2s}
-  .fi:focus{border-color:var(--accent)}
+  .fi:focus{border-color:var(--accent);background:var(--card2)}
   .fi::placeholder{color:var(--muted)}
-  .fi-icon{position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--muted);cursor:pointer;user-select:none}
+  .fi-icon{position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--muted);cursor:pointer}
 
-  .err-msg{display:none;background:rgba(255,59,92,.08);border:1px solid rgba(255,59,92,.2);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--red);margin-bottom:14px}
-  .err-msg.show{display:block}
+  .err{display:none;background:rgba(255,59,92,.08);border:1px solid rgba(255,59,92,.2);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--red);margin-bottom:14px;align-items:center;gap:8px}
+  .err.show{display:flex}
 
-  .btn-primary{width:100%;background:var(--accent);color:#000;border:none;border-radius:12px;padding:14px;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;cursor:pointer;transition:all .2s;margin-top:4px;display:flex;align-items:center;justify-content:center;gap:8px}
+  .btn-primary{width:100%;background:var(--accent);color:#000;border:none;border-radius:12px;padding:14px;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;cursor:pointer;transition:all .2s;margin-top:4px}
   .btn-primary:active{transform:scale(.97)}
-  .btn-primary:disabled{opacity:.6;cursor:not-allowed}
-  .spinner{width:16px;height:16px;border:2px solid rgba(0,0,0,.2);border-top-color:#000;border-radius:50%;animation:spin .7s linear infinite;display:none}
-  @keyframes spin{to{transform:rotate(360deg)}}
 
-  /* APP */
+  /* MAIN APP */
   .app-screen{display:none}
   .app-screen.show{display:block}
 
-  .header{position:sticky;top:0;z-index:50;background:var(--header-bg,rgba(255,255,255,.96));backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+  /* HEADER */
+  .header{position:sticky;top:0;z-index:50;background:rgba(8,11,18,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
   .header-left{display:flex;align-items:center;gap:10px}
   .admin-pill{background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.2);border-radius:50px;padding:3px 10px;font-size:10px;color:var(--purple);font-weight:700;letter-spacing:.5px}
   .page-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:800}
   .page-title span{color:var(--accent)}
   .logout-btn{background:rgba(255,59,92,.1);border:none;color:var(--red);border-radius:8px;padding:7px 12px;font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer}
 
+  /* CONTENT */
   .content{padding:16px 20px 40px}
+
+  /* SECTION */
   .sec{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin:20px 0 10px;display:flex;align-items:center;gap:8px}
   .sec::after{content:'';flex:1;height:1px;background:var(--border)}
 
-  .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px}
+  /* STATS GRID */
+  .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:4px}
   .stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 10px;text-align:center;position:relative;overflow:hidden}
   .stat-card::before{content:'';position:absolute;inset:0;opacity:.05}
   .stat-card.a::before{background:var(--green)}.stat-card.a{border-color:rgba(0,224,150,.15)}
   .stat-card.p::before{background:var(--yellow)}.stat-card.p{border-color:rgba(255,187,0,.15)}
   .stat-card.b::before{background:var(--red)}.stat-card.b{border-color:rgba(255,59,92,.15)}
   .stat-num{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;line-height:1;margin-bottom:4px}
-  .stat-card.a .stat-num{color:var(--green)}.stat-card.p .stat-num{color:var(--yellow)}.stat-card.b .stat-num{color:var(--red)}
+  .stat-card.a .stat-num{color:var(--green)}
+  .stat-card.p .stat-num{color:var(--yellow)}
+  .stat-card.b .stat-num{color:var(--red)}
   .stat-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
 
-  .alert-banner{background:rgba(255,187,0,.07);border:1px solid rgba(255,187,0,.2);border-radius:12px;padding:12px 16px;font-size:13px;color:var(--yellow);display:none;align-items:center;gap:10px;margin-bottom:8px}
+  /* ALERT BANNER */
+  .alert-banner{background:rgba(255,187,0,.07);border:1px solid rgba(255,187,0,.2);border-radius:12px;padding:12px 16px;font-size:13px;color:var(--yellow);display:none;align-items:center;gap:10px;margin-bottom:4px}
   .alert-banner.show{display:flex}
 
-  .user-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:10px}
+  /* USER CARD */
+  .user-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:10px;animation:fadeUp .4s ease both}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
   .card-main{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;transition:background .2s}
   .card-main:active{background:var(--card2)}
+
   .user-avatar{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;font-family:'Syne',sans-serif;flex-shrink:0;color:#000}
+
   .user-info{flex:1;min-width:0}
   .user-name{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .user-email{font-size:11px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
   .status-pill{font-size:10px;font-weight:700;padding:3px 9px;border-radius:50px;white-space:nowrap;flex-shrink:0}
   .s-ativo{background:rgba(0,224,150,.12);color:var(--green)}
   .s-bloqueado{background:rgba(255,59,92,.12);color:var(--red)}
   .s-pendente{background:rgba(255,187,0,.12);color:var(--yellow)}
+
   .card-chevron{color:var(--muted);font-size:16px;transition:transform .3s;flex-shrink:0;margin-left:4px}
 
+  /* DETAIL PANEL */
   .card-detail{display:none;background:var(--card2);border-top:1px solid var(--border)}
   .detail-inner{padding:16px}
+
   .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
   .d-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
   .d-val{font-size:13px;font-weight:500}
+
   .exp-warn{font-size:11px;color:var(--orange);margin-top:2px}
 
+  /* ACTIONS */
   .det-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
   .det-btn{padding:10px 8px;border:none;border-radius:10px;font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:all .2s}
   .det-btn:active{transform:scale(.95)}
@@ -101,9 +118,9 @@
   .btn-wa{background:rgba(37,211,102,.1);color:#25d366}
   .btn-del{background:rgba(255,59,92,.06);color:var(--red);grid-column:1/-1;margin-top:4px;border:1px solid rgba(255,59,92,.15)}
 
+  /* EMPTY */
   .empty{text-align:center;padding:50px 20px;color:var(--muted)}
   .empty-icon{font-size:40px;margin-bottom:12px}
-  .loading-state{text-align:center;padding:40px;color:var(--muted);font-size:14px}
 
   /* MODAL */
   .overlay{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:200;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .3s}
@@ -113,13 +130,14 @@
   .mhandle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 20px}
   .mtitle{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:6px}
   .msub{font-size:13px;color:var(--muted);margin-bottom:20px}
-  .mfi{width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border .2s;margin-bottom:14px}
+  .mfi{width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border .2s}
   .mfi:focus{border-color:var(--accent)}
-  .mfl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;display:block;font-weight:600}
   .btn-save{width:100%;background:var(--accent);color:#000;border:none;border-radius:12px;padding:14px;font-family:'Syne',sans-serif;font-weight:700;font-size:16px;cursor:pointer;margin-top:8px}
-  .btn-cancel-m{width:100%;background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:12px;padding:12px;font-family:'DM Sans',sans-serif;font-size:15px;cursor:pointer;margin-top:8px}
+  .btn-save:active{transform:scale(.97)}
+  .btn-cancel{width:100%;background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:12px;padding:12px;font-family:'DM Sans',sans-serif;font-size:15px;cursor:pointer;margin-top:8px}
 
-  .toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);border:1px solid;border-radius:50px;padding:8px 20px;font-size:13px;font-weight:600;opacity:0;transition:opacity .3s;pointer-events:none;z-index:300;white-space:nowrap}
+  /* TOAST */
+  .toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);background:rgba(0,224,150,.15);border:1px solid var(--green);color:var(--green);border-radius:50px;padding:8px 20px;font-size:13px;font-weight:600;opacity:0;transition:opacity .3s;pointer-events:none;z-index:300;white-space:nowrap}
   .toast.show{opacity:1}
 </style>
 </head>
@@ -127,67 +145,105 @@
 
 <div class="toast" id="toast"></div>
 
-<!-- LOGIN -->
+<!-- ── LOGIN ─────────────────────────────────────── -->
 <div class="login-screen" id="loginScreen">
   <div class="admin-badge">👑 Área Restrita</div>
   <div class="login-logo">Stream<span>Desk</span></div>
   <div class="login-sub">Painel de Administração</div>
+
   <div class="login-card">
     <div class="login-title">🔐 Acesso Admin</div>
-    <div class="err-msg" id="loginErr"></div>
+    <div class="err" id="loginErr">⚠️ <span id="loginErrTxt">Credenciais inválidas.</span></div>
+
     <div class="fg">
-      <label class="fl">E-mail</label>
+      <label class="fl">E-mail Admin</label>
       <div class="fi-wrap">
-        <input class="fi" id="aEmail" type="email" placeholder="admin@email.com" autocomplete="email">
+        <input class="fi" id="aEmail" type="email" placeholder="admin@email.com">
         <span class="fi-icon">📧</span>
       </div>
     </div>
     <div class="fg">
       <label class="fl">Senha</label>
       <div class="fi-wrap">
-        <input class="fi" id="aSenha" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
-        <span class="fi-icon" onclick="var f=document.getElementById('aSenha');f.type=f.type==='password'?'text':'password'">👁️</span>
+        <input class="fi" id="aSenha" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doAdminLogin()">
+        <span class="fi-icon" onclick="togglePwd()">👁️</span>
       </div>
     </div>
-    <button class="btn-primary" id="btnLogin" onclick="doLogin()">
-      <span id="btnTxt">Entrar no Painel</span>
-      <div class="spinner" id="spinner"></div>
-    </button>
+    <button class="btn-primary" onclick="doAdminLogin()">Entrar no Painel</button>
   </div>
 </div>
 
-<!-- APP -->
+<!-- ── APP ───────────────────────────────────────── -->
 <div class="app-screen" id="appScreen">
+
   <div class="header">
     <div class="header-left">
       <div class="page-title">Admin<span>.</span></div>
       <span class="admin-pill">👑 ADMIN</span>
     </div>
-    <button class="logout-btn" id="btnLogout">Sair</button>
+    <button class="logout-btn" onclick="doLogout()">Sair</button>
   </div>
+
   <div class="content">
+
+    <!-- STATS -->
     <div class="sec">Visão Geral</div>
     <div class="stats-grid">
       <div class="stat-card a"><div class="stat-num" id="cAtivo">0</div><div class="stat-lbl">Ativos</div></div>
-      <div class="stat-card p"><div class="stat-num" id="cPend">0</div><div class="stat-lbl">Sem Data</div></div>
+      <div class="stat-card p"><div class="stat-num" id="cPend">0</div><div class="stat-lbl">Pendentes</div></div>
       <div class="stat-card b"><div class="stat-num" id="cBloq">0</div><div class="stat-lbl">Bloqueados</div></div>
     </div>
-    <div class="alert-banner" id="alertBanner">⚠️ <span id="alertTxt"></span></div>
-    <div id="userSections"><div class="loading-state">⏳ Carregando...</div></div>
+
+    <!-- ALERT -->
+    <div class="alert-banner" id="alertBanner">
+      ⚠️ <span id="alertTxt"></span>
+    </div>
+
+    <!-- PENDING -->
+    <div id="sectionPend" style="display:none">
+      <div class="sec">🟡 Aguardando Pagamento</div>
+      <div id="listPend"></div>
+    </div>
+
+    <!-- EXPIRING -->
+    <div id="sectionExp" style="display:none">
+      <div class="sec">🟠 Expirando em 7 dias</div>
+      <div id="listExp"></div>
+    </div>
+
+    <!-- ACTIVE -->
+    <div id="sectionAtivo" style="display:none">
+      <div class="sec">🟢 Ativos</div>
+      <div id="listAtivo"></div>
+    </div>
+
+    <!-- BLOCKED -->
+    <div id="sectionBloq" style="display:none">
+      <div class="sec">🔴 Bloqueados</div>
+      <div id="listBloq"></div>
+    </div>
+
+    <div class="empty" id="emptyState" style="display:none">
+      <div class="empty-icon">👥</div>
+      <div>Nenhum usuário cadastrado ainda</div>
+    </div>
+
   </div>
 </div>
 
 <!-- MODAL EXPIRAÇÃO -->
-<div class="overlay" id="ovExp" onclick="if(event.target===this)closeOv('ovExp')">
+<div class="overlay" id="ovExp" onclick="if(event.target===this)closeModal('ovExp')">
   <div class="modal">
     <div class="mhandle"></div>
     <div class="mtitle">📅 Definir Expiração</div>
-    <div class="msub" id="expSub">Defina até quando o acesso é válido</div>
-    <input type="hidden" id="expUid">
-    <label class="mfl">Data de Expiração</label>
-    <input class="mfi" id="expData" type="date">
-    <button class="btn-save" id="btnSaveExp">✓ Salvar</button>
-    <button class="btn-cancel-m" onclick="closeOv('ovExp')">Cancelar</button>
+    <div class="msub" id="expSubtitle">Defina até quando o acesso é válido</div>
+    <input type="hidden" id="expUserId">
+    <div style="margin-bottom:14px">
+      <label class="fl">Data de Expiração</label>
+      <input class="mfi" id="expData" type="date">
+    </div>
+    <button class="btn-save" onclick="salvarExpiracao()">✓ Salvar</button>
+    <button class="btn-cancel" onclick="closeModal('ovExp')">Cancelar</button>
   </div>
 </div>
 
@@ -198,281 +254,343 @@
     <div style="font-size:32px;text-align:center;margin-bottom:12px">🗑️</div>
     <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;text-align:center;margin-bottom:10px">Excluir Usuário</div>
     <div id="delMsg" style="font-size:14px;color:var(--muted);text-align:center;margin-bottom:24px;line-height:1.5"></div>
-    <button class="btn-save" id="btnConfirmDel" style="background:var(--red);color:#fff">Sim, excluir</button>
-    <button class="btn-cancel-m" onclick="closeOv('ovDel')">Cancelar</button>
+    <button onclick="confirmDel()" style="width:100%;background:var(--red);color:#fff;border:none;border-radius:12px;padding:14px;font-family:'Syne',sans-serif;font-weight:700;font-size:16px;cursor:pointer;margin-bottom:10px">Sim, excluir</button>
+    <button onclick="closeModal('ovDel')" style="width:100%;background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:12px;padding:12px;font-family:'DM Sans',sans-serif;font-size:15px;cursor:pointer">Cancelar</button>
   </div>
 </div>
 
-<script type="module">
-import { initializeApp }           from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged }
-                                   from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-import { getFirestore, collection, getDocs,
-         doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+<!-- MODAL CONFIG ADMIN -->
+<div class="overlay" id="ovSetup" onclick="if(event.target===this)closeModal('ovSetup')">
+  <div class="modal">
+    <div class="mhandle"></div>
+    <div class="mtitle">⚙️ Configurar Admin</div>
+    <div class="msub">Defina as credenciais de acesso do painel</div>
+    <div style="margin-bottom:14px">
+      <label class="fl">E-mail Admin</label>
+      <input class="mfi" id="setupEmail" type="email" placeholder="admin@email.com">
+    </div>
+    <div style="margin-bottom:14px">
+      <label class="fl">Senha</label>
+      <input class="mfi" id="setupSenha" type="password" placeholder="Mínimo 6 caracteres">
+    </div>
+    <div style="margin-bottom:14px">
+      <label class="fl">Confirmar Senha</label>
+      <input class="mfi" id="setupConfirm" type="password" placeholder="Repita a senha">
+    </div>
+    <div style="margin-bottom:14px">
+      <label class="fl">Seu WhatsApp (para renovações)</label>
+      <input class="mfi" id="setupWA" type="tel" placeholder="+55 11 99999-9999">
+    </div>
+    <button class="btn-save" onclick="salvarSetup()">✓ Salvar Configurações</button>
+    <button class="btn-cancel" onclick="closeModal('ovSetup')">Cancelar</button>
+  </div>
+</div>
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCkWlpyp2-wTBeOWOHoAMLpVQ4vG61KBsc",
-  authDomain: "streamdesk-5350d.firebaseapp.com",
-  projectId: "streamdesk-5350d",
-  storageBucket: "streamdesk-5350d.firebasestorage.app",
-  messagingSenderId: "36684694847",
-  appId: "1:36684694847:web:0f6f3a27933e3d84cfff8a"
-};
-
-const app  = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db   = getFirestore(app);
-
-// Apply theme
-(function(){
-  var cfg = JSON.parse(localStorage.getItem('streamdesk_config') || '{}');
-  if (cfg.darkMode === true) document.body.classList.add('dark');
-})();
-document.addEventListener('visibilitychange', function() {
-  if (document.visibilityState === 'visible') {
-    var cfg = JSON.parse(localStorage.getItem('streamdesk_config') || '{}');
-    if (cfg.darkMode === true) { document.body.classList.add('dark'); } else { document.body.classList.remove('dark'); }
-  }
-});
-
-// Admin access — uses Firebase Auth directly
-// No plain text credentials stored here
-const ADMIN_EMAIL = "juniorramos.yeshua@gmail.com";
-
-var pendingDelUid = null;
+<script>
+// ── KEYS ─────────────────────────────────────────
+var ADMIN_KEY    = 'streamdesk_admin_cfg';
+var USERS_KEY    = 'streamdesk_usuarios';
+var SESSION_KEY  = 'streamdesk_admin_session';
+var CLIENT_KEY   = 'iptv_clientes_v3';
 
 // ── HELPERS ──────────────────────────────────────
-function todayStr() {
-  var d=new Date();
-  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+function loadAdmin()  { return JSON.parse(localStorage.getItem(ADMIN_KEY)  || 'null'); }
+function loadUsers()  { return JSON.parse(localStorage.getItem(USERS_KEY)  || '[]'); }
+function saveUsers(u) { localStorage.setItem(USERS_KEY, JSON.stringify(u)); }
+
+function showToast(msg, color) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = color === 'red' ? 'rgba(255,59,92,.15)' : 'rgba(0,224,150,.15)';
+  t.style.borderColor = color === 'red' ? 'var(--red)' : 'var(--green)';
+  t.style.color       = color === 'red' ? 'var(--red)' : 'var(--green)';
+  t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 2500);
+}
+
+function openModal(id)  { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+function today() {
+  var d=new Date(), y=d.getFullYear();
+  var m=String(d.getMonth()+1).padStart(2,'0');
+  var day=String(d.getDate()).padStart(2,'0');
+  return y+'-'+m+'-'+day;
 }
 function formatDate(d) {
-  if(!d||d==='null') return '—';
+  if (!d) return '—';
   var p=d.split('-'); return p[2]+'/'+p[1]+'/'+p[0];
 }
 function daysUntil(d) {
-  if(!d) return null;
-  return Math.round((new Date(d)-new Date(todayStr()))/86400000);
+  if (!d) return null;
+  var diff = Math.round((new Date(d) - new Date(today())) / 86400000);
+  return diff;
 }
 function avatarColor(name) {
-  var c=['#00d4ff','#a78bfa','#00e096','#ff7b00','#ffbb00','#f472b6','#60a5fa'];
-  return c[(name||'?').charCodeAt(0)%c.length];
+  var colors = ['#00d4ff','#a78bfa','#00e096','#ff7b00','#ffbb00','#f472b6','#60a5fa'];
+  var i = (name||'?').charCodeAt(0) % colors.length;
+  return colors[i];
 }
-function toast(msg, red) {
-  var t=document.getElementById('toast');
-  t.textContent=msg;
-  t.style.background=red?'rgba(255,59,92,.15)':'rgba(0,224,150,.15)';
-  t.style.borderColor=red?'var(--red)':'var(--green)';
-  t.style.color=red?'var(--red)':'var(--green)';
-  t.classList.add('show');
-  setTimeout(function(){t.classList.remove('show');},2500);
-}
-window.closeOv = function(id){ document.getElementById(id).classList.remove('open'); };
-function openOv(id){ document.getElementById(id).classList.add('open'); }
 
-// ── LOGIN with Firebase Auth ──────────────────────
-window.doLogin = async function() {
-  var email = document.getElementById('aEmail').value.trim();
+// ── ADMIN LOGIN ───────────────────────────────────
+function togglePwd() {
+  var fi = document.getElementById('aSenha');
+  fi.type = fi.type === 'password' ? 'text' : 'password';
+}
+
+function doAdminLogin() {
+  var email = document.getElementById('aEmail').value.trim().toLowerCase();
   var senha = document.getElementById('aSenha').value;
   var err   = document.getElementById('loginErr');
+  var errTxt= document.getElementById('loginErrTxt');
+
   err.classList.remove('show');
 
-  // Only allow admin email
-  if (email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
-    err.textContent = '⚠️ Acesso negado.';
-    err.classList.add('show');
+  var admin = loadAdmin();
+
+  // First time setup
+  if (!admin) {
+    openModal('ovSetup');
     return;
   }
 
-  document.getElementById('btnLogin').disabled = true;
-  document.getElementById('btnTxt').style.display = 'none';
-  document.getElementById('spinner').style.display = 'block';
+  if (!email || !senha) { errTxt.textContent = 'Preencha todos os campos.'; err.classList.add('show'); return; }
+  if (admin.email !== email) { errTxt.textContent = 'E-mail não encontrado.'; err.classList.add('show'); return; }
+  if (admin.senha !== btoa(senha)) { errTxt.textContent = 'Senha incorreta.'; err.classList.add('show'); return; }
 
-  try {
-    // Use Firebase Auth with credentials typed by user
-    await signInWithEmailAndPassword(auth, email, senha);
-    // onAuthStateChanged will handle showing app
-  } catch(e) {
-    document.getElementById('btnLogin').disabled = false;
-    document.getElementById('btnTxt').style.display = 'inline';
-    document.getElementById('spinner').style.display = 'none';
-    err.textContent = '⚠️ Credenciais inválidas.';
-    err.classList.add('show');
-  }
-};
+  localStorage.setItem(SESSION_KEY, 'true');
+  showApp();
+}
 
-// ── AUTH STATE ────────────────────────────────────
-onAuthStateChanged(auth, function(user) {
-  if (user && user.email === ADMIN_EMAIL) {
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('appScreen').classList.add('show');
-    renderUsers();
-  } else if (user) {
-    // Logged in as regular user — sign out and show login
-    signOut(auth);
-  }
-});
+function salvarSetup() {
+  var email   = document.getElementById('setupEmail').value.trim().toLowerCase();
+  var senha   = document.getElementById('setupSenha').value;
+  var confirm = document.getElementById('setupConfirm').value;
+  var wa      = document.getElementById('setupWA').value.trim();
 
-document.getElementById('btnLogout').addEventListener('click', async function() {
-  await signOut(auth);
+  if (!email || !email.includes('@')) { alert('Informe um e-mail válido!'); return; }
+  if (!senha || senha.length < 6) { alert('A senha deve ter pelo menos 6 caracteres!'); return; }
+  if (senha !== confirm) { alert('As senhas não coincidem!'); return; }
+
+  localStorage.setItem(ADMIN_KEY, JSON.stringify({ email, senha: btoa(senha), wa }));
+  localStorage.setItem(SESSION_KEY, 'true');
+  closeModal('ovSetup');
+  showApp();
+  showToast('✅ Admin configurado com sucesso!');
+}
+
+function doLogout() {
+  localStorage.removeItem(SESSION_KEY);
   document.getElementById('appScreen').classList.remove('show');
   document.getElementById('loginScreen').style.display = 'flex';
-});
+}
 
-// ── LOAD & RENDER USERS ───────────────────────────
-async function renderUsers() {
-  document.getElementById('userSections').innerHTML = '<div class="loading-state">⏳ Carregando usuários...</div>';
+// ── APP ───────────────────────────────────────────
+function showApp() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('appScreen').classList.add('show');
+  render();
+}
 
-  var snap  = await getDocs(collection(db,'usuarios'));
-  var users = snap.docs.map(function(d){ return Object.assign({uid:d.id},d.data()); });
+// ── RENDER ────────────────────────────────────────
+function render() {
+  var users = loadUsers();
 
-  var ativos    = users.filter(function(u){return u.status==='ativo';});
-  var bloqueados= users.filter(function(u){return u.status==='bloqueado';});
-  var semData   = ativos.filter(function(u){return !u.expiracao;});
+  var ativos   = users.filter(function(u){ return u.status === 'ativo'; });
+  var pendentes = users.filter(function(u){ return u.status === 'pendente'; });
+  var bloqueados= users.filter(function(u){ return u.status === 'bloqueado'; });
+
+  // Expiring in 7 days
   var expirando = ativos.filter(function(u){
-    var d=daysUntil(u.expiracao); return d!==null&&d>=0&&d<=7;
+    var d = daysUntil(u.expiracao);
+    return d !== null && d >= 0 && d <= 7;
   });
 
   document.getElementById('cAtivo').textContent = ativos.length;
-  document.getElementById('cPend').textContent  = semData.length;
+  document.getElementById('cPend').textContent  = pendentes.length;
   document.getElementById('cBloq').textContent  = bloqueados.length;
 
-  var alerts = [];
-  if (semData.length)   alerts.push(semData.length+' usuário(s) sem expiração definida');
-  if (expirando.length) alerts.push(expirando.length+' expirando em 7 dias');
+  // Alert banner
   var banner = document.getElementById('alertBanner');
-  if (alerts.length) { document.getElementById('alertTxt').textContent=alerts.join(' · '); banner.classList.add('show'); }
-  else banner.classList.remove('show');
-
-  if (!users.length) {
-    document.getElementById('userSections').innerHTML = '<div class="empty"><div class="empty-icon">👥</div><div>Nenhum usuário cadastrado</div></div>';
-    return;
+  var alerts = [];
+  if (pendentes.length) alerts.push(pendentes.length + ' usuário(s) aguardando pagamento');
+  if (expirando.length) alerts.push(expirando.length + ' acesso(s) expirando em 7 dias');
+  if (alerts.length) {
+    document.getElementById('alertTxt').textContent = alerts.join(' · ');
+    banner.classList.add('show');
+  } else {
+    banner.classList.remove('show');
   }
 
-  var html = '';
-  if (semData.length)   html += buildSection('⚙️ Sem Expiração Definida', semData);
-  if (expirando.length) html += buildSection('🟠 Expirando em 7 dias', expirando);
-  var ativos_ok = ativos.filter(function(u){var d=daysUntil(u.expiracao);return u.expiracao&&d>7;});
-  if (ativos_ok.length) html += buildSection('🟢 Ativos', ativos_ok);
-  if (bloqueados.length) html += buildSection('🔴 Bloqueados', bloqueados);
+  // Empty state
+  document.getElementById('emptyState').style.display = users.length === 0 ? 'block' : 'none';
 
-  document.getElementById('userSections').innerHTML = html;
-  bindEvents();
+  // Render sections
+  renderSection('sectionPend', 'listPend', pendentes);
+  renderSection('sectionExp',  'listExp',  expirando);
+  renderSection('sectionAtivo','listAtivo', ativos.filter(function(u){
+    var d = daysUntil(u.expiracao); return d === null || d > 7;
+  }));
+  renderSection('sectionBloq', 'listBloq', bloqueados);
 }
 
-function buildSection(title, users) {
-  return '<div class="sec">'+title+'</div>' +
-    users.map(function(u) {
-      var init  = (u.nome||'?').charAt(0).toUpperCase();
-      var cor   = avatarColor(u.nome);
-      var dias  = daysUntil(u.expiracao);
-      var warn  = '';
-      if (dias!==null&&dias>=0&&dias<=7) warn='<div class="exp-warn">⚠️ Expira em '+dias+' dia(s)</div>';
-      if (dias!==null&&dias<0) warn='<div class="exp-warn" style="color:var(--red)">❌ Expirado há '+Math.abs(dias)+' dia(s)</div>';
-      var pcls = u.status==='ativo'?'s-ativo':u.status==='bloqueado'?'s-bloqueado':'s-pendente';
-      var ptxt = u.status==='ativo'?'🟢 Ativo':u.status==='bloqueado'?'🔴 Bloqueado':'🟡 Pendente';
+function renderSection(sectionId, listId, users) {
+  var sec  = document.getElementById(sectionId);
+  var list = document.getElementById(listId);
+  sec.style.display = users.length ? 'block' : 'none';
+  list.innerHTML = '';
 
-      var acts = '';
-      if (u.status!=='ativo')     acts+='<button class="det-btn btn-aprovar" data-uid="'+u.uid+'" data-action="aprovar">✅ Aprovar</button>';
-      if (u.status==='ativo')     acts+='<button class="det-btn btn-bloquear" data-uid="'+u.uid+'" data-action="bloquear">🔴 Bloquear</button>';
-      if (u.status==='bloqueado') acts+='<button class="det-btn btn-aprovar" data-uid="'+u.uid+'" data-action="aprovar">✅ Reativar</button>';
-      acts += '<button class="det-btn btn-exp" data-uid="'+u.uid+'" data-nome="'+(u.nome||u.email)+'" data-exp="'+(u.expiracao||'')+'" data-action="exp">📅 Expiração</button>';
-      acts += '<button class="det-btn btn-wa" data-uid="'+u.uid+'" data-nome="'+(u.nome||'')+'" data-wa="'+(u.whatsapp||'')+'" data-exp="'+(u.expiracao||'')+'" data-action="wa">📲 WhatsApp</button>';
-      acts += '<button class="det-btn btn-del" data-uid="'+u.uid+'" data-nome="'+(u.nome||u.email)+'" data-action="del">🗑️ Excluir</button>';
+  users.forEach(function(u, i) {
+    var card = document.createElement('div');
+    card.className = 'user-card';
+    card.style.animationDelay = (i * 0.05) + 's';
 
-      return '<div class="user-card">' +
-        '<div class="card-main">' +
-          '<div class="user-avatar" style="background:'+cor+'">'+init+'</div>' +
-          '<div class="user-info"><div class="user-name">'+(u.nome||'—')+'</div><div class="user-email">'+(u.email||'—')+'</div></div>' +
-          '<span class="status-pill '+pcls+'">'+ptxt+'</span>' +
-          '<span class="card-chevron">›</span>' +
+    var initial = (u.nome || '?').charAt(0).toUpperCase();
+    var color   = avatarColor(u.nome);
+    var dias    = daysUntil(u.expiracao);
+    var expWarn = '';
+    if (dias !== null && dias >= 0 && dias <= 7) expWarn = '<div class="exp-warn">⚠️ Expira em ' + dias + ' dia(s)</div>';
+    if (dias !== null && dias < 0) expWarn = '<div class="exp-warn" style="color:var(--red)">❌ Expirado há ' + Math.abs(dias) + ' dia(s)</div>';
+
+    var pillClass = u.status === 'ativo' ? 's-ativo' : u.status === 'bloqueado' ? 's-bloqueado' : 's-pendente';
+    var pillTxt   = u.status === 'ativo' ? '🟢 Ativo' : u.status === 'bloqueado' ? '🔴 Bloqueado' : '🟡 Pendente';
+
+    // Count user's clients (stored under their own key ideally, but for now shared)
+    var clientes = JSON.parse(localStorage.getItem(CLIENT_KEY) || '[]');
+
+    card.innerHTML =
+      '<div class="card-main">' +
+        '<div class="user-avatar" style="background:' + color + '">' + initial + '</div>' +
+        '<div class="user-info">' +
+          '<div class="user-name">' + (u.nome || '—') + '</div>' +
+          '<div class="user-email">' + (u.email || '—') + '</div>' +
         '</div>' +
-        '<div class="card-detail"><div class="detail-inner">' +
+        '<span class="status-pill ' + pillClass + '">' + pillTxt + '</span>' +
+        '<span class="card-chevron">›</span>' +
+      '</div>' +
+      '<div class="card-detail">' +
+        '<div class="detail-inner">' +
           '<div class="detail-grid">' +
-            '<div><div class="d-label">Cadastro</div><div class="d-val">'+formatDate(u.dataCadastro)+'</div></div>' +
-            '<div><div class="d-label">Expiração</div><div class="d-val">'+(u.expiracao?formatDate(u.expiracao):'—')+'</div>'+warn+'</div>' +
-            '<div><div class="d-label">WhatsApp</div><div class="d-val">'+(u.whatsapp||'—')+'</div></div>' +
-            '<div><div class="d-label">Último acesso</div><div class="d-val">'+formatDate(u.ultimoAcesso)+'</div></div>' +
+            '<div><div class="d-label">Cadastro</div><div class="d-val">' + formatDate(u.dataCadastro) + '</div></div>' +
+            '<div><div class="d-label">Expiração</div><div class="d-val">' + (u.expiracao ? formatDate(u.expiracao) : '—') + '</div>' + expWarn + '</div>' +
+            '<div><div class="d-label">Clientes</div><div class="d-val">' + clientes.length + '</div></div>' +
+            '<div><div class="d-label">Último acesso</div><div class="d-val">' + (u.ultimoAcesso ? formatDate(u.ultimoAcesso) : '—') + '</div></div>' +
           '</div>' +
-          '<div class="det-actions">'+acts+'</div>' +
-        '</div></div>' +
+          '<div class="det-actions">' +
+            (u.status !== 'ativo'     ? '<button class="det-btn btn-aprovar" data-action="aprovar">✅ Aprovar</button>' : '') +
+            (u.status !== 'bloqueado' ? '<button class="det-btn btn-bloquear" data-action="bloquear">🔴 Bloquear</button>' : '') +
+            (u.status === 'bloqueado' ? '<button class="det-btn btn-aprovar" data-action="aprovar">✅ Reativar</button>' : '') +
+            '<button class="det-btn btn-exp" data-action="exp">📅 Expiração</button>' +
+            '<button class="det-btn btn-wa" data-action="wa">📲 WhatsApp</button>' +
+            '<button class="det-btn btn-del" data-action="del">🗑️ Excluir Usuário</button>' +
+          '</div>' +
+        '</div>' +
       '</div>';
-    }).join('');
-}
 
-function bindEvents() {
-  // Toggle cards
-  document.querySelectorAll('.card-main').forEach(function(main) {
-    main.addEventListener('click', function() {
-      var detail = main.nextElementSibling;
-      var chev   = main.querySelector('.card-chevron');
-      var isOpen = detail.style.display === 'block';
-      document.querySelectorAll('.card-detail').forEach(function(d){d.style.display='none';});
-      document.querySelectorAll('.card-chevron').forEach(function(c){c.style.transform='rotate(0)';});
-      if (!isOpen) { detail.style.display='block'; chev.style.transform='rotate(90deg)'; }
+    list.appendChild(card);
+
+    // Toggle expand
+    var mainRow = card.querySelector('.card-main');
+    var detail  = card.querySelector('.card-detail');
+    var chev    = card.querySelector('.card-chevron');
+    mainRow.addEventListener('click', function() {
+      var open = detail.style.display === 'block';
+      document.querySelectorAll('.card-detail').forEach(function(d){ d.style.display='none'; });
+      document.querySelectorAll('.card-chevron').forEach(function(c){ c.style.transform='rotate(0)'; });
+      if (!open) { detail.style.display='block'; chev.style.transform='rotate(90deg)'; }
     });
-  });
 
-  // Action buttons
-  document.querySelectorAll('.det-btn').forEach(function(btn) {
-    btn.addEventListener('click', async function(e) {
-      e.stopPropagation();
-      var action = btn.getAttribute('data-action');
-      var uid    = btn.getAttribute('data-uid');
+    // Action buttons
+    card.querySelectorAll('.det-btn').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var action = btn.getAttribute('data-action');
+        var uid    = u.id;
 
-      if (action==='aprovar') {
-        await updateDoc(doc(db,'usuarios',uid),{status:'ativo'});
-        toast('✅ Usuário aprovado!');
-        renderUsers();
-      }
-      else if (action==='bloquear') {
-        await updateDoc(doc(db,'usuarios',uid),{status:'bloqueado'});
-        toast('🔴 Usuário bloqueado!',true);
-        renderUsers();
-      }
-      else if (action==='exp') {
-        document.getElementById('expUid').value = uid;
-        document.getElementById('expSub').textContent = 'Acesso para: '+btn.getAttribute('data-nome');
-        document.getElementById('expData').value = btn.getAttribute('data-exp')||'';
-        openOv('ovExp');
-      }
-      else if (action==='wa') {
-        var nome = btn.getAttribute('data-nome');
-        var wa   = btn.getAttribute('data-wa');
-        var exp  = btn.getAttribute('data-exp');
-        var msg  = 'Olá '+nome.split(' ')[0]+'! 👋 Seu acesso ao StreamDesk vence em '+formatDate(exp)+'. Renove para continuar usando o app! 😊';
-        var phone= wa ? wa.replace(/\D/g,'') : '';
-        window.open(phone?'https://wa.me/'+phone+'?text='+encodeURIComponent(msg):'https://wa.me/?text='+encodeURIComponent(msg),'_blank');
-      }
-      else if (action==='del') {
-        pendingDelUid = uid;
-        document.getElementById('delMsg').textContent = 'Excluir o usuário '+btn.getAttribute('data-nome')+'?';
-        openOv('ovDel');
-      }
+        if (action === 'aprovar') {
+          updateUser(uid, { status: 'ativo' });
+          showToast('✅ Usuário aprovado!');
+        } else if (action === 'bloquear') {
+          updateUser(uid, { status: 'bloqueado' });
+          showToast('🔴 Usuário bloqueado!', 'red');
+        } else if (action === 'exp') {
+          document.getElementById('expUserId').value = uid;
+          document.getElementById('expSubtitle').textContent = 'Definir acesso para ' + (u.nome||u.email);
+          document.getElementById('expData').value = u.expiracao || '';
+          openModal('ovExp');
+        } else if (action === 'wa') {
+          var admin  = loadAdmin();
+          var waNum  = admin ? (admin.wa||'').replace(/\D/g,'') : '';
+          var msg    = 'Olá ' + (u.nome||'').split(' ')[0] + '! 👋 Seu acesso ao StreamDesk vence em ' + formatDate(u.expiracao) + '. Renove para continuar usando! 😊';
+          var phone  = (u.telefone||'').replace(/\D/g,'');
+          var url    = phone ? 'https://wa.me/'+phone+'?text='+encodeURIComponent(msg) : 'https://wa.me/?text='+encodeURIComponent(msg);
+          window.open(url, '_blank');
+        } else if (action === 'del') {
+          pendingDelId = uid;
+          document.getElementById('delMsg').textContent = 'Excluir o usuário ' + (u.nome||u.email) + '? Esta ação não pode ser desfeita.';
+          openModal('ovDel');
+        }
+      });
     });
   });
 }
 
-// Expiração save
-document.getElementById('btnSaveExp').addEventListener('click', async function() {
-  var uid = document.getElementById('expUid').value;
+function updateUser(id, changes) {
+  var users = loadUsers();
+  var idx   = users.findIndex(function(u){ return u.id === id; });
+  if (idx >= 0) { users[idx] = Object.assign(users[idx], changes); saveUsers(users); }
+  render();
+}
+
+// ── EXPIRACAO ─────────────────────────────────────
+function salvarExpiracao() {
+  var id  = document.getElementById('expUserId').value;
   var dat = document.getElementById('expData').value;
   if (!dat) { alert('Informe a data!'); return; }
-  await updateDoc(doc(db,'usuarios',uid),{expiracao:dat, status:'ativo'});
-  closeOv('ovExp');
-  toast('📅 Expiração definida!');
-  renderUsers();
-});
+  updateUser(id, { expiracao: dat, status: 'ativo' });
+  closeModal('ovExp');
+  showToast('📅 Expiração definida!');
+}
 
-// Delete confirm
-document.getElementById('btnConfirmDel').addEventListener('click', async function() {
-  if (!pendingDelUid) return;
-  await deleteDoc(doc(db,'usuarios',pendingDelUid));
-  pendingDelUid = null;
-  closeOv('ovDel');
-  toast('🗑️ Usuário excluído.');
-  renderUsers();
-});
+// ── DELETE ────────────────────────────────────────
+var pendingDelId = null;
+function confirmDel() {
+  if (!pendingDelId) return;
+  var users = loadUsers().filter(function(u){ return u.id !== pendingDelId; });
+  saveUsers(users);
+  pendingDelId = null;
+  closeModal('ovDel');
+  showToast('🗑️ Usuário excluído.');
+  render();
+}
+
+// ── INIT ─────────────────────────────────────────
+(function(){
+  if (localStorage.getItem(SESSION_KEY) === 'true') {
+    showApp();
+  }
+  // Register new users from login page into users list
+  // When a user registers in login.html, we add them here as pendente
+  var authKey = 'streamdesk_auth';
+  var auth    = JSON.parse(localStorage.getItem(authKey) || 'null');
+  if (auth && auth.email) {
+    var users = loadUsers();
+    var exists = users.find(function(u){ return u.email === auth.email; });
+    if (!exists) {
+      users.push({
+        id:           'u_' + Date.now(),
+        nome:         auth.nome || '',
+        email:        auth.email,
+        dataCadastro: today(),
+        status:       'pendente',
+        expiracao:    null,
+        ultimoAcesso: null,
+        telefone:     '',
+      });
+      saveUsers(users);
+    }
+  }
+})();
 </script>
 </body>
 </html>

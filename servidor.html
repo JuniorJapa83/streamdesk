@@ -7,14 +7,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg:#f0f4f8;--surface:#ffffff;--card:#ffffff;--card2:#f7f9fc;
-    --border:#e2e8f0;--accent:#00d4ff;--red:#ff3b5c;--yellow:#ffbb00;
-    --green:#00e096;--text:#1a202c;--muted:#718096;--radius:16px;
+    --bg:#080b12;--surface:#0e1220;--card:#131825;--card2:#161c2c;
+    --border:#1c2236;--accent:#00d4ff;--red:#ff3b5c;--yellow:#ffbb00;
+    --green:#00e096;--text:#e4e8f4;--muted:#5a6480;--radius:16px;
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:420px;margin:0 auto}
 
-  .header{position:sticky;top:0;z-index:50;background:var(--header-bg, rgba(255,255,255,.96));backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:16px 20px;display:flex;align-items:center;justify-content:space-between}
+  .header{position:sticky;top:0;z-index:50;background:rgba(8,11,18,0.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:16px 20px;display:flex;align-items:center;justify-content:space-between}
   .page-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800}
   .page-title span{color:var(--accent)}
   .add-btn{display:flex;align-items:center;gap:6px;background:var(--accent);color:#000;border:none;border-radius:50px;padding:9px 18px;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:all .2s}
@@ -98,7 +98,7 @@
   .save-btn:active{transform:scale(.97)}
   .cancel-btn{width:100%;background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:12px;padding:12px;font-family:'DM Sans',sans-serif;font-size:15px;cursor:pointer;margin-top:8px}
 
-  .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:420px;background:var(--nav-bg,rgba(255,255,255,.97));backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;padding:10px 0 24px;z-index:50}
+  .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:420px;background:rgba(14,18,32,.97);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;padding:10px 0 24px;z-index:50}
   .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:4px 0}
   .nav-icon{font-size:20px;transition:transform .2s}
   .nav-label{font-size:8px;color:var(--muted);font-weight:500}
@@ -107,18 +107,19 @@
   .nav-dot{width:4px;height:4px;border-radius:50%;background:var(--accent);margin-top:-2px;opacity:0}
   .nav-item.active .nav-dot{opacity:1}
 
-  body.dark {
-    --bg:#080b12;--surface:#0e1220;--card:#131825;--card2:#161c2c;
-    --border:#1c2236;--text:#e4e8f4;--muted:#5a6480;
-    --header-bg:rgba(8,11,18,.96);--nav-bg:rgba(14,18,32,.97);
+  body.light {
+    --bg:#f0f4f8;--surface:#ffffff;--card:#ffffff;--card2:#f7f9fc;
+    --border:#e2e8f0;--text:#1a202c;--muted:#718096;
   }
+  body.light .header { background: rgba(255,255,255,.96); }
+  body.light .bottom-nav { background: rgba(255,255,255,.97); }
 </style>
 </head>
 <body>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-const _app  = initializeApp({apiKey:"AIzaSyCkWlpyp2-wTBeOWOHoAMLpVQ4vG61KBsc",authDomain:"streamdesk-5350d.firebaseapp.com",projectId:"streamdesk-5350d",storageBucket:"streamdesk-5350d.firebasestorage.app",messagingSenderId:"36684694847",appId:"1:36684694847:web:0f6f3a27933e3d84cfff8a"});
+const _app  = initializeApp({apiKey:"AIzaSyDjh7BrMk1MKkLU9MOYJsI1XxantSt1V1g",authDomain:"streamdesk-5350d.firebaseapp.com",projectId:"streamdesk-5350d",storageBucket:"streamdesk-5350d.firebasestorage.app",messagingSenderId:"36684694847",appId:"1:36684694847:web:0f6f3a27933e3d84cfff8a"});
 const _auth = getAuth(_app);
 onAuthStateChanged(_auth, function(user) { if (!user) location.href='login.html'; });
 </script>
@@ -175,216 +176,289 @@ onAuthStateChanged(_auth, function(user) { if (!user) location.href='login.html'
 </div>
 
 <script>
-<script type="module">
-import { initializeApp }                    from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-import { getAuth, onAuthStateChanged }      from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-import { getFirestore, collection, getDocs,
-         doc, setDoc, addDoc, deleteDoc }   from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+const SRV_KEY    = 'iptv_servidores_v1';
+const CLIENT_KEY = 'iptv_clientes_v3';
+const COLORS     = ['#00d4ff','#a78bfa','#00e096','#ff3b5c','#ff7b00','#ffbb00','#f472b6','#34d399','#60a5fa','#fb923c','#e879f9','#e2e8f0'];
 
-const _app = initializeApp({
-  apiKey:"AIzaSyCkWlpyp2-wTBeOWOHoAMLpVQ4vG61KBsc",
-  authDomain:"streamdesk-5350d.firebaseapp.com",
-  projectId:"streamdesk-5350d",
-  storageBucket:"streamdesk-5350d.firebasestorage.app",
-  messagingSenderId:"36684694847",
-  appId:"1:36684694847:web:0f6f3a27933e3d84cfff8a"
-});
-const auth = getAuth(_app);
-const db   = getFirestore(_app);
+let servidores = JSON.parse(localStorage.getItem(SRV_KEY) || '[]');
+let clientes = JSON.parse(localStorage.getItem(CLIENT_KEY) || '[]');
+let selectedColor = COLORS[0];
 
-var UID        = null;
-var servidores = [];
-var clientes   = [];
-var selectedColor = '#00d4ff';
-var pendingDeleteNome = null;
-var COLORS = ['#00d4ff','#a78bfa','#00e096','#ff3b5c','#ff7b00','#ffbb00','#f472b6','#34d399','#60a5fa','#fb923c','#e879f9','#e2e8f0'];
-
-function srvRef()  { return collection(db,'servidores',UID,'lista'); }
-function cliRef()  { return collection(db,'clientes',UID,'lista'); }
-
-async function loadAll() {
-  var [ss,cs] = await Promise.all([getDocs(srvRef()), getDocs(cliRef())]);
-  servidores = ss.docs.map(function(d){ return Object.assign({id:d.id},d.data()); });
-  clientes   = cs.docs.map(function(d){ return Object.assign({id:d.id},d.data()); });
-}
-
-async function saveSrv(srv) {
-  var {id,...data} = srv;
-  if (id) { await setDoc(doc(db,'servidores',UID,'lista',id), data); return id; }
-  else    { var r=await addDoc(srvRef(), data); return r.id; }
-}
-async function removeSrv(id) { await deleteDoc(doc(db,'servidores',UID,'lista',id)); }
-
+function saveAll() { localStorage.setItem(SRV_KEY, JSON.stringify(servidores)); }
 function today() {
-  var d=new Date(), y=d.getFullYear();
-  var m=String(d.getMonth()+1).padStart(2,'0');
-  var day=String(d.getDate()).padStart(2,'0');
+  var d = new Date();
+  var y = d.getFullYear();
+  var m = String(d.getMonth()+1).padStart(2,'0');
+  var day = String(d.getDate()).padStart(2,'0');
   return y+'-'+m+'-'+day;
 }
 
 function getStats(nome) {
-  var list=clientes.filter(function(c){return c.plataforma===nome;});
-  var total=list.length, t=today();
-  var vencidos=list.filter(function(c){return c.vencimento<t;}).length;
-  var emDia=total-vencidos;
-  var pct=total>0?Math.round((emDia/total)*100):0;
-  return {total,vencidos,emDia,pct};
+  const list     = clientes.filter(c => c.plataforma === nome);
+  const total    = list.length;
+  const t        = today();
+  const vencidos = list.filter(c => c.vencimento < t).length;
+  const emDia    = total - vencidos;
+  const pct      = total > 0 ? Math.round((emDia / total) * 100) : 0;
+  return {total, vencidos, emDia, pct};
 }
 
+// ── render ──────────────────────────────────────────────
 function render() {
-  var el=document.getElementById('srvList');
-  if(!servidores.length){
-    el.innerHTML='<div class="empty"><div class="empty-icon">🖥️</div><div class="empty-txt">Nenhum servidor cadastrado ainda</div><button class="empty-btn" onclick="openModal()">＋ Adicionar Servidor</button></div>';
+  const el = document.getElementById('srvList');
+
+  if (!servidores.length) {
+    el.innerHTML = `<div class="empty"><div class="empty-icon">🖥️</div><div class="empty-txt">Nenhum servidor cadastrado ainda</div><button class="empty-btn" onclick="openModal()">＋ Adicionar Servidor</button></div>`;
     return;
   }
-  el.innerHTML='';
-  servidores.forEach(function(s,i) {
-    var st=getStats(s.nome), isOn=s.status==='online';
-    var barColor=st.pct>=70?'#00e096':st.pct>=40?'#ffbb00':'#ff3b5c';
-    var card=document.createElement('div');
-    card.className='srv-card';
-    card.style.animationDelay=(i*0.07)+'s';
-    card.innerHTML=
-      '<div class="card-main">'+
-        '<div class="dot" style="background:'+s.cor+';box-shadow:0 0 8px '+s.cor+'60"></div>'+
-        '<div class="srv-info"><div class="srv-name">'+s.nome+'</div>'+
-          '<span class="srv-status-pill '+(isOn?'pill-online':'pill-offline')+'">'+(isOn?'● Online':'● Offline')+'</span>'+
-        '</div>'+
-        '<div class="mini">'+
-          '<div class="mini-row"><span class="mini-chip chip-total">'+st.total+' total</span></div>'+
-          '<div class="mini-row"><span class="mini-chip chip-ok">'+st.emDia+' ok</span><span class="mini-chip chip-cv">'+st.vencidos+' venc.</span></div>'+
-        '</div>'+
-        '<span class="chev">›</span>'+
-      '</div>'+
-      '<div class="card-detail"><div class="detail-inner">'+
-        '<div class="bar-wrap"><div class="bar-labels"><span>'+st.vencidos+' vencido'+(st.vencidos!==1?'s':'')+'</span><span style="color:'+barColor+'">'+st.pct+'% em dia</span></div>'+
-        '<div class="bar-track"><div class="bar-fill" style="width:'+st.pct+'%;background:'+barColor+'"></div></div></div>'+
-        '<div class="drow"><span class="drow-lbl">💸 Custo por crédito</span><span class="drow-val">R$ '+parseFloat(s.custo).toFixed(2)+'</span></div>'+
-        '<div class="toggle-row"><span class="toggle-row-label">Status do servidor</span>'+
-          '<div class="toggle-wrap">'+
-            '<span class="'+(isOn?'toggle-txt-on':'toggle-txt-off')+'">'+(isOn?'Online':'Offline')+'</span>'+
-            '<div class="t-track '+(isOn?'t-track-on':'t-track-off')+'"><div class="t-thumb '+(isOn?'t-thumb-on':'t-thumb-off')+'"></div></div>'+
-          '</div>'+
-        '</div>'+
-        '<div class="dactions"><button class="dact e">✏️ Editar</button><button class="dact d">🗑️ Excluir</button></div>'+
-      '</div></div>';
+
+  // Build each card as a real DOM node so event listeners bind correctly
+  el.innerHTML = '';
+
+  servidores.forEach(function(s, idx) {
+    const st       = getStats(s.nome);
+    const isOn     = s.status === 'online';
+    const barColor = st.pct >= 70 ? '#00e096' : st.pct >= 40 ? '#ffbb00' : '#ff3b5c';
+
+    // ── card wrapper
+    const card = document.createElement('div');
+    card.className = 'srv-card';
+    card.style.animationDelay = (idx * 0.07) + 's';
+
+    // ── always-visible top row
+    card.innerHTML = `
+      <div class="card-main">
+        <div class="dot" style="background:${s.cor};box-shadow:0 0 8px ${s.cor}60"></div>
+        <div class="srv-info">
+          <div class="srv-name">${s.nome}</div>
+          <span class="status-pill ${isOn ? 'online' : 'offline'}">${isOn ? '● Online' : '● Offline'}</span>
+        </div>
+        <div class="mini">
+          <div class="mini-row"><span class="chip ct">${st.total} total</span></div>
+          <div class="mini-row">
+            <span class="chip ck">${st.emDia} ok</span>
+            <span class="chip cv">${st.vencidos} venc.</span>
+          </div>
+        </div>
+        <span class="chev">›</span>
+      </div>
+
+      <div class="card-detail">
+        <div class="detail-inner">
+          <div class="bar-wrap">
+            <div class="bar-labels">
+              <span>${st.vencidos} vencido${st.vencidos !== 1 ? 's' : ''}</span>
+              <span style="color:${barColor}">${st.pct}% em dia</span>
+            </div>
+            <div class="bar-track"><div class="bar-fill" style="width:${st.pct}%;background:${barColor}"></div></div>
+          </div>
+          <div class="drow">
+            <span class="drow-lbl">💸 Custo por crédito</span>
+            <span class="drow-val">R$ ${parseFloat(s.custo).toFixed(2)}</span>
+          </div>
+          <div class="drow">
+            <span class="drow-lbl">Status do servidor</span>
+            <div class="tog-wrap">
+              <span class="tog-txt" style="color:${isOn ? 'var(--green)' : 'var(--red)'}">${isOn ? 'Online' : 'Offline'}</span>
+              <div class="tog-track ${isOn ? 'is-on' : ''}"><div class="tog-thumb"></div></div>
+            </div>
+          </div>
+          <div class="dactions">
+            <button class="dact e">✏️ Editar</button>
+            <button class="dact d">🗑️ Excluir</button>
+          </div>
+        </div>
+      </div>`;
+
     el.appendChild(card);
 
-    var mainRow=card.querySelector('.card-main');
-    var detail=card.querySelector('.card-detail');
-    var chev=card.querySelector('.chev');
-    var togWrap=card.querySelector('.toggle-wrap');
-    var btnEdit=card.querySelector('.dact.e');
-    var btnDel=card.querySelector('.dact.d');
+    // ── grab internal elements AFTER appending
+    const mainRow  = card.querySelector('.card-main');
+    const detail   = card.querySelector('.card-detail');
+    const chev     = card.querySelector('.chev');
+    const togWrap  = card.querySelector('.tog-wrap');
+    const togTrack = card.querySelector('.tog-track');
+    const togThumb = card.querySelector('.tog-thumb');
+    const togTxt   = card.querySelector('.tog-txt');
+    const pill     = card.querySelector('.status-pill');
+    const btnEdit  = card.querySelector('.dact.e');
+    const btnDel   = card.querySelector('.dact.d');
 
-    mainRow.addEventListener('click', function(){
-      var open=detail.style.display==='block';
-      document.querySelectorAll('.card-detail').forEach(function(d){d.style.display='none';});
-      document.querySelectorAll('.chev').forEach(function(c){c.style.transform='rotate(0)';});
-      if(!open){detail.style.display='block'; chev.style.transform='rotate(90deg)';}
+    // ── expand / collapse
+    mainRow.addEventListener('click', function() {
+      const isOpen = detail.style.display === 'block';
+
+      // close all
+      document.querySelectorAll('.card-detail').forEach(function(d) {
+        d.style.display = 'none';
+      });
+      document.querySelectorAll('.chev').forEach(function(c) {
+        c.style.transform = 'rotate(0deg)';
+      });
+
+      if (!isOpen) {
+        detail.style.display  = 'block';
+        chev.style.transform  = 'rotate(90deg)';
+      }
     });
 
-    (function(sRef){
-      togWrap.addEventListener('click', async function(e){
-        e.stopPropagation();
-        var nowOn=sRef.status!=='online';
-        // Block offline if active clients
-        if(!nowOn){
-          var t=today();
-          var ativos=clientes.filter(function(c){return c.plataforma===sRef.nome&&c.vencimento>=t;}).length;
-          if(ativos>0){ alert('⚠️ Não é possível colocar "'+sRef.nome+'" offline pois há '+ativos+' cliente(s) ativo(s).'); return; }
+    // ── toggle online/offline (only on toggle area, not whole card)
+    togWrap.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const nowOn = servidores[idx].status !== 'online';
+      // Block going offline if has active clients
+      if (!nowOn) {
+        const t = today();
+        const ativos = clientes.filter(function(c){ return c.plataforma === servidores[idx].nome && c.vencimento >= t; }).length;
+        if (ativos > 0) {
+          alert('⚠️ Não é possível colocar "' + servidores[idx].nome + '" offline pois há ' + ativos + ' cliente(s) ativo(s) neste servidor.');
+          return;
         }
-        sRef.status=nowOn?'online':'offline';
-        await saveSrv(sRef);
-        await loadAll(); render();
-      });
-      btnEdit.addEventListener('click', async function(e){
+      }
+      servidores[idx].status = nowOn ? 'online' : 'offline';
+      saveAll();
+
+      // update toggle visual
+      if (nowOn) {
+        togTrack.classList.add('is-on');
+        togTxt.textContent  = 'Online';
+        togTxt.style.color  = 'var(--green)';
+        pill.textContent    = '● Online';
+        pill.className      = 'status-pill online';
+      } else {
+        togTrack.classList.remove('is-on');
+        togTxt.textContent  = 'Offline';
+        togTxt.style.color  = 'var(--red)';
+        pill.textContent    = '● Offline';
+        pill.className      = 'status-pill offline';
+      }
+    });
+
+    btnEdit.addEventListener('click', function(e) {
+      e.stopPropagation();
+      openModal(idx);
+    });
+
+    (function(nomeRef, totalRef) {
+      btnDel.addEventListener('click', function(e) {
         e.stopPropagation();
-        openModal(servidores.findIndex(function(x){return x.id===sRef.id;}));
+        if (totalRef > 0) {
+          alert('Nao e possivel excluir "' + nomeRef + '" pois ha ' + totalRef + ' cliente(s) vinculado(s). Migre ou remova os clientes antes.');
+          return;
+        }
+        pendingDeleteNome  = nomeRef;
+        pendingDeleteTotal = totalRef;
+        showDeleteConfirm(nomeRef, totalRef);
       });
-      (function(nomeRef,totalRef){
-        btnDel.addEventListener('click', function(e){
-          e.stopPropagation();
-          if(totalRef>0){ alert('⚠️ Não é possível excluir "'+nomeRef+'" pois há '+totalRef+' cliente(s). Migre os clientes antes.'); return; }
-          pendingDeleteNome=nomeRef;
-          document.getElementById('deletePayMsg').textContent='Deseja excluir o servidor "'+nomeRef+'"?';
-          document.getElementById('deleteOverlay').classList.add('open');
-        });
-      })(sRef.nome, st.total);
-    })(s);
+    })(s.nome, st.total);
   });
 }
 
-// ── Modal ─────────────────────────────────────────
+let pendingDeleteNome  = null;
+let pendingDeleteTotal = 0;
+
+function showDeleteConfirm(nome, total) {
+  const msg = document.getElementById('deleteMsg');
+  msg.textContent = total > 0
+    ? '⚠️ "' + nome + '" tem ' + total + ' cliente(s) vinculado(s). Deseja excluir mesmo assim?'
+    : 'Deseja excluir o servidor "' + nome + '"?';
+  document.getElementById('deleteOverlay').classList.add('open');
+}
+
+function confirmDelete() {
+  if (!pendingDeleteNome) return;
+  servidores = servidores.filter(function(x) { return x.nome !== pendingDeleteNome; });
+  pendingDeleteNome  = null;
+  pendingDeleteTotal = 0;
+  saveAll();
+  document.getElementById('deleteOverlay').classList.remove('open');
+  render();
+}
+
+function cancelDelete() {
+  pendingDeleteNome  = null;
+  pendingDeleteTotal = 0;
+  document.getElementById('deleteOverlay').classList.remove('open');
+}
+
+// ── modal ────────────────────────────────────────────────
 function buildColorGrid(sel) {
-  selectedColor=sel;
-  document.getElementById('colorGrid').innerHTML=COLORS.map(function(c){
-    return '<div class="color-opt '+(c===sel?'sel':'')+'" style="background:'+c+'" onclick="selectColor(''+c+'')"></div>';
-  }).join('');
+  selectedColor = sel;
+  document.getElementById('colorGrid').innerHTML = COLORS.map(c =>
+    `<div class="color-opt ${c === sel ? 'sel' : ''}" style="background:${c}" onclick="selectColor('${c}')"></div>`
+  ).join('');
 }
-window.selectColor=function(c){selectedColor=c;buildColorGrid(c);};
 
-function setFormToggle(isOn){
-  var trk=document.getElementById('fToggleTrack'),thm=document.getElementById('fToggleThumb');
-  document.getElementById('fStatus').value=isOn?'online':'offline';
-  document.getElementById('fStatusLabel').textContent=isOn?'🟢 Online':'🔴 Offline';
-  trk.className='t-track '+(isOn?'t-track-on':'t-track-off');
-  thm.className='t-thumb '+(isOn?'t-thumb-on':'t-thumb-off');
+function selectColor(c) { selectedColor = c; buildColorGrid(c); }
+
+function setFormToggle(isOn) {
+  const trk = document.getElementById('fTogTrack');
+  document.getElementById('fStatus').value       = isOn ? 'online' : 'offline';
+  document.getElementById('fStatusLabel').textContent = isOn ? '🟢 Online' : '🔴 Offline';
+  if (isOn) trk.classList.add('is-on'); else trk.classList.remove('is-on');
 }
-window.toggleFormStatus=function(){setFormToggle(document.getElementById('fStatus').value!=='online');};
 
-window.openModal=function(idx){
-  var srv=idx!==undefined&&idx>=0?servidores[idx]:null;
-  document.getElementById('editIdx').value=srv?String(idx):'-1';
-  document.getElementById('modalTitle').textContent=srv?'Editar Servidor':'Novo Servidor';
-  document.getElementById('fNome').value=srv?srv.nome:'';
-  document.getElementById('fCusto').value=srv&&srv.custo!=null?srv.custo:'';
-  setFormToggle(srv?srv.status==='online':true);
-  buildColorGrid(srv?srv.cor:COLORS[0]);
+function toggleFormStatus() {
+  setFormToggle(document.getElementById('fStatus').value !== 'online');
+}
+
+function openModal(idx) {
+  // idx === undefined means NEW server; use -1 as sentinel
+  const isNew = idx === undefined;
+  const srv   = isNew ? null : servidores[idx];
+
+  document.getElementById('editIdx').value          = isNew ? '-1' : String(idx);
+  document.getElementById('modalTitle').textContent = isNew ? 'Novo Servidor' : 'Editar Servidor';
+  document.getElementById('fNome').value            = srv ? srv.nome  : '';
+  document.getElementById('fCusto').value           = srv ? srv.custo : '';
+  setFormToggle(srv ? srv.status === 'online' : true);
+  buildColorGrid(srv ? srv.cor : COLORS[0]);
   document.getElementById('modalOverlay').classList.add('open');
-};
-window.closeModal=function(){document.getElementById('modalOverlay').classList.remove('open');};
-window.closeOutside=function(e){if(e.target===document.getElementById('modalOverlay'))closeModal();};
+}
 
-window.saveServidor=async function(){
-  var nome=document.getElementById('fNome').value.trim();
-  var custo=document.getElementById('fCusto').value;
-  if(!nome){alert('Informe o nome!');return;}
-  if(custo===''||isNaN(+custo)){alert('Informe o custo!');return;}
-  var data={nome,custo:parseFloat(custo),cor:selectedColor,status:document.getElementById('fStatus').value};
-  var editIdx=parseInt(document.getElementById('editIdx').value);
-  if(editIdx>=0){ data.id=servidores[editIdx].id; await saveSrv(data); }
-  else { await saveSrv(data); }
-  closeModal(); await loadAll(); render();
-};
+function closeModal()    { document.getElementById('modalOverlay').classList.remove('open'); }
+function closeOutside(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); }
 
-// Delete
-document.getElementById('btnConfirmDel').addEventListener('click', async function(){
-  if(!pendingDeleteNome) return;
-  var srv=servidores.find(function(s){return s.nome===pendingDeleteNome;});
-  if(srv) await removeSrv(srv.id);
-  pendingDeleteNome=null;
-  document.getElementById('deleteOverlay').classList.remove('open');
-  await loadAll(); render();
-});
-document.getElementById('btnCancelDel').addEventListener('click', function(){
-  pendingDeleteNome=null;
-  document.getElementById('deleteOverlay').classList.remove('open');
-});
+function saveServidor() {
+  const nome  = document.getElementById('fNome').value.trim();
+  const custo = document.getElementById('fCusto').value;
+  if (!nome)             { alert('Informe o nome do servidor!'); return; }
+  if (custo === '' || isNaN(+custo)) { alert('Informe o custo do crédito!'); return; }
 
-// ── Init ──────────────────────────────────────────
-onAuthStateChanged(auth, async function(user){
-  if(!user){location.href='login.html';return;}
-  UID=user.uid;
-  var cfg=JSON.parse(localStorage.getItem('streamdesk_config')||'{}')||{};
-  if(cfg.darkMode===true) document.body.classList.add('dark');
-  await loadAll(); render();
-});
-document.addEventListener('visibilitychange', async function(){
-  if(document.visibilityState==='visible'&&UID){
-    var cfg2=JSON.parse(localStorage.getItem('streamdesk_config')||'{}')||{};
-    if(cfg2.darkMode===true){document.body.classList.add('dark');}else{document.body.classList.remove('dark');}
-    await loadAll(); render();
+  const data = {
+    nome,
+    custo:  parseFloat(custo),
+    cor:    selectedColor,
+    status: document.getElementById('fStatus').value,
+  };
+
+  const editIdx = parseInt(document.getElementById('editIdx').value);
+
+  if (editIdx >= 0) {
+    // editing existing
+    servidores[editIdx] = data;
+  } else {
+    // new server
+    servidores.push(data);
+  }
+
+  saveAll();
+  closeModal();
+  render();
+}
+
+// Reload clientes every time user returns to this page
+document.addEventListener('visibilitychange', function() {
+  if (document.visibilityState === 'visible') {
+    var cfg2 = JSON.parse(localStorage.getItem('streamdesk_config') || '{}');
+    if (cfg2.darkMode !== true) { document.body.classList.add('light'); }
+    else { document.body.classList.remove('light'); }
+    clientes = JSON.parse(localStorage.getItem(CLIENT_KEY) || '[]');
+    render();
   }
 });
+
+render();
 </script>
+</body>
+</html>
