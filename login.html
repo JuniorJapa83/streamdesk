@@ -12,38 +12,45 @@
   body::before{content:'';position:fixed;top:-120px;right:-80px;width:320px;height:320px;background:radial-gradient(circle,rgba(0,212,255,.12) 0%,transparent 70%);pointer-events:none}
   body::after{content:'';position:fixed;bottom:-80px;left:-80px;width:280px;height:280px;background:radial-gradient(circle,rgba(0,224,150,.08) 0%,transparent 70%);pointer-events:none}
   .wrap{width:100%;position:relative;z-index:1}
-  .logo-wrap{text-align:center;margin-bottom:32px}
+  .logo-wrap{text-align:center;margin-bottom:36px}
   .logo-icon{width:72px;height:72px;background:linear-gradient(135deg,#00d4ff,#00e096);border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:34px;margin:0 auto 14px;box-shadow:0 8px 32px rgba(0,212,255,.25)}
   .logo-name{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;letter-spacing:-.5px}
   .logo-name span{color:var(--accent)}
   .logo-sub{font-size:13px;color:var(--muted);margin-top:4px}
   .card{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:28px 24px;box-shadow:0 4px 24px rgba(0,0,0,.06)}
   .card-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:4px}
-  .card-sub{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.5}
+  .card-sub{font-size:13px;color:var(--muted);margin-bottom:22px}
+  .fg{margin-bottom:14px}
+  .fl{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;display:block}
+  .fi-wrap{position:relative}
+  .fi{width:100%;background:var(--card2);border:1.5px solid var(--border);border-radius:12px;padding:12px 44px 12px 14px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:all .2s}
+  .fi:focus{border-color:var(--accent);background:#fff;box-shadow:0 0 0 3px rgba(0,212,255,.1)}
+  .fi::placeholder{color:var(--muted)}
+  .fi-icon{position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--muted);cursor:pointer;user-select:none}
   .msg{display:none;border-radius:10px;padding:10px 14px;font-size:13px;margin-bottom:14px;align-items:center;gap:8px;line-height:1.4}
   .msg.show{display:flex}
   .msg.err{background:rgba(255,59,92,.08);border:1px solid rgba(255,59,92,.2);color:var(--red)}
   .msg.ok{background:rgba(0,224,150,.08);border:1px solid rgba(0,224,150,.2);color:var(--green)}
-  .btn-google{width:100%;background:#fff;color:#3c4043;border:1.5px solid #dadce0;border-radius:12px;padding:13px 20px;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
-  .btn-google:hover{background:#f8f9fa;box-shadow:0 4px 16px rgba(0,0,0,.12);transform:translateY(-1px)}
-  .btn-google:active{transform:scale(.97)}
-  .btn-google:disabled{opacity:.6;cursor:not-allowed;transform:none}
-  .btn-google svg{width:20px;height:20px;flex-shrink:0}
-  .spinner{width:18px;height:18px;border:2px solid rgba(60,64,67,.25);border-top-color:#3c4043;border-radius:50%;animation:spin .7s linear infinite;display:none}
+  .btn{width:100%;background:linear-gradient(135deg,#00d4ff,#00b8e0);color:#000;border:none;border-radius:12px;padding:14px;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;cursor:pointer;transition:all .2s;box-shadow:0 4px 16px rgba(0,212,255,.3);margin-top:4px;display:flex;align-items:center;justify-content:center;gap:8px}
+  .btn:active{transform:scale(.97)}
+  .btn:disabled{opacity:.6;cursor:not-allowed}
+  .btn-sec{width:100%;background:var(--card2);color:var(--text);border:1px solid var(--border);border-radius:12px;padding:13px;font-family:'Syne',sans-serif;font-weight:600;font-size:15px;cursor:pointer;margin-top:8px}
+  .spinner{width:16px;height:16px;border:2px solid rgba(0,0,0,.2);border-top-color:#000;border-radius:50%;animation:spin .7s linear infinite;display:none}
   @keyframes spin{to{transform:rotate(360deg)}}
-  .tabs{display:flex;background:var(--card2);border-radius:12px;padding:4px;margin-bottom:22px;gap:4px}
-  .tab{flex:1;padding:9px;border:none;background:transparent;border-radius:9px;font-family:'Syne',sans-serif;font-weight:600;font-size:13px;color:var(--muted);cursor:pointer;transition:all .2s}
-  .tab.active{background:#fff;color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,.08)}
-  .panel{display:none}
-  .panel.active{display:block}
+  .forgot{text-align:right;margin-top:-6px;margin-bottom:12px}
+  .forgot a{font-size:12px;color:var(--accent);cursor:pointer}
+  .link-row{margin-top:20px;text-align:center;font-size:13px;color:var(--muted)}
+  .link-row a{color:var(--accent);font-weight:600;cursor:pointer}
+  .register-card{display:none;background:rgba(0,212,255,.04);border:1px solid rgba(0,212,255,.15);border-radius:16px;padding:20px;margin-top:14px}
+  .register-card.show{display:block}
+  .reg-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:14px;color:var(--accent)}
   .version{text-align:center;font-size:11px;color:var(--muted);margin-top:20px}
   .version span{color:var(--accent);font-weight:600}
-  .debug{background:#1a202c;color:#a0aec0;border-radius:8px;padding:10px 12px;font-size:11px;font-family:monospace;margin-top:10px;display:none;word-break:break-all;line-height:1.6}
-  .debug.show{display:block}
 </style>
 </head>
 <body>
 <div class="wrap">
+
   <div class="logo-wrap">
     <div class="logo-icon">📡</div>
     <div class="logo-name">Stream<span>Desk</span></div>
@@ -51,168 +58,229 @@
   </div>
 
   <div class="card">
-    <div class="tabs">
-      <button class="tab active" id="tabLogin" onclick="switchTab('login')">Entrar</button>
-      <button class="tab" id="tabCadastro" onclick="switchTab('cadastro')">Criar conta</button>
-    </div>
+    <div class="card-title">Bem-vindo! 👋</div>
+    <div class="card-sub">Entre com seu e-mail e senha</div>
 
     <div class="msg err" id="msgErr"></div>
     <div class="msg ok"  id="msgOk"></div>
 
-    <!-- LOGIN -->
-    <div class="panel active" id="panelLogin">
-      <div class="card-title">Bem-vindo! 👋</div>
-      <div class="card-sub">Entre com sua conta Google para acessar o sistema.</div>
-      <button class="btn-google" id="btnLogin" onclick="doGoogle('login')">
-        <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-          <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-          <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-          <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-          <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-          <path fill="none" d="M0 0h48v48H0z"/>
-        </svg>
-        <span id="btnLoginTxt">Entrar com Google</span>
-        <div class="spinner" id="spinnerLogin"></div>
-      </button>
+    <div class="fg">
+      <label class="fl">E-mail</label>
+      <div class="fi-wrap">
+        <input class="fi" id="fEmail" type="email" placeholder="seu@email.com" autocomplete="email">
+        <span class="fi-icon">📧</span>
+      </div>
+    </div>
+    <div class="fg">
+      <label class="fl">Senha</label>
+      <div class="fi-wrap">
+        <input class="fi" id="fSenha" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+        <span class="fi-icon" id="eyeLogin" onclick="toggleEye('fSenha','eyeLogin')">👁️</span>
+      </div>
+    </div>
+    <div class="forgot"><a onclick="doForgot()">Esqueci minha senha</a></div>
+
+    <button class="btn" id="btnLogin" onclick="doLogin()">
+      <span id="btnTxt">Entrar</span>
+      <div class="spinner" id="spinner"></div>
+    </button>
+  </div>
+
+  <div class="link-row">Primeiro acesso? <a onclick="toggleRegister()">Criar conta</a></div>
+
+  <!-- REGISTER CARD -->
+  <div class="register-card" id="registerCard">
+    <div class="reg-title">✨ Criar sua conta</div>
+
+    <div class="msg err" id="regErr"></div>
+
+    <div class="fg">
+      <label class="fl">Nome completo</label>
+      <input class="fi" id="rNome" placeholder="Ex: Junior Ramos">
+    </div>
+    <div class="fg">
+      <label class="fl">E-mail</label>
+      <input class="fi" id="rEmail" type="email" placeholder="seu@email.com">
+    </div>
+    <div class="fg">
+      <label class="fl">WhatsApp <span style="color:var(--red)">*</span></label>
+      <div class="fi-wrap">
+        <input class="fi" id="rWA" type="tel" placeholder="+55 11 99999-9999">
+        <span class="fi-icon">📲</span>
+      </div>
+    </div>
+    <div class="fg">
+      <label class="fl">Senha</label>
+      <div class="fi-wrap">
+        <input class="fi" id="rSenha" type="password" placeholder="Mínimo 6 caracteres">
+        <span class="fi-icon" id="eyeReg" onclick="toggleEye('rSenha','eyeReg')">👁️</span>
+      </div>
+    </div>
+    <div class="fg">
+      <label class="fl">Confirmar Senha</label>
+      <input class="fi" id="rConfirm" type="password" placeholder="Repita a senha">
     </div>
 
-    <!-- CADASTRO -->
-    <div class="panel" id="panelCadastro">
-      <div class="card-title">Criar conta ✨</div>
-      <div class="card-sub">Use sua conta Google para se cadastrar. O acesso é liberado automaticamente.</div>
-      <button class="btn-google" id="btnCadastro" onclick="doGoogle('cadastro')">
-        <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-          <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-          <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-          <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-          <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-          <path fill="none" d="M0 0h48v48H0z"/>
-        </svg>
-        <span id="btnCadastroTxt">Cadastrar com Google</span>
-        <div class="spinner" id="spinnerCadastro"></div>
-      </button>
-    </div>
-
-    <div class="debug" id="debugBox"></div>
+    <button class="btn" id="btnReg" onclick="doRegister()">
+      <span id="btnRegTxt">Criar Conta</span>
+      <div class="spinner" id="spinnerReg"></div>
+    </button>
+    <button class="btn-sec" onclick="toggleRegister()">Cancelar</button>
   </div>
 
   <div class="version">StreamDesk <span>v1.0</span></div>
 </div>
 
 <script type="module">
-import { initializeApp }      from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider,
-         signInWithPopup, signInWithRedirect, getRedirectResult }
-                              from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc }
-                              from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+import { initializeApp }                     from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword,
+         createUserWithEmailAndPassword,
+         sendPasswordResetEmail,
+         onAuthStateChanged }                from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-// Config atualizado do Firebase Console
 const firebaseConfig = {
-  apiKey:            "AIzaSyDjh7BrMk1MKkLU9MOYJsI1XxantSt1V1g",
-  authDomain:        "streamdesk-5350d.firebaseapp.com",
-  projectId:         "streamdesk-5350d",
-  storageBucket:     "streamdesk-5350d.firebasestorage.app",
+  apiKey: "AIzaSyAGHvkDpeSbCTriZCvRf-jJ6z8PQSSWLHI",
+  authDomain: "streamdesk-5350d.firebaseapp.com",
+  projectId: "streamdesk-5350d",
+  storageBucket: "streamdesk-5350d.firebasestorage.app",
   messagingSenderId: "36684694847",
-  appId:             "1:36684694847:web:0f6f3a27933e3d84cfff8a",
-  measurementId:     "G-PN7SZSMQR4"
+  appId: "1:36684694847:web:0f6f3a27933e3d84cfff8a"
 };
 
-const app      = initializeApp(firebaseConfig);
-const auth     = getAuth(app);
-const db       = getFirestore(app);
-const provider = new GoogleAuthProvider();
-provider.setCustomParameters({ prompt: 'select_account' });
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
 
 function todayStr() {
-  var d = new Date();
+  var d=new Date();
   return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 }
-function showMsg(type, msg) {
+
+// Redirect if already logged in
+onAuthStateChanged(auth, async function(user) {
+  if (!user) return;
+  try {
+    var snap = await getDoc(doc(db, 'usuarios', user.uid));
+    if (!snap.exists()) { location.href = 'index.html'; return; }
+    var data = snap.data();
+    if (data.status === 'bloqueado') {
+      await auth.signOut();
+      showMsg('msgErr', '⚠️ Acesso bloqueado. Entre em contato com o administrador.');
+      return;
+    }
+    if (data.status === 'pendente') {
+      await auth.signOut();
+      showMsg('msgOk', '⏳ Aguardando aprovação. Envie o comprovante de pagamento.');
+      return;
+    }
+    if (data.expiracao && new Date(data.expiracao) < new Date()) {
+      await auth.signOut();
+      showMsg('msgErr', '⚠️ Seu acesso expirou. Entre em contato para renovar.');
+      return;
+    }
+    // Update last access
+    await setDoc(doc(db, 'usuarios', user.uid), { ultimoAcesso: todayStr() }, { merge: true });
+    location.href = 'index.html';
+  } catch(e) {
+    location.href = 'index.html';
+  }
+});
+
+function showMsg(id, msg) {
   document.getElementById('msgErr').classList.remove('show');
   document.getElementById('msgOk').classList.remove('show');
-  var el = document.getElementById(type === 'err' ? 'msgErr' : 'msgOk');
+  var el = document.getElementById(id);
   el.textContent = msg;
   el.classList.add('show');
 }
-function showDebug(msg) {
-  var el = document.getElementById('debugBox');
-  el.textContent = '🔍 ' + msg;
+function showRegErr(msg) {
+  var el = document.getElementById('regErr');
+  el.textContent = '⚠️ ' + msg;
   el.classList.add('show');
 }
-function setLoading(tipo, on) {
-  var btnId     = tipo === 'login' ? 'btnLogin'     : 'btnCadastro';
-  var txtId     = tipo === 'login' ? 'btnLoginTxt'  : 'btnCadastroTxt';
-  var spinnerId = tipo === 'login' ? 'spinnerLogin' : 'spinnerCadastro';
-  document.getElementById(btnId).disabled          = on;
-  document.getElementById(txtId).style.display     = on ? 'none'  : 'inline';
-  document.getElementById(spinnerId).style.display = on ? 'block' : 'none';
-}
 
-window.switchTab = function(tab) {
-  document.getElementById('msgErr').classList.remove('show');
-  document.getElementById('msgOk').classList.remove('show');
-  ['Login','Cadastro'].forEach(function(t) {
-    var key = t.toLowerCase();
-    document.getElementById('tab'+t).classList.toggle('active', key === tab);
-    document.getElementById('panel'+t).classList.toggle('active', key === tab);
-  });
+window.toggleEye = function(inputId, iconId) {
+  var fi = document.getElementById(inputId);
+  fi.type = fi.type === 'password' ? 'text' : 'password';
+};
+window.toggleRegister = function() {
+  document.getElementById('registerCard').classList.toggle('show');
+  document.getElementById('regErr').classList.remove('show');
 };
 
-async function processUser(user, tipo) {
-  var snap = await getDoc(doc(db, 'usuarios', user.uid));
-  if (!snap.exists()) {
-    if (tipo === 'login') {
-      await auth.signOut();
-      showMsg('err', '⚠️ Conta não encontrada. Use "Criar conta" para se registrar.');
-      window.switchTab('cadastro');
-      return;
-    }
-    await setDoc(doc(db, 'usuarios', user.uid), {
-      uid: user.uid, nome: user.displayName||'', email: user.email||'',
-      foto: user.photoURL||'', whatsapp: '', status: 'ativo',
-      dataCadastro: todayStr(), expiracao: null, ultimoAcesso: todayStr(),
-    });
-    location.href = 'index.html';
-    return;
-  }
-  var data = snap.data();
-  if (data.status === 'bloqueado') { await auth.signOut(); showMsg('err','⚠️ Acesso bloqueado. Entre em contato com o administrador.'); return; }
-  if (data.status === 'pendente')  { await auth.signOut(); showMsg('ok','⏳ Aguardando aprovação do administrador.'); return; }
-  if (data.expiracao && new Date(data.expiracao) < new Date()) { await auth.signOut(); showMsg('err','⚠️ Seu acesso expirou. Entre em contato para renovar.'); return; }
-  await setDoc(doc(db,'usuarios',user.uid),{ultimoAcesso:todayStr()},{merge:true});
-  location.href = 'index.html';
-}
+window.doLogin = async function() {
+  document.getElementById('msgErr').classList.remove('show');
+  document.getElementById('msgOk').classList.remove('show');
+  var email = document.getElementById('fEmail').value.trim();
+  var senha = document.getElementById('fSenha').value;
+  if (!email) { showMsg('msgErr','⚠️ Informe seu e-mail.'); return; }
+  if (!senha)  { showMsg('msgErr','⚠️ Informe sua senha.'); return; }
 
-// Retorno de redirect
-getRedirectResult(auth).then(async function(result) {
-  if (!result) return;
-  var tipo = sessionStorage.getItem('sd_tipo') || 'login';
-  sessionStorage.removeItem('sd_tipo');
-  await processUser(result.user, tipo);
-}).catch(function(e) {
-  if (e && e.code) showDebug('redirect: ' + e.code + ' — ' + (e.message||''));
-});
+  var btn = document.getElementById('btnLogin');
+  btn.disabled = true;
+  document.getElementById('btnTxt').style.display = 'none';
+  document.getElementById('spinner').style.display = 'block';
 
-window.doGoogle = async function(tipo) {
-  setLoading(tipo, true);
-  sessionStorage.setItem('sd_tipo', tipo);
   try {
-    var result = await signInWithPopup(auth, provider);
-    sessionStorage.removeItem('sd_tipo');
-    await processUser(result.user, tipo);
+    await signInWithEmailAndPassword(auth, email, senha);
   } catch(e) {
-    var code = e.code || '';
-    showDebug('popup: ' + code + ' — ' + (e.message||''));
-    if (code === 'auth/popup-blocked' || code === 'auth/operation-not-supported-in-this-environment') {
-      showMsg('ok', '🔄 Redirecionando para o Google...');
-      setTimeout(function(){ signInWithRedirect(auth, provider); }, 800);
-    } else if (code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') {
-      setLoading(tipo, false);
-    } else {
-      setLoading(tipo, false);
-      showMsg('err', '⚠️ ' + (e.message || 'Erro ao conectar com Google.'));
-    }
+    btn.disabled = false;
+    document.getElementById('btnTxt').style.display = 'inline';
+    document.getElementById('spinner').style.display = 'none';
+    var msg = 'Erro ao entrar. Tente novamente.';
+    if (e.code==='auth/user-not-found'||e.code==='auth/invalid-credential'||e.code==='auth/wrong-password') msg = 'E-mail ou senha incorretos.';
+    else if (e.code==='auth/too-many-requests') msg = 'Muitas tentativas. Aguarde um momento.';
+    showMsg('msgErr', '⚠️ ' + msg);
+  }
+};
+
+window.doRegister = async function() {
+  document.getElementById('regErr').classList.remove('show');
+  var nome    = document.getElementById('rNome').value.trim();
+  var email   = document.getElementById('rEmail').value.trim();
+  var wa      = document.getElementById('rWA').value.trim();
+  var senha   = document.getElementById('rSenha').value;
+  var confirm = document.getElementById('rConfirm').value;
+
+  if (!nome)                        { showRegErr('Informe seu nome.'); return; }
+  if (!email||!email.includes('@')) { showRegErr('E-mail inválido.'); return; }
+  if (!wa||wa.replace(/\D/g,'').length<10) { showRegErr('WhatsApp obrigatório com DDD.'); return; }
+  if (!senha||senha.length<6)       { showRegErr('Senha: mínimo 6 caracteres.'); return; }
+  if (senha!==confirm)              { showRegErr('As senhas não coincidem.'); return; }
+
+  var btn = document.getElementById('btnReg');
+  btn.disabled = true;
+  document.getElementById('btnRegTxt').style.display = 'none';
+  document.getElementById('spinnerReg').style.display = 'block';
+
+  try {
+    var cred = await createUserWithEmailAndPassword(auth, email, senha);
+    await setDoc(doc(db, 'usuarios', cred.user.uid), {
+      uid: cred.user.uid, nome, email, whatsapp: wa,
+      status: 'pendente', dataCadastro: todayStr(),
+      expiracao: null, ultimoAcesso: todayStr(),
+    });
+    await auth.signOut();
+    document.getElementById('registerCard').classList.remove('show');
+    showMsg('msgOk', '✅ Conta criada! Aguarde aprovação e envie o comprovante ao administrador.');
+  } catch(e) {
+    btn.disabled = false;
+    document.getElementById('btnRegTxt').style.display = 'inline';
+    document.getElementById('spinnerReg').style.display = 'none';
+    var msg = e.code==='auth/email-already-in-use' ? 'Este e-mail já está cadastrado.' : 'Erro: '+e.message;
+    showRegErr(msg);
+  }
+};
+
+window.doForgot = async function() {
+  var email = document.getElementById('fEmail').value.trim();
+  if (!email) { showMsg('msgErr','⚠️ Digite seu e-mail acima primeiro.'); return; }
+  try {
+    await sendPasswordResetEmail(auth, email);
+    showMsg('msgOk', '✅ E-mail de recuperação enviado! Verifique sua caixa de entrada.');
+  } catch(e) {
+    showMsg('msgErr','⚠️ E-mail não encontrado.');
   }
 };
 </script>
