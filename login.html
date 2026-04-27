@@ -12,45 +12,39 @@
   body::before{content:'';position:fixed;top:-120px;right:-80px;width:320px;height:320px;background:radial-gradient(circle,rgba(0,212,255,.12) 0%,transparent 70%);pointer-events:none}
   body::after{content:'';position:fixed;bottom:-80px;left:-80px;width:280px;height:280px;background:radial-gradient(circle,rgba(0,224,150,.08) 0%,transparent 70%);pointer-events:none}
   .wrap{width:100%;position:relative;z-index:1}
-
   .logo-wrap{text-align:center;margin-bottom:32px}
   .logo-icon{width:72px;height:72px;background:linear-gradient(135deg,#00d4ff,#00e096);border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:34px;margin:0 auto 14px;box-shadow:0 8px 32px rgba(0,212,255,.25)}
   .logo-name{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;letter-spacing:-.5px}
   .logo-name span{color:var(--accent)}
   .logo-sub{font-size:13px;color:var(--muted);margin-top:4px}
-
   .card{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:28px 24px;box-shadow:0 4px 24px rgba(0,0,0,.06)}
   .card-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:4px}
   .card-sub{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.5}
-
   .msg{display:none;border-radius:10px;padding:10px 14px;font-size:13px;margin-bottom:14px;align-items:center;gap:8px;line-height:1.4}
   .msg.show{display:flex}
   .msg.err{background:rgba(255,59,92,.08);border:1px solid rgba(255,59,92,.2);color:var(--red)}
   .msg.ok{background:rgba(0,224,150,.08);border:1px solid rgba(0,224,150,.2);color:var(--green)}
-
   .btn-google{width:100%;background:#fff;color:#3c4043;border:1.5px solid #dadce0;border-radius:12px;padding:13px 20px;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
   .btn-google:hover{background:#f8f9fa;box-shadow:0 4px 16px rgba(0,0,0,.12);transform:translateY(-1px)}
   .btn-google:active{transform:scale(.97)}
   .btn-google:disabled{opacity:.6;cursor:not-allowed;transform:none}
   .btn-google svg{width:20px;height:20px;flex-shrink:0}
-
   .spinner{width:18px;height:18px;border:2px solid rgba(60,64,67,.25);border-top-color:#3c4043;border-radius:50%;animation:spin .7s linear infinite;display:none}
   @keyframes spin{to{transform:rotate(360deg)}}
-
   .tabs{display:flex;background:var(--card2);border-radius:12px;padding:4px;margin-bottom:22px;gap:4px}
   .tab{flex:1;padding:9px;border:none;background:transparent;border-radius:9px;font-family:'Syne',sans-serif;font-weight:600;font-size:13px;color:var(--muted);cursor:pointer;transition:all .2s}
   .tab.active{background:#fff;color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,.08)}
-
   .panel{display:none}
   .panel.active{display:block}
-
   .version{text-align:center;font-size:11px;color:var(--muted);margin-top:20px}
   .version span{color:var(--accent);font-weight:600}
+  /* debug box */
+  .debug{background:#1a202c;color:#a0aec0;border-radius:8px;padding:10px 12px;font-size:11px;font-family:monospace;margin-top:10px;display:none;word-break:break-all;line-height:1.6}
+  .debug.show{display:block}
 </style>
 </head>
 <body>
 <div class="wrap">
-
   <div class="logo-wrap">
     <div class="logo-icon">📡</div>
     <div class="logo-name">Stream<span>Desk</span></div>
@@ -99,6 +93,8 @@
         <div class="spinner" id="spinnerCadastro"></div>
       </button>
     </div>
+
+    <div class="debug" id="debugBox"></div>
   </div>
 
   <div class="version">StreamDesk <span>v1.0</span></div>
@@ -107,18 +103,18 @@
 <script type="module">
 import { initializeApp }      from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 import { getAuth, GoogleAuthProvider,
-         signInWithPopup, signInWithRedirect, getRedirectResult,
-         onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+         signInWithPopup, signInWithRedirect, getRedirectResult }
+                              from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc }
                               from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDjh7BrMk1MKkLU9MOYJsI1XxantSt1V1g",
-  authDomain: "streamdesk-5350d.firebaseapp.com",
-  projectId: "streamdesk-5350d",
-  storageBucket: "streamdesk-5350d.firebasestorage.app",
+  apiKey:            "AIzaSyDjh7BrMk1MKkLU9MOYJsI1XxantSt1V1g",
+  authDomain:        "streamdesk-5350d.firebaseapp.com",
+  projectId:         "streamdesk-5350d",
+  storageBucket:     "streamdesk-5350d.firebasestorage.app",
   messagingSenderId: "36684694847",
-  appId: "1:36684694847:web:0f6f3a27933e3d84cfff8a"
+  appId:             "1:36684694847:web:0f6f3a27933e3d84cfff8a"
 };
 
 const app      = initializeApp(firebaseConfig);
@@ -131,7 +127,6 @@ function todayStr() {
   var d = new Date();
   return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 }
-
 function showMsg(type, msg) {
   document.getElementById('msgErr').classList.remove('show');
   document.getElementById('msgOk').classList.remove('show');
@@ -139,29 +134,32 @@ function showMsg(type, msg) {
   el.textContent = msg;
   el.classList.add('show');
 }
-
+function showDebug(msg) {
+  var el = document.getElementById('debugBox');
+  el.textContent = '🔍 ' + msg;
+  el.classList.add('show');
+}
 function setLoading(tipo, on) {
   var btnId     = tipo === 'login' ? 'btnLogin'     : 'btnCadastro';
   var txtId     = tipo === 'login' ? 'btnLoginTxt'  : 'btnCadastroTxt';
   var spinnerId = tipo === 'login' ? 'spinnerLogin' : 'spinnerCadastro';
-  document.getElementById(btnId).disabled            = on;
-  document.getElementById(txtId).style.display       = on ? 'none'  : 'inline';
-  document.getElementById(spinnerId).style.display   = on ? 'block' : 'none';
+  document.getElementById(btnId).disabled          = on;
+  document.getElementById(txtId).style.display     = on ? 'none'  : 'inline';
+  document.getElementById(spinnerId).style.display = on ? 'block' : 'none';
 }
 
 window.switchTab = function(tab) {
   document.getElementById('msgErr').classList.remove('show');
   document.getElementById('msgOk').classList.remove('show');
-  ['login','cadastro'].forEach(function(t) {
-    document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1)).classList.toggle('active', t === tab);
-    document.getElementById('panel' + t.charAt(0).toUpperCase() + t.slice(1)).classList.toggle('active', t === tab);
+  ['Login','Cadastro'].forEach(function(t) {
+    var key = t.toLowerCase();
+    document.getElementById('tab'+t).classList.toggle('active', key === tab);
+    document.getElementById('panel'+t).classList.toggle('active', key === tab);
   });
 };
 
 async function processUser(user, tipo) {
   var snap = await getDoc(doc(db, 'usuarios', user.uid));
-
-  // Usuário novo
   if (!snap.exists()) {
     if (tipo === 'login') {
       await auth.signOut();
@@ -169,56 +167,32 @@ async function processUser(user, tipo) {
       window.switchTab('cadastro');
       return;
     }
-    // Cadastro: cria como ativo
     await setDoc(doc(db, 'usuarios', user.uid), {
-      uid:          user.uid,
-      nome:         user.displayName || '',
-      email:        user.email || '',
-      foto:         user.photoURL || '',
-      whatsapp:     '',
-      status:       'ativo',
-      dataCadastro: todayStr(),
-      expiracao:    null,
-      ultimoAcesso: todayStr(),
+      uid: user.uid, nome: user.displayName||'', email: user.email||'',
+      foto: user.photoURL||'', whatsapp: '', status: 'ativo',
+      dataCadastro: todayStr(), expiracao: null, ultimoAcesso: todayStr(),
     });
     location.href = 'index.html';
     return;
   }
-
   var data = snap.data();
-
-  if (data.status === 'bloqueado') {
-    await auth.signOut();
-    showMsg('err', '⚠️ Acesso bloqueado. Entre em contato com o administrador.');
-    return;
-  }
-  if (data.status === 'pendente') {
-    await auth.signOut();
-    showMsg('ok', '⏳ Aguardando aprovação do administrador.');
-    return;
-  }
-  if (data.expiracao && new Date(data.expiracao) < new Date()) {
-    await auth.signOut();
-    showMsg('err', '⚠️ Seu acesso expirou. Entre em contato para renovar.');
-    return;
-  }
-
-  await setDoc(doc(db, 'usuarios', user.uid), { ultimoAcesso: todayStr() }, { merge: true });
+  if (data.status === 'bloqueado') { await auth.signOut(); showMsg('err','⚠️ Acesso bloqueado. Entre em contato com o administrador.'); return; }
+  if (data.status === 'pendente')  { await auth.signOut(); showMsg('ok','⏳ Aguardando aprovação do administrador.'); return; }
+  if (data.expiracao && new Date(data.expiracao) < new Date()) { await auth.signOut(); showMsg('err','⚠️ Seu acesso expirou. Entre em contato para renovar.'); return; }
+  await setDoc(doc(db,'usuarios',user.uid),{ultimoAcesso:todayStr()},{merge:true});
   location.href = 'index.html';
 }
 
-// Verifica resultado de redirect (caso popup tenha falhado e usado redirect)
+// Retorno de redirect
 getRedirectResult(auth).then(async function(result) {
   if (!result) return;
   var tipo = sessionStorage.getItem('sd_tipo') || 'login';
   sessionStorage.removeItem('sd_tipo');
-  setLoading(tipo, false);
   await processUser(result.user, tipo);
 }).catch(function(e) {
-  console.error('redirect error', e);
+  if (e && e.code) showDebug('redirect: ' + e.code + ' — ' + (e.message||''));
 });
 
-// Clique no botão — tenta popup primeiro, se falhar usa redirect
 window.doGoogle = async function(tipo) {
   setLoading(tipo, true);
   sessionStorage.setItem('sd_tipo', tipo);
@@ -227,18 +201,17 @@ window.doGoogle = async function(tipo) {
     sessionStorage.removeItem('sd_tipo');
     await processUser(result.user, tipo);
   } catch(e) {
-    if (
-      e.code === 'auth/popup-blocked' ||
-      e.code === 'auth/popup-closed-by-user' ||
-      e.code === 'auth/cancelled-popup-request' ||
-      e.code === 'auth/operation-not-supported-in-this-environment'
-    ) {
-      // Fallback: redireciona para página do Google
-      signInWithRedirect(auth, provider);
+    var code = e.code || '';
+    showDebug('popup: ' + code + ' — ' + (e.message || ''));
+    if (code === 'auth/popup-blocked' || code === 'auth/operation-not-supported-in-this-environment') {
+      showMsg('ok', '🔄 Redirecionando para o Google...');
+      setTimeout(function(){ signInWithRedirect(auth, provider); }, 800);
+    } else if (code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') {
+      setLoading(tipo, false);
+      // usuário fechou — sem mensagem de erro
     } else {
       setLoading(tipo, false);
-      console.error(e);
-      showMsg('err', '⚠️ Erro ao conectar com Google. Tente novamente.');
+      showMsg('err', '⚠️ ' + (e.message || 'Erro ao conectar com Google.'));
     }
   }
 };
