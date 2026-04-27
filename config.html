@@ -304,6 +304,21 @@ onAuthStateChanged(_auth, function(user) { if (!user) location.href='login.html'
   </div>
 </div>
 
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+
+const _app  = initializeApp({apiKey:"AIzaSyCkWlpyp2-wTBeOWOHoAMLpVQ4vG61KBsc",authDomain:"streamdesk-5350d.firebaseapp.com",projectId:"streamdesk-5350d",storageBucket:"streamdesk-5350d.firebasestorage.app",messagingSenderId:"36684694847",appId:"1:36684694847:web:0f6f3a27933e3d84cfff8a"});
+const _auth = getAuth(_app);
+onAuthStateChanged(_auth, function(user) { if (!user) location.href = 'login.html'; });
+
+window._doFirebaseLogout = async function() {
+  sessionStorage.setItem('sd_logout', '1');
+  await signOut(_auth);
+  location.href = 'login.html';
+};
+</script>
+
 <script>
 var CFG_KEY      = 'streamdesk_config';
 var CLIENT_KEY   = 'iptv_clientes_v3';
@@ -443,8 +458,7 @@ function enviarChamado() {
 
 function doLogout() {
   if (!confirm('Deseja sair do StreamDesk?')) return;
-  localStorage.removeItem('streamdesk_session');
-  location.href = 'login.html';
+  window._doFirebaseLogout();
 }
 
 loadPage();
