@@ -230,6 +230,15 @@
   .pag-res-card.green{border-color:rgba(0,224,150,.2)}.pag-res-card.green .pag-res-num{color:var(--green)}
   .pag-res-card.yellow{border-color:rgba(255,187,0,.2)}.pag-res-card.yellow .pag-res-num{color:var(--yellow)}
   .pag-res-card.accent{border-color:rgba(0,212,255,.2)}.pag-res-card.accent .pag-res-num{color:var(--accent)}
+
+  /* ── MENSALIDADE ── */
+  .mens-card{background:var(--card);border:1px solid rgba(0,212,255,.2);border-radius:14px;padding:16px;margin-bottom:4px}
+  .mens-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;font-weight:600}
+  .mens-input-wrap{display:flex;align-items:center;background:var(--card2);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;transition:border .2s;margin-bottom:8px}
+  .mens-input-wrap:focus-within{border-color:var(--accent)}
+  .mens-prefix{padding:0 14px;font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--accent);flex-shrink:0}
+  .mens-input{flex:1;background:none;border:none;outline:none;color:var(--text);font-family:'Syne',sans-serif;font-size:22px;font-weight:800;padding:12px 14px 12px 0}
+  .mens-hint{font-size:11px;color:var(--muted);line-height:1.5}
   /* ── MODAIS ── */
   .overlay{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:200;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .3s}
   .overlay.open{opacity:1;pointer-events:all}
@@ -431,13 +440,16 @@
         <div class="loading-spinner" style="margin:30px auto"></div>
       </div>
 
-      <!-- Valor por usuário (configuração) -->
-      <div class="sec" style="margin-top:24px">⚙️ Valor Mensal por Usuário</div>
-      <div style="background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.15);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--accent);margin-bottom:12px">
-        💡 Defina o valor de cada usuário. É usado como referência em todos os meses.
-      </div>
-      <div id="finUserList">
-        <div class="loading-spinner" style="margin:30px auto"></div>
+      <!-- Mensalidade do mês -->
+      <div class="sec" style="margin-top:8px">💲 Mensalidade do Mês</div>
+      <div class="mens-card">
+        <div class="mens-label">Valor cobrado neste mês</div>
+        <div class="mens-input-wrap">
+          <span class="mens-prefix">R$</span>
+          <input class="mens-input" id="mensInput" type="number" min="0" step="0.01"
+            placeholder="0,00" oninput="salvarMensalidade()">
+        </div>
+        <div class="mens-hint">Este valor será usado para calcular o total de todos os usuários ativos.</div>
       </div>
 
     </div>
@@ -872,12 +884,16 @@ async function renderFinancas() {
   } catch(e) { _pagamentos = {}; }
 
   // Resumo
-  const comValor    = ativos.filter(u=>u.valorMensal&&Number(u.valorMensal)>0);
-  const pagos       = comValor.filter(u=>_pagamentos[u.id]);
-  const pendentes   = comValor.filter(u=>!_pagamentos[u.id]);
-  const totalPago   = pagos.reduce((s,u)=>s+Number(u.valorMensal||0),0);
-  const totalPend   = pendentes.reduce((s,u)=>s+Number(u.valorMensal||0),0);
-  const pct         = comValor.length ? Math.round((pagos.length/comValor.length)*100) : 0;
+  const mensalidade = Number(_pagamentos._mensalidade||0);
+  const pagos       = ativos.filter(u=>_pagamentos[u.id]);
+  const pendentes   = ativos.filter(u=>!_pagamentos[u.id]);
+  const totalPago   = pagos.length    * mensalidade;
+  const totalPend   = pendentes.length * mensalidade;
+  const pct         = ativos.length ? Math.round((pagos.length/ativos.length)*100) : 0;
+
+  // Preenche campo de mensalidade
+  const mensInput = document.getElementById('mensInput');
+  if (mensInput && !mensInput.matches(':focus')) mensInput.value = mensalidade||'';
 
   document.getElementById('finQtdPago').textContent      = pagos.length;
   document.getElementById('finQtdPend').textContent      = pendentes.length;
@@ -890,7 +906,7 @@ async function renderFinancas() {
   if (!ativos.length) { pagList.innerHTML='<div class="fin-empty">Nenhum usuário ativo.</div>'; }
   else {
     // Pendentes primeiro, depois pagos
-    const ordenados = [...pendentes, ...pagos];
+    const ordenados = [...pendentes, ...pagos]; // pendentes primeiro
     pagList.innerHTML = ordenados.map(u => {
       const color   = avatarColor(u.nome);
       const initial = (u.nome||'?').charAt(0).toUpperCase();
@@ -903,7 +919,7 @@ async function renderFinancas() {
           ${avatarHtml}
           <div class="pag-info">
             <div class="pag-nome">${u.nome||u.email||'—'}</div>
-            <div class="pag-valor">${formatMoney(u.valorMensal||0)}/mês</div>
+            <div class="pag-valor">${mensalidade > 0 ? formatMoney(mensalidade)+'/mês' : '—'}</div>
           </div>
           <button class="pag-btn ${pago?'btn-pago':'btn-pendente'}"
             data-uid="${u.id}" onclick="togglePagamento(this)">
@@ -913,29 +929,6 @@ async function renderFinancas() {
     }).join('');
   }
 
-  // Lista de valores (configuração)
-  const userList = document.getElementById('finUserList');
-  if (!ativos.length) { userList.innerHTML='<div class="fin-empty">Nenhum usuário ativo.</div>'; return; }
-  userList.innerHTML = ativos.map(u => {
-    const color   = avatarColor(u.nome);
-    const initial = (u.nome||'?').charAt(0).toUpperCase();
-    const avatarHtml = u.foto
-      ? `<div class="pag-avatar"><img src="${u.foto}" alt="${initial}" onerror="this.parentElement.innerHTML='${initial}';this.parentElement.style.background='${color}'"></div>`
-      : `<div class="pag-avatar" style="background:${color}">${initial}</div>`;
-    return `
-      <div class="fin-user-row">
-        ${avatarHtml}
-        <div class="fin-user-info">
-          <div class="fin-user-name">${u.nome||u.email||'—'}</div>
-          <div class="fin-user-exp" style="font-size:11px;color:var(--muted)">valor mensal</div>
-        </div>
-        <div class="fin-valor-wrap">
-          <input class="fin-valor-input" type="number" min="0" step="0.01"
-            placeholder="0,00" value="${u.valorMensal||''}"
-            data-uid="${u.id}" onchange="salvarValor(this)">
-        </div>
-      </div>`;
-  }).join('');
 }
 
 window.togglePagamento = async function(btn) {
@@ -948,14 +941,22 @@ window.togglePagamento = async function(btn) {
   renderFinancas();
 };
 
-window.salvarValor = async function(input) {
-  const uid = input.getAttribute('data-uid');
-  const val = parseFloat(input.value)||0;
-  await updateDoc(doc(db,'usuarios',uid),{valorMensal:val});
-  showToast('💰 Valor salvo!');
-  const u = _allUsers.find(u=>u.id===uid);
-  if (u) u.valorMensal = val;
-  renderFinancas();
+window.salvarMensalidade = async function() {
+  const val = parseFloat(document.getElementById('mensInput').value)||0;
+  const key = mesKey();
+  await setDoc(doc(db,'pagamentos',key), { ..._pagamentos, _mensalidade: val });
+  _pagamentos._mensalidade = val;
+  // Recalcula totais
+  const ativos   = _allUsers.filter(u=>u.status==='ativo');
+  const comPag   = ativos.filter(u=>u.id!=='_mensalidade');
+  const pagos    = comPag.filter(u=>_pagamentos[u.id]);
+  const pendentes= comPag.filter(u=>!_pagamentos[u.id]);
+  const totalPago= pagos.length    * val;
+  const totalPend= pendentes.length * val;
+  const pct      = comPag.length ? Math.round((pagos.length/comPag.length)*100) : 0;
+  document.getElementById('finTotalRecebido').textContent = formatMoney(totalPago);
+  document.getElementById('finTotalPend').textContent     = formatMoney(totalPend);
+  document.getElementById('finTxPag').textContent         = pct + '%';
 };
 
 // ── INIT ──────────────────────────────────────────
