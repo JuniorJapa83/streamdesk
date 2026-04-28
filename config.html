@@ -102,19 +102,26 @@
 </style>
 </head>
 <body>
+<script>(function(){var c=JSON.parse(localStorage.getItem('streamdesk_config')||'{}');if(c.darkMode!==true)document.body.classList.add('light');})()</script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 const _app  = initializeApp({apiKey:"AIzaSyAGHvkDpeSbCTriZCvRf-jJ6z8PQSSWLHI",authDomain:"streamdesk-5350d.firebaseapp.com",projectId:"streamdesk-5350d",storageBucket:"streamdesk-5350d.firebasestorage.app",messagingSenderId:"36684694847",appId:"1:36684694847:web:0f6f3a27933e3d84cfff8a"});
 const _auth = getAuth(_app);
-onAuthStateChanged(_auth, function(user) { if (!user) location.href='login.html'; });
+const _db   = getFirestore(_app);
 window._firebaseAuth = _auth;
-</script>
-<script>
-(function(){
-  var cfg = JSON.parse(localStorage.getItem('streamdesk_config') || '{}');
-  if (cfg.darkMode !== true) document.body.classList.add('light');
-})();
+window._firebaseDB   = _db;
+onAuthStateChanged(_auth, function(user) {
+  if (!user) { location.href='login.html'; return; }
+  document.getElementById('cfgNome').value     = user.displayName || '';
+  document.getElementById('cfgEmail').value    = user.email || '';
+  document.getElementById('cfgNome').readOnly  = true;
+  document.getElementById('cfgEmail').readOnly = true;
+  document.getElementById('cfgNome').style.color  = 'var(--muted)';
+  document.getElementById('cfgEmail').style.color = 'var(--muted)';
+  window._currentUser = user;
+});
 </script>
 
 <div class="saved-toast" id="toast">✓ Salvo!</div>
@@ -142,11 +149,7 @@ window._firebaseAuth = _auth;
         <input class="row-input" id="cfgEmail" placeholder="seu@email.com" type="email" onchange="saveConfig()">
       </div>
     </div>
-    <div class="btn-row btn-accent" onclick="openModal('ovSenha')">
-      <div class="row-icon">🔐</div>
-      <div class="row-body"><div class="row-label">Alterar Senha</div></div>
-      <div class="row-arrow">›</div>
-    </div>
+
   </div>
 
   <!-- APARÊNCIA -->
@@ -411,8 +414,12 @@ function salvarSenha() {
 }
 
 function exportCSV() {
-  var clientes = JSON.parse(localStorage.getItem(CLIENT_KEY) || '[]');
-  if (!clientes.length) { alert('Nenhum cliente para exportar!'); return; }
+  if (!window._currentUser || !window._firebaseDB) { alert('Aguarde o carregamento!'); return; }
+  var db = window._firebaseDB, uid = window._currentUser.uid;
+  import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js").then(function(fs) {
+    fs.getDocs(fs.collection(db,'usuarios',uid,'clientes')).then(function(snap) {
+      var clientes = snap.docs.map(function(d){return d.data();});
+      if (!clientes.length) { alert('Nenhum cliente para exportar!'); return; }
   var rows = [['Nome','Servidor','Plano','Vencimento','País','Contato','Observações']];
   clientes.forEach(function(c) {
     var venc = c.vencimento ? c.vencimento.split('-').reverse().join('/') : '';
@@ -421,11 +428,13 @@ function exportCSV() {
   var csv = '\uFEFF' + rows.map(function(r) {
     return r.map(function(v) { return '"' + String(v).replace(/"/g,'""') + '"'; }).join(',');
   }).join('\n');
-  var blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
-  var a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'clientes_streamdesk.csv';
-  a.click();
+      var blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'clientes_streamdesk.csv';
+      a.click();
+    });
+  });
 }
 
 function enviarChamado() {
@@ -451,9 +460,7 @@ function doLogout() {
   if (!confirm('Deseja sair do StreamDesk?')) return;
   if (window._firebaseAuth) {
     window._firebaseAuth.signOut().then(function(){ location.href = 'login.html'; });
-  } else {
-    location.href = 'login.html';
-  }
+  } else { location.href = 'login.html'; }
 }
 
 loadPage();
