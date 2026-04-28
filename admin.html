@@ -4,8 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>StreamDesk — Admin</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="theme.css">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg:#080b12;--surface:#0e1220;--card:#131825;--card2:#161c2c;
@@ -21,11 +20,11 @@
   .login-screen::before{content:'';position:fixed;top:-100px;right:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(0,212,255,.08) 0%,transparent 70%);pointer-events:none}
   .login-screen::after{content:'';position:fixed;bottom:-80px;left:-80px;width:300px;height:300px;background:radial-gradient(circle,rgba(167,139,250,.06) 0%,transparent 70%);pointer-events:none}
   .admin-badge{display:flex;align-items:center;gap:8px;background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.2);border-radius:50px;padding:6px 16px;font-size:12px;color:var(--purple);font-weight:700;margin-bottom:24px;letter-spacing:1px;text-transform:uppercase}
-  .login-logo{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;letter-spacing:-1px;margin-bottom:6px}
+  .login-logo{font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:800;letter-spacing:-1px;margin-bottom:6px}
   .login-logo span{color:var(--accent)}
   .login-sub{font-size:14px;color:var(--muted);margin-bottom:32px}
   .login-card{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:28px 24px;width:100%;max-width:360px}
-  .login-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:20px}
+  .login-title{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:800;margin-bottom:20px}
   .fg{margin-bottom:14px}
   .fl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;display:block;font-weight:600}
   .fi-wrap{position:relative}
@@ -35,7 +34,7 @@
   .fi-icon{position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--muted);cursor:pointer}
   .err{display:none;background:rgba(255,59,92,.08);border:1px solid rgba(255,59,92,.2);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--red);margin-bottom:14px;align-items:center;gap:8px}
   .err.show{display:flex}
-  .btn-primary{width:100%;background:var(--accent);color:#000;border:none;border-radius:12px;padding:14px;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;cursor:pointer;transition:all .2s;margin-top:4px}
+  .btn-primary{width:100%;background:var(--accent);color:#000;border:none;border-radius:12px;padding:14px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;cursor:pointer;transition:all .2s;margin-top:4px}
   .btn-primary:active{transform:scale(.97)}
 
   /* ── APP ── */
@@ -46,7 +45,7 @@
   .header{position:sticky;top:0;z-index:50;background:rgba(8,11,18,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
   .header-left{display:flex;align-items:center;gap:10px}
   .admin-pill{background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.2);border-radius:50px;padding:3px 10px;font-size:10px;color:var(--purple);font-weight:700;letter-spacing:.5px}
-  .page-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:800}
+  .page-title{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:800}
   .page-title span{color:var(--accent)}
   .logout-btn{background:rgba(255,59,92,.1);border:none;color:var(--red);border-radius:8px;padding:7px 12px;font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer}
   .live-dot{display:inline-flex;align-items:center;gap:5px;font-size:10px;color:var(--green);font-weight:700}
@@ -77,7 +76,7 @@
   .stat-card.a::before{background:var(--green)}.stat-card.a{border-color:rgba(0,224,150,.15)}
   .stat-card.p::before{background:var(--yellow)}.stat-card.p{border-color:rgba(255,187,0,.15)}
   .stat-card.b::before{background:var(--red)}.stat-card.b{border-color:rgba(255,59,92,.15)}
-  .stat-num{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;line-height:1;margin-bottom:4px}
+  .stat-num{font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:800;line-height:1;margin-bottom:4px}
   .stat-card.a .stat-num{color:var(--green)}
   .stat-card.p .stat-num{color:var(--yellow)}
   .stat-card.b .stat-num{color:var(--red)}
@@ -99,10 +98,10 @@
   @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
   .card-main{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;transition:background .2s}
   .card-main:active{background:var(--card2)}
-  .user-avatar{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;font-family:'Syne',sans-serif;flex-shrink:0;color:#000;overflow:hidden}
+  .user-avatar{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;font-family:'Space Grotesk',sans-serif;flex-shrink:0;color:#000;overflow:hidden}
   .user-avatar img{width:100%;height:100%;object-fit:cover;border-radius:12px}
   .user-info{flex:1;min-width:0}
-  .user-name{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .user-name{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .user-email{font-size:11px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .status-pill{font-size:10px;font-weight:700;padding:3px 9px;border-radius:50px;white-space:nowrap;flex-shrink:0}
   .s-ativo{background:rgba(0,224,150,.12);color:var(--green)}
@@ -132,7 +131,7 @@
 
   /* ── QUICK RENEW ── */
   .quick-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
-  .q-btn{padding:10px 6px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);color:var(--text);font-size:12px;font-weight:700;font-family:'Syne',sans-serif;cursor:pointer;transition:all .2s;text-align:center}
+  .q-btn{padding:10px 6px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);color:var(--text);font-size:12px;font-weight:700;font-family:'Space Grotesk',sans-serif;cursor:pointer;transition:all .2s;text-align:center}
   .q-btn:active{transform:scale(.95)}
   .q-btn.selected{border-color:var(--accent);background:rgba(0,212,255,.1);color:var(--accent)}
 
@@ -177,7 +176,7 @@
   .fin-card.red::before{background:var(--red)}.fin-card.red{border-color:rgba(255,59,92,.15)}
   .fin-card.purple::before{background:var(--purple)}.fin-card.purple{border-color:rgba(167,139,250,.15)}
   .fin-card-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
-  .fin-card-val{font-family:'Syne',sans-serif;font-size:22px;font-weight:800}
+  .fin-card-val{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:800}
   .fin-card.green .fin-card-val{color:var(--green)}
   .fin-card.yellow .fin-card-val{color:var(--yellow)}
   .fin-card.red .fin-card-val{color:var(--red)}
@@ -185,19 +184,19 @@
   .fin-card-sub{font-size:11px;color:var(--muted);margin-top:3px}
 
   .fin-user-row{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:8px}
-  .fin-avatar{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;font-family:'Syne',sans-serif;flex-shrink:0;color:#000;overflow:hidden}
+  .fin-avatar{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;font-family:'Space Grotesk',sans-serif;flex-shrink:0;color:#000;overflow:hidden}
   .fin-avatar img{width:100%;height:100%;object-fit:cover;border-radius:10px}
   .fin-user-info{flex:1;min-width:0}
   .fin-user-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .fin-user-exp{font-size:11px;color:var(--muted);margin-top:2px}
   .fin-valor-wrap{text-align:right;flex-shrink:0}
-  .fin-valor{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--green)}
-  .fin-valor-input{width:80px;background:var(--card2);border:1.5px solid var(--border);border-radius:8px;padding:5px 8px;color:var(--text);font-size:13px;font-family:'Syne',sans-serif;font-weight:700;outline:none;text-align:right;transition:border .2s}
+  .fin-valor{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:800;color:var(--green)}
+  .fin-valor-input{width:80px;background:var(--card2);border:1.5px solid var(--border);border-radius:8px;padding:5px 8px;color:var(--text);font-size:13px;font-family:'Space Grotesk',sans-serif;font-weight:700;outline:none;text-align:right;transition:border .2s}
   .fin-valor-input:focus{border-color:var(--accent)}
 
   .fin-total-bar{background:var(--card);border:1px solid rgba(0,224,150,.2);border-radius:14px;padding:16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
   .fin-total-label{font-size:13px;color:var(--muted)}
-  .fin-total-val{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--green)}
+  .fin-total-val{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;color:var(--green)}
 
   .fin-empty{text-align:center;padding:40px 20px;color:var(--muted);font-size:13px}
 
@@ -206,14 +205,14 @@
   .mes-nav{display:flex;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 16px;margin-bottom:12px}
   .mes-btn{background:var(--card2);border:1px solid var(--border);border-radius:8px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:var(--text);transition:all .2s;flex-shrink:0}
   .mes-btn:active{transform:scale(.9)}
-  .mes-label{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;text-align:center}
+  .mes-label{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:800;text-align:center}
   .mes-label span{display:block;font-size:10px;color:var(--muted);font-weight:400;font-family:'DM Sans',sans-serif;text-transform:uppercase;letter-spacing:.5px;margin-top:1px}
 
   /* ── PAGAMENTO ROW ── */
   .pag-row{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:8px;transition:border-color .2s}
   .pag-row.pago{border-color:rgba(0,224,150,.25);background:rgba(0,224,150,.03)}
   .pag-row.pendente{border-color:rgba(255,187,0,.2)}
-  .pag-avatar{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;font-family:'Syne',sans-serif;flex-shrink:0;color:#000;overflow:hidden}
+  .pag-avatar{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;font-family:'Space Grotesk',sans-serif;flex-shrink:0;color:#000;overflow:hidden}
   .pag-avatar img{width:100%;height:100%;object-fit:cover;border-radius:10px}
   .pag-info{flex:1;min-width:0}
   .pag-nome{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -226,7 +225,7 @@
   /* ── RESUMO PAGAMENTO ── */
   .pag-resumo{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
   .pag-res-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 10px;text-align:center}
-  .pag-res-num{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:3px}
+  .pag-res-num{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;margin-bottom:3px}
   .pag-res-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
   .pag-res-card.green{border-color:rgba(0,224,150,.2)}.pag-res-card.green .pag-res-num{color:var(--green)}
   .pag-res-card.yellow{border-color:rgba(255,187,0,.2)}.pag-res-card.yellow .pag-res-num{color:var(--yellow)}
@@ -237,8 +236,8 @@
   .mens-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;font-weight:600}
   .mens-input-wrap{display:flex;align-items:center;background:var(--card2);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;transition:border .2s;margin-bottom:8px}
   .mens-input-wrap:focus-within{border-color:var(--accent)}
-  .mens-prefix{padding:0 14px;font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--accent);flex-shrink:0}
-  .mens-input{flex:1;background:none;border:none;outline:none;color:var(--text);font-family:'Syne',sans-serif;font-size:22px;font-weight:800;padding:12px 14px 12px 0}
+  .mens-prefix{padding:0 14px;font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;color:var(--accent);flex-shrink:0}
+  .mens-input{flex:1;background:none;border:none;outline:none;color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:800;padding:12px 14px 12px 0}
   .mens-hint{font-size:11px;color:var(--muted);line-height:1.5}
   /* ── MODAIS ── */
   .overlay{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:200;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .3s}
@@ -246,11 +245,11 @@
   .modal{background:var(--surface);border-radius:24px 24px 0 0;padding:24px 20px 40px;width:100%;max-height:88vh;overflow-y:auto;transform:translateY(100%);transition:transform .35s cubic-bezier(.32,.72,0,1);border-top:1px solid var(--border)}
   .overlay.open .modal{transform:translateY(0)}
   .mhandle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 20px}
-  .mtitle{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:6px}
+  .mtitle{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;margin-bottom:6px}
   .msub{font-size:13px;color:var(--muted);margin-bottom:20px}
   .mfi{width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border .2s}
   .mfi:focus{border-color:var(--accent)}
-  .btn-save{width:100%;background:var(--accent);color:#000;border:none;border-radius:12px;padding:14px;font-family:'Syne',sans-serif;font-weight:700;font-size:16px;cursor:pointer;margin-top:8px}
+  .btn-save{width:100%;background:var(--accent);color:#000;border:none;border-radius:12px;padding:14px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;cursor:pointer;margin-top:8px}
   .btn-save:active{transform:scale(.97)}
   .btn-cancel{width:100%;background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:12px;padding:12px;font-family:'DM Sans',sans-serif;font-size:15px;cursor:pointer;margin-top:8px}
 
@@ -431,7 +430,7 @@
         </div>
         <div style="text-align:right">
           <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">Pendente</div>
-          <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--yellow)" id="finTotalPend">R$ 0,00</div>
+          <div style="font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;color:var(--yellow)" id="finTotalPend">R$ 0,00</div>
         </div>
       </div>
 
@@ -487,9 +486,9 @@
   <div class="modal" style="padding:28px 20px 40px">
     <div class="mhandle"></div>
     <div style="font-size:32px;text-align:center;margin-bottom:12px">🗑️</div>
-    <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;text-align:center;margin-bottom:10px">Excluir Usuário</div>
+    <div style="font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:800;text-align:center;margin-bottom:10px">Excluir Usuário</div>
     <div id="delMsg" style="font-size:14px;color:var(--muted);text-align:center;margin-bottom:24px;line-height:1.5"></div>
-    <button onclick="confirmDel()" style="width:100%;background:var(--red);color:#fff;border:none;border-radius:12px;padding:14px;font-family:'Syne',sans-serif;font-weight:700;font-size:16px;cursor:pointer;margin-bottom:10px">Sim, excluir</button>
+    <button onclick="confirmDel()" style="width:100%;background:var(--red);color:#fff;border:none;border-radius:12px;padding:14px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;cursor:pointer;margin-bottom:10px">Sim, excluir</button>
     <button onclick="closeModal('ovDel')" style="width:100%;background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:12px;padding:12px;font-family:'DM Sans',sans-serif;font-size:15px;cursor:pointer">Cancelar</button>
   </div>
 </div>
