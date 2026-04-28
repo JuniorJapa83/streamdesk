@@ -691,7 +691,7 @@ function render(users) {
   document.getElementById('cPend').textContent     = users.filter(u=>u.status==='pendente').length;
   document.getElementById('cBloq').textContent     = users.filter(u=>u.status==='bloqueado').length;
 
-  const expirando = users.filter(u=>u.status==='ativo' && (()=>{ const d=daysUntil(u.expiracao); return d!==null&&d>=0&&d<=7; })());
+  const expirando = users.filter(u=>{ if(u.status!=='ativo') return false; const d=daysUntil(u.expiracao); return d!==null&&d>=0&&d<=7; });
   const pendentes = users.filter(u=>u.status==='pendente');
   const alerts = [];
   if (pendentes.length) alerts.push(pendentes.length+' usuário(s) aguardando pagamento');
