@@ -491,32 +491,34 @@ function criarOverlayAviso() {
   });
 }
 
+// Flag global — persiste enquanto a aba estiver aberta
+// Mesmo navegando entre páginas e voltando, essa flag impede re-exibição
+let _avisoJaMostrado = false;
+
 async function checkAviso(user) {
+  // Se já mostrou nessa sessão de aba, não mostra de novo
+  if (_avisoJaMostrado) return;
+
   try {
     const snap = await getDoc(doc(db, 'config', 'aviso'));
     if (!snap.exists()) return;
     const data = snap.data();
     if (!data.ativo || !data.texto) return;
 
-    const freq    = data.frequencia || 'uma';
-    const key     = 'aviso_visto_' + (data.atualizadoEm || 'v1') + '_' + user.uid;
-    const sessKey = 'aviso_sessao_' + (data.atualizadoEm || 'v1') + '_' + user.uid;
+    const freq = data.frequencia || 'uma';
+    const key  = 'aviso_visto_' + (data.atualizadoEm || 'v1') + '_' + user.uid;
 
-    // Já viu nessa sessão de login? Não mostra mais (vale para qualquer frequência)
-    if (localStorage.getItem(sessKey)) return;
-
-    // Modo "uma vez": não mostra se já fechou o aviso antes
+    // Modo "uma vez": não mostra se já foi fechado anteriormente
     if (freq === 'uma' && localStorage.getItem(key)) return;
+
+    // Marca na memória — bloqueia qualquer nova chamada nessa sessão
+    _avisoJaMostrado = true;
 
     criarOverlayAviso();
     document.getElementById('avisoBoxBody').textContent = data.texto;
     document.getElementById('avisoOverlay').classList.add('show');
     window._avisoKey  = key;
     window._avisoFreq = freq;
-    window._avisoSessKey = sessKey;
-
-    // Marca como visto nessa sessão IMEDIATAMENTE
-    localStorage.setItem(sessKey, '1');
   } catch(e) { console.error('Aviso erro:', e); }
 }
 
@@ -575,19 +577,9 @@ onAuthStateChanged(auth, async function(user) {
   await loadAndRender(user);
 });
 
-document.addEventListener('visibilitychange', function() {
-  if (document.visibilityState === 'visible') {
-    var u = auth.currentUser;
-    if (u) loadAndRender(u);
-  }
-});
 
-// Limpa chaves de sessão de aviso ao fechar o navegador/aba
-window.addEventListener('beforeunload', function() {
-  Object.keys(localStorage).forEach(function(k) {
-    if (k.startsWith('aviso_sessao_')) localStorage.removeItem(k);
-  });
-});
+
+
 
 function getWAMsg(nome, plataforma, vencimento, config) {
   var t = today();
