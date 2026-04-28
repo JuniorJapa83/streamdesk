@@ -539,9 +539,21 @@ function render(clientes, servidores, config) {
   }
   document.getElementById('attentionList').innerHTML = urgent.map(function(c) {
     var isHoje = c.vencimento===t;
-    var cfgStr = JSON.stringify(config).replace(/'/g,"\'");
-    return '<div class="attention-card '+(isHoje?'hoje':'amanha')+'"><div class="att-row1"><div class="att-name">'+(c.pais||'')+" "+c.nome+'</div><span class="att-badge '+(isHoje?'badge-hoje':'badge-amanha')+'">'+(isHoje?'Vence Hoje':'Vence Amanhã')+'</span></div><div class="att-row2"><div class="att-info"><span class="att-chip">'+c.plataforma+'</span><span class="att-chip">'+c.plano+'</span></div><button class="wa-btn" onclick="sendWA(''+c.nome+'',''+c.plataforma+'',''+c.vencimento+'',''+(c.contato||'')+'')">📲 WhatsApp</button></div></div>';
+    return '<div class="attention-card '+(isHoje?'hoje':'amanha')+'">' +
+      '<div class="att-row1"><div class="att-name">'+(c.pais||'')+' '+c.nome+'</div>' +
+      '<span class="att-badge '+(isHoje?'badge-hoje':'badge-amanha')+'">'+(isHoje?'Vence Hoje':'Vence Amanhã')+'</span></div>' +
+      '<div class="att-row2"><div class="att-info"><span class="att-chip">'+c.plataforma+'</span><span class="att-chip">'+c.plano+'</span></div>' +
+      '<button class="wa-btn" data-nome="'+c.nome+'" data-plat="'+c.plataforma+'" data-venc="'+c.vencimento+'" data-tel="'+(c.contato||'')+'">📲 WhatsApp</button>' +
+      '</div></div>';
   }).join('');
+
+  // Bind WhatsApp buttons
+  document.querySelectorAll('.wa-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var cfg = JSON.parse(localStorage.getItem('streamdesk_config')||'{}');
+      sendWA(btn.dataset.nome, btn.dataset.plat, btn.dataset.venc, btn.dataset.tel, cfg);
+    });
+  });
 }
 </script>
 
