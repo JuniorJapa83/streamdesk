@@ -264,6 +264,15 @@
   .mens-prefix{padding:0 14px;font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;color:var(--accent);flex-shrink:0}
   .mens-input{flex:1;background:none;border:none;outline:none;color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:800;padding:12px 14px 12px 0}
   .mens-hint{font-size:11px;color:var(--muted);line-height:1.5}
+
+  /* ── CLIENTES SUMMARY ── */
+  .cli-box{display:flex;gap:8px;margin-bottom:14px}
+  .cli-item{flex:1;text-align:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 6px}
+  .cli-num{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;line-height:1;margin-bottom:3px}
+  .cli-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.3px}
+  .cli-item.total .cli-num{color:var(--accent)}
+  .cli-item.ok    .cli-num{color:var(--green)}
+  .cli-loading{font-size:12px;color:var(--muted);text-align:center;padding:4px 0 12px}
   /* ── MODAIS ── */
   .overlay{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:200;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .3s}
   .overlay.open{opacity:1;pointer-events:all}
@@ -538,7 +547,7 @@
 <script type="module">
 import { initializeApp }    from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getFirestore, collection, onSnapshot,
-         doc, updateDoc, deleteDoc, setDoc, getDoc }
+         doc, updateDoc, deleteDoc, setDoc, getDoc, getDocs }
                             from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const FB = {
@@ -792,6 +801,7 @@ function renderCard(u, i, container) {
       </div>
       <div class="card-detail">
         <div class="detail-inner">
+          <div id="cli-${u.id}" class="cli-box"><div class="cli-loading">⏳ Carregando...</div></div>
           <div class="detail-grid">
             <div><div class="d-label">Cadastro</div><div class="d-val">${formatDate(u.dataCadastro)}</div></div>
             <div><div class="d-label">Expiração</div><div class="d-val">${u.expiracao?formatDate(u.expiracao):'—'}</div>${expWarn}</div>
@@ -817,7 +827,7 @@ function renderCard(u, i, container) {
       const open = detail.style.display==='block';
       document.querySelectorAll('.card-detail').forEach(d=>d.style.display='none');
       document.querySelectorAll('.card-chevron').forEach(c=>c.style.transform='rotate(0)');
-      if (!open) { detail.style.display='block'; chev.style.transform='rotate(90deg)'; }
+      if (!open) { detail.style.display='block'; chev.style.transform='rotate(90deg)'; loadClientesSummary(u.id); }
     });
     card.querySelectorAll('.det-btn').forEach(btn => {
       btn.addEventListener('click', async e => {
@@ -1061,6 +1071,26 @@ window.salvarMensalidade = async function() {
   document.getElementById('finTotalPend').textContent     = formatMoney(totalPend);
   document.getElementById('finTxPag').textContent         = pct + '%';
 };
+
+// ── CLIENTES SUMMARY ─────────────────────────────
+async function loadClientesSummary(uid) {
+  const el = document.getElementById('cli-' + uid);
+  if (!el || el.dataset.loaded) return;
+  el.dataset.loaded = '1';
+  try {
+    const snap = await getDocs(collection(db, 'usuarios', uid, 'clientes'));
+    const list = snap.docs.map(d => d.data());
+    const t     = new Date().toISOString().slice(0, 10);
+    const total = list.length;
+    const emDia = list.filter(c => c.vencimento >= t).length;
+    el.innerHTML = total === 0
+      ? '<div class="cli-loading">📭 Sem clientes cadastrados</div>'
+      : `<div class="cli-item total"><div class="cli-num">${total}</div><div class="cli-lbl">Clientes</div></div>
+         <div class="cli-item ok"><div class="cli-num">${emDia}</div><div class="cli-lbl">Em dia</div></div>`;
+  } catch(e) {
+    el.innerHTML = '<div class="cli-loading" style="color:var(--red)">Erro ao carregar</div>';
+  }
+}
 
 // ── INIT ──────────────────────────────────────────
 if (localStorage.getItem(SESSION_KEY)==='true') showApp();
