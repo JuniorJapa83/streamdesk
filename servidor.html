@@ -13,91 +13,70 @@
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:420px;margin:0 auto}
-
   .header{position:sticky;top:0;z-index:50;background:rgba(8,11,18,0.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:16px 20px;display:flex;align-items:center;justify-content:space-between}
   .page-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800}
   .page-title span{color:var(--accent)}
   .add-btn{display:flex;align-items:center;gap:6px;background:var(--accent);color:#000;border:none;border-radius:50px;padding:9px 18px;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:all .2s}
   .add-btn:active{transform:scale(.95)}
-
   .content{padding:16px 20px 110px;display:flex;flex-direction:column;gap:10px}
-
   .srv-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
-
   .card-main{display:flex;align-items:center;gap:12px;padding:16px;cursor:pointer;transition:background .2s;user-select:none}
   .card-main:active{background:var(--card2)}
-
   .dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
   .srv-info{flex:1;min-width:0}
   .srv-name{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;margin-bottom:4px}
   .status-pill{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:50px}
   .online{background:rgba(0,224,150,.12);color:var(--green)}
   .offline{background:rgba(255,59,92,.12);color:var(--red)}
-
   .mini{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
   .mini-row{display:flex;gap:6px}
   .chip{font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px;white-space:nowrap}
   .ct{background:rgba(0,212,255,.1);color:var(--accent)}
   .ck{background:rgba(0,224,150,.1);color:var(--green)}
   .cv{background:rgba(255,59,92,.1);color:var(--red)}
-
   .chev{color:var(--muted);font-size:16px;flex-shrink:0;margin-left:4px;transition:transform .3s;display:inline-block}
-
-  /* detail hidden by default */
   .card-detail{display:none;background:var(--card2);border-top:1px solid var(--border)}
   .detail-inner{padding:16px}
-
   .bar-wrap{margin-bottom:14px}
   .bar-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:6px}
   .bar-track{height:6px;background:var(--border);border-radius:50px;overflow:hidden}
   .bar-fill{height:100%;border-radius:50px}
-
   .drow{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-top:1px solid var(--border)}
   .drow-lbl{font-size:12px;color:var(--muted)}
   .drow-val{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--yellow)}
-
-  /* toggle */
   .tog-wrap{display:flex;align-items:center;gap:8px;cursor:pointer;padding:4px}
   .tog-txt{font-size:12px;font-weight:700}
   .tog-track{width:44px;height:24px;border-radius:50px;position:relative;border:1px solid var(--border);background:var(--card);transition:background .3s,border-color .3s}
   .tog-track.is-on{background:rgba(0,224,150,.15);border-color:var(--green)}
   .tog-thumb{position:absolute;top:4px;left:4px;width:14px;height:14px;border-radius:50%;background:var(--muted);transition:left .3s,background .3s}
   .tog-track.is-on .tog-thumb{left:24px;background:var(--green)}
-
   .dactions{display:flex;border-top:1px solid var(--border);margin-top:4px}
   .dact{flex:1;padding:13px;border:none;background:none;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
   .dact:active{opacity:.6}
   .dact.e{color:var(--accent);border-right:1px solid var(--border)}
   .dact.d{color:var(--red)}
-
   .empty{text-align:center;padding:60px 20px;color:var(--muted)}
   .empty-icon{font-size:48px;margin-bottom:12px}
   .empty-txt{font-size:14px;margin-bottom:20px}
   .empty-btn{background:var(--accent);color:#000;border:none;border-radius:50px;padding:12px 24px;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;cursor:pointer}
-
-  /* modal */
   .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:200;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .3s}
   .modal-overlay.open{opacity:1;pointer-events:all}
   .modal{background:var(--surface);border-radius:24px 24px 0 0;padding:24px 20px 40px;width:100%;max-height:88vh;overflow-y:auto;transform:translateY(100%);transition:transform .35s cubic-bezier(.32,.72,0,1);border-top:1px solid var(--border)}
   .modal-overlay.open .modal{transform:translateY(0)}
   .modal-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 20px}
   .modal-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:20px}
-
   .fg{margin-bottom:14px}
   .fl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;display:block}
   .fi{width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border .2s}
   .fi:focus{border-color:var(--accent)}
-
   .color-grid{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
   .color-opt{width:32px;height:32px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:all .2s;flex-shrink:0}
   .color-opt.sel{border-color:#fff;transform:scale(1.15)}
-
   .form-tog-row{display:flex;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px 14px;cursor:pointer}
-
   .save-btn{width:100%;background:var(--accent);color:#000;border:none;border-radius:12px;padding:14px;font-family:'Syne',sans-serif;font-weight:700;font-size:16px;cursor:pointer;margin-top:8px}
   .save-btn:active{transform:scale(.97)}
+  .save-btn:disabled{opacity:.6;cursor:not-allowed}
   .cancel-btn{width:100%;background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:12px;padding:12px;font-family:'DM Sans',sans-serif;font-size:15px;cursor:pointer;margin-top:8px}
-
   .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:420px;background:rgba(14,18,32,.97);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;padding:10px 0 24px;z-index:50}
   .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:4px 0}
   .nav-icon{font-size:20px;transition:transform .2s}
@@ -106,24 +85,13 @@
   .nav-item.active .nav-icon{transform:translateY(-2px)}
   .nav-dot{width:4px;height:4px;border-radius:50%;background:var(--accent);margin-top:-2px;opacity:0}
   .nav-item.active .nav-dot{opacity:1}
-
-  body.light {
-    --bg:#f0f4f8;--surface:#ffffff;--card:#ffffff;--card2:#f7f9fc;
-    --border:#e2e8f0;--text:#1a202c;--muted:#718096;
-  }
-  body.light .header { background: rgba(255,255,255,.96); }
-  body.light .bottom-nav { background: rgba(255,255,255,.97); }
+  .loading{text-align:center;padding:60px 20px;color:var(--muted);font-size:14px}
+  body.light{--bg:#f0f4f8;--surface:#ffffff;--card:#ffffff;--card2:#f7f9fc;--border:#e2e8f0;--text:#1a202c;--muted:#718096}
+  body.light .header{background:rgba(255,255,255,.96)}
+  body.light .bottom-nav{background:rgba(255,255,255,.97)}
 </style>
 </head>
 <body>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-const _app  = initializeApp({apiKey:"AIzaSyAGHvkDpeSbCTriZCvRf-jJ6z8PQSSWLHI",authDomain:"streamdesk-5350d.firebaseapp.com",projectId:"streamdesk-5350d",storageBucket:"streamdesk-5350d.firebasestorage.app",messagingSenderId:"36684694847",appId:"1:36684694847:web:0f6f3a27933e3d84cfff8a"});
-const _auth = getAuth(_app);
-onAuthStateChanged(_auth, function(user) { if (!user) location.href='login.html'; });
-</script>
-
 <script>(function(){var c=JSON.parse(localStorage.getItem('streamdesk_config')||'{}');if(c.darkMode!==true)document.body.classList.add('light');})()</script>
 
 <div class="header">
@@ -131,18 +99,18 @@ onAuthStateChanged(_auth, function(user) { if (!user) location.href='login.html'
   <button class="add-btn" onclick="openModal()">＋ Servidor</button>
 </div>
 
-<div class="content" id="srvList"></div>
+<div class="content" id="srvList"><div class="loading">⏳ Carregando...</div></div>
 
 <div class="bottom-nav">
-  <div class="nav-item " onclick="location.href='index.html'"><div class="nav-icon">🏠</div><div class="nav-label">Início</div><div class="nav-dot"></div></div>
-  <div class="nav-item " onclick="location.href='clientes.html'"><div class="nav-icon">👥</div><div class="nav-label">Clientes</div><div class="nav-dot"></div></div>
+  <div class="nav-item" onclick="location.href='index.html'"><div class="nav-icon">🏠</div><div class="nav-label">Início</div><div class="nav-dot"></div></div>
+  <div class="nav-item" onclick="location.href='clientes.html'"><div class="nav-icon">👥</div><div class="nav-label">Clientes</div><div class="nav-dot"></div></div>
   <div class="nav-item active"><div class="nav-icon">🖥️</div><div class="nav-label">Servidor</div><div class="nav-dot"></div></div>
-  <div class="nav-item " onclick="location.href='financas.html'"><div class="nav-icon">💰</div><div class="nav-label">Finanças</div><div class="nav-dot"></div></div>
-  <div class="nav-item " onclick="location.href='avisos.html'"><div class="nav-icon">📢</div><div class="nav-label">Avisos</div><div class="nav-dot"></div></div>
-  <div class="nav-item " onclick="location.href='config.html'"><div class="nav-icon">⚙️</div><div class="nav-label">Config.</div><div class="nav-dot"></div></div>
+  <div class="nav-item" onclick="location.href='financas.html'"><div class="nav-icon">💰</div><div class="nav-label">Finanças</div><div class="nav-dot"></div></div>
+  <div class="nav-item" onclick="location.href='avisos.html'"><div class="nav-icon">📢</div><div class="nav-label">Avisos</div><div class="nav-dot"></div></div>
+  <div class="nav-item" onclick="location.href='config.html'"><div class="nav-icon">⚙️</div><div class="nav-label">Config.</div><div class="nav-dot"></div></div>
 </div>
 
-<!-- DELETE CONFIRM MODAL -->
+<!-- DELETE MODAL -->
 <div class="modal-overlay" id="deleteOverlay">
   <div class="modal" style="padding:28px 20px 40px">
     <div class="modal-handle"></div>
@@ -154,12 +122,12 @@ onAuthStateChanged(_auth, function(user) { if (!user) location.href='login.html'
   </div>
 </div>
 
-<!-- MODAL -->
+<!-- FORM MODAL -->
 <div class="modal-overlay" id="modalOverlay" onclick="closeOutside(event)">
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-title" id="modalTitle">Novo Servidor</div>
-    <input type="hidden" id="editIdx">
+    <input type="hidden" id="editId">
     <div class="fg"><label class="fl">Nome do Servidor</label><input class="fi" id="fNome" placeholder="Ex: IPTV FIVE"></div>
     <div class="fg"><label class="fl">Custo por Crédito (R$)</label><input class="fi" id="fCusto" type="number" placeholder="0,00" step="0.01" min="0"></div>
     <div class="fg"><label class="fl">Cor de Identificação</label><div class="color-grid" id="colorGrid"></div></div>
@@ -171,295 +139,181 @@ onAuthStateChanged(_auth, function(user) { if (!user) location.href='login.html'
       </div>
       <input type="hidden" id="fStatus" value="online">
     </div>
-    <button class="save-btn" onclick="saveServidor()">✓ Salvar Servidor</button>
+    <button class="save-btn" id="btnSave" onclick="saveServidor()">✓ Salvar Servidor</button>
     <button class="cancel-btn" onclick="closeModal()">Cancelar</button>
   </div>
 </div>
 
-<script>
-const SRV_KEY    = 'iptv_servidores_v1';
-const CLIENT_KEY = 'iptv_clientes_v3';
-const COLORS     = ['#00d4ff','#a78bfa','#00e096','#ff3b5c','#ff7b00','#ffbb00','#f472b6','#34d399','#60a5fa','#fb923c','#e879f9','#e2e8f0'];
+<script type="module">
+import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+import { getFirestore, collection, doc, getDocs, addDoc, setDoc, deleteDoc, query }
+                           from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-let servidores = JSON.parse(localStorage.getItem(SRV_KEY) || '[]');
-let clientes = JSON.parse(localStorage.getItem(CLIENT_KEY) || '[]');
+const FB = {apiKey:"AIzaSyAGHvkDpeSbCTriZCvRf-jJ6z8PQSSWLHI",authDomain:"streamdesk-5350d.firebaseapp.com",projectId:"streamdesk-5350d",storageBucket:"streamdesk-5350d.firebasestorage.app",messagingSenderId:"36684694847",appId:"1:36684694847:web:0f6f3a27933e3d84cfff8a"};
+const app  = initializeApp(FB);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+
+const COLORS = ['#00d4ff','#a78bfa','#00e096','#ff3b5c','#ff7b00','#ffbb00','#f472b6','#34d399','#60a5fa','#fb923c','#e879f9','#e2e8f0'];
+let servidores = [], clientes = [], currentUser = null;
 let selectedColor = COLORS[0];
+let pendingDeleteId = null;
 
-function saveAll() { localStorage.setItem(SRV_KEY, JSON.stringify(servidores)); }
 function today() {
-  var d = new Date();
-  var y = d.getFullYear();
-  var m = String(d.getMonth()+1).padStart(2,'0');
-  var day = String(d.getDate()).padStart(2,'0');
+  var d=new Date(), y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,'0'), day=String(d.getDate()).padStart(2,'0');
   return y+'-'+m+'-'+day;
 }
 
-function getStats(nome) {
-  const list     = clientes.filter(c => c.plataforma === nome);
-  const total    = list.length;
-  const t        = today();
-  const vencidos = list.filter(c => c.vencimento < t).length;
-  const emDia    = total - vencidos;
-  const pct      = total > 0 ? Math.round((emDia / total) * 100) : 0;
-  return {total, vencidos, emDia, pct};
+function srvCol()    { return collection(db,'usuarios',currentUser.uid,'servidores'); }
+function clientCol() { return collection(db,'usuarios',currentUser.uid,'clientes'); }
+
+async function loadData() {
+  const [sSnap, cSnap] = await Promise.all([getDocs(srvCol()), getDocs(clientCol())]);
+  servidores = sSnap.docs.map(d=>({id:d.id,...d.data()}));
+  clientes   = cSnap.docs.map(d=>({id:d.id,...d.data()}));
+  render();
 }
 
-// ── render ──────────────────────────────────────────────
-function render() {
-  const el = document.getElementById('srvList');
+function getStats(nome) {
+  var list=clientes.filter(c=>c.plataforma===nome), t=today();
+  var total=list.length, vencidos=list.filter(c=>c.vencimento<t).length, emDia=total-vencidos;
+  return {total, vencidos, emDia, pct: total>0?Math.round((emDia/total)*100):0};
+}
 
-  if (!servidores.length) {
-    el.innerHTML = `<div class="empty"><div class="empty-icon">🖥️</div><div class="empty-txt">Nenhum servidor cadastrado ainda</div><button class="empty-btn" onclick="openModal()">＋ Adicionar Servidor</button></div>`;
+function render() {
+  var el=document.getElementById('srvList');
+  if(!servidores.length){
+    el.innerHTML='<div class="empty"><div class="empty-icon">🖥️</div><div class="empty-txt">Nenhum servidor cadastrado ainda</div><button class="empty-btn" onclick="openModal()">＋ Adicionar Servidor</button></div>';
     return;
   }
-
-  // Build each card as a real DOM node so event listeners bind correctly
-  el.innerHTML = '';
-
-  servidores.forEach(function(s, idx) {
-    const st       = getStats(s.nome);
-    const isOn     = s.status === 'online';
-    const barColor = st.pct >= 70 ? '#00e096' : st.pct >= 40 ? '#ffbb00' : '#ff3b5c';
-
-    // ── card wrapper
-    const card = document.createElement('div');
-    card.className = 'srv-card';
-    card.style.animationDelay = (idx * 0.07) + 's';
-
-    // ── always-visible top row
-    card.innerHTML = `
+  el.innerHTML='';
+  servidores.forEach(function(s,idx){
+    var st=getStats(s.nome), isOn=s.status==='online', barColor=st.pct>=70?'#00e096':st.pct>=40?'#ffbb00':'#ff3b5c';
+    var card=document.createElement('div');
+    card.className='srv-card';
+    card.innerHTML=`
       <div class="card-main">
         <div class="dot" style="background:${s.cor};box-shadow:0 0 8px ${s.cor}60"></div>
-        <div class="srv-info">
-          <div class="srv-name">${s.nome}</div>
-          <span class="status-pill ${isOn ? 'online' : 'offline'}">${isOn ? '● Online' : '● Offline'}</span>
-        </div>
-        <div class="mini">
-          <div class="mini-row"><span class="chip ct">${st.total} total</span></div>
-          <div class="mini-row">
-            <span class="chip ck">${st.emDia} ok</span>
-            <span class="chip cv">${st.vencidos} venc.</span>
-          </div>
-        </div>
+        <div class="srv-info"><div class="srv-name">${s.nome}</div><span class="status-pill ${isOn?'online':'offline'}">${isOn?'● Online':'● Offline'}</span></div>
+        <div class="mini"><div class="mini-row"><span class="chip ct">${st.total} total</span></div><div class="mini-row"><span class="chip ck">${st.emDia} ok</span><span class="chip cv">${st.vencidos} venc.</span></div></div>
         <span class="chev">›</span>
       </div>
-
-      <div class="card-detail">
-        <div class="detail-inner">
-          <div class="bar-wrap">
-            <div class="bar-labels">
-              <span>${st.vencidos} vencido${st.vencidos !== 1 ? 's' : ''}</span>
-              <span style="color:${barColor}">${st.pct}% em dia</span>
-            </div>
-            <div class="bar-track"><div class="bar-fill" style="width:${st.pct}%;background:${barColor}"></div></div>
-          </div>
-          <div class="drow">
-            <span class="drow-lbl">💸 Custo por crédito</span>
-            <span class="drow-val">R$ ${parseFloat(s.custo).toFixed(2)}</span>
-          </div>
-          <div class="drow">
-            <span class="drow-lbl">Status do servidor</span>
-            <div class="tog-wrap">
-              <span class="tog-txt" style="color:${isOn ? 'var(--green)' : 'var(--red)'}">${isOn ? 'Online' : 'Offline'}</span>
-              <div class="tog-track ${isOn ? 'is-on' : ''}"><div class="tog-thumb"></div></div>
-            </div>
-          </div>
-          <div class="dactions">
-            <button class="dact e">✏️ Editar</button>
-            <button class="dact d">🗑️ Excluir</button>
-          </div>
-        </div>
-      </div>`;
-
+      <div class="card-detail"><div class="detail-inner">
+        <div class="bar-wrap"><div class="bar-labels"><span>${st.vencidos} vencido${st.vencidos!==1?'s':''}</span><span style="color:${barColor}">${st.pct}% em dia</span></div><div class="bar-track"><div class="bar-fill" style="width:${st.pct}%;background:${barColor}"></div></div></div>
+        <div class="drow"><span class="drow-lbl">💸 Custo por crédito</span><span class="drow-val">R$ ${parseFloat(s.custo).toFixed(2)}</span></div>
+        <div class="drow"><span class="drow-lbl">Status do servidor</span><div class="tog-wrap"><span class="tog-txt" style="color:${isOn?'var(--green)':'var(--red)'}">${isOn?'Online':'Offline'}</span><div class="tog-track ${isOn?'is-on':''}"><div class="tog-thumb"></div></div></div></div>
+        <div class="dactions"><button class="dact e">✏️ Editar</button><button class="dact d">🗑️ Excluir</button></div>
+      </div></div>`;
     el.appendChild(card);
 
-    // ── grab internal elements AFTER appending
-    const mainRow  = card.querySelector('.card-main');
-    const detail   = card.querySelector('.card-detail');
-    const chev     = card.querySelector('.chev');
-    const togWrap  = card.querySelector('.tog-wrap');
-    const togTrack = card.querySelector('.tog-track');
-    const togThumb = card.querySelector('.tog-thumb');
-    const togTxt   = card.querySelector('.tog-txt');
-    const pill     = card.querySelector('.status-pill');
-    const btnEdit  = card.querySelector('.dact.e');
-    const btnDel   = card.querySelector('.dact.d');
+    var mainRow=card.querySelector('.card-main'), detail=card.querySelector('.card-detail');
+    var chev=card.querySelector('.chev'), togWrap=card.querySelector('.tog-wrap');
+    var togTrack=card.querySelector('.tog-track'), togTxt=card.querySelector('.tog-txt');
+    var pill=card.querySelector('.status-pill'), btnEdit=card.querySelector('.dact.e'), btnDel=card.querySelector('.dact.d');
 
-    // ── expand / collapse
-    mainRow.addEventListener('click', function() {
-      const isOpen = detail.style.display === 'block';
-
-      // close all
-      document.querySelectorAll('.card-detail').forEach(function(d) {
-        d.style.display = 'none';
-      });
-      document.querySelectorAll('.chev').forEach(function(c) {
-        c.style.transform = 'rotate(0deg)';
-      });
-
-      if (!isOpen) {
-        detail.style.display  = 'block';
-        chev.style.transform  = 'rotate(90deg)';
-      }
+    mainRow.addEventListener('click',function(){
+      var isOpen=detail.style.display==='block';
+      document.querySelectorAll('.card-detail').forEach(d=>d.style.display='none');
+      document.querySelectorAll('.chev').forEach(c=>c.style.transform='rotate(0deg)');
+      if(!isOpen){detail.style.display='block';chev.style.transform='rotate(90deg)';}
     });
 
-    // ── toggle online/offline (only on toggle area, not whole card)
-    togWrap.addEventListener('click', function(e) {
+    togWrap.addEventListener('click',async function(e){
       e.stopPropagation();
-      const nowOn = servidores[idx].status !== 'online';
-      // Block going offline if has active clients
-      if (!nowOn) {
-        const t = today();
-        const ativos = clientes.filter(function(c){ return c.plataforma === servidores[idx].nome && c.vencimento >= t; }).length;
-        if (ativos > 0) {
-          alert('⚠️ Não é possível colocar "' + servidores[idx].nome + '" offline pois há ' + ativos + ' cliente(s) ativo(s) neste servidor.');
-          return;
-        }
+      var nowOn=servidores[idx].status!=='online';
+      if(!nowOn){
+        var ativos=clientes.filter(c=>c.plataforma===servidores[idx].nome&&c.vencimento>=today()).length;
+        if(ativos>0){alert('⚠️ Não é possível colocar "'+servidores[idx].nome+'" offline pois há '+ativos+' cliente(s) ativo(s).');return;}
       }
-      servidores[idx].status = nowOn ? 'online' : 'offline';
-      saveAll();
-
-      // update toggle visual
-      if (nowOn) {
-        togTrack.classList.add('is-on');
-        togTxt.textContent  = 'Online';
-        togTxt.style.color  = 'var(--green)';
-        pill.textContent    = '● Online';
-        pill.className      = 'status-pill online';
-      } else {
-        togTrack.classList.remove('is-on');
-        togTxt.textContent  = 'Offline';
-        togTxt.style.color  = 'var(--red)';
-        pill.textContent    = '● Offline';
-        pill.className      = 'status-pill offline';
-      }
+      servidores[idx].status=nowOn?'online':'offline';
+      await setDoc(doc(db,'usuarios',currentUser.uid,'servidores',servidores[idx].id),{status:servidores[idx].status},{merge:true});
+      if(nowOn){togTrack.classList.add('is-on');togTxt.textContent='Online';togTxt.style.color='var(--green)';pill.textContent='● Online';pill.className='status-pill online';}
+      else{togTrack.classList.remove('is-on');togTxt.textContent='Offline';togTxt.style.color='var(--red)';pill.textContent='● Offline';pill.className='status-pill offline';}
     });
 
-    btnEdit.addEventListener('click', function(e) {
+    btnEdit.addEventListener('click',function(e){e.stopPropagation();openModalEdit(s);});
+    btnDel.addEventListener('click',function(e){
       e.stopPropagation();
-      openModal(idx);
+      if(st.total>0){alert('Não é possível excluir "'+s.nome+'" pois há '+st.total+' cliente(s) vinculado(s).');return;}
+      pendingDeleteId=s.id;
+      document.getElementById('deleteMsg').textContent='Deseja excluir o servidor "'+s.nome+'"?';
+      document.getElementById('deleteOverlay').classList.add('open');
     });
-
-    (function(nomeRef, totalRef) {
-      btnDel.addEventListener('click', function(e) {
-        e.stopPropagation();
-        if (totalRef > 0) {
-          alert('Nao e possivel excluir "' + nomeRef + '" pois ha ' + totalRef + ' cliente(s) vinculado(s). Migre ou remova os clientes antes.');
-          return;
-        }
-        pendingDeleteNome  = nomeRef;
-        pendingDeleteTotal = totalRef;
-        showDeleteConfirm(nomeRef, totalRef);
-      });
-    })(s.nome, st.total);
   });
 }
 
-let pendingDeleteNome  = null;
-let pendingDeleteTotal = 0;
-
-function showDeleteConfirm(nome, total) {
-  const msg = document.getElementById('deleteMsg');
-  msg.textContent = total > 0
-    ? '⚠️ "' + nome + '" tem ' + total + ' cliente(s) vinculado(s). Deseja excluir mesmo assim?'
-    : 'Deseja excluir o servidor "' + nome + '"?';
-  document.getElementById('deleteOverlay').classList.add('open');
-}
-
-function confirmDelete() {
-  if (!pendingDeleteNome) return;
-  servidores = servidores.filter(function(x) { return x.nome !== pendingDeleteNome; });
-  pendingDeleteNome  = null;
-  pendingDeleteTotal = 0;
-  saveAll();
+window.confirmDelete=async function(){
+  if(!pendingDeleteId)return;
+  await deleteDoc(doc(db,'usuarios',currentUser.uid,'servidores',pendingDeleteId));
+  pendingDeleteId=null;
   document.getElementById('deleteOverlay').classList.remove('open');
-  render();
+  await loadData();
+};
+window.cancelDelete=function(){pendingDeleteId=null;document.getElementById('deleteOverlay').classList.remove('open');};
+
+function buildColorGrid(sel){
+  selectedColor=sel;
+  document.getElementById('colorGrid').innerHTML=COLORS.map(c=>`<div class="color-opt ${c===sel?'sel':''}" style="background:${c}" onclick="selectColor('${c}')"></div>`).join('');
 }
+window.selectColor=function(c){selectedColor=c;buildColorGrid(c);};
+window.toggleFormStatus=function(){
+  var isOn=document.getElementById('fStatus').value!=='online';
+  document.getElementById('fStatus').value=isOn?'online':'offline';
+  document.getElementById('fStatusLabel').textContent=isOn?'🟢 Online':'🔴 Offline';
+  document.getElementById('fTogTrack').classList.toggle('is-on',isOn);
+};
 
-function cancelDelete() {
-  pendingDeleteNome  = null;
-  pendingDeleteTotal = 0;
-  document.getElementById('deleteOverlay').classList.remove('open');
-}
-
-// ── modal ────────────────────────────────────────────────
-function buildColorGrid(sel) {
-  selectedColor = sel;
-  document.getElementById('colorGrid').innerHTML = COLORS.map(c =>
-    `<div class="color-opt ${c === sel ? 'sel' : ''}" style="background:${c}" onclick="selectColor('${c}')"></div>`
-  ).join('');
-}
-
-function selectColor(c) { selectedColor = c; buildColorGrid(c); }
-
-function setFormToggle(isOn) {
-  const trk = document.getElementById('fTogTrack');
-  document.getElementById('fStatus').value       = isOn ? 'online' : 'offline';
-  document.getElementById('fStatusLabel').textContent = isOn ? '🟢 Online' : '🔴 Offline';
-  if (isOn) trk.classList.add('is-on'); else trk.classList.remove('is-on');
-}
-
-function toggleFormStatus() {
-  setFormToggle(document.getElementById('fStatus').value !== 'online');
-}
-
-function openModal(idx) {
-  // idx === undefined means NEW server; use -1 as sentinel
-  const isNew = idx === undefined;
-  const srv   = isNew ? null : servidores[idx];
-
-  document.getElementById('editIdx').value          = isNew ? '-1' : String(idx);
-  document.getElementById('modalTitle').textContent = isNew ? 'Novo Servidor' : 'Editar Servidor';
-  document.getElementById('fNome').value            = srv ? srv.nome  : '';
-  document.getElementById('fCusto').value           = srv ? srv.custo : '';
-  setFormToggle(srv ? srv.status === 'online' : true);
-  buildColorGrid(srv ? srv.cor : COLORS[0]);
+window.openModal=function(){
+  document.getElementById('editId').value='';
+  document.getElementById('modalTitle').textContent='Novo Servidor';
+  document.getElementById('fNome').value='';
+  document.getElementById('fCusto').value='';
+  document.getElementById('fStatus').value='online';
+  document.getElementById('fStatusLabel').textContent='🟢 Online';
+  document.getElementById('fTogTrack').classList.add('is-on');
+  buildColorGrid(COLORS[0]);
+  document.getElementById('modalOverlay').classList.add('open');
+};
+function openModalEdit(s){
+  document.getElementById('editId').value=s.id;
+  document.getElementById('modalTitle').textContent='Editar Servidor';
+  document.getElementById('fNome').value=s.nome;
+  document.getElementById('fCusto').value=s.custo;
+  document.getElementById('fStatus').value=s.status;
+  document.getElementById('fStatusLabel').textContent=s.status==='online'?'🟢 Online':'🔴 Offline';
+  document.getElementById('fTogTrack').classList.toggle('is-on',s.status==='online');
+  buildColorGrid(s.cor);
   document.getElementById('modalOverlay').classList.add('open');
 }
+window.closeModal=function(){document.getElementById('modalOverlay').classList.remove('open');};
+window.closeOutside=function(e){if(e.target===document.getElementById('modalOverlay'))closeModal();};
 
-function closeModal()    { document.getElementById('modalOverlay').classList.remove('open'); }
-function closeOutside(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); }
-
-function saveServidor() {
-  const nome  = document.getElementById('fNome').value.trim();
-  const custo = document.getElementById('fCusto').value;
-  if (!nome)             { alert('Informe o nome do servidor!'); return; }
-  if (custo === '' || isNaN(+custo)) { alert('Informe o custo do crédito!'); return; }
-
-  const data = {
-    nome,
-    custo:  parseFloat(custo),
-    cor:    selectedColor,
-    status: document.getElementById('fStatus').value,
-  };
-
-  const editIdx = parseInt(document.getElementById('editIdx').value);
-
-  if (editIdx >= 0) {
-    // editing existing
-    servidores[editIdx] = data;
-  } else {
-    // new server
-    servidores.push(data);
-  }
-
-  saveAll();
+window.saveServidor=async function(){
+  var nome=document.getElementById('fNome').value.trim();
+  var custo=document.getElementById('fCusto').value;
+  if(!nome){alert('Informe o nome do servidor!');return;}
+  if(custo===''||isNaN(+custo)){alert('Informe o custo do crédito!');return;}
+  var data={nome,custo:parseFloat(custo),cor:selectedColor,status:document.getElementById('fStatus').value};
+  var btn=document.getElementById('btnSave');
+  btn.disabled=true;btn.textContent='Salvando...';
+  var editId=document.getElementById('editId').value;
+  if(editId){await setDoc(doc(db,'usuarios',currentUser.uid,'servidores',editId),data);}
+  else{await addDoc(collection(db,'usuarios',currentUser.uid,'servidores'),data);}
+  btn.disabled=false;btn.textContent='✓ Salvar Servidor';
   closeModal();
-  render();
-}
+  await loadData();
+};
 
-// Reload clientes every time user returns to this page
-document.addEventListener('visibilitychange', function() {
-  if (document.visibilityState === 'visible') {
-    var cfg2 = JSON.parse(localStorage.getItem('streamdesk_config') || '{}');
-    if (cfg2.darkMode !== true) { document.body.classList.add('light'); }
-    else { document.body.classList.remove('light'); }
-    clientes = JSON.parse(localStorage.getItem(CLIENT_KEY) || '[]');
-    render();
-  }
+onAuthStateChanged(auth,async function(user){
+  if(!user){location.href='login.html';return;}
+  currentUser=user;
+  await loadData();
 });
 
-render();
+document.addEventListener('visibilitychange',function(){
+  if(document.visibilityState==='visible'&&currentUser)loadData();
+});
 </script>
 </body>
 </html>

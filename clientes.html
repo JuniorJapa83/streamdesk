@@ -6,161 +6,114 @@
 <title>StreamDesk — Clientes</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #080b12; --surface: #0e1220; --card: #131825; --card2: #161c2c;
-    --border: #1c2236; --accent: #00d4ff; --red: #ff3b5c; --yellow: #ffbb00;
-    --orange: #ff7b00; --green: #00e096; --purple: #a78bfa; --text: #e4e8f4; --muted: #5a6480; --radius: 16px;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; max-width: 420px; margin: 0 auto; overflow-x: hidden; }
-
-  .header { position: sticky; top: 0; z-index: 50; background: rgba(8,11,18,0.96); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); padding: 16px 20px 12px; }
-  .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-  .page-title { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; }
-  .page-title span { color: var(--accent); }
-  .total-badge { background: var(--card2); border: 1px solid var(--border); border-radius: 50px; padding: 5px 12px; font-size: 12px; color: var(--muted); }
-  .total-badge strong { color: var(--accent); font-family: 'Syne', sans-serif; }
-
-  .search-box { display: flex; align-items: center; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px 14px; gap: 10px; margin-bottom: 10px; transition: border 0.2s; }
-  .search-box:focus-within { border-color: var(--accent); }
-  .search-input { flex: 1; background: none; border: none; outline: none; color: var(--text); font-size: 14px; font-family: 'DM Sans', sans-serif; }
-  .search-input::placeholder { color: var(--muted); }
-
-  .filters { display: flex; gap: 7px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
-  .filters::-webkit-scrollbar { display: none; }
-  .filter-btn { flex-shrink: 0; background: var(--card); border: 1px solid var(--border); color: var(--muted); border-radius: 50px; padding: 6px 14px; font-size: 12px; font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; white-space: nowrap; }
-  .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #000; font-weight: 700; }
-
-  .server-filters { display: flex; gap: 7px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; margin-top: 8px; }
-  .server-filters::-webkit-scrollbar { display: none; }
-  .srv-btn { flex-shrink: 0; background: var(--card2); border: 1px solid var(--border); color: var(--muted); border-radius: 8px; padding: 5px 12px; font-size: 11px; font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; white-space: nowrap; }
-  .srv-btn.active { border-color: var(--purple); color: var(--purple); background: rgba(167,139,250,0.08); }
-
-  .content { padding: 14px 20px 120px; }
-
-  .section-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin: 16px 0 10px; display: flex; align-items: center; gap: 8px; }
-  .section-label::after { content:''; flex:1; height:1px; background: var(--border); }
-
-  .client-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 10px; overflow: hidden; transition: all 0.2s; animation: fadeUp 0.4s ease both; }
-  @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
-
-  .card-main { display: flex; align-items: stretch; cursor: pointer; padding: 14px 16px; gap: 12px; }
-  .card-main:active { background: var(--card2); }
-  .card-bar { width: 4px; border-radius: 4px; flex-shrink: 0; align-self: stretch; min-height: 50px; }
-  .bar-vencido { background: var(--red); } .bar-hoje { background: var(--yellow); } .bar-amanha { background: var(--orange); } .bar-em-dia { background: var(--green); }
-
-  .card-body { flex: 1; min-width: 0; }
-  .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 7px; }
-  .client-name { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px; }
-  .status-pill { font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 50px; white-space: nowrap; flex-shrink: 0; }
-  .pill-vencido { background: rgba(255,59,92,0.13); color: var(--red); }
-  .pill-hoje { background: rgba(255,187,0,0.13); color: var(--yellow); }
-  .pill-amanha { background: rgba(255,123,0,0.13); color: var(--orange); }
-  .pill-em-dia { background: rgba(0,224,150,0.1); color: var(--green); }
-
-  .card-mid { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
-  .chip { font-size: 11px; color: var(--muted); background: var(--card2); padding: 3px 9px; border-radius: 6px; }
-  .chip-obs { color: var(--purple); background: rgba(167,139,250,0.08); border: 1px solid rgba(167,139,250,0.15); }
-
-  .card-bot { display: flex; justify-content: space-between; align-items: center; }
-  .venc-info { font-size: 12px; color: var(--muted); }
-  .venc-info strong { color: var(--text); font-weight: 600; }
-  .card-chevron { color: var(--muted); font-size: 14px; align-self: center; margin-left: 4px; transition: transform 0.3s; }
-  .client-card.open .card-chevron { transform: rotate(90deg); }
-
-  .card-detail { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; background: var(--card2); }
-  .client-card.open .card-detail { max-height: 700px; border-top: 1px solid var(--border); }
-  .detail-inner { padding: 16px 20px; }
-
-  .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
-  .detail-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 3px; }
-  .detail-value { font-size: 14px; font-weight: 500; }
-
-  .detail-obs { background: var(--card); border: 1px solid rgba(167,139,250,0.2); border-radius: 10px; padding: 10px 14px; font-size: 13px; color: var(--purple); margin-bottom: 14px; }
-
-  .detail-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .det-btn { padding: 10px 8px; border: none; border-radius: 10px; font-size: 13px; font-weight: 600; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 5px; }
-  .det-btn:active { transform: scale(0.95); }
-  .btn-edit  { background: rgba(0,212,255,0.1);  color: var(--accent); }
-  .btn-del   { background: rgba(255,59,92,0.1);   color: var(--red); }
-  .btn-wa    { background: rgba(37,211,102,0.1);  color: #25d366; }
-  .btn-renew { background: rgba(255,187,0,0.12);  color: var(--yellow); grid-column: 1 / -1; font-size: 14px; padding: 12px; }
-
-  /* MODALS */
-  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.82); z-index: 200; display: flex; align-items: flex-end; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
-  .modal-overlay.open { opacity: 1; pointer-events: all; }
-  .modal { background: var(--surface); border-radius: 24px 24px 0 0; padding: 24px 20px 40px; width: 100%; max-height: 88vh; overflow-y: auto; transform: translateY(100%); transition: transform 0.35s cubic-bezier(.32,.72,0,1); border-top: 1px solid var(--border); }
-  .modal-overlay.open .modal { transform: translateY(0); }
-  .modal-handle { width: 40px; height: 4px; background: var(--border); border-radius: 2px; margin: 0 auto 20px; }
-  .modal-title { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; margin-bottom: 6px; }
-  .modal-sub { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
-
-  .form-group { margin-bottom: 14px; }
-  .form-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px; display: block; }
-  .form-input, .form-select { width: 100%; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 11px 14px; color: var(--text); font-size: 14px; font-family: 'DM Sans', sans-serif; outline: none; transition: border 0.2s; appearance: none; }
-  .form-input:focus, .form-select:focus { border-color: var(--accent); }
-  .form-select option { background: var(--card); }
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
-  .save-btn { width: 100%; background: var(--accent); color: #000; border: none; border-radius: 12px; padding: 14px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; cursor: pointer; margin-top: 8px; transition: all 0.2s; box-shadow: 0 4px 20px rgba(0,212,255,0.2); }
-  .save-btn:active { transform: scale(0.97); }
-  .renew-btn { width: 100%; background: var(--yellow); color: #000; border: none; border-radius: 12px; padding: 14px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; cursor: pointer; margin-top: 8px; transition: all 0.2s; box-shadow: 0 4px 20px rgba(255,187,0,0.2); }
-  .renew-btn:active { transform: scale(0.97); }
-  .cancel-btn { width: 100%; background: transparent; color: var(--muted); border: 1px solid var(--border); border-radius: 12px; padding: 12px; font-family: 'DM Sans', sans-serif; font-size: 15px; cursor: pointer; margin-top: 8px; }
-
-  .renew-info-box { background: var(--card); border: 1px solid rgba(255,187,0,0.25); border-radius: 12px; padding: 14px 16px; margin-bottom: 20px; }
-  .renew-info-name { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; margin-bottom: 4px; }
-  .renew-info-sub { font-size: 12px; color: var(--muted); }
-  .renew-info-sub b { color: var(--yellow); }
-
-  .empty { text-align: center; padding: 60px 20px; color: var(--muted); }
-  .empty-icon { font-size: 40px; margin-bottom: 12px; }
-
-  .pagination { display: flex; align-items: center; justify-content: space-between; padding: 14px 0 4px; gap: 12px; }
-  .page-btn { background: var(--card); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 9px 16px; font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.2s; }
-  .page-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-  .page-info { font-size: 12px; color: var(--muted); white-space: nowrap; }
-
-  .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 420px; background: rgba(14,18,32,0.97); backdrop-filter: blur(20px); border-top: 1px solid var(--border); display: flex; padding: 10px 0 24px; z-index: 50; }
-  .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; transition: all 0.2s; padding: 4px 0; }
-  .nav-icon { font-size: 20px; transition: transform 0.2s; }
-  .nav-label { font-size: 8px; color: var(--muted); font-weight: 500; }
-  .nav-item.active .nav-label { color: var(--accent); }
-  .nav-item.active .nav-icon { transform: translateY(-2px); }
-  .nav-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); margin-top: -2px; opacity: 0; }
-  .nav-item.active .nav-dot { opacity: 1; }
-
-  .fab { position: fixed; bottom: 92px; right: calc(50% - 210px + 16px); width: 52px; height: 52px; background: var(--accent); border: none; border-radius: 50%; font-size: 24px; color: #000; cursor: pointer; box-shadow: 0 4px 20px rgba(0,212,255,0.4); transition: all 0.2s; display: flex; align-items: center; justify-content: center; z-index: 49; }
-  .fab:active { transform: scale(0.92); }
-  @media (max-width: 420px) { .fab { right: 16px; } }
-
-  body.light {
-    --bg:#f0f4f8;--surface:#ffffff;--card:#ffffff;--card2:#f7f9fc;
-    --border:#e2e8f0;--text:#1a202c;--muted:#718096;
-  }
-  body.light .header { background: rgba(255,255,255,.96); }
-  body.light .bottom-nav { background: rgba(255,255,255,.97); }
+  :root{--bg:#080b12;--surface:#0e1220;--card:#131825;--card2:#161c2c;--border:#1c2236;--accent:#00d4ff;--red:#ff3b5c;--yellow:#ffbb00;--orange:#ff7b00;--green:#00e096;--purple:#a78bfa;--text:#e4e8f4;--muted:#5a6480;--radius:16px}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:420px;margin:0 auto;overflow-x:hidden}
+  .header{position:sticky;top:0;z-index:50;background:rgba(8,11,18,0.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:16px 20px 12px}
+  .header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+  .page-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800}
+  .page-title span{color:var(--accent)}
+  .total-badge{background:var(--card2);border:1px solid var(--border);border-radius:50px;padding:5px 12px;font-size:12px;color:var(--muted)}
+  .total-badge strong{color:var(--accent);font-family:'Syne',sans-serif}
+  .search-box{display:flex;align-items:center;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px 14px;gap:10px;margin-bottom:10px;transition:border .2s}
+  .search-box:focus-within{border-color:var(--accent)}
+  .search-input{flex:1;background:none;border:none;outline:none;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif}
+  .search-input::placeholder{color:var(--muted)}
+  .filters{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+  .filters::-webkit-scrollbar{display:none}
+  .filter-btn{flex-shrink:0;background:var(--card);border:1px solid var(--border);color:var(--muted);border-radius:50px;padding:6px 14px;font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;white-space:nowrap}
+  .filter-btn.active{background:var(--accent);border-color:var(--accent);color:#000;font-weight:700}
+  .server-filters{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;margin-top:8px}
+  .server-filters::-webkit-scrollbar{display:none}
+  .srv-btn{flex-shrink:0;background:var(--card2);border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:5px 12px;font-size:11px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;white-space:nowrap}
+  .srv-btn.active{border-color:var(--purple);color:var(--purple);background:rgba(167,139,250,0.08)}
+  .content{padding:14px 20px 120px}
+  .section-label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin:16px 0 10px;display:flex;align-items:center;gap:8px}
+  .section-label::after{content:'';flex:1;height:1px;background:var(--border)}
+  .client-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:10px;overflow:hidden;transition:all .2s;animation:fadeUp .4s ease both}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+  .card-main{display:flex;align-items:stretch;cursor:pointer;padding:14px 16px;gap:12px}
+  .card-main:active{background:var(--card2)}
+  .card-bar{width:4px;border-radius:4px;flex-shrink:0;align-self:stretch;min-height:50px}
+  .bar-vencido{background:var(--red)}.bar-hoje{background:var(--yellow)}.bar-amanha{background:var(--orange)}.bar-em-dia{background:var(--green)}
+  .card-body{flex:1;min-width:0}
+  .card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:7px}
+  .client-name{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px}
+  .status-pill{font-size:10px;font-weight:700;padding:3px 9px;border-radius:50px;white-space:nowrap;flex-shrink:0}
+  .pill-vencido{background:rgba(255,59,92,0.13);color:var(--red)}.pill-hoje{background:rgba(255,187,0,0.13);color:var(--yellow)}.pill-amanha{background:rgba(255,123,0,0.13);color:var(--orange)}.pill-em-dia{background:rgba(0,224,150,0.1);color:var(--green)}
+  .card-mid{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+  .chip{font-size:11px;color:var(--muted);background:var(--card2);padding:3px 9px;border-radius:6px}
+  .chip-obs{color:var(--purple);background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.15)}
+  .card-bot{display:flex;justify-content:space-between;align-items:center}
+  .venc-info{font-size:12px;color:var(--muted)}
+  .venc-info strong{color:var(--text);font-weight:600}
+  .card-chevron{color:var(--muted);font-size:14px;align-self:center;margin-left:4px;transition:transform .3s}
+  .client-card.open .card-chevron{transform:rotate(90deg)}
+  .card-detail{max-height:0;overflow:hidden;transition:max-height .35s ease;background:var(--card2)}
+  .client-card.open .card-detail{max-height:700px;border-top:1px solid var(--border)}
+  .detail-inner{padding:16px 20px}
+  .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+  .detail-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:3px}
+  .detail-value{font-size:14px;font-weight:500}
+  .detail-obs{background:var(--card);border:1px solid rgba(167,139,250,0.2);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--purple);margin-bottom:14px}
+  .detail-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .det-btn{padding:10px 8px;border:none;border-radius:10px;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:5px}
+  .det-btn:active{transform:scale(.95)}
+  .btn-edit{background:rgba(0,212,255,0.1);color:var(--accent)}.btn-del{background:rgba(255,59,92,0.1);color:var(--red)}.btn-wa{background:rgba(37,211,102,0.1);color:#25d366}.btn-renew{background:rgba(255,187,0,0.12);color:var(--yellow);grid-column:1/-1;font-size:14px;padding:12px}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:200;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .3s}
+  .modal-overlay.open{opacity:1;pointer-events:all}
+  .modal{background:var(--surface);border-radius:24px 24px 0 0;padding:24px 20px 40px;width:100%;max-height:88vh;overflow-y:auto;transform:translateY(100%);transition:transform .35s cubic-bezier(.32,.72,0,1);border-top:1px solid var(--border)}
+  .modal-overlay.open .modal{transform:translateY(0)}
+  .modal-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 20px}
+  .modal-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:6px}
+  .modal-sub{font-size:13px;color:var(--muted);margin-bottom:20px}
+  .form-group{margin-bottom:14px}
+  .form-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;display:block}
+  .form-input,.form-select{width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border .2s;appearance:none}
+  .form-input:focus,.form-select:focus{border-color:var(--accent)}
+  .form-select option{background:var(--card)}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .save-btn{width:100%;background:var(--accent);color:#000;border:none;border-radius:12px;padding:14px;font-family:'Syne',sans-serif;font-weight:700;font-size:16px;cursor:pointer;margin-top:8px;transition:all .2s;box-shadow:0 4px 20px rgba(0,212,255,.2)}
+  .save-btn:active{transform:scale(.97)}.save-btn:disabled{opacity:.6;cursor:not-allowed}
+  .renew-btn{width:100%;background:var(--yellow);color:#000;border:none;border-radius:12px;padding:14px;font-family:'Syne',sans-serif;font-weight:700;font-size:16px;cursor:pointer;margin-top:8px;transition:all .2s}
+  .renew-btn:active{transform:scale(.97)}.renew-btn:disabled{opacity:.6;cursor:not-allowed}
+  .cancel-btn{width:100%;background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:12px;padding:12px;font-family:'DM Sans',sans-serif;font-size:15px;cursor:pointer;margin-top:8px}
+  .renew-info-box{background:var(--card);border:1px solid rgba(255,187,0,.25);border-radius:12px;padding:14px 16px;margin-bottom:20px}
+  .renew-info-name{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:4px}
+  .renew-info-sub{font-size:12px;color:var(--muted)}
+  .renew-info-sub b{color:var(--yellow)}
+  .empty{text-align:center;padding:60px 20px;color:var(--muted)}
+  .empty-icon{font-size:40px;margin-bottom:12px}
+  .pagination{display:flex;align-items:center;justify-content:space-between;padding:14px 0 4px;gap:12px}
+  .page-btn{background:var(--card);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:9px 16px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s}
+  .page-btn:hover{border-color:var(--accent);color:var(--accent)}.page-btn:disabled{opacity:.3;cursor:not-allowed}
+  .page-info{font-size:12px;color:var(--muted);white-space:nowrap}
+  .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:420px;background:rgba(14,18,32,.97);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;padding:10px 0 24px;z-index:50}
+  .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;transition:all .2s;padding:4px 0}
+  .nav-icon{font-size:20px;transition:transform .2s}.nav-label{font-size:8px;color:var(--muted);font-weight:500}
+  .nav-item.active .nav-label{color:var(--accent)}.nav-item.active .nav-icon{transform:translateY(-2px)}
+  .nav-dot{width:4px;height:4px;border-radius:50%;background:var(--accent);margin-top:-2px;opacity:0}
+  .nav-item.active .nav-dot{opacity:1}
+  .fab{position:fixed;bottom:92px;right:calc(50% - 210px + 16px);width:52px;height:52px;background:var(--accent);border:none;border-radius:50%;font-size:24px;color:#000;cursor:pointer;box-shadow:0 4px 20px rgba(0,212,255,.4);transition:all .2s;display:flex;align-items:center;justify-content:center;z-index:49}
+  .fab:active{transform:scale(.92)}
+  @media(max-width:420px){.fab{right:16px}}
+  .loading{text-align:center;padding:60px 20px;color:var(--muted);font-size:14px}
+  body.light{--bg:#f0f4f8;--surface:#ffffff;--card:#ffffff;--card2:#f7f9fc;--border:#e2e8f0;--text:#1a202c;--muted:#718096}
+  body.light .header{background:rgba(255,255,255,.96)}
+  body.light .bottom-nav{background:rgba(255,255,255,.97)}
 </style>
 </head>
 <body>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-const _app  = initializeApp({apiKey:"AIzaSyAGHvkDpeSbCTriZCvRf-jJ6z8PQSSWLHI",authDomain:"streamdesk-5350d.firebaseapp.com",projectId:"streamdesk-5350d",storageBucket:"streamdesk-5350d.firebasestorage.app",messagingSenderId:"36684694847",appId:"1:36684694847:web:0f6f3a27933e3d84cfff8a"});
-const _auth = getAuth(_app);
-onAuthStateChanged(_auth, function(user) { if (!user) location.href='login.html'; });
-</script>
-
 <script>(function(){var c=JSON.parse(localStorage.getItem('streamdesk_config')||'{}');if(c.darkMode!==true)document.body.classList.add('light');})()</script>
 
 <div class="header">
+  <div class="header-top">
     <div class="page-title">Clientes<span>.</span></div>
     <div class="total-badge"><strong id="totalCount">0</strong> cadastrados</div>
   </div>
   <div class="search-box">
     <span style="color:var(--muted)">🔍</span>
-    <input class="search-input" type="text" placeholder="Buscar por nome ou servidor..." id="searchInput" oninput="currentClientPage=0;render()">
+    <input class="search-input" type="text" placeholder="Buscar por nome ou servidor..." id="searchInput" oninput="currentPage=0;render()">
   </div>
   <div class="filters">
     <button class="filter-btn active" onclick="setFilter('todos',this)">Todos</button>
@@ -170,23 +123,21 @@ onAuthStateChanged(_auth, function(user) { if (!user) location.href='login.html'
     <button class="filter-btn" onclick="setFilter('em-dia',this)">🟢 Em Dia</button>
   </div>
   <div style="padding:6px 0 2px;display:flex;align-items:center;justify-content:flex-end">
-    <button id="btnOcultarVencidos" onclick="toggleOcultarVencidos()" style="background:var(--card);border:1px solid var(--border);color:var(--muted);border-radius:50px;padding:5px 14px;font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;white-space:nowrap">
-      👁️ Ocultar Vencidos
-    </button>
+    <button id="btnOcultarVencidos" onclick="toggleOcultarVencidos()" style="background:var(--card);border:1px solid var(--border);color:var(--muted);border-radius:50px;padding:5px 14px;font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;white-space:nowrap">👁️ Ocultar Vencidos</button>
   </div>
   <div class="server-filters" id="serverFilters"></div>
 </div>
 
-<div class="content" id="clientList"></div>
+<div class="content" id="clientList"><div class="loading">⏳ Carregando...</div></div>
 <button class="fab" onclick="openModal()">＋</button>
 
 <div class="bottom-nav">
-  <div class="nav-item " onclick="location.href='index.html'"><div class="nav-icon">🏠</div><div class="nav-label">Início</div><div class="nav-dot"></div></div>
+  <div class="nav-item" onclick="location.href='index.html'"><div class="nav-icon">🏠</div><div class="nav-label">Início</div><div class="nav-dot"></div></div>
   <div class="nav-item active"><div class="nav-icon">👥</div><div class="nav-label">Clientes</div><div class="nav-dot"></div></div>
-  <div class="nav-item " onclick="location.href='servidor.html'"><div class="nav-icon">🖥️</div><div class="nav-label">Servidor</div><div class="nav-dot"></div></div>
-  <div class="nav-item " onclick="location.href='financas.html'"><div class="nav-icon">💰</div><div class="nav-label">Finanças</div><div class="nav-dot"></div></div>
-  <div class="nav-item " onclick="location.href='avisos.html'"><div class="nav-icon">📢</div><div class="nav-label">Avisos</div><div class="nav-dot"></div></div>
-  <div class="nav-item " onclick="location.href='config.html'"><div class="nav-icon">⚙️</div><div class="nav-label">Config.</div><div class="nav-dot"></div></div>
+  <div class="nav-item" onclick="location.href='servidor.html'"><div class="nav-icon">🖥️</div><div class="nav-label">Servidor</div><div class="nav-dot"></div></div>
+  <div class="nav-item" onclick="location.href='financas.html'"><div class="nav-icon">💰</div><div class="nav-label">Finanças</div><div class="nav-dot"></div></div>
+  <div class="nav-item" onclick="location.href='avisos.html'"><div class="nav-icon">📢</div><div class="nav-label">Avisos</div><div class="nav-dot"></div></div>
+  <div class="nav-item" onclick="location.href='config.html'"><div class="nav-icon">⚙️</div><div class="nav-label">Config.</div><div class="nav-dot"></div></div>
 </div>
 
 <!-- MODAL SEM SERVIDOR -->
@@ -195,426 +146,258 @@ onAuthStateChanged(_auth, function(user) { if (!user) location.href='login.html'
     <div class="modal-handle"></div>
     <div style="font-size:40px;text-align:center;margin-bottom:12px">🖥️</div>
     <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;text-align:center;margin-bottom:10px">Nenhum Servidor Cadastrado</div>
-    <div style="font-size:14px;color:var(--muted);text-align:center;margin-bottom:24px;line-height:1.6">
-      Para cadastrar um cliente, você precisa ter ao menos um servidor cadastrado.<br><br>
-      Vá em <strong style="color:var(--accent)">Servidor</strong> no menu e adicione seu primeiro servidor.
-    </div>
+    <div style="font-size:14px;color:var(--muted);text-align:center;margin-bottom:24px;line-height:1.6">Vá em <strong style="color:var(--accent)">Servidor</strong> no menu e adicione seu primeiro servidor.</div>
     <button onclick="location.href='servidor.html'" style="width:100%;background:var(--accent);color:#000;border:none;border-radius:12px;padding:14px;font-family:'Syne',sans-serif;font-weight:700;font-size:16px;cursor:pointer;margin-bottom:10px">🖥️ Ir para Servidores</button>
-    <button onclick="closeNoServer()" style="width:100%;background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:12px;padding:12px;font-family:'DM Sans',sans-serif;font-size:15px;cursor:pointer">Fechar</button>
+    <button onclick="document.getElementById('noServerOverlay').classList.remove('open')" style="width:100%;background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:12px;padding:12px;font-family:'DM Sans',sans-serif;font-size:15px;cursor:pointer">Fechar</button>
   </div>
 </div>
 
 <!-- MODAL CADASTRO -->
-<div class="modal-overlay" id="modalOverlay" onclick="closeOutside(event,'modalOverlay')">
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal('modalOverlay')">
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-title" id="modalTitle">Novo Cliente</div>
     <input type="hidden" id="editId">
-    <div class="form-group">
-      <label class="form-label">Nome do Cliente</label>
-      <input class="form-input" id="fNome" placeholder="Ex: João Silva">
+    <div class="form-group"><label class="form-label">Nome do Cliente</label><input class="form-input" id="fNome" placeholder="Ex: João Silva"></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Servidor</label><select class="form-select" id="fPlataforma"></select></div>
+      <div class="form-group"><label class="form-label">Plano</label><select class="form-select" id="fPlano"><option>Integral</option><option>Promocional</option><option>Gratuito</option></select></div>
     </div>
     <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">Servidor</label>
-        <select class="form-select" id="fPlataforma">
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Plano</label>
-        <select class="form-select" id="fPlano">
-          <option>Integral</option><option>Promocional</option><option>Gratuito</option>
-        </select>
-      </div>
+      <div class="form-group"><label class="form-label">Vencimento</label><input class="form-input" id="fVencimento" type="date"></div>
+      <div class="form-group"><label class="form-label">País</label><select class="form-select" id="fPais"><option value="🇧🇷">🇧🇷 Brasil</option><option value="🇵🇹">🇵🇹 Portugal</option><option value="🇪🇸">🇪🇸 Espanha</option><option value="🇺🇸">🇺🇸 EUA</option><option value="🇦🇴">🇦🇴 Angola</option><option value="🌍">🌍 Outro</option></select></div>
     </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">Vencimento</label>
-        <input class="form-input" id="fVencimento" type="date">
-      </div>
-      <div class="form-group">
-        <label class="form-label">País</label>
-        <select class="form-select" id="fPais">
-          <option value="🇧🇷">🇧🇷 Brasil</option><option value="🇵🇹">🇵🇹 Portugal</option>
-          <option value="🇪🇸">🇪🇸 Espanha</option><option value="🇺🇸">🇺🇸 EUA</option>
-          <option value="🇦🇴">🇦🇴 Angola</option><option value="🌍">🌍 Outro</option>
-        </select>
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Contato (WhatsApp)</label>
-      <input class="form-input" id="fContato" placeholder="+55 11 99999-9999">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Observações</label>
-      <input class="form-input" id="fObs" placeholder="Ex: FP, desconto especial, indicado por...">
-    </div>
-    <div class="form-group" id="valorPagoGroup">
-      <label class="form-label">Valor Pago (R$) <span style="color:var(--muted);font-size:10px">— opcional, registra em Finanças</span></label>
-      <input class="form-input" id="fValorPago" type="number" placeholder="0,00" step="0.01" min="0">
-    </div>
-    <div class="form-group" id="pagamentoGroup">
-      <label class="form-label">Forma de Pagamento</label>
-      <select class="form-select" id="fPagamento">
-        <option>PIX</option><option>Dinheiro</option><option>Cartão</option>
-        <option>Transferência</option><option>Outro</option>
-      </select>
-    </div>
-    <button class="save-btn" onclick="saveClient()">✓ Salvar Cliente</button>
+    <div class="form-group"><label class="form-label">Contato (WhatsApp)</label><input class="form-input" id="fContato" placeholder="+55 11 99999-9999"></div>
+    <div class="form-group"><label class="form-label">Observações</label><input class="form-input" id="fObs" placeholder="Ex: FP, desconto especial..."></div>
+    <div class="form-group" id="valorPagoGroup"><label class="form-label">Valor Pago (R$) <span style="color:var(--muted);font-size:10px">— opcional</span></label><input class="form-input" id="fValorPago" type="number" placeholder="0,00" step="0.01" min="0"></div>
+    <div class="form-group" id="pagamentoGroup"><label class="form-label">Forma de Pagamento</label><select class="form-select" id="fPagamento"><option>PIX</option><option>Dinheiro</option><option>Cartão</option><option>Transferência</option><option>Outro</option></select></div>
+    <button class="save-btn" id="btnSaveClient" onclick="saveClient()">✓ Salvar Cliente</button>
     <button class="cancel-btn" onclick="closeModal('modalOverlay')">Cancelar</button>
   </div>
 </div>
 
 <!-- MODAL RENOVAR -->
-<div class="modal-overlay" id="renewOverlay" onclick="closeOutside(event,'renewOverlay')">
+<div class="modal-overlay" id="renewOverlay" onclick="if(event.target===this)closeModal('renewOverlay')">
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-title">🔄 Renovar Plano</div>
     <div class="modal-sub">Atualize o vencimento e registre o pagamento</div>
     <input type="hidden" id="renewId">
     <div class="renew-info-box" id="renewInfo"></div>
-    <div class="form-group">
-      <label class="form-label">Nova Data de Vencimento</label>
-      <input class="form-input" id="rVencimento" type="date">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Valor Pago (R$)</label>
-      <input class="form-input" id="rValor" type="number" placeholder="0,00" step="0.01">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Forma de Pagamento</label>
-      <select class="form-select" id="rPagamento">
-        <option>PIX</option><option>Dinheiro</option><option>Cartão</option>
-        <option>Transferência</option><option>Outro</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Observação (opcional)</label>
-      <input class="form-input" id="rObs" placeholder="Ex: Renovação de 30 dias...">
-    </div>
-    <button class="renew-btn" onclick="confirmRenew()">✓ Confirmar Renovação</button>
+    <div class="form-group"><label class="form-label">Nova Data de Vencimento</label><input class="form-input" id="rVencimento" type="date"></div>
+    <div class="form-group"><label class="form-label">Valor Pago (R$)</label><input class="form-input" id="rValor" type="number" placeholder="0,00" step="0.01"></div>
+    <div class="form-group"><label class="form-label">Forma de Pagamento</label><select class="form-select" id="rPagamento"><option>PIX</option><option>Dinheiro</option><option>Cartão</option><option>Transferência</option><option>Outro</option></select></div>
+    <div class="form-group"><label class="form-label">Observação (opcional)</label><input class="form-input" id="rObs" placeholder="Ex: Renovação de 30 dias..."></div>
+    <button class="renew-btn" id="btnRenew" onclick="confirmRenew()">✓ Confirmar Renovação</button>
     <button class="cancel-btn" onclick="closeModal('renewOverlay')">Cancelar</button>
   </div>
 </div>
 
-<script>
-const STORAGE_KEY = 'iptv_clientes_v3';
-const FINANCE_KEY = 'iptv_financas_v1';
-const SRV_KEY     = 'iptv_servidores_v1';
+<script type="module">
+import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+import { getFirestore, collection, doc, getDocs, addDoc, setDoc, deleteDoc }
+                           from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-let clientes = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-let financas   = JSON.parse(localStorage.getItem(FINANCE_KEY) || '[]');
-let servidores = JSON.parse(localStorage.getItem(SRV_KEY) || '[]');
-let currentFilter = 'todos', currentServer = 'todos', openCardId = null;
-let ocultarVencidos = localStorage.getItem('ocultarVencidos') === 'true';
-let currentClientPage = 0;
-const CLIENT_PAGE_SIZE = 10;
-let filteredList = [];
+const FB = {apiKey:"AIzaSyAGHvkDpeSbCTriZCvRf-jJ6z8PQSSWLHI",authDomain:"streamdesk-5350d.firebaseapp.com",projectId:"streamdesk-5350d",storageBucket:"streamdesk-5350d.firebasestorage.app",messagingSenderId:"36684694847",appId:"1:36684694847:web:0f6f3a27933e3d84cfff8a"};
+const app  = initializeApp(FB);
+const auth = getAuth(app);
+const db   = getFirestore(app);
 
-function saveClientes() { localStorage.setItem(STORAGE_KEY, JSON.stringify(clientes)); }
-function saveFinancas()  { localStorage.setItem(FINANCE_KEY, JSON.stringify(financas)); }
-function today() {
-  var d = new Date();
-  var y = d.getFullYear();
-  var m = String(d.getMonth()+1).padStart(2,'0');
-  var day = String(d.getDate()).padStart(2,'0');
-  return y+'-'+m+'-'+day;
-}
-function tomorrow() {
-  var d = new Date();
-  d.setDate(d.getDate()+1);
-  var y = d.getFullYear();
-  var m = String(d.getMonth()+1).padStart(2,'0');
-  var day = String(d.getDate()).padStart(2,'0');
-  return y+'-'+m+'-'+day;
-}
+let clientes=[], servidores=[], currentUser=null;
+let currentFilter='todos', currentServer='todos', openCardId=null;
+let ocultarVencidos=false, currentPage=0;
+const PAGE_SIZE=10;
+let filteredList=[];
 
-function getStatus(v) {
-  const t=today(), tm=tomorrow();
-  if(v<t) return 'vencido'; if(v===t) return 'hoje'; if(v===tm) return 'amanha'; return 'em-dia';
-}
-function formatDate(d) { if(!d) return '-'; const [y,m,day]=d.split('-'); return `${day}/${m}/${y}`; }
-function getDaysText(v) {
-  const diff=Math.round((new Date(v)-new Date(today()))/86400000);
-  if(diff<0) return `<span style="color:var(--red);font-size:11px">${Math.abs(diff)}d em atraso</span>`;
-  if(diff===0) return `<span style="color:var(--yellow);font-size:11px">Vence hoje!</span>`;
-  if(diff===1) return `<span style="color:var(--orange);font-size:11px">Vence amanhã</span>`;
-  return `<span style="color:var(--muted);font-size:11px">em ${diff} dias</span>`;
-}
-function statusPill(s) {
-  const m={vencido:['pill-vencido','Vencido'],hoje:['pill-hoje','Hoje'],amanha:['pill-amanha','Amanhã'],'em-dia':['pill-em-dia','Em Dia']};
-  return `<span class="status-pill ${m[s][0]}">${m[s][1]}</span>`;
-}
-function barClass(s) { return {vencido:'bar-vencido',hoje:'bar-hoje',amanha:'bar-amanha','em-dia':'bar-em-dia'}[s]; }
+function today(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function tomorrow(){var d=new Date();d.setDate(d.getDate()+1);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function formatDate(d){if(!d)return'-';var p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
+function getStatus(v){var t=today(),tm=tomorrow();if(v<t)return'vencido';if(v===t)return'hoje';if(v===tm)return'amanha';return'em-dia';}
+function getDaysText(v){var diff=Math.round((new Date(v)-new Date(today()))/86400000);if(diff<0)return'<span style="color:var(--red);font-size:11px">'+Math.abs(diff)+'d em atraso</span>';if(diff===0)return'<span style="color:var(--yellow);font-size:11px">Vence hoje!</span>';if(diff===1)return'<span style="color:var(--orange);font-size:11px">Vence amanhã</span>';return'<span style="color:var(--muted);font-size:11px">em '+diff+' dias</span>';}
+function statusPill(s){var m={vencido:['pill-vencido','Vencido'],hoje:['pill-hoje','Hoje'],amanha:['pill-amanha','Amanhã'],'em-dia':['pill-em-dia','Em Dia']};return'<span class="status-pill '+m[s][0]+'">'+m[s][1]+'</span>';}
+function barClass(s){return{vencido:'bar-vencido',hoje:'bar-hoje',amanha:'bar-amanha','em-dia':'bar-em-dia'}[s];}
 
-function buildServerFilters() {
-  servidores = JSON.parse(localStorage.getItem(SRV_KEY) || '[]');
-  const srvNomes = servidores.map(s => s.nome);
-  clientes.forEach(c => { if (!srvNomes.includes(c.plataforma)) srvNomes.push(c.plataforma); });
-  const servers = ['todos', ...srvNomes];
-  document.getElementById('serverFilters').innerHTML = servers.map(s =>
-    `<button class="srv-btn ${s===currentServer?'active':''}" onclick="setServer('${s}',this)">${s==='todos'?'Todos Servidores':s}</button>`
-  ).join('');
-}
-function setServer(s,btn) { currentServer=s; currentClientPage=0; document.querySelectorAll('.srv-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); openCardId=null; render(); }
-function setFilter(f,btn) { currentFilter=f; currentClientPage=0; document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); openCardId=null; render(); }
+function clientCol(){return collection(db,'usuarios',currentUser.uid,'clientes');}
+function finCol(){return collection(db,'usuarios',currentUser.uid,'financas');}
+function srvCol(){return collection(db,'usuarios',currentUser.uid,'servidores');}
 
-function toggleOcultarVencidos() {
-  ocultarVencidos = !ocultarVencidos;
-  localStorage.setItem('ocultarVencidos', ocultarVencidos);
-  updateOcultarBtn();
-  openCardId = null;
-  currentClientPage = 0;
+async function loadData(){
+  var [cSnap,sSnap]=await Promise.all([getDocs(clientCol()),getDocs(srvCol())]);
+  clientes=cSnap.docs.map(d=>({id:d.id,...d.data()}));
+  servidores=sSnap.docs.map(d=>({id:d.id,...d.data()}));
   render();
 }
 
-function updateOcultarBtn() {
-  const btn = document.getElementById('btnOcultarVencidos');
-  if (!btn) return;
-  if (ocultarVencidos) {
-    btn.textContent = '👁️ Mostrar Vencidos';
-    btn.style.background  = 'rgba(255,59,92,0.15)';
-    btn.style.borderColor = 'var(--red)';
-    btn.style.color       = 'var(--red)';
-    btn.style.fontWeight  = '700';
-  } else {
-    btn.textContent = '👁️ Ocultar Vencidos';
-    btn.style.background  = 'var(--card)';
-    btn.style.borderColor = 'var(--border)';
-    btn.style.color       = 'var(--muted)';
-    btn.style.fontWeight  = '500';
-  }
+function buildServerFilters(){
+  var names=servidores.map(s=>s.nome);
+  clientes.forEach(c=>{if(!names.includes(c.plataforma))names.push(c.plataforma);});
+  var all=['todos',...names];
+  document.getElementById('serverFilters').innerHTML=all.map(s=>'<button class="srv-btn '+(s===currentServer?'active':'')+'" onclick="setServer(\''+s+'\',this)">'+(s==='todos'?'Todos Servidores':s)+'</button>').join('');
 }
 
-function render() {
+window.setFilter=function(f,btn){currentFilter=f;currentPage=0;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');openCardId=null;render();};
+window.setServer=function(s,btn){currentServer=s;currentPage=0;document.querySelectorAll('.srv-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');openCardId=null;render();};
+window.toggleOcultarVencidos=function(){ocultarVencidos=!ocultarVencidos;updateOcultarBtn();openCardId=null;currentPage=0;render();};
+function updateOcultarBtn(){var btn=document.getElementById('btnOcultarVencidos');if(!btn)return;if(ocultarVencidos){btn.textContent='👁️ Mostrar Vencidos';btn.style.background='rgba(255,59,92,0.15)';btn.style.borderColor='var(--red)';btn.style.color='var(--red)';btn.style.fontWeight='700';}else{btn.textContent='👁️ Ocultar Vencidos';btn.style.background='var(--card)';btn.style.borderColor='var(--border)';btn.style.color='var(--muted)';btn.style.fontWeight='500';}}
+
+function render(){
   buildServerFilters();
-  const q=document.getElementById('searchInput').value.toLowerCase();
-  const order={vencido:0,hoje:1,amanha:2,'em-dia':3};
-  let list=clientes.filter(c=>{
-    const s=getStatus(c.vencimento);
-    if(ocultarVencidos && s==='vencido') return false;
-    return (currentFilter==='todos'||s===currentFilter)&&(currentServer==='todos'||c.plataforma===currentServer)&&(c.nome.toLowerCase().includes(q)||c.plataforma.toLowerCase().includes(q));
-  }).sort((a,b)=>{ const sa=order[getStatus(a.vencimento)],sb=order[getStatus(b.vencimento)]; return sa!==sb?sa-sb:a.vencimento.localeCompare(b.vencimento); });
-
+  var q=document.getElementById('searchInput').value.toLowerCase();
+  var order={vencido:0,hoje:1,amanha:2,'em-dia':3};
+  var list=clientes.filter(c=>{
+    var s=getStatus(c.vencimento);
+    if(ocultarVencidos&&s==='vencido')return false;
+    return(currentFilter==='todos'||s===currentFilter)&&(currentServer==='todos'||c.plataforma===currentServer)&&(c.nome.toLowerCase().includes(q)||c.plataforma.toLowerCase().includes(q));
+  }).sort((a,b)=>{var sa=order[getStatus(a.vencimento)],sb=order[getStatus(b.vencimento)];return sa!==sb?sa-sb:a.vencimento.localeCompare(b.vencimento);});
   document.getElementById('totalCount').textContent=clientes.length;
-  const el=document.getElementById('clientList');
-  if(!list.length){ el.innerHTML=`<div class="empty"><div class="empty-icon">📭</div><div>Nenhum cliente encontrado</div></div>`; return; }
-
-  filteredList = list;
-  renderClientPage();
+  var el=document.getElementById('clientList');
+  if(!list.length){el.innerHTML='<div class="empty"><div class="empty-icon">📭</div><div>Nenhum cliente encontrado</div></div>';return;}
+  filteredList=list;
+  renderPage();
 }
 
-function renderClientPage() {
-  const el = document.getElementById('clientList');
-  const total = filteredList.length;
-  const pages = Math.ceil(total / CLIENT_PAGE_SIZE);
-
-  // Clamp page if list shrunk
-  if (currentClientPage >= pages) currentClientPage = Math.max(0, pages - 1);
-
-  const start = currentClientPage * CLIENT_PAGE_SIZE;
-  const end   = Math.min(start + CLIENT_PAGE_SIZE, total);
-  const page  = filteredList.slice(start, end);
-
-  const groupLabels={vencido:'🔴 Vencidos',hoje:'🟡 Vencem Hoje',amanha:'🟠 Vencem Amanhã','em-dia':'🟢 Em Dia'};
-  let html='', lastGroup=null;
-
-  page.forEach((c,i)=>{
-    const s=getStatus(c.vencimento);
-    if(currentFilter==='todos'&&s!==lastGroup){ lastGroup=s; html+=`<div class="section-label">${groupLabels[s]}</div>`; }
-    const isOpen=openCardId===c.id;
-    html+=`
-    <div class="client-card ${isOpen?'open':''}" id="card-${c.id}" style="animation-delay:${i*0.04}s">
-      <div class="card-main" onclick="toggleCard(${c.id})">
-        <div class="card-bar ${barClass(s)}"></div>
-        <div class="card-body">
-          <div class="card-top">
-            <div class="client-name">${c.pais} ${c.nome}</div>
-            ${statusPill(s)}
-          </div>
-          <div class="card-mid">
-            <span class="chip">📡 ${c.plataforma}</span>
-            <span class="chip">📦 ${c.plano}</span>
-            ${c.obs?`<span class="chip chip-obs">💬 ${c.obs}</span>`:''}
-          </div>
-          <div class="card-bot">
-            <div class="venc-info"><strong>${formatDate(c.vencimento)}</strong>&nbsp;&nbsp;${getDaysText(c.vencimento)}</div>
-          </div>
-        </div>
-        <span class="card-chevron">›</span>
-      </div>
-      <div class="card-detail">
-        <div class="detail-inner">
-          <div class="detail-grid">
-            <div><div class="detail-label">Servidor</div><div class="detail-value">📡 ${c.plataforma}</div></div>
-            <div><div class="detail-label">Plano</div><div class="detail-value">📦 ${c.plano}</div></div>
-            <div><div class="detail-label">Vencimento</div><div class="detail-value">${formatDate(c.vencimento)}</div></div>
-            <div><div class="detail-label">País</div><div class="detail-value">${c.pais}</div></div>
-            <div><div class="detail-label">Contato</div><div class="detail-value" style="font-size:13px">${c.contato||'—'}</div></div>
-          </div>
-          ${c.obs?`<div class="detail-obs">💬 ${c.obs}</div>`:''}
-          <div class="detail-actions">
-            <button class="det-btn btn-edit" onclick="editClient(${c.id})">✏️ Editar</button>
-            <button class="det-btn btn-wa"   onclick="sendWA(${c.id})">📲 WhatsApp</button>
-            <button class="det-btn btn-del"  onclick="deleteClient(${c.id})">🗑️ Excluir</button>
-            <button class="det-btn btn-renew" onclick="openRenew(${c.id})">🔄 Renovar Plano</button>
-          </div>
-        </div>
-      </div>
-    </div>`;
+function renderPage(){
+  var el=document.getElementById('clientList'), total=filteredList.length, pages=Math.ceil(total/PAGE_SIZE);
+  if(currentPage>=pages)currentPage=Math.max(0,pages-1);
+  var start=currentPage*PAGE_SIZE, end=Math.min(start+PAGE_SIZE,total), page=filteredList.slice(start,end);
+  var groupLabels={vencido:'🔴 Vencidos',hoje:'🟡 Vencem Hoje',amanha:'🟠 Vencem Amanhã','em-dia':'🟢 Em Dia'};
+  var html='',lastGroup=null;
+  page.forEach(function(c,i){
+    var s=getStatus(c.vencimento);
+    if(currentFilter==='todos'&&s!==lastGroup){lastGroup=s;html+='<div class="section-label">'+groupLabels[s]+'</div>';}
+    var isOpen=openCardId===c.id;
+    html+='<div class="client-card '+(isOpen?'open':'')+'" id="card-'+c.id+'" style="animation-delay:'+(i*0.04)+'s">'+
+      '<div class="card-main" onclick="toggleCard(\''+c.id+'\')">'+
+        '<div class="card-bar '+barClass(s)+'"></div>'+
+        '<div class="card-body">'+
+          '<div class="card-top"><div class="client-name">'+c.pais+' '+c.nome+'</div>'+statusPill(s)+'</div>'+
+          '<div class="card-mid"><span class="chip">📡 '+c.plataforma+'</span><span class="chip">📦 '+c.plano+'</span>'+(c.obs?'<span class="chip chip-obs">💬 '+c.obs+'</span>':'')+'</div>'+
+          '<div class="card-bot"><div class="venc-info"><strong>'+formatDate(c.vencimento)+'</strong>&nbsp;&nbsp;'+getDaysText(c.vencimento)+'</div></div>'+
+        '</div>'+
+        '<span class="card-chevron">›</span>'+
+      '</div>'+
+      '<div class="card-detail"><div class="detail-inner">'+
+        '<div class="detail-grid">'+
+          '<div><div class="detail-label">Servidor</div><div class="detail-value">📡 '+c.plataforma+'</div></div>'+
+          '<div><div class="detail-label">Plano</div><div class="detail-value">📦 '+c.plano+'</div></div>'+
+          '<div><div class="detail-label">Vencimento</div><div class="detail-value">'+formatDate(c.vencimento)+'</div></div>'+
+          '<div><div class="detail-label">País</div><div class="detail-value">'+c.pais+'</div></div>'+
+          '<div><div class="detail-label">Contato</div><div class="detail-value" style="font-size:13px">'+(c.contato||'—')+'</div></div>'+
+        '</div>'+
+        (c.obs?'<div class="detail-obs">💬 '+c.obs+'</div>':'')+
+        '<div class="detail-actions">'+
+          '<button class="det-btn btn-edit" onclick="editClient(\''+c.id+'\')">✏️ Editar</button>'+
+          '<button class="det-btn btn-wa" onclick="sendWA(\''+c.id+'\')">📲 WhatsApp</button>'+
+          '<button class="det-btn btn-del" onclick="deleteClient(\''+c.id+'\')">🗑️ Excluir</button>'+
+          '<button class="det-btn btn-renew" onclick="openRenew(\''+c.id+'\')">🔄 Renovar Plano</button>'+
+        '</div>'+
+      '</div></div>'+
+    '</div>';
   });
-
-  // Pagination controls
-  if(pages > 1){
-    html += `
-    <div class="pagination">
-      <button class="page-btn" onclick="changeClientPage(-1)" ${currentClientPage===0?'disabled':''}>‹ Anterior</button>
-      <span class="page-info">${start+1}–${end} de ${total}</span>
-      <button class="page-btn" onclick="changeClientPage(1)" ${currentClientPage>=pages-1?'disabled':''}>Próximo ›</button>
-    </div>`;
-  }
-
+  if(pages>1){html+='<div class="pagination"><button class="page-btn" onclick="changePage(-1)" '+(currentPage===0?'disabled':'')+'>‹ Anterior</button><span class="page-info">'+(start+1)+'–'+end+' de '+total+'</span><button class="page-btn" onclick="changePage(1)" '+(currentPage>=pages-1?'disabled':'')+'>Próximo ›</button></div>';}
   el.innerHTML=html;
 }
 
-function changeClientPage(dir){
-  const pages = Math.ceil(filteredList.length / CLIENT_PAGE_SIZE);
-  currentClientPage = Math.max(0, Math.min(pages-1, currentClientPage+dir));
-  openCardId = null;
-  renderClientPage();
-  document.getElementById('clientList').scrollIntoView({behavior:'smooth', block:'start'});
-}
+window.changePage=function(dir){var pages=Math.ceil(filteredList.length/PAGE_SIZE);currentPage=Math.max(0,Math.min(pages-1,currentPage+dir));openCardId=null;renderPage();document.getElementById('clientList').scrollIntoView({behavior:'smooth',block:'start'});};
+window.toggleCard=function(id){openCardId=openCardId===id?null:id;render();};
 
-function toggleCard(id){ openCardId=openCardId===id?null:id; render(); }
-
-function showNoServerAlert() {
-  document.getElementById('noServerOverlay').classList.add('open');
-}
-function closeNoServer() {
-  document.getElementById('noServerOverlay').classList.remove('open');
-}
-
-function openModal(client=null){
+window.openModal=function(client){
   document.getElementById('editId').value=client?client.id:'';
   document.getElementById('modalTitle').textContent=client?'Editar Cliente':'Novo Cliente';
-  document.getElementById('fNome').value=client?.nome||'';
-
-  // Load servidores dynamically from localStorage
-  servidores = JSON.parse(localStorage.getItem(SRV_KEY) || '[]');
-  if (servidores.length === 0) {
-    closeModal('modalOverlay');
-    showNoServerAlert();
-    return;
-  }
-  const selSrv = document.getElementById('fPlataforma');
-  selSrv.innerHTML = servidores.map(s => '<option value="'+s.nome+'">'+s.nome+'</option>').join('');
-  selSrv.value = client?.plataforma || (servidores[0]?.nome || '');
-
-  document.getElementById('fPlano').value=client?.plano||'Integral';
-  document.getElementById('fVencimento').value=client?.vencimento||'';
-  document.getElementById('fPais').value=client?.pais||'🇧🇷';
-  document.getElementById('fContato').value=client?.contato||'';
-  document.getElementById('fObs').value=client?.obs||'';
-  document.getElementById('fValorPago').value = '';
-  // Only show valor pago for NEW clients (not editing)
-  const isNew = !client;
-  document.getElementById('valorPagoGroup').style.display = isNew ? 'block' : 'none';
-  document.getElementById('pagamentoGroup').style.display  = isNew ? 'block' : 'none';
+  document.getElementById('fNome').value=client?client.nome:'';
+  if(!servidores.length){document.getElementById('noServerOverlay').classList.add('open');return;}
+  var selSrv=document.getElementById('fPlataforma');
+  selSrv.innerHTML=servidores.map(s=>'<option value="'+s.nome+'">'+s.nome+'</option>').join('');
+  if(client)selSrv.value=client.plataforma;
+  document.getElementById('fPlano').value=client?client.plano:'Integral';
+  document.getElementById('fVencimento').value=client?client.vencimento:'';
+  document.getElementById('fPais').value=client?client.pais:'🇧🇷';
+  document.getElementById('fContato').value=client?client.contato:'';
+  document.getElementById('fObs').value=client?client.obs:'';
+  document.getElementById('fValorPago').value='';
+  var isNew=!client;
+  document.getElementById('valorPagoGroup').style.display=isNew?'block':'none';
+  document.getElementById('pagamentoGroup').style.display=isNew?'block':'none';
   document.getElementById('modalOverlay').classList.add('open');
-}
-function closeModal(id){ document.getElementById(id).classList.remove('open'); }
-function closeOutside(e,id){ if(e.target===document.getElementById(id)) closeModal(id); }
+};
+window.closeModal=function(id){document.getElementById(id).classList.remove('open');};
 
-function saveClient(){
-  const nome=document.getElementById('fNome').value.trim();
+window.saveClient=async function(){
+  var nome=document.getElementById('fNome').value.trim();
   if(!nome){alert('Informe o nome do cliente!');return;}
-  const vencimento=document.getElementById('fVencimento').value;
+  var vencimento=document.getElementById('fVencimento').value;
   if(!vencimento){alert('Informe a data de vencimento!');return;}
-  const data={nome,plataforma:document.getElementById('fPlataforma').value,plano:document.getElementById('fPlano').value,vencimento,pais:document.getElementById('fPais').value,contato:document.getElementById('fContato').value,obs:document.getElementById('fObs').value};
-  const editId=document.getElementById('editId').value;
-  if(editId){ const idx=clientes.findIndex(c=>c.id==editId); if(idx>=0) clientes[idx]={...clientes[idx],...data}; }
-  else {
-    data.id=Date.now();
-    clientes.push(data);
-    // Register payment in financas if valor provided
-    const val=parseFloat(document.getElementById('fValorPago').value||'0');
-    if(val>0){
-      financas.push({id:Date.now()+1,data:today(),cliente:nome,plataforma:data.plataforma,valor:val,pagamento:document.getElementById('fPagamento').value,obs:'Ativação'});
-      saveFinancas();
-    }
+  var data={nome,plataforma:document.getElementById('fPlataforma').value,plano:document.getElementById('fPlano').value,vencimento,pais:document.getElementById('fPais').value,contato:document.getElementById('fContato').value,obs:document.getElementById('fObs').value};
+  var btn=document.getElementById('btnSaveClient');btn.disabled=true;btn.textContent='Salvando...';
+  var editId=document.getElementById('editId').value;
+  if(editId){await setDoc(doc(db,'usuarios',currentUser.uid,'clientes',editId),data,{merge:true});}
+  else{
+    await addDoc(clientCol(),data);
+    var val=parseFloat(document.getElementById('fValorPago').value||'0');
+    if(val>0){await addDoc(finCol(),{data:today(),cliente:nome,plataforma:data.plataforma,valor:val,pagamento:document.getElementById('fPagamento').value,obs:'Ativação'});}
   }
-  saveClientes(); closeModal('modalOverlay'); render();
-}
-function editClient(id){ openModal(clientes.find(c=>c.id==id)); }
-function deleteClient(id){
-  if(confirm('Tem certeza que deseja remover este cliente?')){ clientes=clientes.filter(c=>c.id!=id); if(openCardId===id) openCardId=null; saveClientes(); render(); }
-}
-function sendWA(id){
-  const c = clientes.find(c=>c.id==id);
-  const s = getStatus(c.vencimento);
-  const cfg = JSON.parse(localStorage.getItem('streamdesk_config') || '{}');
-  const nome = c.nome.split(' ')[0];
+  btn.disabled=false;btn.textContent='✓ Salvar Cliente';
+  closeModal('modalOverlay');
+  await loadData();
+};
 
-  const tplHoje   = cfg.msgHoje    || 'Olá {nome}! 👋 Seu plano IPTV ({servidor}) vence HOJE. Renove para não ficar sem sinal! 📺';
-  const tplAmanha = cfg.msgAmanha  || 'Olá {nome}! 👋 Lembrando que seu plano IPTV ({servidor}) vence amanhã. Renove com antecedência! 😊';
-  const tplVenc   = cfg.msgVencido || 'Olá {nome}! 👋 Seu plano IPTV ({servidor}) está vencido. Entre em contato para renovar! 🙏';
+window.editClient=function(id){openModal(clientes.find(c=>c.id===id));};
 
-  let tpl = s==='vencido' ? tplVenc : s==='hoje' ? tplHoje : tplAmanha;
-  const msg = tpl.replace(/{nome}/g, nome).replace(/{servidor}/g, c.plataforma);
+window.deleteClient=async function(id){
+  if(!confirm('Tem certeza que deseja remover este cliente?'))return;
+  await deleteDoc(doc(db,'usuarios',currentUser.uid,'clientes',id));
+  if(openCardId===id)openCardId=null;
+  await loadData();
+};
 
-  const phone = c.contato ? c.contato.replace(/\D/g,'') : '';
-  window.open(phone ? `https://wa.me/${phone}?text=${encodeURIComponent(msg)}` : `https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
-}
+window.sendWA=function(id){
+  var c=clientes.find(c=>c.id===id), s=getStatus(c.vencimento);
+  var cfg=JSON.parse(localStorage.getItem('streamdesk_config')||'{}');
+  var nome=c.nome.split(' ')[0];
+  var tpl=s==='vencido'?(cfg.msgVencido||'Olá {nome}! 👋 Seu plano IPTV ({servidor}) está vencido. Entre em contato para renovar! 🙏'):s==='hoje'?(cfg.msgHoje||'Olá {nome}! 👋 Seu plano IPTV ({servidor}) vence HOJE. Renove! 📺'):(cfg.msgAmanha||'Olá {nome}! 👋 Seu plano IPTV ({servidor}) vence amanhã. Renove! 😊');
+  var msg=tpl.replace(/{nome}/g,nome).replace(/{servidor}/g,c.plataforma);
+  var phone=c.contato?c.contato.replace(/\D/g,''):'';
+  window.open(phone?'https://wa.me/'+phone+'?text='+encodeURIComponent(msg):'https://wa.me/?text='+encodeURIComponent(msg),'_blank');
+};
 
-function openRenew(id){
-  const c=clientes.find(c=>c.id==id);
+window.openRenew=function(id){
+  var c=clientes.find(c=>c.id===id);
   document.getElementById('renewId').value=id;
   document.getElementById('rVencimento').value='';
   document.getElementById('rValor').value='';
   document.getElementById('rObs').value='';
-  document.getElementById('renewInfo').innerHTML=`
-    <div class="renew-info-name">${c.pais} ${c.nome}</div>
-    <div class="renew-info-sub">${c.plataforma} · ${c.plano} · Vence em <b>${formatDate(c.vencimento)}</b></div>`;
+  document.getElementById('renewInfo').innerHTML='<div class="renew-info-name">'+c.pais+' '+c.nome+'</div><div class="renew-info-sub">'+c.plataforma+' · '+c.plano+' · Vence em <b>'+formatDate(c.vencimento)+'</b></div>';
   document.getElementById('renewOverlay').classList.add('open');
-}
-function confirmRenew(){
-  const id=document.getElementById('renewId').value;
-  const nov=document.getElementById('rVencimento').value;
-  const val=document.getElementById('rValor').value;
-  const pag=document.getElementById('rPagamento').value;
-  const obs=document.getElementById('rObs').value;
+};
+
+window.confirmRenew=async function(){
+  var id=document.getElementById('renewId').value;
+  var nov=document.getElementById('rVencimento').value;
   if(!nov){alert('Informe a nova data de vencimento!');return;}
-  const c=clientes.find(c=>c.id==id);
-  const anterior=c.vencimento;
-  c.vencimento=nov;
-  saveClientes();
-  if(val&&parseFloat(val)>0){
-    financas.push({id:Date.now(),data:today(),cliente:c.nome,plataforma:c.plataforma,valor:parseFloat(val),pagamento:pag,obs:obs||`Renovação ${formatDate(anterior)} → ${formatDate(nov)}`});
-    saveFinancas();
-  }
+  var val=document.getElementById('rValor').value;
+  var pag=document.getElementById('rPagamento').value;
+  var obs=document.getElementById('rObs').value;
+  var c=clientes.find(c=>c.id===id);
+  var anterior=c.vencimento;
+  var btn=document.getElementById('btnRenew');btn.disabled=true;btn.textContent='Salvando...';
+  await setDoc(doc(db,'usuarios',currentUser.uid,'clientes',id),{vencimento:nov},{merge:true});
+  if(val&&parseFloat(val)>0){await addDoc(finCol(),{data:today(),cliente:c.nome,plataforma:c.plataforma,valor:parseFloat(val),pagamento:pag,obs:obs||'Renovação '+formatDate(anterior)+' → '+formatDate(nov)});}
+  btn.disabled=false;btn.textContent='✓ Confirmar Renovação';
   closeModal('renewOverlay');
   openCardId=null;
-  render();
-  alert(`✅ Renovado até ${formatDate(nov)}!${val&&parseFloat(val)>0?`\n💰 R$ ${parseFloat(val).toFixed(2)} registrado em Finanças.`:''}`);
-}
+  await loadData();
+  alert('✅ Renovado até '+formatDate(nov)+'!'+(val&&parseFloat(val)>0?'\n💰 R$ '+parseFloat(val).toFixed(2)+' registrado em Finanças.':''));
+};
 
-// Reload data when returning to this page
-document.addEventListener('visibilitychange', function() {
-  if (document.visibilityState === 'visible') {
-    var cfg2 = JSON.parse(localStorage.getItem('streamdesk_config') || '{}');
-    if (cfg2.darkMode !== true) { document.body.classList.add('light'); }
-    else { document.body.classList.remove('light'); }
-    clientes   = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-    financas   = JSON.parse(localStorage.getItem(FINANCE_KEY) || '[]');
-    servidores = JSON.parse(localStorage.getItem(SRV_KEY) || '[]');
-    ocultarVencidos = localStorage.getItem('ocultarVencidos') === 'true';
-    updateOcultarBtn();
-    render();
-  }
+onAuthStateChanged(auth,async function(user){
+  if(!user){location.href='login.html';return;}
+  currentUser=user;
+  updateOcultarBtn();
+  await loadData();
 });
 
-updateOcultarBtn();
-render();
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'&&currentUser)loadData();});
 </script>
 </body>
 </html>
