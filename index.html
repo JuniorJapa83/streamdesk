@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <link rel="icon" href="favicon.png" type="image/png">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>StreamDesk — Home</title>
@@ -376,10 +375,54 @@
   }
   body.light .header { background: rgba(255,255,255,.96); }
   body.light .bottom-nav { background: rgba(255,255,255,.97); }
+
+  /* AVISO POPUP */
+  .aviso-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:999;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .35s}
+  .aviso-overlay.open{opacity:1;pointer-events:all}
+  .aviso-popup{background:#0e1220;border-radius:24px 24px 0 0;border-top:1px solid #1c2236;padding:24px 20px 44px;width:100%;max-height:85vh;overflow-y:auto;transform:translateY(100%);transition:transform .4s cubic-bezier(.32,.72,0,1)}
+  .aviso-overlay.open .aviso-popup{transform:translateY(0)}
+  .aviso-handle{width:40px;height:4px;background:#1c2236;border-radius:2px;margin:0 auto 20px}
+  .aviso-popup-header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+  .aviso-popup-icon{width:44px;height:44px;border-radius:14px;background:rgba(255,187,0,.12);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+  .aviso-popup-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:800}
+  .aviso-popup-title span{display:block;font-size:11px;color:#5a6480;font-weight:400;font-family:'DM Sans',sans-serif;margin-top:2px;text-transform:uppercase;letter-spacing:.5px}
+  .aviso-popup-body{font-size:14px;color:#c8cfe0;line-height:1.7;white-space:pre-wrap;background:#131825;border:1px solid #1c2236;border-radius:14px;padding:16px;margin-bottom:20px}
+  .aviso-popup-btn{width:100%;background:#00d4ff;color:#000;border:none;border-radius:14px;padding:15px;font-family:'Syne',sans-serif;font-weight:800;font-size:15px;cursor:pointer;transition:transform .15s}
+  .aviso-popup-btn:active{transform:scale(.97)}
+
 </style>
 </head>
 <body>
-<script>(function(){var c=JSON.parse(localStorage.getItem('streamdesk_config')||'{}');if(c.darkMode!==true)document.body.classList.add('light');})()</script>
+<script>(function(){var c=JSON.parse(localStorage.getItem('streamdesk_config')||'{}');if(c.darkMode!==true)document.body.classList.add('light');})()
+// ── AVISO POPUP ───────────────────────────────────
+async function checkAviso() {
+  try {
+    const snap = await getDoc(doc(db, 'config', 'aviso'));
+    if (!snap.exists()) return;
+    const data = snap.data();
+    if (!data.ativo) return;
+
+    // Check if user already saw this version
+    const seenKey = 'aviso_seen_' + (data.atualizadoEm || '');
+    if (localStorage.getItem(seenKey)) return;
+
+    // Show popup
+    document.getElementById('avisoPopupBody').textContent = data.texto || '';
+    document.getElementById('avisoOverlay').classList.add('open');
+
+    // Mark as seen when closed
+    window._avisoSeenKey = seenKey;
+  } catch(e) { console.error('Erro aviso:', e); }
+}
+
+window.fecharAviso = function() {
+  document.getElementById('avisoOverlay').classList.remove('open');
+  if (window._avisoSeenKey) {
+    localStorage.setItem(window._avisoSeenKey, '1');
+  }
+};
+
+</script>
 
 <!-- HEADER -->
 <div class="header">
@@ -428,7 +471,7 @@
 <script type="module">
 import { initializeApp }                        from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 import { getAuth, onAuthStateChanged }          from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAGHvkDpeSbCTriZCvRf-jJ6z8PQSSWLHI",
@@ -478,6 +521,7 @@ async function loadAndRender(user) {
   if (logoSub) logoSub.textContent = 'Olá, ' + nome + ' 👋';
 
   render(clientes, servidores, cfg);
+  checkAviso();
 }
 
 onAuthStateChanged(auth, async function(user) {
@@ -558,6 +602,23 @@ function render(clientes, servidores, config) {
   });
 }
 </script>
+
+
+<!-- AVISO POPUP -->
+<div class="aviso-overlay" id="avisoOverlay">
+  <div class="aviso-popup">
+    <div class="aviso-handle"></div>
+    <div class="aviso-popup-header">
+      <div class="aviso-popup-icon">📢</div>
+      <div class="aviso-popup-title">
+        Aviso Importante
+        <span>da administração</span>
+      </div>
+    </div>
+    <div class="aviso-popup-body" id="avisoPopupBody"></div>
+    <button class="aviso-popup-btn" onclick="fecharAviso()">Entendido ✓</button>
+  </div>
+</div>
 
 <!-- BOTTOM NAV -->
 <div class="bottom-nav">

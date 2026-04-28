@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <link rel="icon" href="favicon.png" type="image/png">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>StreamDesk — Admin</title>
@@ -163,6 +162,23 @@
   .q-btn:active{transform:scale(.95)}
   .q-btn.selected{border-color:var(--accent);background:rgba(0,212,255,.1);color:var(--accent)}
 
+
+  /* AVISO ADMIN */
+  .aviso-card{background:var(--card);border:1px solid rgba(255,187,0,.2);border-radius:var(--radius);padding:16px;margin-bottom:4px}
+  .aviso-status{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+  .aviso-status-dot{width:8px;height:8px;border-radius:50%;background:var(--muted);flex-shrink:0}
+  .aviso-status-dot.ativo{background:var(--green);box-shadow:0 0 8px var(--green)}
+  .aviso-status-txt{font-size:12px;color:var(--muted);font-weight:600}
+  .aviso-status-txt.ativo{color:var(--green)}
+  .aviso-textarea{width:100%;background:var(--card2);border:1.5px solid var(--border);border-radius:12px;padding:12px 14px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;resize:none;min-height:110px;transition:border .2s;line-height:1.5}
+  .aviso-textarea:focus{border-color:var(--yellow)}
+  .aviso-textarea::placeholder{color:var(--muted)}
+  .aviso-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+  .btn-pub{padding:11px;border:none;border-radius:10px;background:rgba(255,187,0,.15);color:var(--yellow);font-size:13px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s}
+  .btn-pub:active{transform:scale(.95)}
+  .btn-despub{padding:11px;border:none;border-radius:10px;background:rgba(255,59,92,.08);color:var(--red);font-size:13px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s;border:1px solid rgba(255,59,92,.15)}
+  .btn-despub:active{transform:scale(.95)}
+  .aviso-hint{font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5;text-align:center}
   /* TOAST */
   .toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);background:rgba(0,224,150,.15);border:1px solid var(--green);color:var(--green);border-radius:50px;padding:8px 20px;font-size:13px;font-weight:600;opacity:0;transition:opacity .3s;pointer-events:none;z-index:300;white-space:nowrap}
   .toast.show{opacity:1}
@@ -234,6 +250,22 @@
     <div class="search-wrap">
       <span class="search-icon">🔍</span>
       <input class="search-input" id="searchInput" type="text" placeholder="Buscar por nome, e-mail ou WhatsApp..." oninput="onSearch()">
+    </div>
+
+
+    <!-- AVISO ADMIN -->
+    <div class="sec">📢 Aviso aos Usuários</div>
+    <div class="aviso-card">
+      <div class="aviso-status">
+        <div class="aviso-status-dot" id="avisoStatusDot"></div>
+        <span class="aviso-status-txt" id="avisoStatusTxt">Sem aviso ativo</span>
+      </div>
+      <textarea class="aviso-textarea" id="avisoTexto" placeholder="Escreva aqui o aviso que aparecerá para todos os usuários ao fazerem login...&#10;&#10;Ex: 🔧 Manutenção programada amanhã às 22h. O sistema ficará indisponível por 30 minutos."></textarea>
+      <div class="aviso-actions">
+        <button class="btn-pub" onclick="publicarAviso()">📢 Publicar Aviso</button>
+        <button class="btn-despub" onclick="despublicarAviso()">🔕 Remover Aviso</button>
+      </div>
+      <div class="aviso-hint">O aviso aparece como pop-up para todos os usuários na próxima vez que abrirem o app.</div>
     </div>
 
     <!-- LOADING -->
@@ -318,7 +350,7 @@
 <script type="module">
 import { initializeApp }                          from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getFirestore, collection, onSnapshot,
-         doc, updateDoc, deleteDoc, setDoc,
+         doc, updateDoc, deleteDoc, setDoc, getDoc,
          serverTimestamp }                        from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 // ── CONFIG ───────────────────────────────────────
@@ -417,6 +449,7 @@ function showApp() {
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('appScreen').classList.add('show');
   startListen();
+  loadAviso();
 }
 
 // ── FIRESTORE LISTENER (tempo real) ──────────────
@@ -619,6 +652,60 @@ window.confirmDel = async function() {
   pendingDelId = null;
   closeModal('ovDel');
   showToast('🗑️ Usuário excluído.');
+};
+
+
+// ── AVISO ─────────────────────────────────────────
+async function loadAviso() {
+  try {
+    const snap = await getDoc(doc(db, 'config', 'aviso'));
+    if (snap.exists()) {
+      const data = snap.data();
+      document.getElementById('avisoTexto').value = data.texto || '';
+      const ativo = data.ativo === true;
+      const dot = document.getElementById('avisoStatusDot');
+      const txt = document.getElementById('avisoStatusTxt');
+      if (ativo) {
+        dot.classList.add('ativo');
+        txt.classList.add('ativo');
+        txt.textContent = '✅ Aviso ativo — aparecendo para os usuários';
+      } else {
+        dot.classList.remove('ativo');
+        txt.classList.remove('ativo');
+        txt.textContent = 'Sem aviso ativo';
+      }
+    }
+  } catch(e) { console.error('Erro ao carregar aviso:', e); }
+}
+
+window.publicarAviso = async function() {
+  const texto = document.getElementById('avisoTexto').value.trim();
+  if (!texto) { showToast('✏️ Escreva o aviso antes de publicar!', 'red'); return; }
+  await setDoc(doc(db, 'config', 'aviso'), {
+    texto,
+    ativo: true,
+    atualizadoEm: new Date().toISOString(),
+  });
+  const dot = document.getElementById('avisoStatusDot');
+  const txt = document.getElementById('avisoStatusTxt');
+  dot.classList.add('ativo');
+  txt.classList.add('ativo');
+  txt.textContent = '✅ Aviso ativo — aparecendo para os usuários';
+  showToast('📢 Aviso publicado com sucesso!');
+};
+
+window.despublicarAviso = async function() {
+  await setDoc(doc(db, 'config', 'aviso'), {
+    texto: document.getElementById('avisoTexto').value.trim(),
+    ativo: false,
+    atualizadoEm: new Date().toISOString(),
+  });
+  const dot = document.getElementById('avisoStatusDot');
+  const txt = document.getElementById('avisoStatusTxt');
+  dot.classList.remove('ativo');
+  txt.classList.remove('ativo');
+  txt.textContent = 'Sem aviso ativo';
+  showToast('🔕 Aviso removido.');
 };
 
 // ── INIT ─────────────────────────────────────────
