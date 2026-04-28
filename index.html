@@ -491,51 +491,42 @@ function criarOverlayAviso() {
   });
 }
 
-// Flag global — persiste enquanto a aba estiver aberta
-// Mesmo navegando entre páginas e voltando, essa flag impede re-exibição
-let _avisoJaMostrado = false;
-
 async function checkAviso(user) {
-  // Se já mostrou nessa sessão de aba, não mostra de novo
-  if (_avisoJaMostrado) return;
-
   try {
     const snap = await getDoc(doc(db, 'config', 'aviso'));
     if (!snap.exists()) return;
     const data = snap.data();
     if (!data.ativo || !data.texto) return;
 
-    const freq = data.frequencia || 'uma';
-    const key  = 'aviso_visto_' + (data.atualizadoEm || 'v1') + '_' + user.uid;
+    const freq     = data.frequencia || 'uma';
+    const avisoId  = data.atualizadoEm || 'v1';
+    
+    // Chave "uma vez" — permanente até novo aviso
+    const keyUma   = 'aviso_uma_' + avisoId + '_' + user.uid;
+    if (freq === 'uma' && localStorage.getItem(keyUma)) return;
 
-      // Verifica se já foi exibido nessa sessão de login (8h)
-    const sessKey = 'aviso_sessao_' + (data.atualizadoEm || 'v1') + '_' + user.uid;
-    const sessVal = localStorage.getItem(sessKey);
-    if (sessVal && Date.now() < Number(sessVal)) return;
+    // Chave "hoje" — bloqueia para o dia inteiro, para qualquer frequência
+    const hoje     = new Date().toISOString().slice(0, 10); // "2026-04-28"
+    const keyHoje  = 'aviso_hoje_' + avisoId + '_' + user.uid + '_' + hoje;
+    if (localStorage.getItem(keyHoje)) return;
 
-    // Modo "uma vez": não mostra se já foi fechado anteriormente
-    if (freq === 'uma' && localStorage.getItem(key)) return;
-
-    _avisoJaMostrado = true;
-
-    // Guarda que já exibiu nessa sessão de login (expira em 8h)
-    const sessKey = 'aviso_sessao_' + (data.atualizadoEm || 'v1') + '_' + user.uid;
-    const expire  = Date.now() + (8 * 60 * 60 * 1000); // 8 horas
-    localStorage.setItem(sessKey, String(expire));
+    // Salva ANTES de exibir — garante bloqueio mesmo ao recarregar
+    localStorage.setItem(keyHoje, '1');
 
     criarOverlayAviso();
     document.getElementById('avisoBoxBody').textContent = data.texto;
     document.getElementById('avisoOverlay').classList.add('show');
-    window._avisoKey  = key;
-    window._avisoFreq = freq;
+    window._avisoKeyUma = keyUma;
+    window._avisoFreq   = freq;
   } catch(e) { console.error('Aviso erro:', e); }
 }
 
 window.fecharAviso = function() {
   const el = document.getElementById('avisoOverlay');
   if (el) el.classList.remove('show');
-  if (window._avisoFreq === 'uma' && window._avisoKey) {
-    localStorage.setItem(window._avisoKey, '1');
+  // Se "uma vez", marca como visto permanentemente
+  if (window._avisoFreq === 'uma' && window._avisoKeyUma) {
+    localStorage.setItem(window._avisoKeyUma, '1');
   }
 };
 
