@@ -454,6 +454,43 @@ const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
 // ── AVISO ─────────────────────────────────────────
+function criarOverlayAviso() {
+  if (document.getElementById('avisoOverlay')) return;
+  const style = document.createElement('style');
+  style.textContent = `
+    #avisoOverlay{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.78);backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .35s}
+    #avisoOverlay.show{opacity:1;pointer-events:all}
+    #avisoBox{background:#0e1220;border:1px solid #2a3352;border-radius:24px;padding:24px 20px 20px;width:100%;max-width:400px;max-height:80vh;overflow-y:auto;transform:translateY(20px) scale(.97);transition:transform .35s cubic-bezier(.32,.72,0,1)}
+    #avisoOverlay.show #avisoBox{transform:translateY(0) scale(1)}
+    #avisoBoxBody{font-size:14px;color:#c8cfe0;line-height:1.7;white-space:pre-wrap;background:#131825;border:1px solid #1c2236;border-radius:12px;padding:14px;margin-bottom:16px}
+    #avisoBoxBtn{width:100%;background:#00d4ff;color:#000;border:none;border-radius:12px;padding:13px;font-family:'Syne',sans-serif;font-weight:800;font-size:14px;cursor:pointer}
+  `;
+  document.head.appendChild(style);
+
+  const overlay = document.createElement('div');
+  overlay.id = 'avisoOverlay';
+  overlay.innerHTML = `
+    <div id="avisoBox">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+        <div style="width:42px;height:42px;border-radius:13px;background:rgba(255,187,0,.12);border:1px solid rgba(255,187,0,.2);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">📢</div>
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:#e4e8f4">Aviso Importante</div>
+          <div style="font-size:11px;color:#5a6480;text-transform:uppercase;letter-spacing:.5px">da administração</div>
+        </div>
+      </div>
+      <div id="avisoBoxBody"></div>
+      <button id="avisoBoxBtn">Entendido ✓</button>
+    </div>`;
+  document.body.appendChild(overlay);
+
+  document.getElementById('avisoBoxBtn').addEventListener('click', function() {
+    document.getElementById('avisoOverlay').classList.remove('show');
+    if (window._avisoFreq === 'uma' && window._avisoKey) {
+      localStorage.setItem(window._avisoKey, '1');
+    }
+  });
+}
+
 async function checkAviso(user) {
   try {
     const snap = await getDoc(doc(db, 'config', 'aviso'));
@@ -463,9 +500,9 @@ async function checkAviso(user) {
 
     const freq = data.frequencia || 'uma';
     const key  = 'aviso_visto_' + (data.atualizadoEm || 'v1') + '_' + user.uid;
-
     if (freq === 'uma' && localStorage.getItem(key)) return;
 
+    criarOverlayAviso();
     document.getElementById('avisoBoxBody').textContent = data.texto;
     document.getElementById('avisoOverlay').classList.add('show');
     window._avisoKey  = key;
@@ -474,7 +511,8 @@ async function checkAviso(user) {
 }
 
 window.fecharAviso = function() {
-  document.getElementById('avisoOverlay').classList.remove('show');
+  const el = document.getElementById('avisoOverlay');
+  if (el) el.classList.remove('show');
   if (window._avisoFreq === 'uma' && window._avisoKey) {
     localStorage.setItem(window._avisoKey, '1');
   }
