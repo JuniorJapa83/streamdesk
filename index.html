@@ -375,72 +375,10 @@
   }
   body.light .header { background: rgba(255,255,255,.96); }
   body.light .bottom-nav { background: rgba(255,255,255,.97); }
-
-  /* ── AVISO OVERLAY ── */
-  .aviso-overlay{
-    position:fixed;inset:0;z-index:999;
-    display:flex;align-items:center;justify-content:center;
-    padding:20px;
-    background:rgba(0,0,0,.7);
-    backdrop-filter:blur(6px);
-    opacity:0;pointer-events:none;
-    transition:opacity .35s;
-  }
-  .aviso-overlay.show{opacity:1;pointer-events:all}
-  .aviso-box{
-    background:#0e1220;
-    border:1px solid #1c2236;
-    border-radius:24px;
-    padding:24px 20px 20px;
-    width:100%;max-width:400px;
-    max-height:80vh;overflow-y:auto;
-    transform:translateY(20px) scale(.97);
-    transition:transform .35s cubic-bezier(.32,.72,0,1);
-    position:relative;
-  }
-  .aviso-overlay.show .aviso-box{transform:translateY(0) scale(1)}
-  .aviso-box-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px}
-  .aviso-box-icon{width:42px;height:42px;border-radius:13px;background:rgba(255,187,0,.12);border:1px solid rgba(255,187,0,.2);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-  .aviso-box-titles{}
-  .aviso-box-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:#e4e8f4}
-  .aviso-box-sub{font-size:11px;color:#5a6480;margin-top:2px;text-transform:uppercase;letter-spacing:.5px}
-  .aviso-box-body{font-size:14px;color:#c8cfe0;line-height:1.7;white-space:pre-wrap;background:#131825;border:1px solid #1c2236;border-radius:12px;padding:14px;margin-bottom:16px}
-  .aviso-box-btn{width:100%;background:#00d4ff;color:#000;border:none;border-radius:12px;padding:13px;font-family:'Syne',sans-serif;font-weight:800;font-size:14px;cursor:pointer;transition:transform .15s}
-  .aviso-box-btn:active{transform:scale(.97)}
 </style>
 </head>
 <body>
-<script>(function(){var c=JSON.parse(localStorage.getItem('streamdesk_config')||'{}');if(c.darkMode!==true)document.body.classList.add('light');})()
-// ── AVISO ─────────────────────────────────────────
-async function checkAviso(user) {
-  try {
-    const snap = await getDoc(doc(db,'config','aviso'));
-    if (!snap.exists()) return;
-    const data = snap.data();
-    if (!data.ativo || !data.texto) return;
-
-    const freq = data.frequencia || 'uma';
-    const key  = 'aviso_visto_' + (data.atualizadoEm || 'v1') + '_' + user.uid;
-
-    // Se 'uma vez' e já viu, não mostra
-    if (freq === 'uma' && localStorage.getItem(key)) return;
-
-    // Mostra
-    document.getElementById('avisoBoxBody').textContent = data.texto;
-    document.getElementById('avisoOverlay').classList.add('show');
-    window._avisoKey  = key;
-    window._avisoFreq = freq;
-  } catch(e) { console.error('Aviso erro:',e); }
-}
-
-window.fecharAviso = function() {
-  document.getElementById('avisoOverlay').classList.remove('show');
-  // Salva como visto apenas se for "uma vez"
-  if (window._avisoFreq === 'uma' && window._avisoKey) {
-    localStorage.setItem(window._avisoKey, '1');
-  }
-};
-</script>
+<script>(function(){var c=JSON.parse(localStorage.getItem('streamdesk_config')||'{}');if(c.darkMode!==true)document.body.classList.add('light');})()</script>
 
 <!-- HEADER -->
 <div class="header">
@@ -489,7 +427,7 @@ window.fecharAviso = function() {
 <script type="module">
 import { initializeApp }                        from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 import { getAuth, onAuthStateChanged }          from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAGHvkDpeSbCTriZCvRf-jJ6z8PQSSWLHI",
@@ -502,6 +440,33 @@ const firebaseConfig = {
 const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
+// ── AVISO ─────────────────────────────────────────
+async function checkAviso(user) {
+  try {
+    const snap = await getDoc(doc(db, 'config', 'aviso'));
+    if (!snap.exists()) return;
+    const data = snap.data();
+    if (!data.ativo || !data.texto) return;
+
+    const freq = data.frequencia || 'uma';
+    const key  = 'aviso_visto_' + (data.atualizadoEm || 'v1') + '_' + user.uid;
+
+    if (freq === 'uma' && localStorage.getItem(key)) return;
+
+    document.getElementById('avisoBoxBody').textContent = data.texto;
+    document.getElementById('avisoOverlay').classList.add('show');
+    window._avisoKey  = key;
+    window._avisoFreq = freq;
+  } catch(e) { console.error('Aviso erro:', e); }
+}
+
+window.fecharAviso = function() {
+  document.getElementById('avisoOverlay').classList.remove('show');
+  if (window._avisoFreq === 'uma' && window._avisoKey) {
+    localStorage.setItem(window._avisoKey, '1');
+  }
+};
+
 
 function today() {
   var d=new Date(), y=d.getFullYear();
@@ -539,7 +504,7 @@ async function loadAndRender(user) {
   if (logoSub) logoSub.textContent = 'Olá, ' + nome + ' 👋';
 
   render(clientes, servidores, cfg);
-  checkAviso(user);
+  await checkAviso(user);
 }
 
 onAuthStateChanged(auth, async function(user) {
@@ -620,21 +585,6 @@ function render(clientes, servidores, config) {
   });
 }
 </script>
-
-<!-- AVISO OVERLAY -->
-<div class="aviso-overlay" id="avisoOverlay">
-  <div class="aviso-box">
-    <div class="aviso-box-header">
-      <div class="aviso-box-icon">📢</div>
-      <div class="aviso-box-titles">
-        <div class="aviso-box-title">Aviso Importante</div>
-        <div class="aviso-box-sub">da administração</div>
-      </div>
-    </div>
-    <div class="aviso-box-body" id="avisoBoxBody"></div>
-    <button class="aviso-box-btn" onclick="fecharAviso()">Entendido ✓</button>
-  </div>
-</div>
 
 <!-- BOTTOM NAV -->
 <div class="bottom-nav">
