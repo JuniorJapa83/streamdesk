@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <link rel="icon" href="favicon.png" type="image/png">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>StreamDesk — Login</title>
@@ -70,7 +69,7 @@
   <div class="logo-wrap">
     <div class="logo-icon">📡</div>
     <div class="logo-name">Stream<span>Desk</span></div>
-    <div class="logo-sub">Gestão de clientes</div>
+    <div class="logo-sub">Gestão de clientes IPTV</div>
   </div>
 
   <!-- TELA LOGIN/CADASTRO -->
@@ -262,11 +261,16 @@ async function processUser(user, tipo) {
       window.switchTab('cadastro');
       return;
     }
-    // Cria conta sem WhatsApp ainda
+    // Calcula expiração: hoje + 30 dias
+    var expDate = new Date();
+    expDate.setDate(expDate.getDate() + 30);
+    var expStr = expDate.getFullYear()+'-'+String(expDate.getMonth()+1).padStart(2,'0')+'-'+String(expDate.getDate()).padStart(2,'0');
+
+    // Cria conta com 30 dias de teste
     await setDoc(doc(db,'usuarios',user.uid), {
       uid:user.uid, nome:user.displayName||'', email:user.email||'',
       foto:user.photoURL||'', whatsapp:'', status:'ativo',
-      dataCadastro:todayStr(), expiracao:null, ultimoAcesso:todayStr(),
+      dataCadastro:todayStr(), expiracao:expStr, ultimoAcesso:todayStr(),
     });
     // Pede WhatsApp antes de entrar
     showWAScreen(user);
