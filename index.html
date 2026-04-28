@@ -498,15 +498,15 @@ async function checkAviso(user) {
     const data = snap.data();
     if (!data.ativo || !data.texto) return;
 
-    const freq = data.frequencia || 'uma';
-    const key  = 'aviso_visto_' + (data.atualizadoEm || 'v1') + '_' + user.uid;
-    const sessKey = 'aviso_sessao_' + (data.atualizadoEm || 'v1');
+    const freq    = data.frequencia || 'uma';
+    const key     = 'aviso_visto_' + (data.atualizadoEm || 'v1') + '_' + user.uid;
+    const sessKey = 'aviso_sessao_' + (data.atualizadoEm || 'v1') + '_' + user.uid;
 
-    // "uma vez": não mostra se já viu antes
+    // Já viu nessa sessão de login? Não mostra mais (vale para qualquer frequência)
+    if (localStorage.getItem(sessKey)) return;
+
+    // Modo "uma vez": não mostra se já fechou o aviso antes
     if (freq === 'uma' && localStorage.getItem(key)) return;
-
-    // Qualquer frequência: não mostra de novo na mesma sessão de navegação
-    if (sessionStorage.getItem(sessKey)) return;
 
     criarOverlayAviso();
     document.getElementById('avisoBoxBody').textContent = data.texto;
@@ -514,8 +514,9 @@ async function checkAviso(user) {
     window._avisoKey  = key;
     window._avisoFreq = freq;
     window._avisoSessKey = sessKey;
-    // Marca sessão imediatamente
-    sessionStorage.setItem(sessKey, '1');
+
+    // Marca como visto nessa sessão IMEDIATAMENTE
+    localStorage.setItem(sessKey, '1');
   } catch(e) { console.error('Aviso erro:', e); }
 }
 
@@ -569,6 +570,8 @@ async function loadAndRender(user) {
 
 onAuthStateChanged(auth, async function(user) {
   if (!user) { location.href='login.html'; return; }
+  // Limpa chaves de sessão antigas ao fazer login (novo login = novos avisos)
+  // mas mantém as de "uma vez"
   await loadAndRender(user);
 });
 
@@ -577,6 +580,13 @@ document.addEventListener('visibilitychange', function() {
     var u = auth.currentUser;
     if (u) loadAndRender(u);
   }
+});
+
+// Limpa chaves de sessão de aviso ao fechar o navegador/aba
+window.addEventListener('beforeunload', function() {
+  Object.keys(localStorage).forEach(function(k) {
+    if (k.startsWith('aviso_sessao_')) localStorage.removeItem(k);
+  });
 });
 
 function getWAMsg(nome, plataforma, vencimento, config) {
