@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>StreamDesk — Clientes</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="theme.css">
-  <style>
+<style>
   :root{--bg:#080b12;--surface:#0e1220;--card:#131825;--card2:#161c2c;--border:#1c2236;--accent:#00d4ff;--red:#ff3b5c;--yellow:#ffbb00;--orange:#ff7b00;--green:#00e096;--purple:#a78bfa;--text:#e4e8f4;--muted:#5a6480;--radius:16px}
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:420px;margin:0 auto;overflow-x:hidden}
@@ -168,7 +168,7 @@
       <div class="form-group"><label class="form-label">Vencimento</label><input class="form-input" id="fVencimento" type="date"></div>
       <div class="form-group"><label class="form-label">País</label><select class="form-select" id="fPais"><option value="🇧🇷">🇧🇷 Brasil</option><option value="🇵🇹">🇵🇹 Portugal</option><option value="🇪🇸">🇪🇸 Espanha</option><option value="🇺🇸">🇺🇸 EUA</option><option value="🇦🇴">🇦🇴 Angola</option><option value="🌍">🌍 Outro</option></select></div>
     </div>
-    <div class="form-group"><label class="form-label">Contato (WhatsApp)</label><input class="form-input" id="fContato" placeholder="+55 11 99999-9999"></div>
+    <div class="form-group"><label class="form-label">WhatsApp <span style="color:var(--red)">*</span> <span style="color:var(--muted);font-weight:400;font-size:10px">obrigatório</span></label><div style="display:flex;align-items:center;background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:border .2s" id="contatoWrap"><span style="padding:0 12px;font-size:16px;color:var(--green);flex-shrink:0">📲</span><input class="form-input" id="fContato" placeholder="55 11 99999-9999" type="tel" style="border:none;border-radius:0;padding-left:0"></div><div style="font-size:11px;color:var(--muted);margin-top:4px">Digite com DDD. Ex: 55 11 99999-9999</div></div>
     <div class="form-group"><label class="form-label">Observações</label><input class="form-input" id="fObs" placeholder="Ex: FP, desconto especial..."></div>
     <div class="form-group" id="valorPagoGroup"><label class="form-label">Valor Pago (R$) <span style="color:var(--muted);font-size:10px">— opcional</span></label><input class="form-input" id="fValorPago" type="number" placeholder="0,00" step="0.01" min="0"></div>
     <div class="form-group" id="pagamentoGroup"><label class="form-label">Forma de Pagamento</label><select class="form-select" id="fPagamento"><option>PIX</option><option>Dinheiro</option><option>Cartão</option><option>Transferência</option><option>Outro</option></select></div>
@@ -284,7 +284,7 @@ function renderPage(){
           '<div><div class="detail-label">Plano</div><div class="detail-value">📦 '+c.plano+'</div></div>'+
           '<div><div class="detail-label">Vencimento</div><div class="detail-value">'+formatDate(c.vencimento)+'</div></div>'+
           '<div><div class="detail-label">País</div><div class="detail-value">'+c.pais+'</div></div>'+
-          '<div><div class="detail-label">Contato</div><div class="detail-value" style="font-size:13px">'+(c.contato||'—')+'</div></div>'+
+          '<div><div class="detail-label">WhatsApp</div><div class="detail-value" style="font-size:13px">'+(c.contato?'<a href="https://wa.me/'+c.contato.replace(/\D/g,'')+'" style="color:var(--green);text-decoration:none" target="_blank">📲 '+c.contato+'</a>':'—')+'</div></div>'+
         '</div>'+
         (c.obs?'<div class="detail-obs">💬 '+c.obs+'</div>':'')+
         '<div class="detail-actions">'+
@@ -329,6 +329,8 @@ window.saveClient=async function(){
   if(!nome){alert('Informe o nome do cliente!');return;}
   var vencimento=document.getElementById('fVencimento').value;
   if(!vencimento){alert('Informe a data de vencimento!');return;}
+  var contato=document.getElementById('fContato').value.trim();
+  if(!contato||contato.replace(/\D/g,'').length<10){alert('WhatsApp obrigatório! Informe com DDD (mínimo 10 dígitos).');return;}
   var data={nome,plataforma:document.getElementById('fPlataforma').value,plano:document.getElementById('fPlano').value,vencimento,pais:document.getElementById('fPais').value,contato:document.getElementById('fContato').value,obs:document.getElementById('fObs').value};
   var btn=document.getElementById('btnSaveClient');btn.disabled=true;btn.textContent='Salvando...';
   var editId=document.getElementById('editId').value;
