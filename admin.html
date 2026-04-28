@@ -200,6 +200,36 @@
 
   .fin-empty{text-align:center;padding:40px 20px;color:var(--muted);font-size:13px}
 
+
+  /* ── NAVEGAÇÃO DE MÊS ── */
+  .mes-nav{display:flex;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 16px;margin-bottom:12px}
+  .mes-btn{background:var(--card2);border:1px solid var(--border);border-radius:8px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:var(--text);transition:all .2s;flex-shrink:0}
+  .mes-btn:active{transform:scale(.9)}
+  .mes-label{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;text-align:center}
+  .mes-label span{display:block;font-size:10px;color:var(--muted);font-weight:400;font-family:'DM Sans',sans-serif;text-transform:uppercase;letter-spacing:.5px;margin-top:1px}
+
+  /* ── PAGAMENTO ROW ── */
+  .pag-row{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:8px;transition:border-color .2s}
+  .pag-row.pago{border-color:rgba(0,224,150,.25);background:rgba(0,224,150,.03)}
+  .pag-row.pendente{border-color:rgba(255,187,0,.2)}
+  .pag-avatar{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;font-family:'Syne',sans-serif;flex-shrink:0;color:#000;overflow:hidden}
+  .pag-avatar img{width:100%;height:100%;object-fit:cover;border-radius:10px}
+  .pag-info{flex:1;min-width:0}
+  .pag-nome{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .pag-valor{font-size:11px;color:var(--muted);margin-top:2px}
+  .pag-btn{padding:7px 14px;border:none;border-radius:8px;font-size:12px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s;flex-shrink:0;white-space:nowrap}
+  .pag-btn:active{transform:scale(.93)}
+  .pag-btn.btn-pago{background:rgba(0,224,150,.15);color:var(--green);border:1px solid rgba(0,224,150,.2)}
+  .pag-btn.btn-pendente{background:rgba(255,187,0,.12);color:var(--yellow);border:1px solid rgba(255,187,0,.2)}
+
+  /* ── RESUMO PAGAMENTO ── */
+  .pag-resumo{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+  .pag-res-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 10px;text-align:center}
+  .pag-res-num{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:3px}
+  .pag-res-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+  .pag-res-card.green{border-color:rgba(0,224,150,.2)}.pag-res-card.green .pag-res-num{color:var(--green)}
+  .pag-res-card.yellow{border-color:rgba(255,187,0,.2)}.pag-res-card.yellow .pag-res-num{color:var(--yellow)}
+  .pag-res-card.accent{border-color:rgba(0,212,255,.2)}.pag-res-card.accent .pag-res-num{color:var(--accent)}
   /* ── MODAIS ── */
   .overlay{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:200;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .3s}
   .overlay.open{opacity:1;pointer-events:all}
@@ -356,38 +386,55 @@
   <div class="page" id="page-financas">
     <div class="content">
 
-      <div class="sec">Resumo do Mês</div>
-      <div class="fin-summary">
-        <div class="fin-card green">
-          <div class="fin-card-label">Usuários Ativos</div>
-          <div class="fin-card-val" id="finAtivos">—</div>
-          <div class="fin-card-sub">com valor definido</div>
+      <!-- Navegação de mês -->
+      <div class="sec">Período</div>
+      <div class="mes-nav">
+        <button class="mes-btn" onclick="mudarMes(-1)">‹</button>
+        <div class="mes-label">
+          <span id="finMesLabel">—</span>
+          <span id="finMesAno">—</span>
         </div>
-        <div class="fin-card yellow">
-          <div class="fin-card-label">Receita Mensal</div>
-          <div class="fin-card-val" id="finTotal">R$ —</div>
-          <div class="fin-card-sub">soma dos valores</div>
+        <button class="mes-btn" onclick="mudarMes(1)">›</button>
+      </div>
+
+      <!-- Resumo do mês -->
+      <div class="pag-resumo">
+        <div class="pag-res-card green">
+          <div class="pag-res-num" id="finQtdPago">—</div>
+          <div class="pag-res-label">Pagaram</div>
         </div>
-        <div class="fin-card red">
-          <div class="fin-card-label">Sem Valor</div>
-          <div class="fin-card-val" id="finSemValor">—</div>
-          <div class="fin-card-sub">usuários</div>
+        <div class="pag-res-card yellow">
+          <div class="pag-res-num" id="finQtdPend">—</div>
+          <div class="pag-res-label">Pendentes</div>
         </div>
-        <div class="fin-card purple">
-          <div class="fin-card-label">Expirando</div>
-          <div class="fin-card-val" id="finExpirando">—</div>
-          <div class="fin-card-sub">em 7 dias</div>
+        <div class="pag-res-card accent">
+          <div class="pag-res-num" id="finTxPag">—%</div>
+          <div class="pag-res-label">Recebido</div>
         </div>
       </div>
 
-      <div class="fin-total-bar">
-        <span class="fin-total-label">💰 Total estimado/mês</span>
-        <span class="fin-total-val" id="finTotalBar">R$ 0,00</span>
+      <!-- Total recebido -->
+      <div class="fin-total-bar" style="margin-bottom:12px">
+        <div>
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">Total Recebido</div>
+          <div class="fin-total-val" id="finTotalRecebido">R$ 0,00</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">Pendente</div>
+          <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--yellow)" id="finTotalPend">R$ 0,00</div>
+        </div>
       </div>
 
-      <div class="sec">Valor por Usuário</div>
+      <!-- Lista de pagamentos -->
+      <div class="sec">Pagamentos</div>
+      <div id="finPagList">
+        <div class="loading-spinner" style="margin:30px auto"></div>
+      </div>
+
+      <!-- Valor por usuário (configuração) -->
+      <div class="sec" style="margin-top:24px">⚙️ Valor Mensal por Usuário</div>
       <div style="background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.15);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--accent);margin-bottom:12px">
-        💡 Defina o valor mensal de cada usuário. Os totais são calculados automaticamente.
+        💡 Defina o valor de cada usuário. É usado como referência em todos os meses.
       </div>
       <div id="finUserList">
         <div class="loading-spinner" style="margin:30px auto"></div>
@@ -786,57 +833,126 @@ window.despublicarAviso = async function() {
 };
 
 // ── FINANÇAS ──────────────────────────────────────
-function renderFinancas() {
-  const ativos     = _allUsers.filter(u=>u.status==='ativo');
-  const comValor   = ativos.filter(u=>u.valorMensal&&Number(u.valorMensal)>0);
-  const semValor   = ativos.filter(u=>!u.valorMensal||Number(u.valorMensal)===0);
-  const expirando  = ativos.filter(u=>{ const d=daysUntil(u.expiracao); return d!==null&&d>=0&&d<=7; });
-  const total      = comValor.reduce((s,u)=>s+Number(u.valorMensal||0),0);
+// ── FINANÇAS ─────────────────────────────────────
+const MESES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+let _finMes  = new Date().getMonth();    // 0-11
+let _finAno  = new Date().getFullYear();
+let _pagamentos = {}; // cache: { uid: true/false }
 
-  document.getElementById('finAtivos').textContent   = comValor.length;
-  document.getElementById('finTotal').textContent    = formatMoney(total);
-  document.getElementById('finSemValor').textContent = semValor.length;
-  document.getElementById('finExpirando').textContent= expirando.length;
-  document.getElementById('finTotalBar').textContent = formatMoney(total);
+window.mudarMes = function(dir) {
+  _finMes += dir;
+  if (_finMes > 11) { _finMes = 0;  _finAno++; }
+  if (_finMes < 0)  { _finMes = 11; _finAno--; }
+  renderFinancas();
+};
 
-  const list = document.getElementById('finUserList');
-  if (!ativos.length) { list.innerHTML='<div class="fin-empty">Nenhum usuário ativo.</div>'; return; }
+function mesKey() {
+  return `${_finAno}-${String(_finMes+1).padStart(2,'0')}`;
+}
 
-  list.innerHTML = ativos.map(u => {
+async function renderFinancas() {
+  const ativos = _allUsers.filter(u=>u.status==='ativo');
+
+  // Atualiza label do mês
+  document.getElementById('finMesLabel').textContent = MESES[_finMes];
+  document.getElementById('finMesAno').textContent   = _finAno;
+
+  // Bloqueia mês futuro
+  const hoje = new Date();
+  const isFuturo = (_finAno > hoje.getFullYear()) ||
+    (_finAno === hoje.getFullYear() && _finMes > hoje.getMonth());
+  document.querySelector('.mes-btn:last-child').style.opacity = isFuturo ? '.3' : '1';
+  document.querySelector('.mes-btn:last-child').style.pointerEvents = isFuturo ? 'none' : 'auto';
+
+  // Carrega pagamentos do Firestore para esse mês
+  const key = mesKey();
+  try {
+    const snap = await getDoc(doc(db, 'pagamentos', key));
+    _pagamentos = snap.exists() ? (snap.data() || {}) : {};
+  } catch(e) { _pagamentos = {}; }
+
+  // Resumo
+  const comValor    = ativos.filter(u=>u.valorMensal&&Number(u.valorMensal)>0);
+  const pagos       = comValor.filter(u=>_pagamentos[u.id]);
+  const pendentes   = comValor.filter(u=>!_pagamentos[u.id]);
+  const totalPago   = pagos.reduce((s,u)=>s+Number(u.valorMensal||0),0);
+  const totalPend   = pendentes.reduce((s,u)=>s+Number(u.valorMensal||0),0);
+  const pct         = comValor.length ? Math.round((pagos.length/comValor.length)*100) : 0;
+
+  document.getElementById('finQtdPago').textContent      = pagos.length;
+  document.getElementById('finQtdPend').textContent      = pendentes.length;
+  document.getElementById('finTxPag').textContent        = pct + '%';
+  document.getElementById('finTotalRecebido').textContent= formatMoney(totalPago);
+  document.getElementById('finTotalPend').textContent    = formatMoney(totalPend);
+
+  // Lista de pagamentos
+  const pagList = document.getElementById('finPagList');
+  if (!ativos.length) { pagList.innerHTML='<div class="fin-empty">Nenhum usuário ativo.</div>'; }
+  else {
+    // Pendentes primeiro, depois pagos
+    const ordenados = [...pendentes, ...pagos];
+    pagList.innerHTML = ordenados.map(u => {
+      const color   = avatarColor(u.nome);
+      const initial = (u.nome||'?').charAt(0).toUpperCase();
+      const avatarHtml = u.foto
+        ? `<div class="pag-avatar"><img src="${u.foto}" alt="${initial}" onerror="this.parentElement.innerHTML='${initial}';this.parentElement.style.background='${color}'"></div>`
+        : `<div class="pag-avatar" style="background:${color}">${initial}</div>`;
+      const pago = !!_pagamentos[u.id];
+      return `
+        <div class="pag-row ${pago?'pago':'pendente'}">
+          ${avatarHtml}
+          <div class="pag-info">
+            <div class="pag-nome">${u.nome||u.email||'—'}</div>
+            <div class="pag-valor">${formatMoney(u.valorMensal||0)}/mês</div>
+          </div>
+          <button class="pag-btn ${pago?'btn-pago':'btn-pendente'}"
+            data-uid="${u.id}" onclick="togglePagamento(this)">
+            ${pago ? '✅ Pago' : '⏳ Pendente'}
+          </button>
+        </div>`;
+    }).join('');
+  }
+
+  // Lista de valores (configuração)
+  const userList = document.getElementById('finUserList');
+  if (!ativos.length) { userList.innerHTML='<div class="fin-empty">Nenhum usuário ativo.</div>'; return; }
+  userList.innerHTML = ativos.map(u => {
     const color   = avatarColor(u.nome);
     const initial = (u.nome||'?').charAt(0).toUpperCase();
     const avatarHtml = u.foto
-      ? `<div class="fin-avatar"><img src="${u.foto}" alt="${initial}" onerror="this.parentElement.innerHTML='${initial}';this.parentElement.style.background='${color}'"></div>`
-      : `<div class="fin-avatar" style="background:${color}">${initial}</div>`;
-    const dias = daysUntil(u.expiracao);
-    const expStr = u.expiracao
-      ? (dias!==null&&dias<0 ? `<span style="color:var(--red)">Expirado</span>` : `Expira ${formatDate(u.expiracao)}`)
-      : '—';
+      ? `<div class="pag-avatar"><img src="${u.foto}" alt="${initial}" onerror="this.parentElement.innerHTML='${initial}';this.parentElement.style.background='${color}'"></div>`
+      : `<div class="pag-avatar" style="background:${color}">${initial}</div>`;
     return `
       <div class="fin-user-row">
         ${avatarHtml}
         <div class="fin-user-info">
           <div class="fin-user-name">${u.nome||u.email||'—'}</div>
-          <div class="fin-user-exp">${expStr}</div>
+          <div class="fin-user-exp" style="font-size:11px;color:var(--muted)">valor mensal</div>
         </div>
         <div class="fin-valor-wrap">
           <input class="fin-valor-input" type="number" min="0" step="0.01"
-            placeholder="0,00"
-            value="${u.valorMensal||''}"
-            data-uid="${u.id}"
-            onchange="salvarValor(this)"
-            title="Valor mensal (R$)">
+            placeholder="0,00" value="${u.valorMensal||''}"
+            data-uid="${u.id}" onchange="salvarValor(this)">
         </div>
       </div>`;
   }).join('');
 }
+
+window.togglePagamento = async function(btn) {
+  const uid  = btn.getAttribute('data-uid');
+  const pago = !_pagamentos[uid];
+  _pagamentos[uid] = pago;
+  const key  = mesKey();
+  await setDoc(doc(db,'pagamentos',key), _pagamentos);
+  showToast(pago ? '✅ Marcado como pago!' : '⏳ Marcado como pendente', pago ? undefined : 'red');
+  renderFinancas();
+};
 
 window.salvarValor = async function(input) {
   const uid = input.getAttribute('data-uid');
   const val = parseFloat(input.value)||0;
   await updateDoc(doc(db,'usuarios',uid),{valorMensal:val});
   showToast('💰 Valor salvo!');
-  // update local state for totals
   const u = _allUsers.find(u=>u.id===uid);
   if (u) u.valorMensal = val;
   renderFinancas();
