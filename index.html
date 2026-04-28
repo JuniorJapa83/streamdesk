@@ -508,11 +508,20 @@ async function checkAviso(user) {
     const freq = data.frequencia || 'uma';
     const key  = 'aviso_visto_' + (data.atualizadoEm || 'v1') + '_' + user.uid;
 
+      // Verifica se já foi exibido nessa sessão de login (8h)
+    const sessKey = 'aviso_sessao_' + (data.atualizadoEm || 'v1') + '_' + user.uid;
+    const sessVal = localStorage.getItem(sessKey);
+    if (sessVal && Date.now() < Number(sessVal)) return;
+
     // Modo "uma vez": não mostra se já foi fechado anteriormente
     if (freq === 'uma' && localStorage.getItem(key)) return;
 
-    // Marca na memória — bloqueia qualquer nova chamada nessa sessão
     _avisoJaMostrado = true;
+
+    // Guarda que já exibiu nessa sessão de login (expira em 8h)
+    const sessKey = 'aviso_sessao_' + (data.atualizadoEm || 'v1') + '_' + user.uid;
+    const expire  = Date.now() + (8 * 60 * 60 * 1000); // 8 horas
+    localStorage.setItem(sessKey, String(expire));
 
     criarOverlayAviso();
     document.getElementById('avisoBoxBody').textContent = data.texto;
