@@ -500,13 +500,22 @@ async function checkAviso(user) {
 
     const freq = data.frequencia || 'uma';
     const key  = 'aviso_visto_' + (data.atualizadoEm || 'v1') + '_' + user.uid;
+    const sessKey = 'aviso_sessao_' + (data.atualizadoEm || 'v1');
+
+    // "uma vez": não mostra se já viu antes
     if (freq === 'uma' && localStorage.getItem(key)) return;
+
+    // Qualquer frequência: não mostra de novo na mesma sessão de navegação
+    if (sessionStorage.getItem(sessKey)) return;
 
     criarOverlayAviso();
     document.getElementById('avisoBoxBody').textContent = data.texto;
     document.getElementById('avisoOverlay').classList.add('show');
     window._avisoKey  = key;
     window._avisoFreq = freq;
+    window._avisoSessKey = sessKey;
+    // Marca sessão imediatamente
+    sessionStorage.setItem(sessKey, '1');
   } catch(e) { console.error('Aviso erro:', e); }
 }
 
