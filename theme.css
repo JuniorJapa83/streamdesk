@@ -1,0 +1,158 @@
+/* ============================================================
+   StreamDesk — theme.css
+   Arquivo central de design. Altere aqui para mudar o visual
+   em todas as páginas ao mesmo tempo.
+   ============================================================ */
+
+/* ── FONTES ─────────────────────────────────────────────────
+   Para trocar as fontes, altere os nomes abaixo E atualize
+   o link do Google Fonts no <head> de cada página.
+   Fontes alternativas sugeridas:
+     Título : Syne | Outfit | Plus Jakarta Sans | Raleway
+     Corpo  : DM Sans | Inter | Nunito | Poppins
+   ──────────────────────────────────────────────────────── */
+:root {
+  --font-title: 'Syne', sans-serif;
+  --font-body:  'DM Sans', sans-serif;
+}
+
+/* ── TEMA ESCURO (padrão) ────────────────────────────────── */
+:root {
+  /* Fundos */
+  --bg:      #080b12;
+  --surface: #0e1220;
+  --card:    #131825;
+  --card2:   #161c2c;
+
+  /* Bordas */
+  --border:  #1c2236;
+
+  /* Cor de destaque principal — muda o "tom" do app inteiro */
+  --accent:      #00d4ff;
+  --accent-glow: rgba(0, 212, 255, 0.15);
+
+  /* Cores semânticas */
+  --red:         #ff3b5c;
+  --red-glow:    rgba(255, 59, 92, 0.12);
+  --yellow:      #ffbb00;
+  --yellow-glow: rgba(255, 187, 0, 0.12);
+  --orange:      #ff7b00;
+  --orange-glow: rgba(255, 123, 0, 0.12);
+  --green:       #00e096;
+  --green-glow:  rgba(0, 224, 150, 0.12);
+  --purple:      #a78bfa;
+
+  /* Texto */
+  --text:  #e4e8f4;
+  --muted: #5a6480;
+
+  /* Forma */
+  --radius: 16px;
+
+  /* Nav bar */
+  --nav-bg: rgba(14, 18, 32, 0.97);
+
+  /* Header */
+  --header-bg: rgba(8, 11, 18, 0.92);
+}
+
+/* ── TEMA CLARO ──────────────────────────────────────────── */
+body.light {
+  --bg:      #f0f4f8;
+  --surface: #ffffff;
+  --card:    #ffffff;
+  --card2:   #f7f9fc;
+  --border:  #e2e8f0;
+  --text:    #1a202c;
+  --muted:   #718096;
+  --nav-bg:  rgba(255, 255, 255, 0.97);
+  --header-bg: rgba(255, 255, 255, 0.96);
+}
+
+/* ── APLICAÇÃO GLOBAL DAS FONTES ─────────────────────────── */
+body {
+  font-family: var(--font-body);
+}
+
+/* Títulos que usam a fonte de destaque */
+.logo,
+.logo-name,
+.page-title,
+.card-title,
+.modal-title,
+.mtitle,
+.att-name,
+.srv-name,
+.client-name,
+.status-num,
+.sum-val,
+.pay-valor,
+.server-num,
+.renew-info-name,
+.version span,
+[class*="btn"].save-btn,
+[class*="btn"].renew-btn,
+.add-btn,
+.filter-btn.active,
+.tab.active,
+.tab,
+.construction-title {
+  font-family: var(--font-title);
+}
+
+/* ── HEADER E NAV ────────────────────────────────────────── */
+.header {
+  background: var(--header-bg) !important;
+}
+.bottom-nav {
+  background: var(--nav-bg) !important;
+}
+
+/* ── BORDAS GLOBAIS ──────────────────────────────────────── */
+:root {
+  --radius-sm:  8px;
+  --radius-md:  12px;
+  --radius-lg:  16px;
+  --radius-xl:  24px;
+}
+
+
+/* ============================================================
+   TEMAS ALTERNATIVOS — descomente um bloco para testar
+   ============================================================
+
+── TEMA ROXO/VIOLETA ─────────────────────────────────────
+:root {
+  --accent:      #a78bfa;
+  --accent-glow: rgba(167, 139, 250, 0.15);
+}
+
+── TEMA VERDE NEON ───────────────────────────────────────
+:root {
+  --accent:      #00e096;
+  --accent-glow: rgba(0, 224, 150, 0.15);
+}
+
+── TEMA LARANJA ──────────────────────────────────────────
+:root {
+  --accent:      #ff7b00;
+  --accent-glow: rgba(255, 123, 0, 0.15);
+}
+
+── TEMA ROSA ─────────────────────────────────────────────
+:root {
+  --accent:      #f472b6;
+  --accent-glow: rgba(244, 114, 182, 0.15);
+}
+
+── BORDAS ARREDONDADAS (mais suave) ──────────────────────
+:root {
+  --radius: 20px;
+}
+
+── BORDAS QUADRADAS (mais sério) ────────────────────────
+:root {
+  --radius: 8px;
+}
+
+   ============================================================ */
