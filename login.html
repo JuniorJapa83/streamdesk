@@ -15,18 +15,16 @@
   body::after{content:'';position:fixed;bottom:-80px;left:-80px;width:280px;height:280px;background:radial-gradient(circle,rgba(0,224,150,.08) 0%,transparent 70%);pointer-events:none}
   .wrap{width:100%;position:relative;z-index:1}
   .logo-wrap{text-align:center;margin-bottom:32px}
-  .logo-icon{width:72px;height:72px;background:linear-gradient(135deg,#00d4ff,#00e096);border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:34px;margin:0 auto 14px;box-shadow:0 8px 32px rgba(0,212,255,.25)}
-  .logo-name{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;letter-spacing:-.5px}
-  .logo-name span{color:var(--accent)}
+  .logo-img{width:260px;max-width:90%;display:block;margin:0 auto 6px;object-fit:contain}
   .logo-sub{font-size:13px;color:var(--muted);margin-top:4px}
   .card{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:28px 24px;box-shadow:0 4px 24px rgba(0,0,0,.06)}
-  .card-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:4px}
+  .card-title{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;margin-bottom:4px}
   .card-sub{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.5}
   .msg{display:none;border-radius:10px;padding:10px 14px;font-size:13px;margin-bottom:14px;align-items:center;gap:8px;line-height:1.4}
   .msg.show{display:flex}
   .msg.err{background:rgba(255,59,92,.08);border:1px solid rgba(255,59,92,.2);color:var(--red)}
   .msg.ok{background:rgba(0,224,150,.08);border:1px solid rgba(0,224,150,.2);color:var(--green)}
-  .btn-google{width:100%;background:#fff;color:#3c4043;border:1.5px solid #dadce0;border-radius:12px;padding:13px 20px;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+  .btn-google{width:100%;background:#fff;color:#3c4043;border:1.5px solid #dadce0;border-radius:12px;padding:13px 20px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
   .btn-google:hover{background:#f8f9fa;box-shadow:0 4px 16px rgba(0,0,0,.12);transform:translateY(-1px)}
   .btn-google:active{transform:scale(.97)}
   .btn-google:disabled{opacity:.6;cursor:not-allowed;transform:none}
@@ -34,17 +32,15 @@
   .spinner{width:18px;height:18px;border:2px solid rgba(60,64,67,.25);border-top-color:#3c4043;border-radius:50%;animation:spin .7s linear infinite;display:none}
   @keyframes spin{to{transform:rotate(360deg)}}
   .tabs{display:flex;background:var(--card2);border-radius:12px;padding:4px;margin-bottom:22px;gap:4px}
-  .tab{flex:1;padding:9px;border:none;background:transparent;border-radius:9px;font-family:'Syne',sans-serif;font-weight:600;font-size:13px;color:var(--muted);cursor:pointer;transition:all .2s}
+  .tab{flex:1;padding:9px;border:none;background:transparent;border-radius:9px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13px;color:var(--muted);cursor:pointer;transition:all .2s}
   .tab.active{background:#fff;color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,.08)}
   .panel{display:none}
   .panel.active{display:block}
-
-  /* Tela de WhatsApp */
   .wa-screen{display:none}
   .wa-screen.show{display:block}
   .wa-user-box{display:flex;align-items:center;gap:12px;background:var(--card2);border-radius:12px;padding:12px 14px;margin-bottom:20px}
   .wa-avatar{width:44px;height:44px;border-radius:50%;border:2px solid var(--accent)}
-  .wa-user-name{font-family:'Syne',sans-serif;font-weight:700;font-size:15px}
+  .wa-user-name{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px}
   .wa-user-email{font-size:12px;color:var(--muted)}
   .form-group{margin-bottom:16px}
   .form-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;display:flex;align-items:center;gap:6px}
@@ -54,11 +50,10 @@
   .input-prefix{padding:0 12px;font-size:18px;flex-shrink:0}
   .form-input{flex:1;background:none;border:none;outline:none;color:var(--text);font-size:15px;font-family:'DM Sans',sans-serif;padding:13px 14px 13px 0}
   .form-hint{font-size:11px;color:var(--muted);margin-top:5px;line-height:1.4}
-  .btn-primary{width:100%;background:linear-gradient(135deg,#00d4ff,#00b8e0);color:#000;border:none;border-radius:12px;padding:14px;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;cursor:pointer;transition:all .2s;box-shadow:0 4px 16px rgba(0,212,255,.3);display:flex;align-items:center;justify-content:center;gap:8px}
+  .btn-primary{width:100%;background:linear-gradient(135deg,#00d4ff,#00b8e0);color:#000;border:none;border-radius:12px;padding:14px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;cursor:pointer;transition:all .2s;box-shadow:0 4px 16px rgba(0,212,255,.3);display:flex;align-items:center;justify-content:center;gap:8px}
   .btn-primary:active{transform:scale(.97)}
   .btn-primary:disabled{opacity:.6;cursor:not-allowed}
   .spinner-w{width:18px;height:18px;border:2px solid rgba(0,0,0,.2);border-top-color:#000;border-radius:50%;animation:spin .7s linear infinite;display:none}
-
   .version{text-align:center;font-size:11px;color:var(--muted);margin-top:20px}
   .version span{color:var(--accent);font-weight:600}
   .debug{background:#1a202c;color:#a0aec0;border-radius:8px;padding:10px 12px;font-size:11px;font-family:monospace;margin-top:10px;display:none;word-break:break-all;line-height:1.6}
@@ -68,12 +63,9 @@
 <body>
 <div class="wrap">
   <div class="logo-wrap">
-    <img src="logo.png" style="width:72px;height:72px;border-radius:22px;object-fit:contain">
-    <div class="logo-name"><img src="logo.png" style="width:72px;height:72px;border-radius:22px;object-fit:contain"></div>
-    
+    <img src="Logo_Oficial.png" class="logo-img" alt="StreamDesk">
   </div>
 
-  <!-- TELA LOGIN/CADASTRO -->
   <div id="loginScreen">
     <div class="card">
       <div class="tabs">
@@ -83,7 +75,6 @@
       <div class="msg err" id="msgErr"></div>
       <div class="msg ok"  id="msgOk"></div>
 
-      <!-- LOGIN -->
       <div class="panel active" id="panelLogin">
         <div class="card-title">Bem-vindo! 👋</div>
         <div class="card-sub">Entre com sua conta Google para acessar o sistema.</div>
@@ -100,7 +91,6 @@
         </button>
       </div>
 
-      <!-- CADASTRO -->
       <div class="panel" id="panelCadastro">
         <div class="card-title">Criar conta ✨</div>
         <div class="card-sub">Use sua conta Google. O acesso é liberado automaticamente.</div>
@@ -121,12 +111,10 @@
     </div>
   </div>
 
-  <!-- TELA DE WHATSAPP (aparece só no primeiro acesso) -->
   <div id="waScreen" style="display:none">
     <div class="card">
       <div class="card-title">Quase lá! 📲</div>
       <div class="card-sub">Informe seu WhatsApp para contato e suporte. Ele não será compartilhado.</div>
-
       <div class="wa-user-box" id="waUserBox">
         <img class="wa-avatar" id="waAvatar" src="" alt="">
         <div>
@@ -134,9 +122,7 @@
           <div class="wa-user-email" id="waUserEmail"></div>
         </div>
       </div>
-
       <div class="msg err" id="waErr"></div>
-
       <div class="form-group">
         <div class="form-label">WhatsApp <span class="req">*</span></div>
         <div class="input-wrap">
@@ -145,7 +131,6 @@
         </div>
         <div class="form-hint">Digite com código do país + DDD. Ex: <strong>55 11 99999-9999</strong></div>
       </div>
-
       <button class="btn-primary" id="btnSaveWA" onclick="saveWhatsApp()">
         <span id="btnSaveWATxt">✓ Confirmar e Entrar</span>
         <div class="spinner-w" id="spinnerWA"></div>
@@ -215,7 +200,6 @@ window.switchTab=function(tab){
   });
 };
 
-// Mostra tela de WhatsApp
 function showWAScreen(user) {
   _pendingUser = user;
   document.getElementById('loginScreen').style.display = 'none';
@@ -226,7 +210,6 @@ function showWAScreen(user) {
   document.getElementById('waInput').focus();
 }
 
-// Salvar WhatsApp e entrar
 window.saveWhatsApp = async function() {
   var wa = document.getElementById('waInput').value.trim();
   var digits = wa.replace(/\D/g,'');
@@ -240,21 +223,17 @@ window.saveWhatsApp = async function() {
   btn.disabled=true;
   document.getElementById('btnSaveWATxt').style.display='none';
   document.getElementById('spinnerWA').style.display='block';
-
   var user=_pendingUser;
   await setDoc(doc(db,'usuarios',user.uid),{whatsapp: wa},{merge:true});
   location.href='index.html';
 };
 
-// Formatar input automaticamente
 document.getElementById('waInput').addEventListener('input', function() {
   document.getElementById('waErr').classList.remove('show');
 });
 
 async function processUser(user, tipo) {
   var snap = await getDoc(doc(db,'usuarios',user.uid));
-
-  // Novo usuário
   if (!snap.exists()) {
     if (tipo==='login') {
       await auth.signOut();
@@ -262,38 +241,26 @@ async function processUser(user, tipo) {
       window.switchTab('cadastro');
       return;
     }
-    // Calcula expiração: hoje + 30 dias
     var expDate = new Date();
     expDate.setDate(expDate.getDate() + 30);
     var expStr = expDate.getFullYear()+'-'+String(expDate.getMonth()+1).padStart(2,'0')+'-'+String(expDate.getDate()).padStart(2,'0');
-
-    // Cria conta com 30 dias de teste
     await setDoc(doc(db,'usuarios',user.uid), {
       uid:user.uid, nome:user.displayName||'', email:user.email||'',
       foto:user.photoURL||'', whatsapp:'', status:'ativo',
       dataCadastro:todayStr(), expiracao:expStr, ultimoAcesso:todayStr(),
     });
-    // Pede WhatsApp antes de entrar
     showWAScreen(user);
     return;
   }
-
   var data = snap.data();
   if (data.status==='bloqueado') { await auth.signOut(); showMsg('err','⚠️ Acesso bloqueado. Entre em contato com o administrador.'); return; }
   if (data.status==='pendente')  { await auth.signOut(); showMsg('ok','⏳ Aguardando aprovação do administrador.'); return; }
   if (data.expiracao && new Date(data.expiracao) < new Date()) { await auth.signOut(); showMsg('err','⚠️ Seu acesso expirou. Entre em contato para renovar.'); return; }
-
-  // Se já tem conta mas não tem WhatsApp, pede agora
-  if (!data.whatsapp) {
-    showWAScreen(user);
-    return;
-  }
-
+  if (!data.whatsapp) { showWAScreen(user); return; }
   await setDoc(doc(db,'usuarios',user.uid),{ultimoAcesso:todayStr()},{merge:true});
   location.href='index.html';
 }
 
-// Retorno de redirect
 getRedirectResult(auth).then(async function(result) {
   if (!result) return;
   var tipo=sessionStorage.getItem('sd_tipo')||'login';
@@ -311,7 +278,7 @@ window.doGoogle = async function(tipo) {
     sessionStorage.removeItem('sd_tipo');
     await processUser(result.user, tipo);
   } catch(e) {
-    var code=e.code||'';
+    var code=e.code||''
     showDebug('popup: '+code+' — '+(e.message||''));
     if (code==='auth/popup-blocked'||code==='auth/operation-not-supported-in-this-environment') {
       showMsg('ok','🔄 Redirecionando para o Google...');
