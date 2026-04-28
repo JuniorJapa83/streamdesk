@@ -377,7 +377,6 @@
 </style>
 </head>
 <body>
-
 <script>(function(){var c=JSON.parse(localStorage.getItem('streamdesk_config')||'{}');if(c.darkMode!==true)document.body.classList.add('light');})()</script>
 
 <!-- HEADER -->
@@ -427,11 +426,10 @@
 <script type="module">
 import { initializeApp }                        from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 import { getAuth, onAuthStateChanged }          from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-import { getFirestore, collection, getDocs,
-         doc, getDoc }                          from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDjh7BrMk1MKkLU9MOYJsI1XxantSt1V1g",
+  apiKey: "AIzaSyAGHvkDpeSbCTriZCvRf-jJ6z8PQSSWLHI",
   authDomain: "streamdesk-5350d.firebaseapp.com",
   projectId: "streamdesk-5350d",
   storageBucket: "streamdesk-5350d.firebasestorage.app",
@@ -463,26 +461,33 @@ function formatDate(d) {
 var cfg2 = JSON.parse(localStorage.getItem('streamdesk_config')||'{}');
 if (cfg2.darkMode !== true) document.body.classList.add('light');
 
-onAuthStateChanged(auth, async function(user) {
-  if (!user) { location.href='login.html'; return; }
-
-  // Load data from Firestore
-  var [clientSnap, srvSnap, cfgSnap] = await Promise.all([
-    getDocs(collection(db,'clientes',user.uid,'lista')),
-    getDocs(collection(db,'servidores',user.uid,'lista')),
-    getDoc(doc(db,'config',user.uid))
+async function loadAndRender(user) {
+  var [clientSnap, srvSnap] = await Promise.all([
+    getDocs(collection(db,'usuarios',user.uid,'clientes')),
+    getDocs(collection(db,'usuarios',user.uid,'servidores'))
   ]);
-
   var clientes   = clientSnap.docs.map(d=>({id:d.id,...d.data()}));
   var servidores = srvSnap.docs.map(d=>({id:d.id,...d.data()}));
-  var config     = cfgSnap.exists() ? cfgSnap.data() : {};
+  var cfg = JSON.parse(localStorage.getItem('streamdesk_config')||'{}');
 
-  // Update greeting with user name
-  var nome = config.nome || user.email.split('@')[0];
+  // Greeting: use Google display name
+  var nome = user.displayName ? user.displayName.split(' ')[0] : user.email.split('@')[0];
   var logoSub = document.querySelector('.logo-sub');
   if (logoSub) logoSub.textContent = 'Olá, ' + nome + ' 👋';
 
-  render(clientes, servidores, config);
+  render(clientes, servidores, cfg);
+}
+
+onAuthStateChanged(auth, async function(user) {
+  if (!user) { location.href='login.html'; return; }
+  await loadAndRender(user);
+});
+
+document.addEventListener('visibilitychange', function() {
+  if (document.visibilityState === 'visible') {
+    var u = auth.currentUser;
+    if (u) loadAndRender(u);
+  }
 });
 
 function getWAMsg(nome, plataforma, vencimento, config) {
