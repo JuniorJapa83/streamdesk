@@ -15,19 +15,16 @@
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:480px;margin:0 auto}
 
-  /* LOGIN SCREEN */
+  /* ── LOGIN ── */
   .login-screen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;position:relative;overflow:hidden}
   .login-screen::before{content:'';position:fixed;top:-100px;right:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(0,212,255,.08) 0%,transparent 70%);pointer-events:none}
   .login-screen::after{content:'';position:fixed;bottom:-80px;left:-80px;width:300px;height:300px;background:radial-gradient(circle,rgba(167,139,250,.06) 0%,transparent 70%);pointer-events:none}
-
   .admin-badge{display:flex;align-items:center;gap:8px;background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.2);border-radius:50px;padding:6px 16px;font-size:12px;color:var(--purple);font-weight:700;margin-bottom:24px;letter-spacing:1px;text-transform:uppercase}
   .login-logo{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;letter-spacing:-1px;margin-bottom:6px}
   .login-logo span{color:var(--accent)}
   .login-sub{font-size:14px;color:var(--muted);margin-bottom:32px}
-
   .login-card{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:28px 24px;width:100%;max-width:360px}
   .login-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:20px}
-
   .fg{margin-bottom:14px}
   .fl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;display:block;font-weight:600}
   .fi-wrap{position:relative}
@@ -35,38 +32,43 @@
   .fi:focus{border-color:var(--accent);background:var(--card2)}
   .fi::placeholder{color:var(--muted)}
   .fi-icon{position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--muted);cursor:pointer}
-
   .err{display:none;background:rgba(255,59,92,.08);border:1px solid rgba(255,59,92,.2);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--red);margin-bottom:14px;align-items:center;gap:8px}
   .err.show{display:flex}
-
   .btn-primary{width:100%;background:var(--accent);color:#000;border:none;border-radius:12px;padding:14px;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;cursor:pointer;transition:all .2s;margin-top:4px}
   .btn-primary:active{transform:scale(.97)}
 
-  /* MAIN APP */
-  .app-screen{display:none}
-  .app-screen.show{display:block}
+  /* ── APP ── */
+  .app-screen{display:none;min-height:100vh;flex-direction:column}
+  .app-screen.show{display:flex}
 
-  /* HEADER */
-  .header{position:sticky;top:0;z-index:50;background:rgba(8,11,18,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+  /* ── HEADER ── */
+  .header{position:sticky;top:0;z-index:50;background:rgba(8,11,18,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
   .header-left{display:flex;align-items:center;gap:10px}
   .admin-pill{background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.2);border-radius:50px;padding:3px 10px;font-size:10px;color:var(--purple);font-weight:700;letter-spacing:.5px}
   .page-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:800}
   .page-title span{color:var(--accent)}
   .logout-btn{background:rgba(255,59,92,.1);border:none;color:var(--red);border-radius:8px;padding:7px 12px;font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer}
-
-  /* LIVE BADGE */
-  .live-dot{display:inline-flex;align-items:center;gap:5px;font-size:10px;color:var(--green);font-weight:700;letter-spacing:.3px}
+  .live-dot{display:inline-flex;align-items:center;gap:5px;font-size:10px;color:var(--green);font-weight:700}
   .live-dot::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
   @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
 
-  /* CONTENT */
+  /* ── TAB NAV ── */
+  .tab-nav{display:flex;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0}
+  .tab-btn{flex:1;padding:12px 6px;border:none;background:transparent;color:var(--muted);font-size:11px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;transition:all .2s;letter-spacing:.3px;text-transform:uppercase;position:relative}
+  .tab-btn .tab-icon{font-size:18px}
+  .tab-btn.active{color:var(--accent)}
+  .tab-btn.active::after{content:'';position:absolute;bottom:0;left:20%;right:20%;height:2px;background:var(--accent);border-radius:2px 2px 0 0}
+
+  /* ── PAGES ── */
+  .page{display:none;flex:1;overflow-y:auto}
+  .page.active{display:block}
   .content{padding:16px 20px 40px}
 
-  /* SECTION */
+  /* ── SECTION LABEL ── */
   .sec{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin:20px 0 10px;display:flex;align-items:center;gap:8px}
   .sec::after{content:'';flex:1;height:1px;background:var(--border)}
 
-  /* STATS GRID */
+  /* ── STATS ── */
   .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:4px}
   .stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 10px;text-align:center;position:relative;overflow:hidden;cursor:pointer;transition:transform .15s}
   .stat-card:active{transform:scale(.96)}
@@ -80,50 +82,39 @@
   .stat-card.b .stat-num{color:var(--red)}
   .stat-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
 
-  /* ALERT BANNER */
+  /* ── ALERT BANNER ── */
   .alert-banner{background:rgba(255,187,0,.07);border:1px solid rgba(255,187,0,.2);border-radius:12px;padding:12px 16px;font-size:13px;color:var(--yellow);display:none;align-items:center;gap:10px;margin-bottom:4px}
   .alert-banner.show{display:flex}
 
-  /* SEARCH BAR */
+  /* ── SEARCH ── */
   .search-wrap{position:relative;margin-bottom:4px}
   .search-input{width:100%;background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:11px 14px 11px 38px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border .2s}
   .search-input:focus{border-color:var(--accent)}
   .search-input::placeholder{color:var(--muted)}
   .search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:14px;pointer-events:none}
 
-  /* USER CARD */
+  /* ── USER CARD ── */
   .user-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:10px;animation:fadeUp .4s ease both}
   @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-
   .card-main{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;transition:background .2s}
   .card-main:active{background:var(--card2)}
-
   .user-avatar{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;font-family:'Syne',sans-serif;flex-shrink:0;color:#000;overflow:hidden}
   .user-avatar img{width:100%;height:100%;object-fit:cover;border-radius:12px}
-
   .user-info{flex:1;min-width:0}
   .user-name{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .user-email{font-size:11px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-
   .status-pill{font-size:10px;font-weight:700;padding:3px 9px;border-radius:50px;white-space:nowrap;flex-shrink:0}
   .s-ativo{background:rgba(0,224,150,.12);color:var(--green)}
   .s-bloqueado{background:rgba(255,59,92,.12);color:var(--red)}
   .s-pendente{background:rgba(255,187,0,.12);color:var(--yellow)}
-
   .card-chevron{color:var(--muted);font-size:16px;transition:transform .3s;flex-shrink:0;margin-left:4px}
-
-  /* DETAIL PANEL */
   .card-detail{display:none;background:var(--card2);border-top:1px solid var(--border)}
   .detail-inner{padding:16px}
-
   .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
   .d-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
   .d-val{font-size:13px;font-weight:500}
   .d-val.wa-link{color:#25d366;text-decoration:none;display:block}
-
   .exp-warn{font-size:11px;color:var(--orange);margin-top:2px}
-
-  /* ACTIONS */
   .det-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
   .det-btn{padding:10px 8px;border:none;border-radius:10px;font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:all .2s}
   .det-btn:active{transform:scale(.95)}
@@ -132,17 +123,84 @@
   .btn-exp{background:rgba(0,212,255,.1);color:var(--accent)}
   .btn-wa{background:rgba(37,211,102,.1);color:#25d366}
   .btn-del{background:rgba(255,59,92,.06);color:var(--red);grid-column:1/-1;margin-top:4px;border:1px solid rgba(255,59,92,.15)}
-
-  /* EMPTY */
   .empty{text-align:center;padding:50px 20px;color:var(--muted)}
   .empty-icon{font-size:40px;margin-bottom:12px}
-
-  /* LOADING */
   .loading-state{text-align:center;padding:50px 20px;color:var(--muted)}
   .loading-spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 12px}
   @keyframes spin{to{transform:rotate(360deg)}}
 
-  /* MODAL */
+  /* ── QUICK RENEW ── */
+  .quick-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+  .q-btn{padding:10px 6px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);color:var(--text);font-size:12px;font-weight:700;font-family:'Syne',sans-serif;cursor:pointer;transition:all .2s;text-align:center}
+  .q-btn:active{transform:scale(.95)}
+  .q-btn.selected{border-color:var(--accent);background:rgba(0,212,255,.1);color:var(--accent)}
+
+  /* ── AVISOS PAGE ── */
+  .aviso-form-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:12px}
+  .aviso-status-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+  .aviso-status-info{display:flex;align-items:center;gap:8px}
+  .aviso-dot{width:8px;height:8px;border-radius:50%;background:var(--muted);flex-shrink:0;transition:all .3s}
+  .aviso-dot.ativo{background:var(--green);box-shadow:0 0 8px var(--green)}
+  .aviso-status-txt{font-size:12px;color:var(--muted);font-weight:600;transition:color .3s}
+  .aviso-status-txt.ativo{color:var(--green)}
+
+  .aviso-textarea{width:100%;background:var(--card2);border:1.5px solid var(--border);border-radius:12px;padding:13px 14px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;resize:none;min-height:120px;transition:border .2s;line-height:1.6;margin-bottom:12px}
+  .aviso-textarea:focus{border-color:var(--yellow)}
+  .aviso-textarea::placeholder{color:var(--muted)}
+
+  /* Frequency toggle */
+  .freq-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;font-weight:600}
+  .freq-toggle{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px}
+  .freq-opt{padding:10px;border:1.5px solid var(--border);border-radius:10px;background:var(--card2);color:var(--muted);font-size:12px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;text-align:center;transition:all .2s}
+  .freq-opt.selected{border-color:var(--yellow);background:rgba(255,187,0,.1);color:var(--yellow)}
+
+  .aviso-btn-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .btn-pub{padding:12px;border:none;border-radius:10px;background:rgba(255,187,0,.15);color:var(--yellow);font-size:13px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s;border:1px solid rgba(255,187,0,.2)}
+  .btn-pub:active{transform:scale(.95)}
+  .btn-despub{padding:12px;border:1px solid rgba(255,59,92,.2);border-radius:10px;background:rgba(255,59,92,.08);color:var(--red);font-size:13px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s}
+  .btn-despub:active{transform:scale(.95)}
+
+  /* Histórico de avisos */
+  .aviso-hist-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:8px}
+  .aviso-hist-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+  .aviso-hist-date{font-size:11px;color:var(--muted)}
+  .aviso-hist-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:50px}
+  .aviso-hist-txt{font-size:13px;color:var(--text);line-height:1.5;white-space:pre-wrap}
+
+  /* ── FINANÇAS PAGE ── */
+  .fin-summary{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:4px}
+  .fin-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 14px;position:relative;overflow:hidden}
+  .fin-card::before{content:'';position:absolute;inset:0;opacity:.04}
+  .fin-card.green::before{background:var(--green)}.fin-card.green{border-color:rgba(0,224,150,.15)}
+  .fin-card.yellow::before{background:var(--yellow)}.fin-card.yellow{border-color:rgba(255,187,0,.15)}
+  .fin-card.red::before{background:var(--red)}.fin-card.red{border-color:rgba(255,59,92,.15)}
+  .fin-card.purple::before{background:var(--purple)}.fin-card.purple{border-color:rgba(167,139,250,.15)}
+  .fin-card-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+  .fin-card-val{font-family:'Syne',sans-serif;font-size:22px;font-weight:800}
+  .fin-card.green .fin-card-val{color:var(--green)}
+  .fin-card.yellow .fin-card-val{color:var(--yellow)}
+  .fin-card.red .fin-card-val{color:var(--red)}
+  .fin-card.purple .fin-card-val{color:var(--purple)}
+  .fin-card-sub{font-size:11px;color:var(--muted);margin-top:3px}
+
+  .fin-user-row{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:8px}
+  .fin-avatar{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;font-family:'Syne',sans-serif;flex-shrink:0;color:#000;overflow:hidden}
+  .fin-avatar img{width:100%;height:100%;object-fit:cover;border-radius:10px}
+  .fin-user-info{flex:1;min-width:0}
+  .fin-user-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .fin-user-exp{font-size:11px;color:var(--muted);margin-top:2px}
+  .fin-valor-wrap{text-align:right;flex-shrink:0}
+  .fin-valor{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--green)}
+  .fin-valor-input{width:80px;background:var(--card2);border:1.5px solid var(--border);border-radius:8px;padding:5px 8px;color:var(--text);font-size:13px;font-family:'Syne',sans-serif;font-weight:700;outline:none;text-align:right;transition:border .2s}
+  .fin-valor-input:focus{border-color:var(--accent)}
+
+  .fin-total-bar{background:var(--card);border:1px solid rgba(0,224,150,.2);border-radius:14px;padding:16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+  .fin-total-label{font-size:13px;color:var(--muted)}
+  .fin-total-val{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--green)}
+
+  .fin-empty{text-align:center;padding:40px 20px;color:var(--muted);font-size:13px}
+
+  /* ── MODAIS ── */
   .overlay{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:200;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .3s}
   .overlay.open{opacity:1;pointer-events:all}
   .modal{background:var(--surface);border-radius:24px 24px 0 0;padding:24px 20px 40px;width:100%;max-height:88vh;overflow-y:auto;transform:translateY(100%);transition:transform .35s cubic-bezier(.32,.72,0,1);border-top:1px solid var(--border)}
@@ -150,59 +208,33 @@
   .mhandle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 20px}
   .mtitle{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:6px}
   .msub{font-size:13px;color:var(--muted);margin-bottom:20px}
-  .mfi{width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border .2s;margin-bottom:0}
+  .mfi{width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border .2s}
   .mfi:focus{border-color:var(--accent)}
   .btn-save{width:100%;background:var(--accent);color:#000;border:none;border-radius:12px;padding:14px;font-family:'Syne',sans-serif;font-weight:700;font-size:16px;cursor:pointer;margin-top:8px}
   .btn-save:active{transform:scale(.97)}
   .btn-cancel{width:100%;background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:12px;padding:12px;font-family:'DM Sans',sans-serif;font-size:15px;cursor:pointer;margin-top:8px}
 
-  /* QUICK RENEW BUTTONS */
-  .quick-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
-  .q-btn{padding:10px 6px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);color:var(--text);font-size:12px;font-weight:700;font-family:'Syne',sans-serif;cursor:pointer;transition:all .2s;text-align:center}
-  .q-btn:active{transform:scale(.95)}
-  .q-btn.selected{border-color:var(--accent);background:rgba(0,212,255,.1);color:var(--accent)}
-
-
-  /* AVISO ADMIN */
-  .aviso-card{background:var(--card);border:1px solid rgba(255,187,0,.2);border-radius:var(--radius);padding:16px;margin-bottom:4px}
-  .aviso-status{display:flex;align-items:center;gap:8px;margin-bottom:12px}
-  .aviso-status-dot{width:8px;height:8px;border-radius:50%;background:var(--muted);flex-shrink:0}
-  .aviso-status-dot.ativo{background:var(--green);box-shadow:0 0 8px var(--green)}
-  .aviso-status-txt{font-size:12px;color:var(--muted);font-weight:600}
-  .aviso-status-txt.ativo{color:var(--green)}
-  .aviso-textarea{width:100%;background:var(--card2);border:1.5px solid var(--border);border-radius:12px;padding:12px 14px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;resize:none;min-height:110px;transition:border .2s;line-height:1.5}
-  .aviso-textarea:focus{border-color:var(--yellow)}
-  .aviso-textarea::placeholder{color:var(--muted)}
-  .aviso-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
-  .btn-pub{padding:11px;border:none;border-radius:10px;background:rgba(255,187,0,.15);color:var(--yellow);font-size:13px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s}
-  .btn-pub:active{transform:scale(.95)}
-  .btn-despub{padding:11px;border:none;border-radius:10px;background:rgba(255,59,92,.08);color:var(--red);font-size:13px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s;border:1px solid rgba(255,59,92,.15)}
-  .btn-despub:active{transform:scale(.95)}
-  .aviso-hint{font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5;text-align:center}
-  /* TOAST */
+  /* ── TOAST ── */
   .toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);background:rgba(0,224,150,.15);border:1px solid var(--green);color:var(--green);border-radius:50px;padding:8px 20px;font-size:13px;font-weight:600;opacity:0;transition:opacity .3s;pointer-events:none;z-index:300;white-space:nowrap}
   .toast.show{opacity:1}
 </style>
 </head>
 <body>
-
 <div class="toast" id="toast"></div>
 
-<!-- ── LOGIN ─────────────────────────────────────── -->
+<!-- ── LOGIN ── -->
 <div class="login-screen" id="loginScreen">
   <div class="admin-badge">👑 Área Restrita</div>
   <div class="login-logo">Stream<span>Desk</span></div>
   <div class="login-sub">Painel de Administração</div>
-
   <div class="login-card">
     <div class="login-title">🔐 Acesso Admin</div>
     <div class="err" id="loginErr">⚠️ <span id="loginErrTxt">Credenciais inválidas.</span></div>
-
     <div class="fg">
       <label class="fl">Usuário</label>
       <div class="fi-wrap">
-        <input class="fi" id="aEmail" type="email" placeholder="Usuário">
-        <span class="fi-icon">📧</span>
+        <input class="fi" id="aEmail" type="text" placeholder="Usuário">
+        <span class="fi-icon">👤</span>
       </div>
     </div>
     <div class="fg">
@@ -216,9 +248,10 @@
   </div>
 </div>
 
-<!-- ── APP ───────────────────────────────────────── -->
+<!-- ── APP ── -->
 <div class="app-screen" id="appScreen">
 
+  <!-- HEADER -->
   <div class="header">
     <div class="header-left">
       <div class="page-title">Admin<span>.</span></div>
@@ -230,81 +263,140 @@
     </div>
   </div>
 
-  <div class="content">
-
-    <!-- STATS -->
-    <div class="sec">Visão Geral</div>
-    <div class="stats-grid">
-      <div class="stat-card a" onclick="scrollToSection('sectionAtivo')"><div class="stat-num" id="cAtivo">—</div><div class="stat-lbl">Ativos</div></div>
-      <div class="stat-card p" onclick="scrollToSection('sectionPend')"><div class="stat-num" id="cPend">—</div><div class="stat-lbl">Pendentes</div></div>
-      <div class="stat-card b" onclick="scrollToSection('sectionBloq')"><div class="stat-num" id="cBloq">—</div><div class="stat-lbl">Bloqueados</div></div>
-    </div>
-
-    <!-- ALERT -->
-    <div class="alert-banner" id="alertBanner">
-      ⚠️ <span id="alertTxt"></span>
-    </div>
-
-    <!-- SEARCH -->
-    <div class="sec">Usuários</div>
-    <div class="search-wrap">
-      <span class="search-icon">🔍</span>
-      <input class="search-input" id="searchInput" type="text" placeholder="Buscar por nome, e-mail ou WhatsApp..." oninput="onSearch()">
-    </div>
-
-
-    <!-- AVISO ADMIN -->
-    <div class="sec">📢 Aviso aos Usuários</div>
-    <div class="aviso-card">
-      <div class="aviso-status">
-        <div class="aviso-status-dot" id="avisoStatusDot"></div>
-        <span class="aviso-status-txt" id="avisoStatusTxt">Sem aviso ativo</span>
-      </div>
-      <textarea class="aviso-textarea" id="avisoTexto" placeholder="Escreva aqui o aviso que aparecerá para todos os usuários ao fazerem login...&#10;&#10;Ex: 🔧 Manutenção programada amanhã às 22h. O sistema ficará indisponível por 30 minutos."></textarea>
-      <div class="aviso-actions">
-        <button class="btn-pub" onclick="publicarAviso()">📢 Publicar Aviso</button>
-        <button class="btn-despub" onclick="despublicarAviso()">🔕 Remover Aviso</button>
-      </div>
-      <div class="aviso-hint">O aviso aparece como pop-up para todos os usuários na próxima vez que abrirem o app.</div>
-    </div>
-
-    <!-- LOADING -->
-    <div class="loading-state" id="loadingState">
-      <div class="loading-spinner"></div>
-      <div>Carregando usuários...</div>
-    </div>
-
-    <!-- PENDING -->
-    <div id="sectionPend" style="display:none">
-      <div class="sec">🟡 Aguardando Pagamento</div>
-      <div id="listPend"></div>
-    </div>
-
-    <!-- EXPIRING -->
-    <div id="sectionExp" style="display:none">
-      <div class="sec">🟠 Expirando em 7 dias</div>
-      <div id="listExp"></div>
-    </div>
-
-    <!-- ACTIVE -->
-    <div id="sectionAtivo" style="display:none">
-      <div class="sec">🟢 Ativos</div>
-      <div id="listAtivo"></div>
-    </div>
-
-    <!-- BLOCKED -->
-    <div id="sectionBloq" style="display:none">
-      <div class="sec">🔴 Bloqueados</div>
-      <div id="listBloq"></div>
-    </div>
-
-    <div class="empty" id="emptyState" style="display:none">
-      <div class="empty-icon">👥</div>
-      <div>Nenhum usuário encontrado</div>
-    </div>
-
+  <!-- TAB NAV -->
+  <div class="tab-nav">
+    <button class="tab-btn active" id="tab-usuarios" onclick="switchTab('usuarios')">
+      <span class="tab-icon">👥</span>Usuários
+    </button>
+    <button class="tab-btn" id="tab-avisos" onclick="switchTab('avisos')">
+      <span class="tab-icon">📢</span>Avisos
+    </button>
+    <button class="tab-btn" id="tab-financas" onclick="switchTab('financas')">
+      <span class="tab-icon">💰</span>Finanças
+    </button>
   </div>
-</div>
+
+  <!-- ── PAGE: USUÁRIOS ── -->
+  <div class="page active" id="page-usuarios">
+    <div class="content">
+      <div class="sec">Visão Geral</div>
+      <div class="stats-grid">
+        <div class="stat-card a" onclick="scrollToSection('sectionAtivo')"><div class="stat-num" id="cAtivo">—</div><div class="stat-lbl">Ativos</div></div>
+        <div class="stat-card p" onclick="scrollToSection('sectionPend')"><div class="stat-num" id="cPend">—</div><div class="stat-lbl">Pendentes</div></div>
+        <div class="stat-card b" onclick="scrollToSection('sectionBloq')"><div class="stat-num" id="cBloq">—</div><div class="stat-lbl">Bloqueados</div></div>
+      </div>
+      <div class="alert-banner" id="alertBanner">⚠️ <span id="alertTxt"></span></div>
+
+      <div class="sec">Usuários</div>
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input class="search-input" id="searchInput" type="text" placeholder="Buscar por nome, e-mail ou WhatsApp..." oninput="onSearch()">
+      </div>
+
+      <div class="loading-state" id="loadingState">
+        <div class="loading-spinner"></div>
+        <div>Carregando usuários...</div>
+      </div>
+
+      <div id="sectionPend" style="display:none"><div class="sec">🟡 Aguardando Pagamento</div><div id="listPend"></div></div>
+      <div id="sectionExp"  style="display:none"><div class="sec">🟠 Expirando em 7 dias</div><div id="listExp"></div></div>
+      <div id="sectionAtivo" style="display:none"><div class="sec">🟢 Ativos</div><div id="listAtivo"></div></div>
+      <div id="sectionBloq" style="display:none"><div class="sec">🔴 Bloqueados</div><div id="listBloq"></div></div>
+      <div class="empty" id="emptyState" style="display:none"><div class="empty-icon">👥</div><div>Nenhum usuário encontrado</div></div>
+    </div>
+  </div>
+
+  <!-- ── PAGE: AVISOS ── -->
+  <div class="page" id="page-avisos">
+    <div class="content">
+
+      <div class="sec">Criar Aviso</div>
+      <div class="aviso-form-card">
+
+        <!-- Status -->
+        <div class="aviso-status-bar">
+          <div class="aviso-status-info">
+            <div class="aviso-dot" id="avisoStatusDot"></div>
+            <span class="aviso-status-txt" id="avisoStatusTxt">Sem aviso ativo</span>
+          </div>
+          <span style="font-size:11px;color:var(--muted)" id="avisoDataTxt"></span>
+        </div>
+
+        <!-- Textarea -->
+        <textarea class="aviso-textarea" id="avisoTexto" placeholder="Escreva o aviso que será exibido para todos os usuários...&#10;&#10;Ex: 🔧 Manutenção amanhã às 22h. O sistema ficará fora do ar por 30 minutos."></textarea>
+
+        <!-- Frequência -->
+        <div class="freq-label">Frequência de exibição</div>
+        <div class="freq-toggle">
+          <div class="freq-opt selected" id="freqUma" onclick="selectFreq('uma')">
+            📌 Uma única vez
+          </div>
+          <div class="freq-opt" id="freqSempre" onclick="selectFreq('sempre')">
+            🔁 Sempre ao entrar
+          </div>
+        </div>
+
+        <!-- Botões -->
+        <div class="aviso-btn-grid">
+          <button class="btn-pub" onclick="publicarAviso()">📢 Publicar</button>
+          <button class="btn-despub" onclick="despublicarAviso()">🔕 Remover</button>
+        </div>
+      </div>
+
+      <!-- Histórico -->
+      <div class="sec">Histórico</div>
+      <div id="avisoHistorico">
+        <div class="fin-empty">Nenhum aviso publicado ainda.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── PAGE: FINANÇAS ── -->
+  <div class="page" id="page-financas">
+    <div class="content">
+
+      <div class="sec">Resumo do Mês</div>
+      <div class="fin-summary">
+        <div class="fin-card green">
+          <div class="fin-card-label">Usuários Ativos</div>
+          <div class="fin-card-val" id="finAtivos">—</div>
+          <div class="fin-card-sub">com valor definido</div>
+        </div>
+        <div class="fin-card yellow">
+          <div class="fin-card-label">Receita Mensal</div>
+          <div class="fin-card-val" id="finTotal">R$ —</div>
+          <div class="fin-card-sub">soma dos valores</div>
+        </div>
+        <div class="fin-card red">
+          <div class="fin-card-label">Sem Valor</div>
+          <div class="fin-card-val" id="finSemValor">—</div>
+          <div class="fin-card-sub">usuários</div>
+        </div>
+        <div class="fin-card purple">
+          <div class="fin-card-label">Expirando</div>
+          <div class="fin-card-val" id="finExpirando">—</div>
+          <div class="fin-card-sub">em 7 dias</div>
+        </div>
+      </div>
+
+      <div class="fin-total-bar">
+        <span class="fin-total-label">💰 Total estimado/mês</span>
+        <span class="fin-total-val" id="finTotalBar">R$ 0,00</span>
+      </div>
+
+      <div class="sec">Valor por Usuário</div>
+      <div style="background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.15);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--accent);margin-bottom:12px">
+        💡 Defina o valor mensal de cada usuário. Os totais são calculados automaticamente.
+      </div>
+      <div id="finUserList">
+        <div class="loading-spinner" style="margin:30px auto"></div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /app-screen -->
 
 <!-- MODAL EXPIRAÇÃO -->
 <div class="overlay" id="ovExp" onclick="if(event.target===this)closeModal('ovExp')">
@@ -313,8 +405,6 @@
     <div class="mtitle">📅 Definir Expiração</div>
     <div class="msub" id="expSubtitle">Defina até quando o acesso é válido</div>
     <input type="hidden" id="expUserId">
-
-    <!-- Renovação rápida -->
     <div style="margin-bottom:14px">
       <label class="fl" style="margin-bottom:8px">Renovação rápida</label>
       <div class="quick-btns">
@@ -323,7 +413,6 @@
         <button class="q-btn" onclick="addDays(90)">+90 dias</button>
       </div>
     </div>
-
     <div style="margin-bottom:14px">
       <label class="fl">Ou escolha a data manualmente</label>
       <input class="mfi" id="expData" type="date" oninput="clearQuickBtns()">
@@ -345,15 +434,13 @@
   </div>
 </div>
 
-
-<!-- ── FIREBASE ───────────────────────────────────── -->
+<!-- ── FIREBASE ── -->
 <script type="module">
-import { initializeApp }                          from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { initializeApp }    from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getFirestore, collection, onSnapshot,
-         doc, updateDoc, deleteDoc, setDoc, getDoc,
-         serverTimestamp }                        from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+         doc, updateDoc, deleteDoc, setDoc, getDoc }
+                            from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-// ── CONFIG ───────────────────────────────────────
 const FB = {
   apiKey:"AIzaSyC3vJGo0S5aSINTuMIHbq1uc9IHMtaFIFo",
   authDomain:"streamdesk-5350d.firebaseapp.com",
@@ -362,7 +449,6 @@ const FB = {
   messagingSenderId:"36684694847",
   appId:"1:36684694847:web:0f6f3a27933e3d84cfff8a",
 };
-
 const app = initializeApp(FB);
 const db  = getFirestore(app);
 
@@ -371,33 +457,35 @@ const ADMIN_USER  = '__ADMIN_USER__';
 const ADMIN_PASS  = '__ADMIN_PASS__';
 const SESSION_KEY = 'streamdesk_admin_session';
 
-// ── STATE ────────────────────────────────────────
+// ── STATE ─────────────────────────────────────────
 let _allUsers    = [];
 let _unsubscribe = null;
 let pendingDelId = null;
+let _freqMode    = 'uma'; // 'uma' | 'sempre'
 
+// ── HELPERS ───────────────────────────────────────
 window.showToast = function(msg, color) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   const isRed = color === 'red';
-  t.style.background   = isRed ? 'rgba(255,59,92,.15)' : 'rgba(0,224,150,.15)';
-  t.style.borderColor  = isRed ? 'var(--red)'          : 'var(--green)';
-  t.style.color        = isRed ? 'var(--red)'          : 'var(--green)';
+  t.style.background  = isRed ? 'rgba(255,59,92,.15)' : 'rgba(0,224,150,.15)';
+  t.style.borderColor = isRed ? 'var(--red)'          : 'var(--green)';
+  t.style.color       = isRed ? 'var(--red)'          : 'var(--green)';
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2500);
 };
-
 window.openModal  = id => document.getElementById(id).classList.add('open');
 window.closeModal = id => document.getElementById(id).classList.remove('open');
 
 function today() {
   const d = new Date();
-  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 }
 function formatDate(d) {
-  if (!d) return '—';
-  const p = d.split('-');
-  return p[2] + '/' + p[1] + '/' + p[0];
+  if (!d) return '—'; const p = d.split('-'); return p[2]+'/'+p[1]+'/'+p[0];
+}
+function formatMoney(v) {
+  return 'R$ ' + Number(v||0).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.');
 }
 function daysUntil(d) {
   if (!d) return null;
@@ -405,38 +493,41 @@ function daysUntil(d) {
 }
 function avatarColor(name) {
   const colors = ['#00d4ff','#a78bfa','#00e096','#ff7b00','#ffbb00','#f472b6','#60a5fa'];
-  return colors[((name || '?').charCodeAt(0)) % colors.length];
+  return colors[((name||'?').charCodeAt(0)) % colors.length];
 }
 window.scrollToSection = function(id) {
   const el = document.getElementById(id);
-  if (el && el.style.display !== 'none') el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  if (el && el.style.display !== 'none') el.scrollIntoView({behavior:'smooth',block:'start'});
 };
 
-// ── AUTH ─────────────────────────────────────────
+// ── TAB NAVIGATION ────────────────────────────────
+window.switchTab = function(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.getElementById('page-' + tab).classList.add('active');
+  if (tab === 'avisos')   loadAviso();
+  if (tab === 'financas') renderFinancas();
+};
+
+// ── AUTH ──────────────────────────────────────────
 window.togglePwd = function() {
   const fi = document.getElementById('aSenha');
   fi.type = fi.type === 'password' ? 'text' : 'password';
 };
-
 window.doAdminLogin = function() {
-  const user   = document.getElementById('aEmail').value.trim();
-  const senha  = document.getElementById('aSenha').value;
-  const err    = document.getElementById('loginErr');
-  const errTxt = document.getElementById('loginErrTxt');
+  const user  = document.getElementById('aEmail').value.trim();
+  const senha = document.getElementById('aSenha').value;
+  const err   = document.getElementById('loginErr');
+  const errTxt= document.getElementById('loginErrTxt');
   err.classList.remove('show');
-
-  if (!user || !senha) { errTxt.textContent = 'Preencha todos os campos.'; err.classList.add('show'); return; }
-
+  if (!user || !senha) { errTxt.textContent='Preencha todos os campos.'; err.classList.add('show'); return; }
   if (user !== ADMIN_USER || senha !== ADMIN_PASS) {
-    errTxt.textContent = 'Usuário ou senha incorretos.';
-    err.classList.add('show');
-    return;
+    errTxt.textContent='Usuário ou senha incorretos.'; err.classList.add('show'); return;
   }
-
-  localStorage.setItem(SESSION_KEY, 'true');
+  localStorage.setItem(SESSION_KEY,'true');
   showApp();
 };
-
 window.doLogout = function() {
   localStorage.removeItem(SESSION_KEY);
   if (_unsubscribe) { _unsubscribe(); _unsubscribe = null; }
@@ -452,16 +543,16 @@ function showApp() {
   loadAviso();
 }
 
-// ── FIRESTORE LISTENER (tempo real) ──────────────
+// ── FIRESTORE LISTENER ────────────────────────────
 function startListen() {
   document.getElementById('loadingState').style.display = 'block';
-
-  _unsubscribe = onSnapshot(collection(db, 'usuarios'), snapshot => {
-    _allUsers = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+  _unsubscribe = onSnapshot(collection(db,'usuarios'), snapshot => {
+    _allUsers = snapshot.docs.map(d => ({id:d.id,...d.data()}));
     document.getElementById('loadingState').style.display = 'none';
     render(_allUsers);
+    // refresh financas if tab open
+    if (document.getElementById('page-financas').classList.contains('active')) renderFinancas();
   }, err => {
-    console.error('Firestore error:', err);
     document.getElementById('loadingState').innerHTML =
       '<div style="color:var(--red);font-size:13px">⚠️ Erro ao carregar usuários.<br>Verifique as regras do Firestore.</div>';
   });
@@ -470,41 +561,36 @@ function startListen() {
 // ── SEARCH ────────────────────────────────────────
 window.onSearch = function() {
   const q = document.getElementById('searchInput').value.trim().toLowerCase();
-  if (!q) { render(_allUsers); return; }
-  const filtered = _allUsers.filter(u =>
-    (u.nome      || '').toLowerCase().includes(q) ||
-    (u.email     || '').toLowerCase().includes(q) ||
-    (u.whatsapp  || '').replace(/\D/g,'').includes(q.replace(/\D/g,''))
-  );
-  render(filtered);
+  render(!q ? _allUsers : _allUsers.filter(u =>
+    (u.nome||'').toLowerCase().includes(q) ||
+    (u.email||'').toLowerCase().includes(q) ||
+    (u.whatsapp||'').replace(/\D/g,'').includes(q.replace(/\D/g,''))
+  ));
 };
 
-// ── RENDER ────────────────────────────────────────
+// ── RENDER USUARIOS ───────────────────────────────
 function render(users) {
-  const ativos    = users.filter(u => u.status === 'ativo');
-  const pendentes = users.filter(u => u.status === 'pendente');
-  const bloqueados= users.filter(u => u.status === 'bloqueado');
-  const expirando = ativos.filter(u => { const d = daysUntil(u.expiracao); return d !== null && d >= 0 && d <= 7; });
+  const ativos    = users.filter(u => u.status==='ativo');
+  const pendentes = users.filter(u => u.status==='pendente');
+  const bloqueados= users.filter(u => u.status==='bloqueado');
+  const expirando = ativos.filter(u => { const d=daysUntil(u.expiracao); return d!==null&&d>=0&&d<=7; });
 
   document.getElementById('cAtivo').textContent = ativos.length;
   document.getElementById('cPend').textContent  = pendentes.length;
   document.getElementById('cBloq').textContent  = bloqueados.length;
 
-  // Alert banner
   const alerts = [];
-  if (pendentes.length) alerts.push(pendentes.length + ' usuário(s) aguardando pagamento');
-  if (expirando.length) alerts.push(expirando.length + ' acesso(s) expirando em 7 dias');
+  if (pendentes.length) alerts.push(pendentes.length+' usuário(s) aguardando pagamento');
+  if (expirando.length) alerts.push(expirando.length+' acesso(s) expirando em 7 dias');
   const banner = document.getElementById('alertBanner');
-  if (alerts.length) { document.getElementById('alertTxt').textContent = alerts.join(' · '); banner.classList.add('show'); }
+  if (alerts.length) { document.getElementById('alertTxt').textContent=alerts.join(' · '); banner.classList.add('show'); }
   else banner.classList.remove('show');
 
-  // Empty state
-  document.getElementById('emptyState').style.display = users.length === 0 ? 'block' : 'none';
-
-  renderSection('sectionPend', 'listPend', pendentes);
-  renderSection('sectionExp',  'listExp',  expirando);
-  renderSection('sectionAtivo','listAtivo', ativos.filter(u => { const d = daysUntil(u.expiracao); return d === null || d > 7; }));
-  renderSection('sectionBloq', 'listBloq', bloqueados);
+  document.getElementById('emptyState').style.display = users.length===0 ? 'block' : 'none';
+  renderSection('sectionPend','listPend', pendentes);
+  renderSection('sectionExp', 'listExp',  expirando);
+  renderSection('sectionAtivo','listAtivo', ativos.filter(u=>{ const d=daysUntil(u.expiracao); return d===null||d>7; }));
+  renderSection('sectionBloq','listBloq', bloqueados);
 }
 
 function renderSection(sectionId, listId, users) {
@@ -512,39 +598,31 @@ function renderSection(sectionId, listId, users) {
   const list = document.getElementById(listId);
   sec.style.display = users.length ? 'block' : 'none';
   list.innerHTML = '';
-
-  users.forEach((u, i) => {
+  users.forEach((u,i) => {
     const card = document.createElement('div');
     card.className = 'user-card';
-    card.style.animationDelay = (i * 0.05) + 's';
-
-    const initial   = (u.nome || '?').charAt(0).toUpperCase();
+    card.style.animationDelay = (i*.05)+'s';
+    const initial   = (u.nome||'?').charAt(0).toUpperCase();
     const color     = avatarColor(u.nome);
     const dias      = daysUntil(u.expiracao);
-    const pillClass = u.status === 'ativo' ? 's-ativo' : u.status === 'bloqueado' ? 's-bloqueado' : 's-pendente';
-    const pillTxt   = u.status === 'ativo' ? '🟢 Ativo' : u.status === 'bloqueado' ? '🔴 Bloqueado' : '🟡 Pendente';
-
+    const pillClass = u.status==='ativo' ? 's-ativo' : u.status==='bloqueado' ? 's-bloqueado' : 's-pendente';
+    const pillTxt   = u.status==='ativo' ? '🟢 Ativo' : u.status==='bloqueado' ? '🔴 Bloqueado' : '🟡 Pendente';
     let expWarn = '';
-    if (dias !== null && dias >= 0 && dias <= 7) expWarn = `<div class="exp-warn">⚠️ Expira em ${dias} dia(s)</div>`;
-    if (dias !== null && dias < 0)               expWarn = `<div class="exp-warn" style="color:var(--red)">❌ Expirado há ${Math.abs(dias)} dia(s)</div>`;
-
-    // Avatar: foto do Google ou inicial colorida
+    if (dias!==null&&dias>=0&&dias<=7) expWarn=`<div class="exp-warn">⚠️ Expira em ${dias} dia(s)</div>`;
+    if (dias!==null&&dias<0)           expWarn=`<div class="exp-warn" style="color:var(--red)">❌ Expirado há ${Math.abs(dias)} dia(s)</div>`;
     const avatarHtml = u.foto
       ? `<div class="user-avatar"><img src="${u.foto}" alt="${initial}" onerror="this.parentElement.innerHTML='${initial}';this.parentElement.style.background='${color}'"></div>`
       : `<div class="user-avatar" style="background:${color}">${initial}</div>`;
-
-    // WhatsApp formatado
-    const waDisplay = u.whatsapp || '—';
-    const waLink    = u.whatsapp
-      ? `<a class="d-val wa-link" href="https://wa.me/${u.whatsapp.replace(/\D/g,'')}?text=${encodeURIComponent('Olá ' + (u.nome||'').split(' ')[0] + '! 👋')}" target="_blank">📲 ${waDisplay}</a>`
+    const waLink = u.whatsapp
+      ? `<a class="d-val wa-link" href="https://wa.me/${u.whatsapp.replace(/\D/g,'')}?text=${encodeURIComponent('Olá '+((u.nome||'').split(' ')[0])+'! 👋')}" target="_blank">📲 ${u.whatsapp}</a>`
       : `<div class="d-val">—</div>`;
 
     card.innerHTML = `
       <div class="card-main">
         ${avatarHtml}
         <div class="user-info">
-          <div class="user-name">${u.nome || '—'}</div>
-          <div class="user-email">${u.email || '—'}</div>
+          <div class="user-name">${u.nome||'—'}</div>
+          <div class="user-email">${u.email||'—'}</div>
         </div>
         <span class="status-pill ${pillClass}">${pillTxt}</span>
         <span class="card-chevron">›</span>
@@ -553,14 +631,14 @@ function renderSection(sectionId, listId, users) {
         <div class="detail-inner">
           <div class="detail-grid">
             <div><div class="d-label">Cadastro</div><div class="d-val">${formatDate(u.dataCadastro)}</div></div>
-            <div><div class="d-label">Expiração</div><div class="d-val">${u.expiracao ? formatDate(u.expiracao) : '—'}</div>${expWarn}</div>
+            <div><div class="d-label">Expiração</div><div class="d-val">${u.expiracao?formatDate(u.expiracao):'—'}</div>${expWarn}</div>
             <div><div class="d-label">WhatsApp</div>${waLink}</div>
-            <div><div class="d-label">Último acesso</div><div class="d-val">${u.ultimoAcesso ? formatDate(u.ultimoAcesso) : '—'}</div></div>
+            <div><div class="d-label">Último acesso</div><div class="d-val">${u.ultimoAcesso?formatDate(u.ultimoAcesso):'—'}</div></div>
           </div>
           <div class="det-actions">
-            ${u.status !== 'ativo'     ? `<button class="det-btn btn-aprovar"  data-action="aprovar">✅ Aprovar</button>`  : ''}
-            ${u.status !== 'bloqueado' ? `<button class="det-btn btn-bloquear" data-action="bloquear">🔴 Bloquear</button>` : ''}
-            ${u.status === 'bloqueado' ? `<button class="det-btn btn-aprovar"  data-action="aprovar">✅ Reativar</button>`  : ''}
+            ${u.status!=='ativo'     ? `<button class="det-btn btn-aprovar"  data-action="aprovar">✅ Aprovar</button>`  : ''}
+            ${u.status!=='bloqueado' ? `<button class="det-btn btn-bloquear" data-action="bloquear">🔴 Bloquear</button>` : ''}
+            ${u.status==='bloqueado' ? `<button class="det-btn btn-aprovar"  data-action="aprovar">✅ Reativar</button>`  : ''}
             <button class="det-btn btn-exp" data-action="exp">📅 Expiração</button>
             <button class="det-btn btn-wa"  data-action="wa">📲 WhatsApp</button>
             <button class="det-btn btn-del" data-action="del">🗑️ Excluir Usuário</button>
@@ -569,49 +647,38 @@ function renderSection(sectionId, listId, users) {
       </div>`;
 
     list.appendChild(card);
-
-    // Toggle expand
     const mainRow = card.querySelector('.card-main');
     const detail  = card.querySelector('.card-detail');
     const chev    = card.querySelector('.card-chevron');
     mainRow.addEventListener('click', () => {
-      const open = detail.style.display === 'block';
-      document.querySelectorAll('.card-detail').forEach(d => d.style.display = 'none');
-      document.querySelectorAll('.card-chevron').forEach(c => c.style.transform = 'rotate(0)');
-      if (!open) { detail.style.display = 'block'; chev.style.transform = 'rotate(90deg)'; }
+      const open = detail.style.display==='block';
+      document.querySelectorAll('.card-detail').forEach(d=>d.style.display='none');
+      document.querySelectorAll('.card-chevron').forEach(c=>c.style.transform='rotate(0)');
+      if (!open) { detail.style.display='block'; chev.style.transform='rotate(90deg)'; }
     });
-
-    // Action buttons
     card.querySelectorAll('.det-btn').forEach(btn => {
       btn.addEventListener('click', async e => {
         e.stopPropagation();
         const action = btn.getAttribute('data-action');
-        const uid    = u.id;
-
-        if (action === 'aprovar') {
-          await updateDoc(doc(db, 'usuarios', uid), { status: 'ativo' });
+        if (action==='aprovar') {
+          await updateDoc(doc(db,'usuarios',u.id),{status:'ativo'});
           showToast('✅ Usuário aprovado!');
-
-        } else if (action === 'bloquear') {
-          await updateDoc(doc(db, 'usuarios', uid), { status: 'bloqueado' });
-          showToast('🔴 Usuário bloqueado!', 'red');
-
-        } else if (action === 'exp') {
-          document.getElementById('expUserId').value           = uid;
-          document.getElementById('expSubtitle').textContent   = 'Definir acesso para ' + (u.nome || u.email);
-          document.getElementById('expData').value             = u.expiracao || '';
+        } else if (action==='bloquear') {
+          await updateDoc(doc(db,'usuarios',u.id),{status:'bloqueado'});
+          showToast('🔴 Usuário bloqueado!','red');
+        } else if (action==='exp') {
+          document.getElementById('expUserId').value         = u.id;
+          document.getElementById('expSubtitle').textContent = 'Definir acesso para '+(u.nome||u.email);
+          document.getElementById('expData').value           = u.expiracao||'';
           clearQuickBtns();
           openModal('ovExp');
-
-        } else if (action === 'wa') {
+        } else if (action==='wa') {
           const msg   = `Olá ${(u.nome||'').split(' ')[0]}! 👋 Seu acesso ao StreamDesk vence em ${formatDate(u.expiracao)}. Renove para continuar usando! 😊`;
-          const phone = (u.whatsapp || '').replace(/\D/g,'');
-          const url   = phone ? `https://wa.me/${phone}?text=${encodeURIComponent(msg)}` : `https://wa.me/?text=${encodeURIComponent(msg)}`;
-          window.open(url, '_blank');
-
-        } else if (action === 'del') {
-          pendingDelId = uid;
-          document.getElementById('delMsg').textContent = `Excluir o usuário ${u.nome || u.email}? Esta ação não pode ser desfeita.`;
+          const phone = (u.whatsapp||'').replace(/\D/g,'');
+          window.open(phone?`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`:`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank');
+        } else if (action==='del') {
+          pendingDelId = u.id;
+          document.getElementById('delMsg').textContent=`Excluir o usuário ${u.nome||u.email}? Esta ação não pode ser desfeita.`;
           openModal('ovDel');
         }
       });
@@ -621,26 +688,21 @@ function renderSection(sectionId, listId, users) {
 
 // ── EXPIRAÇÃO ─────────────────────────────────────
 window.addDays = function(n) {
-  // Calcula a partir da expiração atual ou de hoje
   const uid  = document.getElementById('expUserId').value;
-  const user = _allUsers.find(u => u.id === uid);
-  const base = (user && user.expiracao && daysUntil(user.expiracao) > 0) ? new Date(user.expiracao) : new Date();
-  base.setDate(base.getDate() + n);
-  const iso = base.getFullYear() + '-' + String(base.getMonth()+1).padStart(2,'0') + '-' + String(base.getDate()).padStart(2,'0');
+  const user = _allUsers.find(u=>u.id===uid);
+  const base = (user&&user.expiracao&&daysUntil(user.expiracao)>0) ? new Date(user.expiracao) : new Date();
+  base.setDate(base.getDate()+n);
+  const iso = base.getFullYear()+'-'+String(base.getMonth()+1).padStart(2,'0')+'-'+String(base.getDate()).padStart(2,'0');
   document.getElementById('expData').value = iso;
-  document.querySelectorAll('.q-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelectorAll('.q-btn').forEach(b=>b.classList.remove('selected'));
   event.currentTarget.classList.add('selected');
 };
-
-window.clearQuickBtns = function() {
-  document.querySelectorAll('.q-btn').forEach(b => b.classList.remove('selected'));
-};
-
+window.clearQuickBtns = function() { document.querySelectorAll('.q-btn').forEach(b=>b.classList.remove('selected')); };
 window.salvarExpiracao = async function() {
   const uid = document.getElementById('expUserId').value;
   const dat = document.getElementById('expData').value;
   if (!dat) { alert('Informe a data!'); return; }
-  await updateDoc(doc(db, 'usuarios', uid), { expiracao: dat, status: 'ativo' });
+  await updateDoc(doc(db,'usuarios',uid),{expiracao:dat,status:'ativo'});
   closeModal('ovExp');
   showToast('📅 Expiração definida!');
 };
@@ -648,70 +710,140 @@ window.salvarExpiracao = async function() {
 // ── DELETE ────────────────────────────────────────
 window.confirmDel = async function() {
   if (!pendingDelId) return;
-  await deleteDoc(doc(db, 'usuarios', pendingDelId));
+  await deleteDoc(doc(db,'usuarios',pendingDelId));
   pendingDelId = null;
   closeModal('ovDel');
   showToast('🗑️ Usuário excluído.');
 };
 
+// ── AVISOS ────────────────────────────────────────
+window.selectFreq = function(mode) {
+  _freqMode = mode;
+  document.getElementById('freqUma').classList.toggle('selected', mode==='uma');
+  document.getElementById('freqSempre').classList.toggle('selected', mode==='sempre');
+};
 
-// ── AVISO ─────────────────────────────────────────
 async function loadAviso() {
   try {
-    const snap = await getDoc(doc(db, 'config', 'aviso'));
-    if (snap.exists()) {
-      const data = snap.data();
-      document.getElementById('avisoTexto').value = data.texto || '';
-      const ativo = data.ativo === true;
-      const dot = document.getElementById('avisoStatusDot');
-      const txt = document.getElementById('avisoStatusTxt');
-      if (ativo) {
-        dot.classList.add('ativo');
-        txt.classList.add('ativo');
-        txt.textContent = '✅ Aviso ativo — aparecendo para os usuários';
-      } else {
-        dot.classList.remove('ativo');
-        txt.classList.remove('ativo');
-        txt.textContent = 'Sem aviso ativo';
-      }
+    const snap = await getDoc(doc(db,'config','aviso'));
+    if (!snap.exists()) return;
+    const data = snap.data();
+    document.getElementById('avisoTexto').value = data.texto||'';
+    _freqMode = data.frequencia||'uma';
+    selectFreq(_freqMode);
+    const ativo = data.ativo===true;
+    const dot = document.getElementById('avisoStatusDot');
+    const txt = document.getElementById('avisoStatusTxt');
+    const dataTxt = document.getElementById('avisoDataTxt');
+    if (ativo) {
+      dot.classList.add('ativo'); txt.classList.add('ativo');
+      txt.textContent = '✅ Aviso ativo';
+      dataTxt.textContent = data.atualizadoEm ? 'Publicado em '+new Date(data.atualizadoEm).toLocaleDateString('pt-BR') : '';
+    } else {
+      dot.classList.remove('ativo'); txt.classList.remove('ativo');
+      txt.textContent = 'Sem aviso ativo';
+      dataTxt.textContent = '';
     }
-  } catch(e) { console.error('Erro ao carregar aviso:', e); }
+    renderHistorico(data);
+  } catch(e) { console.error('Erro aviso:',e); }
+}
+
+function renderHistorico(data) {
+  const el = document.getElementById('avisoHistorico');
+  if (!data || !data.texto) { el.innerHTML='<div class="fin-empty">Nenhum aviso publicado ainda.</div>'; return; }
+  const freqLabel = data.frequencia==='sempre' ? '🔁 Sempre' : '📌 Uma vez';
+  const freqColor = data.frequencia==='sempre' ? 'var(--accent)' : 'var(--yellow)';
+  const statusLabel = data.ativo ? '🟢 Ativo' : '⚫ Inativo';
+  const statusBg    = data.ativo ? 'rgba(0,224,150,.12)' : 'rgba(90,100,128,.15)';
+  const statusColor = data.ativo ? 'var(--green)' : 'var(--muted)';
+  el.innerHTML = `
+    <div class="aviso-hist-card">
+      <div class="aviso-hist-top">
+        <span class="aviso-hist-date">${data.atualizadoEm ? new Date(data.atualizadoEm).toLocaleDateString('pt-BR',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '—'}</span>
+        <div style="display:flex;gap:6px">
+          <span class="aviso-hist-badge" style="background:rgba(255,187,0,.1);color:${freqColor}">${freqLabel}</span>
+          <span class="aviso-hist-badge" style="background:${statusBg};color:${statusColor}">${statusLabel}</span>
+        </div>
+      </div>
+      <div class="aviso-hist-txt">${data.texto}</div>
+    </div>`;
 }
 
 window.publicarAviso = async function() {
   const texto = document.getElementById('avisoTexto').value.trim();
-  if (!texto) { showToast('✏️ Escreva o aviso antes de publicar!', 'red'); return; }
-  await setDoc(doc(db, 'config', 'aviso'), {
-    texto,
-    ativo: true,
-    atualizadoEm: new Date().toISOString(),
-  });
-  const dot = document.getElementById('avisoStatusDot');
-  const txt = document.getElementById('avisoStatusTxt');
-  dot.classList.add('ativo');
-  txt.classList.add('ativo');
-  txt.textContent = '✅ Aviso ativo — aparecendo para os usuários';
-  showToast('📢 Aviso publicado com sucesso!');
+  if (!texto) { showToast('✏️ Escreva o aviso antes de publicar!','red'); return; }
+  const now = new Date().toISOString();
+  await setDoc(doc(db,'config','aviso'),{ texto, ativo:true, frequencia:_freqMode, atualizadoEm:now });
+  showToast('📢 Aviso publicado!');
+  loadAviso();
 };
 
 window.despublicarAviso = async function() {
-  await setDoc(doc(db, 'config', 'aviso'), {
-    texto: document.getElementById('avisoTexto').value.trim(),
-    ativo: false,
-    atualizadoEm: new Date().toISOString(),
-  });
-  const dot = document.getElementById('avisoStatusDot');
-  const txt = document.getElementById('avisoStatusTxt');
-  dot.classList.remove('ativo');
-  txt.classList.remove('ativo');
-  txt.textContent = 'Sem aviso ativo';
+  const texto = document.getElementById('avisoTexto').value.trim();
+  await setDoc(doc(db,'config','aviso'),{ texto, ativo:false, frequencia:_freqMode, atualizadoEm:new Date().toISOString() });
   showToast('🔕 Aviso removido.');
+  loadAviso();
 };
 
-// ── INIT ─────────────────────────────────────────
-if (localStorage.getItem(SESSION_KEY) === 'true') {
-  showApp();
+// ── FINANÇAS ──────────────────────────────────────
+function renderFinancas() {
+  const ativos     = _allUsers.filter(u=>u.status==='ativo');
+  const comValor   = ativos.filter(u=>u.valorMensal&&Number(u.valorMensal)>0);
+  const semValor   = ativos.filter(u=>!u.valorMensal||Number(u.valorMensal)===0);
+  const expirando  = ativos.filter(u=>{ const d=daysUntil(u.expiracao); return d!==null&&d>=0&&d<=7; });
+  const total      = comValor.reduce((s,u)=>s+Number(u.valorMensal||0),0);
+
+  document.getElementById('finAtivos').textContent   = comValor.length;
+  document.getElementById('finTotal').textContent    = formatMoney(total);
+  document.getElementById('finSemValor').textContent = semValor.length;
+  document.getElementById('finExpirando').textContent= expirando.length;
+  document.getElementById('finTotalBar').textContent = formatMoney(total);
+
+  const list = document.getElementById('finUserList');
+  if (!ativos.length) { list.innerHTML='<div class="fin-empty">Nenhum usuário ativo.</div>'; return; }
+
+  list.innerHTML = ativos.map(u => {
+    const color   = avatarColor(u.nome);
+    const initial = (u.nome||'?').charAt(0).toUpperCase();
+    const avatarHtml = u.foto
+      ? `<div class="fin-avatar"><img src="${u.foto}" alt="${initial}" onerror="this.parentElement.innerHTML='${initial}';this.parentElement.style.background='${color}'"></div>`
+      : `<div class="fin-avatar" style="background:${color}">${initial}</div>`;
+    const dias = daysUntil(u.expiracao);
+    const expStr = u.expiracao
+      ? (dias!==null&&dias<0 ? `<span style="color:var(--red)">Expirado</span>` : `Expira ${formatDate(u.expiracao)}`)
+      : '—';
+    return `
+      <div class="fin-user-row">
+        ${avatarHtml}
+        <div class="fin-user-info">
+          <div class="fin-user-name">${u.nome||u.email||'—'}</div>
+          <div class="fin-user-exp">${expStr}</div>
+        </div>
+        <div class="fin-valor-wrap">
+          <input class="fin-valor-input" type="number" min="0" step="0.01"
+            placeholder="0,00"
+            value="${u.valorMensal||''}"
+            data-uid="${u.id}"
+            onchange="salvarValor(this)"
+            title="Valor mensal (R$)">
+        </div>
+      </div>`;
+  }).join('');
 }
+
+window.salvarValor = async function(input) {
+  const uid = input.getAttribute('data-uid');
+  const val = parseFloat(input.value)||0;
+  await updateDoc(doc(db,'usuarios',uid),{valorMensal:val});
+  showToast('💰 Valor salvo!');
+  // update local state for totals
+  const u = _allUsers.find(u=>u.id===uid);
+  if (u) u.valorMensal = val;
+  renderFinancas();
+};
+
+// ── INIT ──────────────────────────────────────────
+if (localStorage.getItem(SESSION_KEY)==='true') showApp();
 </script>
 </body>
 </html>
