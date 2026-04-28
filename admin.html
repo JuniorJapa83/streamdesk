@@ -82,6 +82,31 @@
   .stat-card.b .stat-num{color:var(--red)}
   .stat-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
 
+
+  /* ── FILTROS ── */
+  .filter-bar{display:flex;gap:6px;margin-bottom:10px;overflow-x:auto;padding-bottom:2px}
+  .filter-bar::-webkit-scrollbar{display:none}
+  .filter-btn{padding:7px 14px;border:1.5px solid var(--border);border-radius:50px;background:transparent;color:var(--muted);font-size:12px;font-weight:700;font-family:'Space Grotesk',sans-serif;cursor:pointer;white-space:nowrap;transition:all .2s;flex-shrink:0}
+  .filter-btn.active-a{border-color:var(--green);background:rgba(0,224,150,.1);color:var(--green)}
+  .filter-btn.active-p{border-color:var(--yellow);background:rgba(255,187,0,.1);color:var(--yellow)}
+  .filter-btn.active-b{border-color:var(--red);background:rgba(255,59,92,.1);color:var(--red)}
+  .filter-btn.active-all{border-color:var(--accent);background:rgba(0,212,255,.1);color:var(--accent)}
+
+  /* ── EXP BADGE NO CARD ── */
+  .exp-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:50px;white-space:nowrap;flex-shrink:0}
+  .exp-badge.critico{background:rgba(255,59,92,.15);color:var(--red)}
+  .exp-badge.urgente{background:rgba(255,123,0,.15);color:var(--orange)}
+  .exp-badge.aviso{background:rgba(255,187,0,.12);color:var(--yellow)}
+  .exp-badge.ok{background:rgba(0,224,150,.1);color:var(--green)}
+  .exp-badge.sem{background:rgba(90,100,128,.15);color:var(--muted)}
+
+  /* ── PAGINAÇÃO ── */
+  .pag-nav{display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding:10px 0}
+  .pag-nav-btn{display:flex;align-items:center;gap:6px;padding:9px 16px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);color:var(--text);font-size:13px;font-weight:600;font-family:'Space Grotesk',sans-serif;cursor:pointer;transition:all .2s}
+  .pag-nav-btn:disabled{opacity:.3;cursor:not-allowed}
+  .pag-nav-btn:not(:disabled):active{transform:scale(.95)}
+  .pag-info{font-size:12px;color:var(--muted);text-align:center}
+  .pag-info strong{color:var(--text);font-family:'Space Grotesk',sans-serif}
   /* ── ALERT BANNER ── */
   .alert-banner{background:rgba(255,187,0,.07);border:1px solid rgba(255,187,0,.2);border-radius:12px;padding:12px 16px;font-size:13px;color:var(--yellow);display:none;align-items:center;gap:10px;margin-bottom:4px}
   .alert-banner.show{display:flex}
@@ -318,18 +343,29 @@
   <!-- ── PAGE: USUÁRIOS ── -->
   <div class="page active" id="page-usuarios">
     <div class="content">
+
+      <!-- Stats clicáveis como filtro -->
       <div class="sec">Visão Geral</div>
       <div class="stats-grid">
-        <div class="stat-card a" onclick="scrollToSection('sectionAtivo')"><div class="stat-num" id="cAtivo">—</div><div class="stat-lbl">Ativos</div></div>
-        <div class="stat-card p" onclick="scrollToSection('sectionPend')"><div class="stat-num" id="cPend">—</div><div class="stat-lbl">Pendentes</div></div>
-        <div class="stat-card b" onclick="scrollToSection('sectionBloq')"><div class="stat-num" id="cBloq">—</div><div class="stat-lbl">Bloqueados</div></div>
+        <div class="stat-card a" onclick="setFiltro('ativo')"><div class="stat-num" id="cAtivo">—</div><div class="stat-lbl">Ativos</div></div>
+        <div class="stat-card p" onclick="setFiltro('pendente')"><div class="stat-num" id="cPend">—</div><div class="stat-lbl">Pendentes</div></div>
+        <div class="stat-card b" onclick="setFiltro('bloqueado')"><div class="stat-num" id="cBloq">—</div><div class="stat-lbl">Bloqueados</div></div>
       </div>
       <div class="alert-banner" id="alertBanner">⚠️ <span id="alertTxt"></span></div>
 
+      <!-- Busca -->
       <div class="sec">Usuários</div>
-      <div class="search-wrap">
+      <div class="search-wrap" style="margin-bottom:8px">
         <span class="search-icon">🔍</span>
         <input class="search-input" id="searchInput" type="text" placeholder="Buscar por nome, e-mail ou WhatsApp..." oninput="onSearch()">
+      </div>
+
+      <!-- Filtros -->
+      <div class="filter-bar">
+        <button class="filter-btn active-all" id="fb-todos"     onclick="setFiltro('todos')">👥 Todos</button>
+        <button class="filter-btn"            id="fb-ativo"     onclick="setFiltro('ativo')">🟢 Ativos</button>
+        <button class="filter-btn"            id="fb-pendente"  onclick="setFiltro('pendente')">🟡 Pendentes</button>
+        <button class="filter-btn"            id="fb-bloqueado" onclick="setFiltro('bloqueado')">🔴 Bloqueados</button>
       </div>
 
       <div class="loading-state" id="loadingState">
@@ -337,11 +373,16 @@
         <div>Carregando usuários...</div>
       </div>
 
-      <div id="sectionPend" style="display:none"><div class="sec">🟡 Aguardando Pagamento</div><div id="listPend"></div></div>
-      <div id="sectionExp"  style="display:none"><div class="sec">🟠 Expirando em 7 dias</div><div id="listExp"></div></div>
-      <div id="sectionAtivo" style="display:none"><div class="sec">🟢 Ativos</div><div id="listAtivo"></div></div>
-      <div id="sectionBloq" style="display:none"><div class="sec">🔴 Bloqueados</div><div id="listBloq"></div></div>
+      <div id="userListContainer"></div>
       <div class="empty" id="emptyState" style="display:none"><div class="empty-icon">👥</div><div>Nenhum usuário encontrado</div></div>
+
+      <!-- Paginação -->
+      <div class="pag-nav" id="pagNav" style="display:none">
+        <button class="pag-nav-btn" id="pagPrev" onclick="mudarPag(-1)">‹ Anterior</button>
+        <div class="pag-info"><strong id="pagLabel">—</strong></div>
+        <button class="pag-nav-btn" id="pagNext" onclick="mudarPag(1)">Próximo ›</button>
+      </div>
+
     </div>
   </div>
 
@@ -554,10 +595,7 @@ function avatarColor(name) {
   const colors = ['#00d4ff','#a78bfa','#00e096','#ff7b00','#ffbb00','#f472b6','#60a5fa'];
   return colors[((name||'?').charCodeAt(0)) % colors.length];
 }
-window.scrollToSection = function(id) {
-  const el = document.getElementById(id);
-  if (el && el.style.display !== 'none') el.scrollIntoView({behavior:'smooth',block:'start'});
-};
+window.scrollToSection = function(id) {}; // deprecated — using filtro now
 
 // ── TAB NAVIGATION ────────────────────────────────
 window.switchTab = function(tab) {
@@ -617,27 +655,44 @@ function startListen() {
   });
 }
 
-// ── SEARCH ────────────────────────────────────────
+// ── FILTRO + PAGINAÇÃO ───────────────────────────
+let _filtroAtual = 'todos';
+let _pagAtual    = 0;
+const POR_PAG    = 20;
+
+window.setFiltro = function(f) {
+  _filtroAtual = f;
+  _pagAtual    = 0;
+  // Update filter buttons
+  const map = {todos:'all', ativo:'a', pendente:'p', bloqueado:'b'};
+  ['todos','ativo','pendente','bloqueado'].forEach(k => {
+    const btn = document.getElementById('fb-'+k);
+    if (!btn) return;
+    btn.className = 'filter-btn' + (k===f ? ' active-'+map[k] : '');
+  });
+  renderUsers();
+};
+
+window.mudarPag = function(dir) {
+  _pagAtual += dir;
+  renderUsers();
+  document.getElementById('page-usuarios').scrollTo({top:0,behavior:'smooth'});
+};
+
 window.onSearch = function() {
-  const q = document.getElementById('searchInput').value.trim().toLowerCase();
-  render(!q ? _allUsers : _allUsers.filter(u =>
-    (u.nome||'').toLowerCase().includes(q) ||
-    (u.email||'').toLowerCase().includes(q) ||
-    (u.whatsapp||'').replace(/\D/g,'').includes(q.replace(/\D/g,''))
-  ));
+  _pagAtual = 0;
+  renderUsers();
 };
 
 // ── RENDER USUARIOS ───────────────────────────────
 function render(users) {
-  const ativos    = users.filter(u => u.status==='ativo');
-  const pendentes = users.filter(u => u.status==='pendente');
-  const bloqueados= users.filter(u => u.status==='bloqueado');
-  const expirando = ativos.filter(u => { const d=daysUntil(u.expiracao); return d!==null&&d>=0&&d<=7; });
+  // Update counters
+  document.getElementById('cAtivo').textContent    = users.filter(u=>u.status==='ativo').length;
+  document.getElementById('cPend').textContent     = users.filter(u=>u.status==='pendente').length;
+  document.getElementById('cBloq').textContent     = users.filter(u=>u.status==='bloqueado').length;
 
-  document.getElementById('cAtivo').textContent = ativos.length;
-  document.getElementById('cPend').textContent  = pendentes.length;
-  document.getElementById('cBloq').textContent  = bloqueados.length;
-
+  const expirando = users.filter(u=>u.status==='ativo' && (()=>{ const d=daysUntil(u.expiracao); return d!==null&&d>=0&&d<=7; })());
+  const pendentes = users.filter(u=>u.status==='pendente');
   const alerts = [];
   if (pendentes.length) alerts.push(pendentes.length+' usuário(s) aguardando pagamento');
   if (expirando.length) alerts.push(expirando.length+' acesso(s) expirando em 7 dias');
@@ -645,30 +700,76 @@ function render(users) {
   if (alerts.length) { document.getElementById('alertTxt').textContent=alerts.join(' · '); banner.classList.add('show'); }
   else banner.classList.remove('show');
 
-  document.getElementById('emptyState').style.display = users.length===0 ? 'block' : 'none';
-  renderSection('sectionPend','listPend', pendentes);
-  renderSection('sectionExp', 'listExp',  expirando);
-  renderSection('sectionAtivo','listAtivo', ativos.filter(u=>{ const d=daysUntil(u.expiracao); return d===null||d>7; }));
-  renderSection('sectionBloq','listBloq', bloqueados);
+  renderUsers();
 }
 
-function renderSection(sectionId, listId, users) {
-  const sec  = document.getElementById(sectionId);
-  const list = document.getElementById(listId);
-  sec.style.display = users.length ? 'block' : 'none';
-  list.innerHTML = '';
-  users.forEach((u,i) => {
+function renderUsers() {
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+
+  // Filtra por status
+  let users = q
+    ? _allUsers.filter(u =>
+        (u.nome||'').toLowerCase().includes(q) ||
+        (u.email||'').toLowerCase().includes(q) ||
+        (u.whatsapp||'').replace(/\D/g,'').includes(q.replace(/\D/g,'')))
+    : [..._allUsers];
+
+  if (_filtroAtual !== 'todos') users = users.filter(u => u.status === _filtroAtual);
+
+  // Ordena: expirados/prestes a vencer primeiro, depois por dias restantes
+  users.sort((a, b) => {
+    const da = daysUntil(a.expiracao) ?? 99999;
+    const db2 = daysUntil(b.expiracao) ?? 99999;
+    return da - db2;
+  });
+
+  const total  = users.length;
+  const totalPag = Math.ceil(total / POR_PAG) || 1;
+  _pagAtual = Math.min(_pagAtual, totalPag - 1);
+  const slice = users.slice(_pagAtual * POR_PAG, (_pagAtual + 1) * POR_PAG);
+
+  // Empty state
+  document.getElementById('emptyState').style.display = total===0 ? 'block' : 'none';
+
+  // Paginação
+  const pagNav = document.getElementById('pagNav');
+  pagNav.style.display = total > POR_PAG ? 'flex' : 'none';
+  document.getElementById('pagLabel').textContent = `Pág. ${_pagAtual+1} de ${totalPag}`;
+  document.getElementById('pagPrev').disabled = _pagAtual === 0;
+  document.getElementById('pagNext').disabled = _pagAtual >= totalPag - 1;
+
+  // Render cards
+  const container = document.getElementById('userListContainer');
+  container.innerHTML = '';
+  slice.forEach((u, i) => renderCard(u, i, container));
+}
+
+function renderCard(u, i, container) {
     const card = document.createElement('div');
     card.className = 'user-card';
-    card.style.animationDelay = (i*.05)+'s';
+    card.style.animationDelay = (i*.04)+'s';
     const initial   = (u.nome||'?').charAt(0).toUpperCase();
     const color     = avatarColor(u.nome);
     const dias      = daysUntil(u.expiracao);
     const pillClass = u.status==='ativo' ? 's-ativo' : u.status==='bloqueado' ? 's-bloqueado' : 's-pendente';
-    const pillTxt   = u.status==='ativo' ? '🟢 Ativo' : u.status==='bloqueado' ? '🔴 Bloqueado' : '🟡 Pendente';
+
+    // Badge de expiração no card
+    let expBadge = '';
+    if (u.expiracao) {
+      if (dias < 0)       expBadge = `<span class="exp-badge critico">Expirado ${Math.abs(dias)}d</span>`;
+      else if (dias === 0) expBadge = `<span class="exp-badge critico">Expira hoje!</span>`;
+      else if (dias <= 3)  expBadge = `<span class="exp-badge urgente">Expira em ${dias}d</span>`;
+      else if (dias <= 7)  expBadge = `<span class="exp-badge aviso">Expira em ${dias}d</span>`;
+      else                 expBadge = `<span class="exp-badge ok">${formatDate(u.expiracao)}</span>`;
+    } else {
+      expBadge = `<span class="exp-badge sem">Sem data</span>`;
+    }
+
+    // Warn no detalhe
     let expWarn = '';
     if (dias!==null&&dias>=0&&dias<=7) expWarn=`<div class="exp-warn">⚠️ Expira em ${dias} dia(s)</div>`;
     if (dias!==null&&dias<0)           expWarn=`<div class="exp-warn" style="color:var(--red)">❌ Expirado há ${Math.abs(dias)} dia(s)</div>`;
+
     const avatarHtml = u.foto
       ? `<div class="user-avatar"><img src="${u.foto}" alt="${initial}" onerror="this.parentElement.innerHTML='${initial}';this.parentElement.style.background='${color}'"></div>`
       : `<div class="user-avatar" style="background:${color}">${initial}</div>`;
@@ -683,7 +784,10 @@ function renderSection(sectionId, listId, users) {
           <div class="user-name">${u.nome||'—'}</div>
           <div class="user-email">${u.email||'—'}</div>
         </div>
-        <span class="status-pill ${pillClass}">${pillTxt}</span>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0">
+          <span class="status-pill ${pillClass}">${u.status==='ativo'?'Ativo':u.status==='bloqueado'?'Bloqueado':'Pendente'}</span>
+          ${expBadge}
+        </div>
         <span class="card-chevron">›</span>
       </div>
       <div class="card-detail">
@@ -705,7 +809,7 @@ function renderSection(sectionId, listId, users) {
         </div>
       </div>`;
 
-    list.appendChild(card);
+    container.appendChild(card);
     const mainRow = card.querySelector('.card-main');
     const detail  = card.querySelector('.card-detail');
     const chev    = card.querySelector('.card-chevron');
