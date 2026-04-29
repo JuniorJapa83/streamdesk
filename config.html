@@ -28,11 +28,9 @@
 
   .content{padding:16px 20px 110px;display:flex;flex-direction:column;gap:6px}
 
-  /* SECTION */
   .sec-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin:16px 0 8px 4px;display:flex;align-items:center;gap:8px}
   .sec-label::after{content:'';flex:1;height:1px;background:var(--border)}
 
-  /* GROUP */
   .group{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
   .row{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border)}
   .row:last-child{border-bottom:none}
@@ -44,17 +42,14 @@
   .row-val{font-size:13px;color:var(--muted)}
   .row-arrow{color:var(--muted);font-size:16px}
 
-  /* INPUT INLINE */
   .row-input{width:100%;background:none;border:none;outline:none;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;font-weight:500}
   .row-input::placeholder{color:var(--muted)}
 
-  /* TOGGLE */
   .tog{width:44px;height:24px;border-radius:50px;position:relative;border:1px solid var(--border);background:var(--card2);transition:background .3s,border-color .3s;cursor:pointer;flex-shrink:0}
   .tog.on{background:rgba(0,224,150,.15);border-color:var(--green)}
   .tog-thumb{position:absolute;top:4px;left:4px;width:14px;height:14px;border-radius:50%;background:var(--muted);transition:left .3s,background .3s}
   .tog.on .tog-thumb{left:24px;background:var(--green)}
 
-  /* BUTTONS */
   .btn-row{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;border-bottom:1px solid var(--border);transition:background .2s}
   .btn-row:last-child{border-bottom:none}
   .btn-row:active{background:var(--card2)}
@@ -63,16 +58,12 @@
   .btn-green{color:var(--green)}
   .btn-yellow{color:var(--yellow)}
 
-  /* SAVE INDICATOR */
   .saved-toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);background:rgba(0,224,150,.15);border:1px solid var(--green);color:var(--green);border-radius:50px;padding:8px 20px;font-size:13px;font-weight:600;opacity:0;transition:opacity .3s;pointer-events:none;z-index:100}
   .saved-toast.show{opacity:1}
 
-  /* TEXTAREA */
   .msg-area{width:100%;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;resize:none;outline:none;min-height:80px;line-height:1.5;transition:border .2s;margin-top:8px}
   .msg-area:focus{border-color:var(--accent)}
-  .msg-hint{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.4}
 
-  /* SUPPORT MODAL */
   .overlay{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:200;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .3s}
   .overlay.open{opacity:1;pointer-events:all}
   .modal{background:var(--surface);border-radius:24px 24px 0 0;padding:24px 20px 40px;width:100%;max-height:88vh;overflow-y:auto;transform:translateY(100%);transition:transform .35s cubic-bezier(.32,.72,0,1);border-top:1px solid var(--border)}
@@ -89,10 +80,8 @@
   .btn-save:active{transform:scale(.97)}
   .btn-cancel{width:100%;background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:12px;padding:12px;font-family:'DM Sans',sans-serif;font-size:15px;cursor:pointer;margin-top:8px}
 
-  /* VERSION BADGE */
   .version-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.15);border-radius:50px;padding:3px 10px;font-size:11px;color:var(--accent);font-weight:600}
 
-  /* BOTTOM NAV */
   .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:420px;background:rgba(14,18,32,.97);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;padding:10px 0 24px;z-index:50}
   .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:4px 0}
   .nav-icon{font-size:20px;transition:transform .2s}
@@ -101,6 +90,57 @@
   .nav-item.active .nav-icon{transform:translateY(-2px)}
   .nav-dot{width:4px;height:4px;border-radius:50%;background:var(--accent);margin-top:-2px;opacity:0}
   .nav-item.active .nav-dot{opacity:1}
+
+  /* ── ASSINATURA ── */
+  .assin-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+  .assin-header{padding:16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+  .assin-status{display:flex;align-items:center;gap:8px}
+  .assin-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .assin-dot.ativo{background:var(--green);box-shadow:0 0 6px rgba(0,224,150,.5)}
+  .assin-dot.vencendo{background:var(--yellow);box-shadow:0 0 6px rgba(255,187,0,.5)}
+  .assin-dot.vencido{background:var(--red);box-shadow:0 0 6px rgba(255,59,92,.5)}
+  .assin-status-txt{font-size:13px;font-weight:600}
+  .assin-status-txt.ativo{color:var(--green)}
+  .assin-status-txt.vencendo{color:var(--yellow)}
+  .assin-status-txt.vencido{color:var(--red)}
+  .assin-body{padding:16px;display:flex;flex-direction:column;gap:10px}
+  .assin-row{display:flex;justify-content:space-between;align-items:center}
+  .assin-lbl{font-size:12px;color:var(--muted)}
+  .assin-val{font-size:14px;font-weight:500}
+  .assin-dias{font-size:11px;color:var(--muted);margin-top:2px}
+  .btn-renovar{width:100%;background:var(--accent);color:#000;border:none;border-radius:12px;padding:13px;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;cursor:pointer;margin-top:4px;transition:transform .15s,box-shadow .15s}
+  .btn-renovar:active{transform:scale(.97)}
+  .btn-renovar.vencendo{background:var(--yellow)}
+  .btn-renovar.vencido{background:var(--red);color:#fff}
+
+  /* ── MODAL PAGAMENTO ── */
+  .pay-tabs{display:flex;gap:8px;margin-bottom:20px}
+  .pay-tab{flex:1;padding:10px;border-radius:10px;border:1px solid var(--border);background:var(--card);text-align:center;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;color:var(--muted)}
+  .pay-tab.active{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,.06)}
+  .pay-panel{display:none}
+  .pay-panel.active{display:block}
+
+  /* PIX */
+  .pix-qr-wrap{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center;margin-bottom:16px;min-height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+  .pix-qr-img{width:160px;height:160px;border-radius:8px;background:#fff;padding:4px}
+  .pix-copy-btn{width:100%;background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.2);color:var(--accent);border-radius:10px;padding:12px;font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+  .pix-copy-btn:active{transform:scale(.97)}
+  .pix-timer{font-size:12px;color:var(--muted);text-align:center;margin-top:8px}
+
+  /* CARTÃO */
+  .card-field{margin-bottom:12px}
+  .card-field label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;display:block}
+  .card-field input{width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border .2s}
+  .card-field input:focus{border-color:var(--accent)}
+  .card-row{display:flex;gap:10px}
+  .card-row .card-field{flex:1}
+
+  .spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(0,0,0,.2);border-top-color:#000;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  .pay-msg{font-size:13px;text-align:center;padding:10px;border-radius:8px;margin-top:10px;display:none}
+  .pay-msg.ok{background:rgba(0,224,150,.1);color:var(--green);border:1px solid rgba(0,224,150,.2);display:block}
+  .pay-msg.err{background:rgba(255,59,92,.1);color:var(--red);border:1px solid rgba(255,59,92,.2);display:block}
 </style>
 </head>
 <body>
@@ -108,13 +148,15 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
 const _app  = initializeApp({apiKey:"AIzaSyAGHvkDpeSbCTriZCvRf-jJ6z8PQSSWLHI",authDomain:"streamdesk-5350d.firebaseapp.com",projectId:"streamdesk-5350d",storageBucket:"streamdesk-5350d.firebasestorage.app",messagingSenderId:"36684694847",appId:"1:36684694847:web:0f6f3a27933e3d84cfff8a"});
 const _auth = getAuth(_app);
 const _db   = getFirestore(_app);
 window._firebaseAuth = _auth;
 window._firebaseDB   = _db;
-onAuthStateChanged(_auth, function(user) {
+
+onAuthStateChanged(_auth, async function(user) {
   if (!user) { location.href='login.html'; return; }
   document.getElementById('cfgNome').value     = user.displayName || '';
   document.getElementById('cfgEmail').value    = user.email || '';
@@ -123,7 +165,68 @@ onAuthStateChanged(_auth, function(user) {
   document.getElementById('cfgNome').style.color  = 'var(--muted)';
   document.getElementById('cfgEmail').style.color = 'var(--muted)';
   window._currentUser = user;
+
+  // Carrega dados da assinatura do gerente
+  try {
+    const snap = await getDoc(doc(_db, 'usuarios', user.uid));
+    const data = snap.exists() ? snap.data() : {};
+    window._userData = data;
+    renderAssinatura(user, data);
+  } catch(e) { console.error('Erro ao carregar assinatura:', e); }
 });
+
+function today() {
+  var d=new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function daysUntil(venc) {
+  if (!venc) return null;
+  var diff = (new Date(venc) - new Date(today())) / 86400000;
+  return Math.round(diff);
+}
+function formatDate(d) {
+  if (!d) return '—';
+  var p = d.split('-');
+  return p[2]+'/'+p[1]+'/'+p[0];
+}
+
+window.renderAssinatura = function(user, data) {
+  var venc   = data.expiracao || data.vencimento || null;
+  var dias   = daysUntil(venc);
+  var status = dias === null ? 'sem-data' : dias < 0 ? 'vencido' : dias <= 7 ? 'vencendo' : 'ativo';
+
+  var statusTxt = {ativo:'Ativo', vencendo:'Vencendo em breve', vencido:'Vencido', 'sem-data':'Sem data'}[status];
+  var diasTxt   = dias === null ? '' : dias < 0 ? 'Venceu há '+Math.abs(dias)+' dia(s)' : dias === 0 ? 'Vence hoje!' : 'Vence em '+dias+' dia(s)';
+  var btnTxt    = status === 'vencido' ? '🔄 Renovar Agora' : status === 'vencendo' ? '⚡ Renovar Antes de Vencer' : '💳 Gerenciar Assinatura';
+
+  document.getElementById('assinCard').innerHTML = `
+    <div class="assin-header">
+      <div class="assin-status">
+        <div class="assin-dot ${status}"></div>
+        <div class="assin-status-txt ${status}">${statusTxt}</div>
+      </div>
+      <div style="font-size:11px;color:var(--muted)">StreamDesk</div>
+    </div>
+    <div class="assin-body">
+      <div class="assin-row">
+        <span class="assin-lbl">Plano</span>
+        <span class="assin-val">Mensal</span>
+      </div>
+      <div class="assin-row">
+        <span class="assin-lbl">Vencimento</span>
+        <div style="text-align:right">
+          <div class="assin-val">${venc ? formatDate(venc) : '—'}</div>
+          ${diasTxt ? '<div class="assin-dias">'+diasTxt+'</div>' : ''}
+        </div>
+      </div>
+      <button class="btn-renovar ${status === 'vencido' ? 'vencido' : status === 'vencendo' ? 'vencendo' : ''}"
+        onclick="openModal('ovPagamento')">${btnTxt}</button>
+    </div>`;
+
+  // Salva uid+venc para o modal de pagamento
+  window._payUid  = user.uid;
+  window._payVenc = venc;
+};
 </script>
 
 <div class="saved-toast" id="toast">✓ Salvo!</div>
@@ -151,7 +254,14 @@ onAuthStateChanged(_auth, function(user) {
         <input class="row-input" id="cfgEmail" placeholder="seu@email.com" type="email" onchange="saveConfig()">
       </div>
     </div>
+  </div>
 
+  <!-- MINHA ASSINATURA -->
+  <div class="sec-label">💳 Minha Assinatura</div>
+  <div class="assin-card" id="assinCard">
+    <div class="assin-body" style="padding:20px;text-align:center;color:var(--muted);font-size:13px">
+      Carregando...
+    </div>
   </div>
 
   <!-- APARÊNCIA -->
@@ -248,13 +358,68 @@ onAuthStateChanged(_auth, function(user) {
   <div class="nav-item active"><div class="nav-icon">⚙️</div><div class="nav-label">Config.</div><div class="nav-dot"></div></div>
 </div>
 
+<!-- MODAL PAGAMENTO -->
+<div class="overlay" id="ovPagamento" onclick="if(event.target===this)closeModal('ovPagamento')">
+  <div class="modal">
+    <div class="mhandle"></div>
+    <div class="mtitle">💳 Renovar Assinatura</div>
+    <div class="msub">Escolha a forma de pagamento</div>
+
+    <div class="pay-tabs">
+      <div class="pay-tab active" id="tabPix" onclick="switchTab('pix')">⚡ Pix</div>
+      <div class="pay-tab" id="tabCartao" onclick="switchTab('cartao')">💳 Cartão</div>
+    </div>
+
+    <!-- PAINEL PIX -->
+    <div class="pay-panel active" id="panelPix">
+      <div class="pix-qr-wrap" id="pixQrWrap">
+        <div style="color:var(--muted);font-size:13px">Clique em "Gerar Pix" para criar o QR Code</div>
+      </div>
+      <div id="pixCopyArea" style="display:none">
+        <button class="pix-copy-btn" onclick="copiarPix()">📋 Copiar código Pix</button>
+        <div class="pix-timer" id="pixTimer"></div>
+      </div>
+      <button class="btn-save" id="btnGerarPix" onclick="gerarPix()">⚡ Gerar QR Code Pix</button>
+      <div class="pay-msg" id="pixMsg"></div>
+    </div>
+
+    <!-- PAINEL CARTÃO -->
+    <div class="pay-panel" id="panelCartao">
+      <div class="card-field">
+        <label>Número do cartão</label>
+        <input type="tel" id="cardNum" placeholder="0000 0000 0000 0000" maxlength="19" oninput="fmtCard(this)">
+      </div>
+      <div class="card-field">
+        <label>Nome no cartão</label>
+        <input type="text" id="cardName" placeholder="NOME SOBRENOME" style="text-transform:uppercase">
+      </div>
+      <div class="card-row">
+        <div class="card-field">
+          <label>Validade</label>
+          <input type="tel" id="cardExp" placeholder="MM/AA" maxlength="5" oninput="fmtExp(this)">
+        </div>
+        <div class="card-field">
+          <label>CVV</label>
+          <input type="tel" id="cardCvv" placeholder="123" maxlength="4">
+        </div>
+      </div>
+      <button class="btn-save" id="btnCartao" onclick="pagarCartao()">💳 Assinar — R$ 29,90/mês</button>
+      <div class="pay-msg" id="cartaoMsg"></div>
+      <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:12px;line-height:1.5">
+        🔒 Pagamento seguro via Mercado Pago.<br>Sua assinatura renova automaticamente todo mês.
+      </div>
+    </div>
+
+    <button class="btn-cancel" onclick="closeModal('ovPagamento')">Cancelar</button>
+  </div>
+</div>
+
 <!-- MODAL RESPOSTAS RÁPIDAS -->
 <div class="overlay" id="ovRespostas" onclick="if(event.target===this)closeModal('ovRespostas')">
   <div class="modal">
     <div class="mhandle"></div>
     <div class="mtitle">✏️ Respostas Rápidas</div>
     <div class="msub">Edite as mensagens enviadas pelo WhatsApp. Use <strong style="color:var(--accent)">{nome}</strong> e <strong style="color:var(--accent)">{servidor}</strong> como variáveis.</div>
-
     <div class="fg">
       <label class="fl">🟡 Vence Hoje</label>
       <textarea class="fi fi-area" id="mHoje"></textarea>
@@ -317,16 +482,18 @@ onAuthStateChanged(_auth, function(user) {
 
 <script>
 var CFG_KEY      = 'streamdesk_config';
-var CLIENT_KEY   = 'iptv_clientes_v3';
-var SUPORTE_WHATSAPP = ''; // coloque seu número aqui ex: 5511999999999
+var SUPORTE_WHATSAPP = '';
+var MP_PUBLIC_KEY    = 'APP_USR-b9e0a4a9-be59-4ebb-87b0-c3fd2f4453a2';
+var VALOR_MENSALIDADE = 29.90; // altere aqui o valor da mensalidade
 
 var DEFAULT_MSG_HOJE   = 'Olá {nome}! 👋 Seu plano IPTV ({servidor}) vence HOJE. Renove para não ficar sem sinal! 📺';
 var DEFAULT_MSG_AMANHA = 'Olá {nome}! 👋 Lembrando que seu plano IPTV ({servidor}) vence amanhã. Renove com antecedência! 😊';
 var DEFAULT_MSG_VENC   = 'Olá {nome}! 👋 Seu plano IPTV ({servidor}) está vencido. Entre em contato para renovar! 🙏';
 
-function loadConfig() {
-  return JSON.parse(localStorage.getItem(CFG_KEY) || '{}');
-}
+var _pixCodigo = '';
+var _pixTimer  = null;
+
+function loadConfig() { return JSON.parse(localStorage.getItem(CFG_KEY) || '{}'); }
 function saveConfig() {
   var cfg = {
     nome:       document.getElementById('cfgNome').value,
@@ -338,134 +505,249 @@ function saveConfig() {
   };
   localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
 }
-
 function loadPage() {
   var cfg = loadConfig();
-  document.getElementById('cfgNome').value    = cfg.nome    || '';
-  document.getElementById('cfgEmail').value   = cfg.email   || '';
-  // Messages are loaded when modal opens
-
-  var dark = cfg.darkMode === true; // default light
-  applyTheme(dark);
+  document.getElementById('cfgNome').value  = cfg.nome  || '';
+  document.getElementById('cfgEmail').value = cfg.email || '';
+  applyTheme(cfg.darkMode === true);
 }
-
 function applyTheme(dark) {
   var tog = document.getElementById('themeToggle');
   var lbl = document.getElementById('themeLabel');
-  if (dark) {
-    document.body.classList.remove('light');
-    tog.classList.add('on');
-    lbl.textContent = 'Ativado';
-  } else {
-    document.body.classList.add('light');
-    tog.classList.remove('on');
-    lbl.textContent = 'Desativado';
-  }
+  if (dark) { document.body.classList.remove('light'); tog.classList.add('on'); lbl.textContent='Ativado'; }
+  else       { document.body.classList.add('light'); tog.classList.remove('on'); lbl.textContent='Desativado'; }
 }
-
-function toggleTheme() {
-  var isLight = document.body.classList.contains('light');
-  applyTheme(isLight); // if light, go dark; if dark, go light
-  saveConfig();
-}
-
+function toggleTheme() { applyTheme(document.body.classList.contains('light')); saveConfig(); }
 function showToast() {
   var t = document.getElementById('toast');
   t.classList.add('show');
-  setTimeout(function() { t.classList.remove('show'); }, 2000);
+  setTimeout(function(){ t.classList.remove('show'); }, 2000);
 }
-
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-
 function openModal(id) {
-  // If opening respostas modal, populate fields first
   if (id === 'ovRespostas') {
     var cfg = loadConfig();
     document.getElementById('mHoje').value    = cfg.msgHoje    || DEFAULT_MSG_HOJE;
     document.getElementById('mAmanha').value  = cfg.msgAmanha  || DEFAULT_MSG_AMANHA;
     document.getElementById('mVencido').value = cfg.msgVencido || DEFAULT_MSG_VENC;
   }
+  if (id === 'ovPagamento') { resetPagamento(); }
   document.getElementById(id).classList.add('open');
 }
-
 function salvarRespostas() {
   var cfg = loadConfig();
   cfg.msgHoje    = document.getElementById('mHoje').value.trim()    || DEFAULT_MSG_HOJE;
   cfg.msgAmanha  = document.getElementById('mAmanha').value.trim()  || DEFAULT_MSG_AMANHA;
   cfg.msgVencido = document.getElementById('mVencido').value.trim() || DEFAULT_MSG_VENC;
   localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
-  closeModal('ovRespostas');
-  showToast();
+  closeModal('ovRespostas'); showToast();
 }
-
 function salvarSenha() {
-  var nova    = document.getElementById('senhaNova').value;
-  var confirm = document.getElementById('senhaConfirm').value;
-  if (!nova)           { alert('Informe a nova senha!'); return; }
-  if (nova !== confirm) { alert('As senhas não coincidem!'); return; }
-  if (nova.length < 6) { alert('A senha deve ter pelo menos 6 caracteres!'); return; }
-  // Save hashed (simple base64 for now — real hash needs backend)
-  var cfg = loadConfig();
-  cfg.senha = btoa(nova);
+  var nova = document.getElementById('senhaNova').value;
+  var conf = document.getElementById('senhaConfirm').value;
+  if (!nova) { alert('Informe a nova senha!'); return; }
+  if (nova !== conf) { alert('As senhas não coincidem!'); return; }
+  if (nova.length < 6) { alert('Mínimo 6 caracteres!'); return; }
+  var cfg = loadConfig(); cfg.senha = btoa(nova);
   localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
   closeModal('ovSenha');
   document.getElementById('senhaAtual').value = '';
-  document.getElementById('senhaNova').value = '';
+  document.getElementById('senhaNova').value  = '';
   document.getElementById('senhaConfirm').value = '';
   showToast();
 }
-
 function exportCSV() {
-  if (!window._currentUser || !window._firebaseDB) { alert('Aguarde o carregamento!'); return; }
+  if (!window._currentUser || !window._firebaseDB) { alert('Aguarde!'); return; }
   var db = window._firebaseDB, uid = window._currentUser.uid;
   import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js").then(function(fs) {
     fs.getDocs(fs.collection(db,'usuarios',uid,'clientes')).then(function(snap) {
       var clientes = snap.docs.map(function(d){return d.data();});
       if (!clientes.length) { alert('Nenhum cliente para exportar!'); return; }
-  var rows = [['Nome','Servidor','Plano','Vencimento','País','Contato','Observações']];
-  clientes.forEach(function(c) {
-    var venc = c.vencimento ? c.vencimento.split('-').reverse().join('/') : '';
-    rows.push([c.nome||'', c.plataforma||'', c.plano||'', venc, c.pais||'', c.contato||'', c.obs||'']);
-  });
-  var csv = '\uFEFF' + rows.map(function(r) {
-    return r.map(function(v) { return '"' + String(v).replace(/"/g,'""') + '"'; }).join(',');
-  }).join('\n');
-      var blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+      var rows = [['Nome','Servidor','Plano','Vencimento','País','Contato','Observações']];
+      clientes.forEach(function(c) {
+        var venc = c.vencimento ? c.vencimento.split('-').reverse().join('/') : '';
+        rows.push([c.nome||'', c.plataforma||'', c.plano||'', venc, c.pais||'', c.contato||'', c.obs||'']);
+      });
+      var csv = '\uFEFF' + rows.map(function(r){ return r.map(function(v){ return '"'+String(v).replace(/"/g,'""')+'"'; }).join(','); }).join('\n');
       var a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'clientes_streamdesk.csv';
-      a.click();
+      a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));
+      a.download = 'clientes_streamdesk.csv'; a.click();
     });
   });
 }
-
 function enviarChamado() {
-  var assunto = document.getElementById('supAssunto').value;
-  var msg     = document.getElementById('supMsg').value.trim();
-  var email   = document.getElementById('supEmail').value.trim();
-  if (!msg) { alert('Descreva seu problema ou sugestão!'); return; }
+  var msg = document.getElementById('supMsg').value.trim();
+  if (!msg) { alert('Descreva o problema!'); return; }
   var cfg = loadConfig();
-  var texto = '📋 *Chamado StreamDesk*\n\n' +
-    '*Assunto:* ' + assunto + '\n' +
-    '*Mensagem:* ' + msg + '\n' +
-    (email ? '*E-mail:* ' + email : '') + '\n' +
-    (cfg.nome ? '*Usuário:* ' + cfg.nome : '');
-  var url = SUPORTE_WHATSAPP
-    ? 'https://wa.me/' + SUPORTE_WHATSAPP + '?text=' + encodeURIComponent(texto)
-    : 'https://wa.me/?text=' + encodeURIComponent(texto);
-  window.open(url, '_blank');
-  closeModal('ovSuporte');
+  var texto = '📋 *Chamado StreamDesk*\n\n*Assunto:* '+document.getElementById('supAssunto').value+'\n*Mensagem:* '+msg;
+  var url = SUPORTE_WHATSAPP ? 'https://wa.me/'+SUPORTE_WHATSAPP+'?text='+encodeURIComponent(texto) : 'https://wa.me/?text='+encodeURIComponent(texto);
+  window.open(url,'_blank'); closeModal('ovSuporte');
   document.getElementById('supMsg').value = '';
 }
-
 function doLogout() {
-  if (!confirm('Deseja sair do StreamDesk?')) return;
-  if (window._firebaseAuth) {
-    window._firebaseAuth.signOut().then(function(){ location.href = 'login.html'; });
-  } else { location.href = 'login.html'; }
+  if (!confirm('Deseja sair?')) return;
+  if (window._firebaseAuth) window._firebaseAuth.signOut().then(function(){ location.href='login.html'; });
+  else location.href='login.html';
 }
+
+// ── PAGAMENTO ────────────────────────────────────────────────────────────────
+function switchTab(tab) {
+  document.getElementById('tabPix').classList.toggle('active', tab==='pix');
+  document.getElementById('tabCartao').classList.toggle('active', tab==='cartao');
+  document.getElementById('panelPix').classList.toggle('active', tab==='pix');
+  document.getElementById('panelCartao').classList.toggle('active', tab==='cartao');
+}
+
+function resetPagamento() {
+  switchTab('pix');
+  document.getElementById('pixQrWrap').innerHTML = '<div style="color:var(--muted);font-size:13px">Clique em "Gerar Pix" para criar o QR Code</div>';
+  document.getElementById('pixCopyArea').style.display = 'none';
+  document.getElementById('btnGerarPix').disabled = false;
+  document.getElementById('btnGerarPix').innerHTML = '⚡ Gerar QR Code Pix';
+  setMsg('pixMsg', '', '');
+  setMsg('cartaoMsg', '', '');
+  _pixCodigo = '';
+  if (_pixTimer) clearInterval(_pixTimer);
+}
+
+function setMsg(id, txt, tipo) {
+  var el = document.getElementById(id);
+  el.textContent = txt; el.className = 'pay-msg' + (tipo ? ' '+tipo : ''); el.style.display = txt ? 'block' : 'none';
+}
+
+function fmtCard(el) {
+  var v = el.value.replace(/\D/g,'').substring(0,16);
+  el.value = v.replace(/(.{4})/g,'$1 ').trim();
+}
+function fmtExp(el) {
+  var v = el.value.replace(/\D/g,'').substring(0,4);
+  if (v.length > 2) v = v.substring(0,2)+'/'+v.substring(2);
+  el.value = v;
+}
+
+// Gera Pix via backend (Mercado Pago Payments API)
+window.gerarPix = async function() {
+  var uid = window._payUid;
+  if (!uid) { setMsg('pixMsg','Usuário não autenticado.','err'); return; }
+
+  var btn = document.getElementById('btnGerarPix');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Gerando...';
+  setMsg('pixMsg','','');
+
+  try {
+    var resp = await fetch('https://webhookmp-vsw4hqxmxq-rj.a.run.app/criarPix', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        uid: uid,
+        valor: VALOR_MENSALIDADE,
+        descricao: 'StreamDesk — Assinatura Mensal'
+      })
+    });
+    var data = await resp.json();
+    if (!resp.ok || !data.qr_code) throw new Error(data.error || 'Erro ao gerar Pix');
+
+    _pixCodigo = data.qr_code;
+
+    // Exibe QR Code
+    var qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=160x160&data='+encodeURIComponent(_pixCodigo);
+    document.getElementById('pixQrWrap').innerHTML =
+      '<img class="pix-qr-img" src="'+qrUrl+'" alt="QR Code Pix">'+
+      '<div style="font-size:12px;color:var(--muted)">Escaneie com seu banco</div>';
+
+    document.getElementById('pixCopyArea').style.display = 'block';
+    btn.innerHTML = '🔄 Gerar novo QR Code';
+    btn.disabled  = false;
+
+    // Timer de 30 minutos
+    var expira = Date.now() + 30*60*1000;
+    if (_pixTimer) clearInterval(_pixTimer);
+    _pixTimer = setInterval(function() {
+      var resto = Math.max(0, expira - Date.now());
+      var m = Math.floor(resto/60000), s = Math.floor((resto%60000)/1000);
+      document.getElementById('pixTimer').textContent = 'Expira em '+m+'m '+String(s).padStart(2,'0')+'s';
+      if (resto === 0) clearInterval(_pixTimer);
+    }, 1000);
+
+  } catch(e) {
+    setMsg('pixMsg', e.message || 'Erro ao gerar Pix. Tente novamente.', 'err');
+    btn.disabled = false;
+    btn.innerHTML = '⚡ Gerar QR Code Pix';
+  }
+};
+
+window.copiarPix = function() {
+  if (!_pixCodigo) return;
+  navigator.clipboard.writeText(_pixCodigo).then(function() {
+    var btn = document.querySelector('.pix-copy-btn');
+    btn.textContent = '✅ Copiado!';
+    setTimeout(function(){ btn.textContent = '📋 Copiar código Pix'; }, 2000);
+  });
+};
+
+// Pagamento com cartão via Mercado Pago SDK
+window.pagarCartao = async function() {
+  var uid  = window._payUid;
+  var num  = document.getElementById('cardNum').value.replace(/\s/g,'');
+  var name = document.getElementById('cardName').value.trim().toUpperCase();
+  var exp  = document.getElementById('cardExp').value;
+  var cvv  = document.getElementById('cardCvv').value;
+
+  if (!uid)              { setMsg('cartaoMsg','Usuário não autenticado.','err'); return; }
+  if (num.length < 16)   { setMsg('cartaoMsg','Número do cartão inválido.','err'); return; }
+  if (!name)             { setMsg('cartaoMsg','Informe o nome do cartão.','err'); return; }
+  if (exp.length < 5)    { setMsg('cartaoMsg','Validade inválida.','err'); return; }
+  if (cvv.length < 3)    { setMsg('cartaoMsg','CVV inválido.','err'); return; }
+
+  var btn = document.getElementById('btnCartao');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Processando...';
+  setMsg('cartaoMsg','','');
+
+  try {
+    var partes  = exp.split('/');
+    var mesExp  = partes[0];
+    var anoExp  = '20'+partes[1];
+
+    // Tokeniza o cartão via Mercado Pago SDK
+    var mp = new MercadoPago(MP_PUBLIC_KEY, {locale:'pt-BR'});
+    var token = await mp.createCardToken({
+      cardNumber:      num,
+      cardholderName:  name,
+      cardExpirationMonth: mesExp,
+      cardExpirationYear:  anoExp,
+      securityCode:    cvv
+    });
+
+    // Envia token para o backend criar a assinatura
+    var resp = await fetch('https://webhookmp-vsw4hqxmxq-rj.a.run.app/criarAssinatura', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        uid:   uid,
+        token: token.id,
+        email: window._currentUser ? window._currentUser.email : '',
+        valor: VALOR_MENSALIDADE
+      })
+    });
+    var data = await resp.json();
+    if (!resp.ok) throw new Error(data.error || 'Erro ao criar assinatura');
+
+    setMsg('cartaoMsg','✅ Assinatura ativada com sucesso! Seu acesso foi renovado.','ok');
+    btn.innerHTML = '✅ Assinatura ativa';
+
+  } catch(e) {
+    setMsg('cartaoMsg', e.message || 'Erro ao processar. Verifique os dados.', 'err');
+    btn.disabled = false;
+    btn.innerHTML = '💳 Assinar — R$ '+VALOR_MENSALIDADE.toFixed(2).replace('.',',')+'/mês';
+  }
+};
 
 loadPage();
 </script>
+
+<!-- SDK Mercado Pago (carregado só quando necessário) -->
+<script src="https://sdk.mercadopago.com/js/v2"></script>
 </body>
 </html>
