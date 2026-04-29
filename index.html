@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+  <link rel="icon" href="favicon.png" type="image/png">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>StreamDesk — Home</title>
@@ -8,367 +9,98 @@
 <link rel="stylesheet" href="theme.css">
 <style>
   :root {
-    --bg: #080b12;
-    --surface: #0e1220;
-    --card: #131825;
-    --card2: #161c2c;
-    --border: #1c2236;
-    --accent: #00d4ff;
-    --accent-glow: rgba(0,212,255,0.15);
-    --red: #ff3b5c;
-    --red-glow: rgba(255,59,92,0.12);
-    --yellow: #ffbb00;
-    --yellow-glow: rgba(255,187,0,0.12);
-    --orange: #ff7b00;
-    --orange-glow: rgba(255,123,0,0.12);
-    --green: #00e096;
-    --green-glow: rgba(0,224,150,0.12);
-    --text: #e4e8f4;
-    --muted: #5a6480;
-    --radius: 16px;
+    --bg: #080b12; --surface: #0e1220; --card: #131825; --card2: #161c2c;
+    --border: #1c2236; --accent: #00d4ff; --accent-glow: rgba(0,212,255,0.15);
+    --red: #ff3b5c; --red-glow: rgba(255,59,92,0.12);
+    --yellow: #ffbb00; --yellow-glow: rgba(255,187,0,0.12);
+    --orange: #ff7b00; --orange-glow: rgba(255,123,0,0.12);
+    --green: #00e096; --green-glow: rgba(0,224,150,0.12);
+    --text: #e4e8f4; --muted: #5a6480; --radius: 16px;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    max-width: 420px;
-    margin: 0 auto;
-    position: relative;
-    overflow-x: hidden;
-  }
-
-  /* Background mesh */
-  body::before {
-    content: '';
-    position: fixed;
-    top: -100px; right: -100px;
-    width: 400px; height: 400px;
-    background: radial-gradient(circle, rgba(0,212,255,0.05) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  /* HEADER */
-  .header {
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    background: rgba(8,11,18,0.92);
-    backdrop-filter: blur(16px);
-    border-bottom: 1px solid var(--border);
-    padding: 16px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    animation: slideDown 0.4s ease;
-  }
-
-  @keyframes slideDown {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; max-width: 420px; margin: 0 auto; position: relative; overflow-x: hidden; }
+  body::before { content: ''; position: fixed; top: -100px; right: -100px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(0,212,255,0.05) 0%, transparent 70%); pointer-events: none; z-index: 0; }
+  .header { position: sticky; top: 0; z-index: 50; background: rgba(8,11,18,0.92); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; animation: slideDown 0.4s ease; }
+  @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
   .logo-wrap { display: flex; flex-direction: column; }
-  .logo {
-    font-family: 'Syne', sans-serif;
-    font-size: 21px;
-    font-weight: 800;
-    letter-spacing: -1px;
-    line-height: 1;
-    display: flex;
-    align-items: center;
-    gap: 2px;
-  }
-  .logo-icon { display: none; }
-  .logo span { color: var(--accent); }
   .logo-sub { font-size: 11px; color: var(--muted); margin-top: 2px; letter-spacing: 0.3px; }
-
-  .add-btn {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    background: var(--accent);
-    color: #000;
-    border: none;
-    border-radius: 50px;
-    padding: 9px 18px;
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 14px;
-    cursor: pointer;
-    box-shadow: 0 0 20px rgba(0,212,255,0.3);
-    transition: all 0.2s;
-  }
-  .add-btn:active { transform: scale(0.95); box-shadow: 0 0 10px rgba(0,212,255,0.2); }
+  .add-btn { display: flex; align-items: center; gap: 6px; background: var(--accent); color: #000; border: none; border-radius: 50px; padding: 9px 18px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; cursor: pointer; box-shadow: 0 0 20px rgba(0,212,255,0.3); transition: all 0.2s; }
+  .add-btn:active { transform: scale(0.95); }
   .plus-icon { font-size: 18px; line-height: 1; }
-
-  /* SCROLL CONTENT */
-  .content {
-    padding: 20px 20px 100px;
-    position: relative;
-    z-index: 1;
-  }
-
-  /* SECTION LABEL */
-  .section-label {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 10px;
-    margin-top: 22px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .section-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  /* STATUS CARDS */
-  .status-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    animation: fadeUp 0.5s ease 0.1s both;
-  }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .status-card {
-    border-radius: var(--radius);
-    padding: 14px 12px;
-    text-align: center;
-    border: 1px solid var(--border);
-    position: relative;
-    overflow: hidden;
-    transition: transform 0.2s;
-  }
+  .content { padding: 20px 20px 100px; position: relative; z-index: 1; }
+  .section-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; margin-top: 22px; display: flex; align-items: center; gap: 8px; }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .status-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; animation: fadeUp 0.5s ease 0.1s both; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  .status-card { border-radius: var(--radius); padding: 14px 12px; text-align: center; border: 1px solid var(--border); position: relative; overflow: hidden; transition: transform 0.2s; }
   .status-card:active { transform: scale(0.96); }
-  .status-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    opacity: 0.06;
-  }
+  .status-card::before { content: ''; position: absolute; inset: 0; opacity: 0.06; }
   .status-card.red { background: var(--card); border-color: rgba(255,59,92,0.2); }
   .status-card.red::before { background: var(--red); }
   .status-card.yellow { background: var(--card); border-color: rgba(255,187,0,0.2); }
   .status-card.yellow::before { background: var(--yellow); }
   .status-card.green { background: var(--card); border-color: rgba(0,224,150,0.2); }
   .status-card.green::before { background: var(--green); }
-
   .status-icon { font-size: 20px; margin-bottom: 6px; }
-  .status-num {
-    font-family: 'Syne', sans-serif;
-    font-size: 28px;
-    font-weight: 800;
-    line-height: 1;
-    margin-bottom: 4px;
-  }
+  .status-num { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
   .status-card.red .status-num { color: var(--red); }
   .status-card.yellow .status-num { color: var(--yellow); }
   .status-card.green .status-num { color: var(--green); }
   .status-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.3; }
-
-  /* SERVER CARDS */
-  .server-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    animation: fadeUp 0.5s ease 0.2s both;
-  }
-
-  .server-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 12px 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    transition: all 0.2s;
-  }
+  .server-list { display: flex; flex-direction: column; gap: 8px; animation: fadeUp 0.5s ease 0.2s both; }
+  .server-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; transition: all 0.2s; }
   .server-card:active { transform: scale(0.98); }
-
   .server-left { display: flex; align-items: center; gap: 10px; }
-  .server-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
+  .server-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
   .server-name { font-size: 14px; font-weight: 500; }
-  .server-count {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .server-num {
-    font-family: 'Syne', sans-serif;
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--accent);
-  }
+  .server-count { display: flex; align-items: center; gap: 6px; }
+  .server-num { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; color: var(--accent); }
   .server-word { font-size: 12px; color: var(--muted); }
-
-  .server-bar-wrap {
-    width: 60px;
-    height: 4px;
-    background: var(--border);
-    border-radius: 2px;
-    overflow: hidden;
-    margin-left: 12px;
-  }
-  .server-bar {
-    height: 100%;
-    border-radius: 2px;
-    background: var(--accent);
-  }
-
-  /* ATTENTION LIST */
-  .attention-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    animation: fadeUp 0.5s ease 0.3s both;
-  }
-
-  .attention-card {
-    background: var(--card);
-    border-radius: var(--radius);
-    padding: 14px 16px;
-    border-left: 4px solid transparent;
-    border-top: 1px solid var(--border);
-    border-right: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    transition: all 0.2s;
-  }
+  .server-bar-wrap { width: 60px; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; margin-left: 12px; }
+  .server-bar { height: 100%; border-radius: 2px; background: var(--accent); }
+  .attention-list { display: flex; flex-direction: column; gap: 8px; animation: fadeUp 0.5s ease 0.3s both; }
+  .attention-card { background: var(--card); border-radius: var(--radius); padding: 14px 16px; border-left: 4px solid transparent; border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); transition: all 0.2s; }
   .attention-card:active { transform: scale(0.98); }
   .attention-card.hoje { border-left-color: var(--yellow); }
   .attention-card.amanha { border-left-color: var(--orange); }
-
   .att-row1 { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
   .att-name { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; }
-  .att-badge {
-    font-size: 11px;
-    font-weight: 600;
-    padding: 3px 10px;
-    border-radius: 50px;
-  }
+  .att-badge { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 50px; }
   .badge-hoje { background: var(--yellow-glow); color: var(--yellow); }
   .badge-amanha { background: var(--orange-glow); color: var(--orange); }
-
   .att-row2 { display: flex; align-items: center; justify-content: space-between; }
   .att-info { display: flex; gap: 10px; align-items: center; }
-  .att-chip {
-    font-size: 11px;
-    color: var(--muted);
-    background: var(--card2);
-    padding: 3px 8px;
-    border-radius: 6px;
-  }
-  .att-flag { font-size: 14px; }
-
-  .wa-btn {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    background: rgba(37,211,102,0.12);
-    color: #25d366;
-    border: none;
-    border-radius: 8px;
-    padding: 6px 12px;
-    font-size: 12px;
-    font-weight: 600;
-    font-family: 'DM Sans', sans-serif;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
+  .att-chip { font-size: 11px; color: var(--muted); background: var(--card2); padding: 3px 8px; border-radius: 6px; }
+  .wa-btn { display: flex; align-items: center; gap: 5px; background: rgba(37,211,102,0.12); color: #25d366; border: none; border-radius: 8px; padding: 6px 12px; font-size: 12px; font-weight: 600; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.2s; }
   .wa-btn:active { transform: scale(0.95); }
 
-  /* BOTTOM NAV */
-  .bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    max-width: 420px;
-    background: rgba(14,18,32,0.97);
-    backdrop-filter: blur(20px);
-    border-top: 1px solid var(--border);
-    display: flex;
-    padding: 10px 0 24px;
-    z-index: 50;
-  }
+  /* ── BANNER DE VENCIMENTO ── */
+  .banner-venc { display: none; border-radius: 12px; padding: 12px 14px; margin-bottom: 16px; border: 1px solid; cursor: pointer; transition: opacity .2s; animation: fadeUp 0.4s ease both; }
+  .banner-venc:active { opacity: .8; }
+  .banner-venc.vencendo { background: rgba(255,187,0,.07); border-color: rgba(255,187,0,.25); }
+  .banner-venc.vencido  { background: rgba(255,59,92,.07);  border-color: rgba(255,59,92,.25); }
+  .banner-venc-row { display: flex; align-items: center; gap: 10px; }
+  .banner-venc-icon { font-size: 22px; flex-shrink: 0; }
+  .banner-venc-body { flex: 1; }
+  .banner-venc-titulo { font-size: 13px; font-weight: 600; }
+  .banner-venc.vencendo .banner-venc-titulo { color: var(--yellow); }
+  .banner-venc.vencido  .banner-venc-titulo { color: var(--red); }
+  .banner-venc-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .banner-venc-arrow { font-size: 16px; color: var(--muted); flex-shrink: 0; }
 
-  .nav-item {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    cursor: pointer;
-    transition: all 0.2s;
-    padding: 4px 0;
-  }
-  .nav-icon {
-    font-size: 22px;
-    transition: transform 0.2s;
-  }
+  .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 420px; background: rgba(14,18,32,0.97); backdrop-filter: blur(20px); border-top: 1px solid var(--border); display: flex; padding: 10px 0 24px; z-index: 50; }
+  .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; transition: all 0.2s; padding: 4px 0; }
+  .nav-icon { font-size: 22px; transition: transform 0.2s; }
   .nav-label { font-size: 8px; color: var(--muted); font-weight: 500; letter-spacing: 0.3px; }
   .nav-item.active .nav-label { color: var(--accent); }
   .nav-item.active .nav-icon { transform: translateY(-2px); }
+  .nav-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); margin-top: -2px; opacity: 0; transition: opacity 0.2s; }
+  .nav-item.active .nav-dot { opacity: 1; }
 
-  .nav-indicator {
-    width: 4px; height: 4px;
-    border-radius: 50%;
-    background: var(--accent);
-    margin-top: -2px;
-    opacity: 0;
-    transition: opacity 0.2s;
-  }
-  .nav-item.active .nav-indicator { opacity: 1; }
-
-  /* GREETING */
-  .greeting {
-    margin-bottom: 20px;
-    animation: fadeUp 0.4s ease both;
-  }
-  .greeting-hi { font-size: 13px; color: var(--muted); }
-  .greeting-name { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; margin-top: 2px; }
-  .greeting-name span { color: var(--accent); }
-
-  /* EMPTY STATE */
-  .empty-att {
-    text-align: center;
-    padding: 24px;
-    background: var(--card);
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    color: var(--muted);
-    font-size: 13px;
-  }
-
-  body.light {
-    --bg:#f0f4f8;--surface:#ffffff;--card:#ffffff;--card2:#f7f9fc;
-    --border:#e2e8f0;--text:#1a202c;--muted:#718096;
-  }
+  body.light { --bg:#f0f4f8;--surface:#ffffff;--card:#ffffff;--card2:#f7f9fc;--border:#e2e8f0;--text:#1a202c;--muted:#718096; }
   body.light .header { background: rgba(255,255,255,.96); }
   body.light .bottom-nav { background: rgba(255,255,255,.97); }
 
-  /* ── AVISO OVERLAY ── */
   .aviso-overlay{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .35s}
   .aviso-overlay.show{opacity:1;pointer-events:all}
   .aviso-box{background:#0e1220;border:1px solid #1c2236;border-radius:24px;padding:24px 20px 20px;width:100%;max-width:400px;max-height:80vh;overflow-y:auto;transform:translateY(20px) scale(.97);transition:transform .35s cubic-bezier(.32,.72,0,1)}
@@ -389,7 +121,7 @@
 <div class="header">
   <div class="logo-wrap">
     <img src="logo.png" style="height:44px;object-fit:contain;display:block">
-    <div class="logo-sub">Olá, Admin 👋</div>
+    <div class="logo-sub" id="logoSub">Olá, Admin 👋</div>
   </div>
   <button class="add-btn" onclick="location.href='clientes.html'">
     <span class="plus-icon">＋</span> Cliente
@@ -399,24 +131,24 @@
 <!-- CONTENT -->
 <div class="content">
 
+  <!-- BANNER DE VENCIMENTO -->
+  <div class="banner-venc" id="bannerVenc" onclick="location.href='config.html'">
+    <div class="banner-venc-row">
+      <div class="banner-venc-icon" id="bannerIcon">⚠️</div>
+      <div class="banner-venc-body">
+        <div class="banner-venc-titulo" id="bannerTitulo"></div>
+        <div class="banner-venc-sub" id="bannerSub">Toque para renovar sua assinatura</div>
+      </div>
+      <div class="banner-venc-arrow">›</div>
+    </div>
+  </div>
+
   <!-- STATUS CARDS -->
   <div class="section-label">Resumo Geral</div>
   <div class="status-grid">
-    <div class="status-card red">
-      <div class="status-icon">🔴</div>
-      <div class="status-num" id="numVencido">0</div>
-      <div class="status-label">Vencidos</div>
-    </div>
-    <div class="status-card yellow">
-      <div class="status-icon">🟡</div>
-      <div class="status-num" id="numHoje">0</div>
-      <div class="status-label">Vencem Hoje</div>
-    </div>
-    <div class="status-card green">
-      <div class="status-icon">🟢</div>
-      <div class="status-num" id="numEmDia">0</div>
-      <div class="status-label">Em Dia</div>
-    </div>
+    <div class="status-card red"><div class="status-icon">🔴</div><div class="status-num" id="numVencido">0</div><div class="status-label">Vencidos</div></div>
+    <div class="status-card yellow"><div class="status-icon">🟡</div><div class="status-num" id="numHoje">0</div><div class="status-label">Vencem Hoje</div></div>
+    <div class="status-card green"><div class="status-icon">🟢</div><div class="status-num" id="numEmDia">0</div><div class="status-label">Em Dia</div></div>
   </div>
 
   <!-- SERVERS -->
@@ -430,8 +162,8 @@
 </div>
 
 <script type="module">
-import { initializeApp }                        from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-import { getAuth, onAuthStateChanged }          from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+import { initializeApp }     from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -445,44 +177,34 @@ const firebaseConfig = {
 const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
-// ── AVISO ─────────────────────────────────────────
-function criarOverlayAviso() {
-  if (document.getElementById('avisoOverlay')) return;
-  const style = document.createElement('style');
-  style.textContent = `
-    #avisoOverlay{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.78);backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .35s}
-    #avisoOverlay.show{opacity:1;pointer-events:all}
-    #avisoBox{background:#0e1220;border:1px solid #2a3352;border-radius:24px;padding:24px 20px 20px;width:100%;max-width:400px;max-height:80vh;overflow-y:auto;transform:translateY(20px) scale(.97);transition:transform .35s cubic-bezier(.32,.72,0,1)}
-    #avisoOverlay.show #avisoBox{transform:translateY(0) scale(1)}
-    #avisoBoxBody{font-size:14px;color:#c8cfe0;line-height:1.7;white-space:pre-wrap;background:#131825;border:1px solid #1c2236;border-radius:12px;padding:14px;margin-bottom:16px}
-    #avisoBoxBtn{width:100%;background:#00d4ff;color:#000;border:none;border-radius:12px;padding:13px;font-family:'Syne',sans-serif;font-weight:800;font-size:14px;cursor:pointer}
-  `;
-  document.head.appendChild(style);
 
-  const overlay = document.createElement('div');
-  overlay.id = 'avisoOverlay';
-  overlay.innerHTML = `
-    <div id="avisoBox">
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
-        <div style="width:42px;height:42px;border-radius:13px;background:rgba(255,187,0,.12);border:1px solid rgba(255,187,0,.2);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">📢</div>
-        <div>
-          <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:#e4e8f4">Aviso Importante</div>
-          <div style="font-size:11px;color:#5a6480;text-transform:uppercase;letter-spacing:.5px">da administração</div>
-        </div>
-      </div>
-      <div id="avisoBoxBody"></div>
-      <button id="avisoBoxBtn">Entendido ✓</button>
-    </div>`;
-  document.body.appendChild(overlay);
+// ── BANNER DE VENCIMENTO ──────────────────────────────────────────────────────
+function mostrarBannerVenc(vencimento) {
+  if (!vencimento) return;
+  var hoje  = new Date(); hoje.setHours(0,0,0,0);
+  var partes = vencimento.split('-');
+  var venc   = new Date(partes[0], partes[1]-1, partes[2]);
+  var dias   = Math.round((venc - hoje) / 86400000);
+  var banner = document.getElementById('bannerVenc');
+  if (!banner) return;
 
-  document.getElementById('avisoBoxBtn').addEventListener('click', function() {
-    document.getElementById('avisoOverlay').classList.remove('show');
-    if (window._avisoFreq === 'uma' && window._avisoKey) {
-      localStorage.setItem(window._avisoKey, '1');
-    }
-  });
+  if (dias < 0) {
+    banner.className = 'banner-venc vencido';
+    document.getElementById('bannerIcon').textContent   = '🔴';
+    document.getElementById('bannerTitulo').textContent = 'Sua assinatura está vencida!';
+    document.getElementById('bannerSub').textContent    = 'Renove agora para continuar usando o StreamDesk';
+    banner.style.display = 'block';
+  } else if (dias <= 7) {
+    var txt = dias === 0 ? 'Vence hoje!' : 'Vence em '+dias+' dia'+(dias>1?'s':'')+'!';
+    banner.className = 'banner-venc vencendo';
+    document.getElementById('bannerIcon').textContent   = '⚡';
+    document.getElementById('bannerTitulo').textContent = txt;
+    document.getElementById('bannerSub').textContent    = 'Toque para renovar sua assinatura';
+    banner.style.display = 'block';
+  }
 }
 
+// ── AVISO DA ADMINISTRAÇÃO ────────────────────────────────────────────────────
 async function checkAviso(user) {
   try {
     const snap = await getDoc(doc(db, 'config', 'aviso'));
@@ -490,63 +212,55 @@ async function checkAviso(user) {
     const data = snap.data();
     if (!data.ativo || !data.texto) return;
 
-    // Se frequencia = 'uma', bloqueia após primeira vez
+    // Se frequencia = 'uma', aparece só uma vez para sempre
     if (data.frequencia === 'uma') {
       const avisoId = data.atualizadoEm || 'v1';
       const keyUma  = 'aviso_uma_' + avisoId + '_' + user.uid;
       if (localStorage.getItem(keyUma)) return;
       window._avisoKeyUma = keyUma;
     }
-    // frequencia = 'sempre' (padrão) ou qualquer outro valor → exibe sempre
+    // 'sempre' ou qualquer outro valor → aparece sempre que logar
 
-    criarOverlayAviso();
+    window._avisoFreq = data.frequencia || 'sempre';
     document.getElementById('avisoBoxBody').textContent = data.texto;
     document.getElementById('avisoOverlay').classList.add('show');
-    window._avisoFreq = data.frequencia || 'sempre';
   } catch(e) { console.error('Aviso erro:', e); }
 }
 
 window.fecharAviso = function() {
-  const el = document.getElementById('avisoOverlay');
-  if (el) el.classList.remove('show');
-  // Se "uma vez", marca como visto permanentemente
+  document.getElementById('avisoOverlay').classList.remove('show');
   if (window._avisoFreq === 'uma' && window._avisoKeyUma) {
     localStorage.setItem(window._avisoKeyUma, '1');
   }
 };
 
-
+// ── HELPERS ───────────────────────────────────────────────────────────────────
 function today() {
-  var d=new Date(), y=d.getFullYear();
-  var m=String(d.getMonth()+1).padStart(2,'0');
-  var day=String(d.getDate()).padStart(2,'0');
-  return y+'-'+m+'-'+day;
+  var d=new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 }
 function tomorrow() {
   var d=new Date(); d.setDate(d.getDate()+1);
-  var y=d.getFullYear();
-  var m=String(d.getMonth()+1).padStart(2,'0');
-  var day=String(d.getDate()).padStart(2,'0');
-  return y+'-'+m+'-'+day;
-}
-function formatDate(d) {
-  if(!d) return '-'; var p=d.split('-'); return p[2]+'/'+p[1]+'/'+p[0];
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 }
 
-// Apply theme
 var cfg2 = JSON.parse(localStorage.getItem('streamdesk_config')||'{}');
 if (cfg2.darkMode !== true) document.body.classList.add('light');
 
+// ── CARREGAMENTO PRINCIPAL ────────────────────────────────────────────────────
 async function loadAndRender(user) {
+  // Nome no header
   var nome = user.displayName ? user.displayName.split(' ')[0] : user.email.split('@')[0];
   document.getElementById('logoSub').textContent = 'Olá, ' + nome + ' 👋';
 
+  // 1. Busca dados do gerente PRIMEIRO — exibe banner de vencimento imediatamente
   try {
     var userSnap = await getDoc(doc(db, 'usuarios', user.uid));
     var userData = userSnap.exists() ? userSnap.data() : {};
     mostrarBannerVenc(userData.expiracao || userData.vencimento || null);
   } catch(e) { console.error('Banner venc erro:', e); }
 
+  // 2. Busca clientes e servidores em paralelo
   try {
     var [clientSnap, srvSnap] = await Promise.all([
       getDocs(collection(db,'usuarios',user.uid,'clientes')),
@@ -558,20 +272,16 @@ async function loadAndRender(user) {
     render(clientes, servidores, cfg);
   } catch(e) { console.error('Clientes/servidores erro:', e); }
 
+  // 3. Exibe aviso da administração
   await checkAviso(user);
 }
 
 onAuthStateChanged(auth, async function(user) {
   if (!user) { location.href='login.html'; return; }
-  // Limpa chaves de sessão antigas ao fazer login (novo login = novos avisos)
-  // mas mantém as de "uma vez"
   await loadAndRender(user);
 });
 
-
-
-
-
+// ── WHATSAPP ──────────────────────────────────────────────────────────────────
 function getWAMsg(nome, plataforma, vencimento, config) {
   var t = today();
   var tpl = vencimento < t
@@ -588,18 +298,14 @@ window.sendWA = function(nome, plataforma, vencimento, contato, cfg) {
   window.open(phone ? 'https://wa.me/'+phone+'?text='+encodeURIComponent(msg) : 'https://wa.me/?text='+encodeURIComponent(msg), '_blank');
 };
 
+// ── RENDER ────────────────────────────────────────────────────────────────────
 function render(clientes, servidores, config) {
-  var t  = today(), tm = tomorrow();
+  var t = today(), tm = tomorrow();
 
-  var vencidos = clientes.filter(c=>c.vencimento<t).length;
-  var hoje     = clientes.filter(c=>c.vencimento===t).length;
-  var emDia    = clientes.filter(c=>c.vencimento>t).length;
+  document.getElementById('numVencido').textContent = clientes.filter(c=>c.vencimento<t).length;
+  document.getElementById('numHoje').textContent    = clientes.filter(c=>c.vencimento===t).length;
+  document.getElementById('numEmDia').textContent   = clientes.filter(c=>c.vencimento>t).length;
 
-  document.getElementById('numVencido').textContent = vencidos;
-  document.getElementById('numHoje').textContent    = hoje;
-  document.getElementById('numEmDia').textContent   = emDia;
-
-  // Server list — only online
   var online = servidores.filter(s=>s.status!=='offline');
   var max    = Math.max.apply(null, online.map(s=>clientes.filter(c=>c.plataforma===s.nome).length).concat([1]));
 
@@ -613,7 +319,6 @@ function render(clientes, servidores, config) {
     }).join('');
   }
 
-  // Urgent list
   var urgent = clientes.filter(c=>c.vencimento===t||c.vencimento===tm).sort((a,b)=>a.vencimento.localeCompare(b.vencimento));
   if (!urgent.length) {
     document.getElementById('attentionList').innerHTML = '<div style="text-align:center;padding:24px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);color:var(--muted);font-size:13px">✅ Nenhum cliente vencendo hoje ou amanhã</div>';
@@ -629,7 +334,6 @@ function render(clientes, servidores, config) {
       '</div></div>';
   }).join('');
 
-  // Bind WhatsApp buttons
   document.querySelectorAll('.wa-btn').forEach(function(btn) {
     btn.addEventListener('click', function() {
       var cfg = JSON.parse(localStorage.getItem('streamdesk_config')||'{}');
@@ -642,13 +346,12 @@ function render(clientes, servidores, config) {
 <!-- BOTTOM NAV -->
 <div class="bottom-nav">
   <div class="nav-item active"><div class="nav-icon">🏠</div><div class="nav-label">Início</div><div class="nav-dot"></div></div>
-  <div class="nav-item " onclick="location.href='clientes.html'"><div class="nav-icon">👥</div><div class="nav-label">Clientes</div><div class="nav-dot"></div></div>
-  <div class="nav-item " onclick="location.href='servidor.html'"><div class="nav-icon">🖥️</div><div class="nav-label">Servidor</div><div class="nav-dot"></div></div>
-  <div class="nav-item " onclick="location.href='financas.html'"><div class="nav-icon">💰</div><div class="nav-label">Finanças</div><div class="nav-dot"></div></div>
-  <div class="nav-item " onclick="location.href='avisos.html'"><div class="nav-icon">📢</div><div class="nav-label">Avisos</div><div class="nav-dot"></div></div>
-  <div class="nav-item " onclick="location.href='config.html'"><div class="nav-icon">⚙️</div><div class="nav-label">Config.</div><div class="nav-dot"></div></div>
+  <div class="nav-item" onclick="location.href='clientes.html'"><div class="nav-icon">👥</div><div class="nav-label">Clientes</div><div class="nav-dot"></div></div>
+  <div class="nav-item" onclick="location.href='servidor.html'"><div class="nav-icon">🖥️</div><div class="nav-label">Servidor</div><div class="nav-dot"></div></div>
+  <div class="nav-item" onclick="location.href='financas.html'"><div class="nav-icon">💰</div><div class="nav-label">Finanças</div><div class="nav-dot"></div></div>
+  <div class="nav-item" onclick="location.href='avisos.html'"><div class="nav-icon">📢</div><div class="nav-label">Avisos</div><div class="nav-dot"></div></div>
+  <div class="nav-item" onclick="location.href='config.html'"><div class="nav-icon">⚙️</div><div class="nav-label">Config.</div><div class="nav-dot"></div></div>
 </div>
-
 
 <!-- AVISO OVERLAY -->
 <div class="aviso-overlay" id="avisoOverlay">
@@ -665,3 +368,4 @@ function render(clientes, servidores, config) {
   </div>
 </div>
 </body>
+</html>
