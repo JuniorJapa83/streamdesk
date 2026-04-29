@@ -266,8 +266,9 @@ const provider = new GoogleAuthProvider();
 provider.setCustomParameters({ prompt: 'select_account' });
 
 const MP_PUBLIC_KEY     = 'APP_USR-b9e0a4a9-be59-4ebb-87b0-c3fd2f4453a2';
-const VALOR_MENSALIDADE = 29.90;
-const WEBHOOK_URL = 'https://southamerica-east1-streamdesk-5350d.cloudfunctions.net';
+const VALOR_MENSALIDADE = 9.90;
+const URL_PIX        = 'https://criarpix-vsw4hqxmxq-rj.a.run.app';
+const URL_ASSINATURA = 'https://criarassinatura-vsw4hqxmxq-rj.a.run.app';
 
 let _pendingUser = null;
 let _pixCodigo   = '';
@@ -405,7 +406,7 @@ window.rGerarPix = async function() {
   rSetMsg('rPixMsg','','');
 
   try {
-    var resp = await fetch(WEBHOOK_URL+'/criarPix', {
+    var resp = await fetch(URL_PIX, {
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ uid, valor: VALOR_MENSALIDADE, descricao: 'StreamDesk — Assinatura Mensal' })
@@ -501,7 +502,7 @@ window.rPagarCartao = async function() {
       securityCode:        cvv
     });
 
-    var resp = await fetch(WEBHOOK_URL+'/criarAssinatura', {
+    var resp = await fetch(URL_ASSINATURA, {
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
@@ -619,3 +620,4 @@ window.doGoogle = async function(tipo) {
 <script src="https://sdk.mercadopago.com/js/v2"></script>
 </body>
 </html>
+

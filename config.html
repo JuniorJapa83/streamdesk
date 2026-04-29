@@ -483,7 +483,8 @@ var CFG_KEY           = 'streamdesk_config';
 var SUPORTE_WHATSAPP  = '';
 var MP_PUBLIC_KEY     = 'APP_USR-b9e0a4a9-be59-4ebb-87b0-c3fd2f4453a2';
 var VALOR_MENSALIDADE = 9.90;
-var WEBHOOK_URL       = 'https://southamerica-east1-streamdesk-5350d.cloudfunctions.net';
+var URL_PIX        = 'https://criarpix-vsw4hqxmxq-rj.a.run.app';
+var URL_ASSINATURA = 'https://criarassinatura-vsw4hqxmxq-rj.a.run.app';
 
 var DEFAULT_MSG_HOJE   = 'Olá {nome}! 👋 Seu plano IPTV ({servidor}) vence HOJE. Renove para não ficar sem sinal! 📺';
 var DEFAULT_MSG_AMANHA = 'Olá {nome}! 👋 Lembrando que seu plano IPTV ({servidor}) vence amanhã. Renove com antecedência! 😊';
@@ -627,7 +628,7 @@ window.gerarPix = async function() {
   btn.innerHTML = '<span class="spinner"></span>Gerando...';
   setMsg('pixMsg','','');
   try {
-    var resp = await fetch(WEBHOOK_URL+'/criarPix', {
+    var resp = await fetch(URL_PIX, {
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ uid, valor: VALOR_MENSALIDADE, descricao: 'StreamDesk — Assinatura Mensal' })
     });
@@ -688,7 +689,7 @@ window.pagarCartao = async function() {
       cardExpirationMonth: partes[0], cardExpirationYear: '20'+partes[1],
       securityCode: cvv
     });
-    var resp = await fetch(WEBHOOK_URL+'/criarAssinatura', {
+    var resp = await fetch(URL_ASSINATURA, {
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ uid, token: token.id, email: window._currentUser?.email||'', valor: VALOR_MENSALIDADE })
     });
