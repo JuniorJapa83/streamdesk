@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <link rel="icon" href="favicon.png" type="image/png">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>StreamDesk — Home</title>
@@ -42,6 +41,7 @@
     overflow-x: hidden;
   }
 
+  /* Background mesh */
   body::before {
     content: '';
     position: fixed;
@@ -52,6 +52,7 @@
     z-index: 0;
   }
 
+  /* HEADER */
   .header {
     position: sticky;
     top: 0;
@@ -105,12 +106,14 @@
   .add-btn:active { transform: scale(0.95); box-shadow: 0 0 10px rgba(0,212,255,0.2); }
   .plus-icon { font-size: 18px; line-height: 1; }
 
+  /* SCROLL CONTENT */
   .content {
     padding: 20px 20px 100px;
     position: relative;
     z-index: 1;
   }
 
+  /* SECTION LABEL */
   .section-label {
     font-size: 11px;
     font-weight: 600;
@@ -130,6 +133,7 @@
     background: var(--border);
   }
 
+  /* STATUS CARDS */
   .status-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -152,7 +156,12 @@
     transition: transform 0.2s;
   }
   .status-card:active { transform: scale(0.96); }
-  .status-card::before { content: ''; position: absolute; inset: 0; opacity: 0.06; }
+  .status-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.06;
+  }
   .status-card.red { background: var(--card); border-color: rgba(255,59,92,0.2); }
   .status-card.red::before { background: var(--red); }
   .status-card.yellow { background: var(--card); border-color: rgba(255,187,0,0.2); }
@@ -161,13 +170,25 @@
   .status-card.green::before { background: var(--green); }
 
   .status-icon { font-size: 20px; margin-bottom: 6px; }
-  .status-num { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+  .status-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
   .status-card.red .status-num { color: var(--red); }
   .status-card.yellow .status-num { color: var(--yellow); }
   .status-card.green .status-num { color: var(--green); }
   .status-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.3; }
 
-  .server-list { display: flex; flex-direction: column; gap: 8px; animation: fadeUp 0.5s ease 0.2s both; }
+  /* SERVER CARDS */
+  .server-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    animation: fadeUp 0.5s ease 0.2s both;
+  }
 
   .server-card {
     background: var(--card);
@@ -182,15 +203,46 @@
   .server-card:active { transform: scale(0.98); }
 
   .server-left { display: flex; align-items: center; gap: 10px; }
-  .server-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .server-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
   .server-name { font-size: 14px; font-weight: 500; }
-  .server-count { display: flex; align-items: center; gap: 6px; }
-  .server-num { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; color: var(--accent); }
+  .server-count {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .server-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--accent);
+  }
   .server-word { font-size: 12px; color: var(--muted); }
-  .server-bar-wrap { width: 60px; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; margin-left: 12px; }
-  .server-bar { height: 100%; border-radius: 2px; background: var(--accent); }
 
-  .attention-list { display: flex; flex-direction: column; gap: 8px; animation: fadeUp 0.5s ease 0.3s both; }
+  .server-bar-wrap {
+    width: 60px;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-left: 12px;
+  }
+  .server-bar {
+    height: 100%;
+    border-radius: 2px;
+    background: var(--accent);
+  }
+
+  /* ATTENTION LIST */
+  .attention-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    animation: fadeUp 0.5s ease 0.3s both;
+  }
 
   .attention-card {
     background: var(--card);
@@ -208,66 +260,106 @@
 
   .att-row1 { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
   .att-name { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; }
-  .att-badge { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 50px; }
+  .att-badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 50px;
+  }
   .badge-hoje { background: var(--yellow-glow); color: var(--yellow); }
   .badge-amanha { background: var(--orange-glow); color: var(--orange); }
 
   .att-row2 { display: flex; align-items: center; justify-content: space-between; }
   .att-info { display: flex; gap: 10px; align-items: center; }
-  .att-chip { font-size: 11px; color: var(--muted); background: var(--card2); padding: 3px 8px; border-radius: 6px; }
+  .att-chip {
+    font-size: 11px;
+    color: var(--muted);
+    background: var(--card2);
+    padding: 3px 8px;
+    border-radius: 6px;
+  }
+  .att-flag { font-size: 14px; }
 
   .wa-btn {
-    display: flex; align-items: center; gap: 5px;
-    background: rgba(37,211,102,0.12); color: #25d366;
-    border: none; border-radius: 8px; padding: 6px 12px;
-    font-size: 12px; font-weight: 600; font-family: 'DM Sans', sans-serif;
-    cursor: pointer; transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(37,211,102,0.12);
+    color: #25d366;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
   }
   .wa-btn:active { transform: scale(0.95); }
 
-  /* ── BANNER DE VENCIMENTO ── */
-  .banner-venc {
-    display: none;
-    border-radius: 12px;
-    padding: 12px 14px;
-    margin-bottom: 16px;
-    border: 1px solid;
-    cursor: pointer;
-    transition: opacity .2s;
-    animation: fadeUp 0.4s ease both;
-  }
-  .banner-venc:active { opacity: .8; }
-  .banner-venc.vencendo {
-    background: rgba(255,187,0,.07);
-    border-color: rgba(255,187,0,.25);
-  }
-  .banner-venc.vencido {
-    background: rgba(255,59,92,.07);
-    border-color: rgba(255,59,92,.25);
-  }
-  .banner-venc-row { display: flex; align-items: center; gap: 10px; }
-  .banner-venc-icon { font-size: 22px; flex-shrink: 0; }
-  .banner-venc-body { flex: 1; }
-  .banner-venc-titulo { font-size: 13px; font-weight: 600; }
-  .banner-venc.vencendo .banner-venc-titulo { color: var(--yellow); }
-  .banner-venc.vencido  .banner-venc-titulo { color: var(--red); }
-  .banner-venc-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
-  .banner-venc-arrow { font-size: 16px; color: var(--muted); flex-shrink: 0; }
-
+  /* BOTTOM NAV */
   .bottom-nav {
-    position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
-    width: 100%; max-width: 420px;
-    background: rgba(14,18,32,0.97); backdrop-filter: blur(20px);
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 420px;
+    background: rgba(14,18,32,0.97);
+    backdrop-filter: blur(20px);
     border-top: 1px solid var(--border);
-    display: flex; padding: 10px 0 24px; z-index: 50;
+    display: flex;
+    padding: 10px 0 24px;
+    z-index: 50;
   }
-  .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; transition: all 0.2s; padding: 4px 0; }
-  .nav-icon { font-size: 22px; transition: transform 0.2s; }
+
+  .nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    padding: 4px 0;
+  }
+  .nav-icon {
+    font-size: 22px;
+    transition: transform 0.2s;
+  }
   .nav-label { font-size: 8px; color: var(--muted); font-weight: 500; letter-spacing: 0.3px; }
   .nav-item.active .nav-label { color: var(--accent); }
   .nav-item.active .nav-icon { transform: translateY(-2px); }
-  .nav-indicator { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); margin-top: -2px; opacity: 0; transition: opacity 0.2s; }
+
+  .nav-indicator {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--accent);
+    margin-top: -2px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
   .nav-item.active .nav-indicator { opacity: 1; }
+
+  /* GREETING */
+  .greeting {
+    margin-bottom: 20px;
+    animation: fadeUp 0.4s ease both;
+  }
+  .greeting-hi { font-size: 13px; color: var(--muted); }
+  .greeting-name { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; margin-top: 2px; }
+  .greeting-name span { color: var(--accent); }
+
+  /* EMPTY STATE */
+  .empty-att {
+    text-align: center;
+    padding: 24px;
+    background: var(--card);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 13px;
+  }
 
   body.light {
     --bg:#f0f4f8;--surface:#ffffff;--card:#ffffff;--card2:#f7f9fc;
@@ -296,8 +388,8 @@
 <!-- HEADER -->
 <div class="header">
   <div class="logo-wrap">
-    <img src="logo.png" style="height:56px;object-fit:contain;display:block">
-    <div class="logo-sub" id="logoSub">Olá, Admin 👋</div>
+    <img src="logo.png" style="height:44px;object-fit:contain;display:block">
+    <div class="logo-sub">Olá, Admin 👋</div>
   </div>
   <button class="add-btn" onclick="location.href='clientes.html'">
     <span class="plus-icon">＋</span> Cliente
@@ -306,18 +398,6 @@
 
 <!-- CONTENT -->
 <div class="content">
-
-  <!-- BANNER DE VENCIMENTO (aparece só quando necessário) -->
-  <div class="banner-venc" id="bannerVenc" onclick="location.href='config.html'">
-    <div class="banner-venc-row">
-      <div class="banner-venc-icon" id="bannerIcon">⚠️</div>
-      <div class="banner-venc-body">
-        <div class="banner-venc-titulo" id="bannerTitulo"></div>
-        <div class="banner-venc-sub" id="bannerSub">Toque para renovar sua assinatura</div>
-      </div>
-      <div class="banner-venc-arrow">›</div>
-    </div>
-  </div>
 
   <!-- STATUS CARDS -->
   <div class="section-label">Resumo Geral</div>
@@ -350,8 +430,8 @@
 </div>
 
 <script type="module">
-import { initializeApp }     from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+import { initializeApp }                        from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+import { getAuth, onAuthStateChanged }          from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -365,36 +445,7 @@ const firebaseConfig = {
 const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
-
-// ── BANNER DE VENCIMENTO ──────────────────────────────────────────────────────
-function mostrarBannerVenc(vencimento) {
-  if (!vencimento) return;
-  var hoje  = new Date(); hoje.setHours(0,0,0,0);
-  var partes = vencimento.split('-');
-  var venc   = new Date(partes[0], partes[1]-1, partes[2]);
-  var dias  = Math.round((venc - hoje) / 86400000);
-  var banner = document.getElementById('bannerVenc');
-
-  if (dias < 0) {
-    // Vencido
-    banner.className = 'banner-venc vencido';
-    document.getElementById('bannerIcon').textContent    = '🔴';
-    document.getElementById('bannerTitulo').textContent  = 'Sua assinatura está vencida!';
-    document.getElementById('bannerSub').textContent     = 'Renove agora para continuar usando o StreamDesk';
-    banner.style.display = 'block';
-  } else if (dias <= 3) {
-    // Vencendo em até 7 dias
-    var txt = dias === 0 ? 'Vence hoje!' : 'Vence em '+dias+' dia'+(dias>1?'s':'')+'!';
-    banner.className = 'banner-venc vencendo';
-    document.getElementById('bannerIcon').textContent    = '⚡';
-    document.getElementById('bannerTitulo').textContent  = txt;
-    document.getElementById('bannerSub').textContent     = 'Toque para renovar sua assinatura';
-    banner.style.display = 'block';
-  }
-  // Se em dia e mais de 7 dias: banner fica oculto (display:none)
-}
-
-// ── AVISO ─────────────────────────────────────────────────────────────────────
+// ── AVISO ─────────────────────────────────────────
 function criarOverlayAviso() {
   if (document.getElementById('avisoOverlay')) return;
   const style = document.createElement('style');
@@ -426,8 +477,8 @@ function criarOverlayAviso() {
 
   document.getElementById('avisoBoxBtn').addEventListener('click', function() {
     document.getElementById('avisoOverlay').classList.remove('show');
-    if (window._avisoFreq === 'uma' && window._avisoKeyUma) {
-      localStorage.setItem(window._avisoKeyUma, '1');
+    if (window._avisoFreq === 'uma' && window._avisoKey) {
+      localStorage.setItem(window._avisoKey, '1');
     }
   });
 }
@@ -439,14 +490,19 @@ async function checkAviso(user) {
     const data = snap.data();
     if (!data.ativo || !data.texto) return;
 
-    const freq    = data.frequencia || 'uma';
-    const avisoId = data.atualizadoEm || 'v1';
-    const keyUma  = 'aviso_uma_' + avisoId + '_' + user.uid;
+    const freq     = data.frequencia || 'uma';
+    const avisoId  = data.atualizadoEm || 'v1';
+    
+    // Chave "uma vez" — permanente até novo aviso
+    const keyUma   = 'aviso_uma_' + avisoId + '_' + user.uid;
     if (freq === 'uma' && localStorage.getItem(keyUma)) return;
 
-    const hoje   = new Date().toISOString().slice(0, 10);
-    const keyHoje = 'aviso_hoje_' + avisoId + '_' + user.uid + '_' + hoje;
+    // Chave "hoje" — bloqueia para o dia inteiro, para qualquer frequência
+    const hoje     = new Date().toISOString().slice(0, 10); // "2026-04-28"
+    const keyHoje  = 'aviso_hoje_' + avisoId + '_' + user.uid + '_' + hoje;
     if (localStorage.getItem(keyHoje)) return;
+
+    // Salva ANTES de exibir — garante bloqueio mesmo ao recarregar
     localStorage.setItem(keyHoje, '1');
 
     criarOverlayAviso();
@@ -460,10 +516,12 @@ async function checkAviso(user) {
 window.fecharAviso = function() {
   const el = document.getElementById('avisoOverlay');
   if (el) el.classList.remove('show');
+  // Se "uma vez", marca como visto permanentemente
   if (window._avisoFreq === 'uma' && window._avisoKeyUma) {
     localStorage.setItem(window._avisoKeyUma, '1');
   }
 };
+
 
 function today() {
   var d=new Date(), y=d.getFullYear();
@@ -473,9 +531,16 @@ function today() {
 }
 function tomorrow() {
   var d=new Date(); d.setDate(d.getDate()+1);
-  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  var y=d.getFullYear();
+  var m=String(d.getMonth()+1).padStart(2,'0');
+  var day=String(d.getDate()).padStart(2,'0');
+  return y+'-'+m+'-'+day;
+}
+function formatDate(d) {
+  if(!d) return '-'; var p=d.split('-'); return p[2]+'/'+p[1]+'/'+p[0];
 }
 
+// Apply theme
 var cfg2 = JSON.parse(localStorage.getItem('streamdesk_config')||'{}');
 if (cfg2.darkMode !== true) document.body.classList.add('light');
 
@@ -484,30 +549,39 @@ async function loadAndRender(user) {
   var nome = user.displayName ? user.displayName.split(' ')[0] : user.email.split('@')[0];
   document.getElementById('logoSub').textContent = 'Olá, ' + nome + ' 👋';
 
-  // Carrega dados do gerente (vencimento da assinatura) + clientes + servidores em paralelo
-  var [userSnap, clientSnap, srvSnap] = await Promise.all([
-    getDoc(doc(db, 'usuarios', user.uid)),
-    getDocs(collection(db,'usuarios',user.uid,'clientes')),
-    getDocs(collection(db,'usuarios',user.uid,'servidores'))
-  ]);
+  // Busca dados do gerente PRIMEIRO — exibe banner imediatamente
+  try {
+    var userSnap = await getDoc(doc(db, 'usuarios', user.uid));
+    var userData = userSnap.exists() ? userSnap.data() : {};
+    mostrarBannerVenc(userData.expiracao || userData.vencimento || null);
+  } catch(e) { console.error('Banner venc erro:', e); }
 
-  var userData   = userSnap.exists() ? userSnap.data() : {};
-  var clientes   = clientSnap.docs.map(d=>({id:d.id,...d.data()}));
-  var servidores = srvSnap.docs.map(d=>({id:d.id,...d.data()}));
-  var cfg        = JSON.parse(localStorage.getItem('streamdesk_config')||'{}');
+  // Busca clientes e servidores em paralelo
+  try {
+    var [clientSnap, srvSnap] = await Promise.all([
+      getDocs(collection(db,'usuarios',user.uid,'clientes')),
+      getDocs(collection(db,'usuarios',user.uid,'servidores'))
+    ]);
+    var clientes   = clientSnap.docs.map(d=>({id:d.id,...d.data()}));
+    var servidores = srvSnap.docs.map(d=>({id:d.id,...d.data()}));
+    var cfg        = JSON.parse(localStorage.getItem('streamdesk_config')||'{}');
+    render(clientes, servidores, cfg);
+  } catch(e) { console.error('Clientes/servidores erro:', e); }
 
-  // Mostra banner de vencimento da assinatura do gerente
-  var vencGerente = userData.expiracao || userData.vencimento || null;
-  mostrarBannerVenc(vencGerente);
-
-  render(clientes, servidores, cfg);
   await checkAviso(user);
 }
 
+
 onAuthStateChanged(auth, async function(user) {
   if (!user) { location.href='login.html'; return; }
+  // Limpa chaves de sessão antigas ao fazer login (novo login = novos avisos)
+  // mas mantém as de "uma vez"
   await loadAndRender(user);
 });
+
+
+
+
 
 function getWAMsg(nome, plataforma, vencimento, config) {
   var t = today();
@@ -536,6 +610,7 @@ function render(clientes, servidores, config) {
   document.getElementById('numHoje').textContent    = hoje;
   document.getElementById('numEmDia').textContent   = emDia;
 
+  // Server list — only online
   var online = servidores.filter(s=>s.status!=='offline');
   var max    = Math.max.apply(null, online.map(s=>clientes.filter(c=>c.plataforma===s.nome).length).concat([1]));
 
@@ -549,6 +624,7 @@ function render(clientes, servidores, config) {
     }).join('');
   }
 
+  // Urgent list
   var urgent = clientes.filter(c=>c.vencimento===t||c.vencimento===tm).sort((a,b)=>a.vencimento.localeCompare(b.vencimento));
   if (!urgent.length) {
     document.getElementById('attentionList').innerHTML = '<div style="text-align:center;padding:24px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);color:var(--muted);font-size:13px">✅ Nenhum cliente vencendo hoje ou amanhã</div>';
@@ -564,6 +640,7 @@ function render(clientes, servidores, config) {
       '</div></div>';
   }).join('');
 
+  // Bind WhatsApp buttons
   document.querySelectorAll('.wa-btn').forEach(function(btn) {
     btn.addEventListener('click', function() {
       var cfg = JSON.parse(localStorage.getItem('streamdesk_config')||'{}');
@@ -576,12 +653,13 @@ function render(clientes, servidores, config) {
 <!-- BOTTOM NAV -->
 <div class="bottom-nav">
   <div class="nav-item active"><div class="nav-icon">🏠</div><div class="nav-label">Início</div><div class="nav-dot"></div></div>
-  <div class="nav-item" onclick="location.href='clientes.html'"><div class="nav-icon">👥</div><div class="nav-label">Clientes</div><div class="nav-dot"></div></div>
-  <div class="nav-item" onclick="location.href='servidor.html'"><div class="nav-icon">🖥️</div><div class="nav-label">Servidor</div><div class="nav-dot"></div></div>
-  <div class="nav-item" onclick="location.href='financas.html'"><div class="nav-icon">💰</div><div class="nav-label">Finanças</div><div class="nav-dot"></div></div>
-  <div class="nav-item" onclick="location.href='avisos.html'"><div class="nav-icon">📢</div><div class="nav-label">Avisos</div><div class="nav-dot"></div></div>
-  <div class="nav-item" onclick="location.href='config.html'"><div class="nav-icon">⚙️</div><div class="nav-label">Config.</div><div class="nav-dot"></div></div>
+  <div class="nav-item " onclick="location.href='clientes.html'"><div class="nav-icon">👥</div><div class="nav-label">Clientes</div><div class="nav-dot"></div></div>
+  <div class="nav-item " onclick="location.href='servidor.html'"><div class="nav-icon">🖥️</div><div class="nav-label">Servidor</div><div class="nav-dot"></div></div>
+  <div class="nav-item " onclick="location.href='financas.html'"><div class="nav-icon">💰</div><div class="nav-label">Finanças</div><div class="nav-dot"></div></div>
+  <div class="nav-item " onclick="location.href='avisos.html'"><div class="nav-icon">📢</div><div class="nav-label">Avisos</div><div class="nav-dot"></div></div>
+  <div class="nav-item " onclick="location.href='config.html'"><div class="nav-icon">⚙️</div><div class="nav-label">Config.</div><div class="nav-dot"></div></div>
 </div>
+
 
 <!-- AVISO OVERLAY -->
 <div class="aviso-overlay" id="avisoOverlay">
@@ -598,4 +676,3 @@ function render(clientes, servidores, config) {
   </div>
 </div>
 </body>
-</html>
