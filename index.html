@@ -382,7 +382,7 @@ function mostrarBannerVenc(vencimento) {
     document.getElementById('bannerTitulo').textContent  = 'Sua assinatura está vencida!';
     document.getElementById('bannerSub').textContent     = 'Renove agora para continuar usando o StreamDesk';
     banner.style.display = 'block';
-  } else if (dias <= 7) {
+  } else if (dias <= 3) {
     // Vencendo em até 7 dias
     var txt = dias === 0 ? 'Vence hoje!' : 'Vence em '+dias+' dia'+(dias>1?'s':'')+'!';
     banner.className = 'banner-venc vencendo';
