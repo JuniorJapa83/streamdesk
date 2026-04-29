@@ -490,26 +490,19 @@ async function checkAviso(user) {
     const data = snap.data();
     if (!data.ativo || !data.texto) return;
 
-    const freq     = data.frequencia || 'uma';
-    const avisoId  = data.atualizadoEm || 'v1';
-    
-    // Chave "uma vez" — permanente até novo aviso
-    const keyUma   = 'aviso_uma_' + avisoId + '_' + user.uid;
-    if (freq === 'uma' && localStorage.getItem(keyUma)) return;
-
-    // Chave "hoje" — bloqueia para o dia inteiro, para qualquer frequência
-    const hoje     = new Date().toISOString().slice(0, 10); // "2026-04-28"
-    const keyHoje  = 'aviso_hoje_' + avisoId + '_' + user.uid + '_' + hoje;
-    if (localStorage.getItem(keyHoje)) return;
-
-    // Salva ANTES de exibir — garante bloqueio mesmo ao recarregar
-    localStorage.setItem(keyHoje, '1');
+    // Se frequencia = 'uma', bloqueia após primeira vez
+    if (data.frequencia === 'uma') {
+      const avisoId = data.atualizadoEm || 'v1';
+      const keyUma  = 'aviso_uma_' + avisoId + '_' + user.uid;
+      if (localStorage.getItem(keyUma)) return;
+      window._avisoKeyUma = keyUma;
+    }
+    // frequencia = 'sempre' (padrão) ou qualquer outro valor → exibe sempre
 
     criarOverlayAviso();
     document.getElementById('avisoBoxBody').textContent = data.texto;
     document.getElementById('avisoOverlay').classList.add('show');
-    window._avisoKeyUma = keyUma;
-    window._avisoFreq   = freq;
+    window._avisoFreq = data.frequencia || 'sempre';
   } catch(e) { console.error('Aviso erro:', e); }
 }
 
@@ -545,18 +538,15 @@ var cfg2 = JSON.parse(localStorage.getItem('streamdesk_config')||'{}');
 if (cfg2.darkMode !== true) document.body.classList.add('light');
 
 async function loadAndRender(user) {
-  // Nome no header
   var nome = user.displayName ? user.displayName.split(' ')[0] : user.email.split('@')[0];
   document.getElementById('logoSub').textContent = 'Olá, ' + nome + ' 👋';
 
-  // Busca dados do gerente PRIMEIRO — exibe banner imediatamente
   try {
     var userSnap = await getDoc(doc(db, 'usuarios', user.uid));
     var userData = userSnap.exists() ? userSnap.data() : {};
     mostrarBannerVenc(userData.expiracao || userData.vencimento || null);
   } catch(e) { console.error('Banner venc erro:', e); }
 
-  // Busca clientes e servidores em paralelo
   try {
     var [clientSnap, srvSnap] = await Promise.all([
       getDocs(collection(db,'usuarios',user.uid,'clientes')),
@@ -570,7 +560,6 @@ async function loadAndRender(user) {
 
   await checkAviso(user);
 }
-
 
 onAuthStateChanged(auth, async function(user) {
   if (!user) { location.href='login.html'; return; }
