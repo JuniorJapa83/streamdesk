@@ -4,6 +4,7 @@ const { initializeApp } = require("firebase-admin/app");
 const { getFirestore } = require("firebase-admin/firestore");
 const { defineSecret } = require("firebase-functions/params");
 const https = require("https");
+const crypto = require("crypto");
 
 // ── Configuração global ───────────────────────────────────────────────────────
 setGlobalOptions({ region: "southamerica-east1" });
@@ -25,7 +26,7 @@ function setCors(req, res) {
 }
 
 // ── API Mercado Pago ──────────────────────────────────────────────────────────
-function mpRequest(method, path, body, token) {
+function mpRequest(method, path, body, token, idempotencyKey) {
   return new Promise((resolve, reject) => {
     const payload = body ? JSON.stringify(body) : null;
     const options = {
@@ -35,6 +36,7 @@ function mpRequest(method, path, body, token) {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
+        "X-Idempotency-Key": idempotencyKey || crypto.randomUUID(),
         ...(payload ? { "Content-Length": Buffer.byteLength(payload) } : {}),
       },
     };
@@ -193,7 +195,7 @@ exports.criarPix = onRequest(
     };
 
     try {
-      const { status, body: payment } = await mpRequest("POST", "/v1/payments", body, token);
+      const { status, body: payment } = await mpRequest("POST", "/v1/payments", body, token, `pix-${uid}-${Date.now()}`);
 
       if (status !== 201 && status !== 200) {
         console.error("Erro MP criarPix:", payment);
@@ -249,7 +251,7 @@ exports.criarAssinatura = onRequest(
     };
 
     try {
-      const { status, body: sub } = await mpRequest("POST", "/preapproval", body, mpToken);
+      const { status, body: sub } = await mpRequest("POST", "/preapproval", body, mpToken, `sub-${uid}-${Date.now()}`);
 
       if (status !== 201 && status !== 200) {
         console.error("Erro MP criarAssinatura:", sub);
