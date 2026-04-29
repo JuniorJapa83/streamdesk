@@ -370,7 +370,8 @@ const db   = getFirestore(app);
 function mostrarBannerVenc(vencimento) {
   if (!vencimento) return;
   var hoje  = new Date(); hoje.setHours(0,0,0,0);
-  var venc  = new Date(vencimento); venc.setHours(0,0,0,0);
+  var partes = vencimento.split('-');
+  var venc   = new Date(partes[0], partes[1]-1, partes[2]);
   var dias  = Math.round((venc - hoje) / 86400000);
   var banner = document.getElementById('bannerVenc');
 
