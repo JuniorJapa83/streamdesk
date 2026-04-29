@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="theme.css">
 <style>
-  :root{--bg:#f0f4f8;--surface:#fff;--card:#fff;--card2:#f7f9fc;--border:#e2e8f0;--accent:#00d4ff;--red:#ff3b5c;--green:#00e096;--text:#1a202c;--muted:#718096}
+  :root{--bg:#f0f4f8;--surface:#fff;--card:#fff;--card2:#f7f9fc;--border:#e2e8f0;--accent:#00d4ff;--red:#ff3b5c;--green:#00e096;--yellow:#ffbb00;--text:#1a202c;--muted:#718096}
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:420px;margin:0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
   body::before{content:'';position:fixed;top:-120px;right:-80px;width:320px;height:320px;background:radial-gradient(circle,rgba(0,212,255,.12) 0%,transparent 70%);pointer-events:none}
@@ -16,7 +16,6 @@
   .wrap{width:100%;position:relative;z-index:1}
   .logo-wrap{text-align:center;margin-bottom:32px}
   .logo-img{width:260px;max-width:90%;display:block;margin:0 auto 6px;object-fit:contain}
-  .logo-sub{font-size:13px;color:var(--muted);margin-top:4px}
   .card{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:28px 24px;box-shadow:0 4px 24px rgba(0,0,0,.06)}
   .card-title{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;margin-bottom:4px}
   .card-sub{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.5}
@@ -30,14 +29,14 @@
   .btn-google:disabled{opacity:.6;cursor:not-allowed;transform:none}
   .btn-google svg{width:20px;height:20px;flex-shrink:0}
   .spinner{width:18px;height:18px;border:2px solid rgba(60,64,67,.25);border-top-color:#3c4043;border-radius:50%;animation:spin .7s linear infinite;display:none}
+  .spinner-w{width:18px;height:18px;border:2px solid rgba(0,0,0,.2);border-top-color:#000;border-radius:50%;animation:spin .7s linear infinite;display:none}
+  .spinner-dark{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;margin-right:6px}
   @keyframes spin{to{transform:rotate(360deg)}}
   .tabs{display:flex;background:var(--card2);border-radius:12px;padding:4px;margin-bottom:22px;gap:4px}
   .tab{flex:1;padding:9px;border:none;background:transparent;border-radius:9px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13px;color:var(--muted);cursor:pointer;transition:all .2s}
   .tab.active{background:#fff;color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,.08)}
   .panel{display:none}
   .panel.active{display:block}
-  .wa-screen{display:none}
-  .wa-screen.show{display:block}
   .wa-user-box{display:flex;align-items:center;gap:12px;background:var(--card2);border-radius:12px;padding:12px 14px;margin-bottom:20px}
   .wa-avatar{width:44px;height:44px;border-radius:50%;border:2px solid var(--accent)}
   .wa-user-name{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px}
@@ -53,11 +52,49 @@
   .btn-primary{width:100%;background:linear-gradient(135deg,#00d4ff,#00b8e0);color:#000;border:none;border-radius:12px;padding:14px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;cursor:pointer;transition:all .2s;box-shadow:0 4px 16px rgba(0,212,255,.3);display:flex;align-items:center;justify-content:center;gap:8px}
   .btn-primary:active{transform:scale(.97)}
   .btn-primary:disabled{opacity:.6;cursor:not-allowed}
-  .spinner-w{width:18px;height:18px;border:2px solid rgba(0,0,0,.2);border-top-color:#000;border-radius:50%;animation:spin .7s linear infinite;display:none}
   .version{text-align:center;font-size:11px;color:var(--muted);margin-top:20px}
   .version span{color:var(--accent);font-weight:600}
   .debug{background:#1a202c;color:#a0aec0;border-radius:8px;padding:10px 12px;font-size:11px;font-family:monospace;margin-top:10px;display:none;word-break:break-all;line-height:1.6}
   .debug.show{display:block}
+
+  /* ── TELA DE RENOVAÇÃO ── */
+  .renov-badge{display:flex;align-items:center;gap:10px;background:rgba(255,59,92,.06);border:1px solid rgba(255,59,92,.18);border-radius:14px;padding:14px;margin-bottom:20px}
+  .renov-badge-icon{font-size:28px;flex-shrink:0}
+  .renov-badge-title{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;color:var(--red)}
+  .renov-badge-sub{font-size:12px;color:var(--muted);margin-top:2px}
+
+  .pay-tabs{display:flex;gap:8px;margin-bottom:18px}
+  .pay-tab{flex:1;padding:10px;border-radius:10px;border:1px solid var(--border);background:var(--card2);text-align:center;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;color:var(--muted);font-family:'Space Grotesk',sans-serif}
+  .pay-tab.active{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,.06)}
+  .pay-panel{display:none}
+  .pay-panel.active{display:block}
+
+  .pix-qr-wrap{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center;margin-bottom:14px;min-height:160px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+  .pix-qr-img{width:148px;height:148px;border-radius:8px;background:#fff;padding:4px}
+  .pix-copy-btn{width:100%;background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.2);color:var(--accent);border-radius:10px;padding:11px;font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;margin-bottom:8px}
+  .pix-copy-btn:active{transform:scale(.97)}
+  .pix-timer{font-size:11px;color:var(--muted);text-align:center}
+
+  .card-field{margin-bottom:11px}
+  .card-field label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px;display:block}
+  .card-field input{width:100%;background:var(--card2);border:1.5px solid var(--border);border-radius:10px;padding:11px 13px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border .2s}
+  .card-field input:focus{border-color:var(--accent)}
+  .card-row{display:flex;gap:10px}
+  .card-row .card-field{flex:1}
+
+  .btn-pix{width:100%;background:linear-gradient(135deg,#00d4ff,#00b8e0);color:#000;border:none;border-radius:12px;padding:13px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;cursor:pointer;margin-bottom:8px;transition:transform .15s}
+  .btn-pix:active{transform:scale(.97)}
+  .btn-pix:disabled{opacity:.6;cursor:not-allowed}
+  .btn-cartao{width:100%;background:#1a202c;color:#fff;border:none;border-radius:12px;padding:13px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;cursor:pointer;transition:transform .15s}
+  .btn-cartao:active{transform:scale(.97)}
+  .btn-cartao:disabled{opacity:.6;cursor:not-allowed}
+
+  .pay-msg{font-size:13px;text-align:center;padding:10px;border-radius:8px;margin-top:8px;display:none}
+  .pay-msg.ok{background:rgba(0,224,150,.08);color:var(--green);border:1px solid rgba(0,224,150,.2);display:block}
+  .pay-msg.err{background:rgba(255,59,92,.08);color:var(--red);border:1px solid rgba(255,59,92,.2);display:block}
+
+  .btn-sair-renov{width:100%;background:transparent;color:var(--muted);border:none;padding:10px;font-size:13px;cursor:pointer;margin-top:4px;font-family:'DM Sans',sans-serif}
+  .btn-sair-renov:hover{color:var(--red)}
 </style>
 </head>
 <body>
@@ -66,6 +103,7 @@
     <img src="logo.png" class="logo-img" alt="StreamDesk">
   </div>
 
+  <!-- TELA DE LOGIN NORMAL -->
   <div id="loginScreen">
     <div class="card">
       <div class="tabs">
@@ -111,6 +149,7 @@
     </div>
   </div>
 
+  <!-- TELA DE WHATSAPP -->
   <div id="waScreen" style="display:none">
     <div class="card">
       <div class="card-title">Quase lá! 📲</div>
@@ -135,6 +174,67 @@
         <span id="btnSaveWATxt">✓ Confirmar e Entrar</span>
         <div class="spinner-w" id="spinnerWA"></div>
       </button>
+    </div>
+  </div>
+
+  <!-- TELA DE RENOVAÇÃO (aparece quando assinatura vencida) -->
+  <div id="renovScreen" style="display:none">
+    <div class="card">
+
+      <div class="renov-badge">
+        <div class="renov-badge-icon">🔒</div>
+        <div>
+          <div class="renov-badge-title">Assinatura vencida</div>
+          <div class="renov-badge-sub" id="renovSubtitulo">Renove para continuar usando o StreamDesk</div>
+        </div>
+      </div>
+
+      <div class="pay-tabs">
+        <div class="pay-tab active" id="rtabPix" onclick="rSwitchTab('pix')">⚡ Pix</div>
+        <div class="pay-tab" id="rtabCartao" onclick="rSwitchTab('cartao')">💳 Cartão</div>
+      </div>
+
+      <!-- PAINEL PIX -->
+      <div class="pay-panel active" id="rpanelPix">
+        <div class="pix-qr-wrap" id="rPixQrWrap">
+          <div style="color:var(--muted);font-size:13px">Clique em "Gerar Pix" para criar o QR Code</div>
+        </div>
+        <div id="rPixCopyArea" style="display:none">
+          <button class="pix-copy-btn" onclick="rCopiarPix()">📋 Copiar código Pix</button>
+          <div class="pix-timer" id="rPixTimer"></div>
+        </div>
+        <button class="btn-pix" id="rBtnGerarPix" onclick="rGerarPix()">⚡ Gerar QR Code Pix</button>
+        <div class="pay-msg" id="rPixMsg"></div>
+      </div>
+
+      <!-- PAINEL CARTÃO -->
+      <div class="pay-panel" id="rpanelCartao">
+        <div class="card-field">
+          <label>Número do cartão</label>
+          <input type="tel" id="rCardNum" placeholder="0000 0000 0000 0000" maxlength="19" oninput="fmtCard(this)">
+        </div>
+        <div class="card-field">
+          <label>Nome no cartão</label>
+          <input type="text" id="rCardName" placeholder="NOME SOBRENOME" style="text-transform:uppercase">
+        </div>
+        <div class="card-row">
+          <div class="card-field">
+            <label>Validade</label>
+            <input type="tel" id="rCardExp" placeholder="MM/AA" maxlength="5" oninput="fmtExp(this)">
+          </div>
+          <div class="card-field">
+            <label>CVV</label>
+            <input type="tel" id="rCardCvv" placeholder="123" maxlength="4">
+          </div>
+        </div>
+        <button class="btn-cartao" id="rBtnCartao" onclick="rPagarCartao()">💳 Assinar — R$ 29,90/mês</button>
+        <div class="pay-msg" id="rCartaoMsg"></div>
+        <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:10px;line-height:1.5">
+          🔒 Pagamento seguro via Mercado Pago
+        </div>
+      </div>
+
+      <button class="btn-sair-renov" onclick="sairRenovacao()">← Usar outra conta</button>
     </div>
   </div>
 
@@ -165,22 +265,31 @@ const db       = getFirestore(app);
 const provider = new GoogleAuthProvider();
 provider.setCustomParameters({ prompt: 'select_account' });
 
+const MP_PUBLIC_KEY     = 'APP_USR-b9e0a4a9-be59-4ebb-87b0-c3fd2f4453a2';
+const VALOR_MENSALIDADE = 29.90;
+const WEBHOOK_URL       = 'https://webhookmp-vsw4hqxmxq-rj.a.run.app';
+
 let _pendingUser = null;
+let _pixCodigo   = '';
+let _pixTimer    = null;
 
 function todayStr() {
   var d=new Date();
   return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 }
+
 function showMsg(type, msg) {
   document.getElementById('msgErr').classList.remove('show');
   document.getElementById('msgOk').classList.remove('show');
   var el = document.getElementById(type==='err'?'msgErr':'msgOk');
   el.textContent = msg; el.classList.add('show');
 }
+
 function showDebug(msg) {
   var el=document.getElementById('debugBox');
   el.textContent='🔍 '+msg; el.classList.add('show');
 }
+
 function setLoading(tipo, on) {
   var btnId=tipo==='login'?'btnLogin':'btnCadastro';
   var txtId=tipo==='login'?'btnLoginTxt':'btnCadastroTxt';
@@ -200,13 +309,14 @@ window.switchTab=function(tab){
   });
 };
 
+// ── TELA WHATSAPP ─────────────────────────────────────────────────────────────
 function showWAScreen(user) {
   _pendingUser = user;
   document.getElementById('loginScreen').style.display = 'none';
-  document.getElementById('waScreen').style.display = 'block';
-  document.getElementById('waAvatar').src   = user.photoURL || '';
-  document.getElementById('waUserName').textContent  = user.displayName || '';
-  document.getElementById('waUserEmail').textContent = user.email || '';
+  document.getElementById('waScreen').style.display    = 'block';
+  document.getElementById('waAvatar').src              = user.photoURL || '';
+  document.getElementById('waUserName').textContent    = user.displayName || '';
+  document.getElementById('waUserEmail').textContent   = user.email || '';
   document.getElementById('waInput').focus();
 }
 
@@ -232,8 +342,191 @@ document.getElementById('waInput').addEventListener('input', function() {
   document.getElementById('waErr').classList.remove('show');
 });
 
+// ── TELA DE RENOVAÇÃO ─────────────────────────────────────────────────────────
+function showRenovScreen(user, expiracao) {
+  _pendingUser = user;
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('renovScreen').style.display = 'block';
+
+  // Mostra quantos dias venceu
+  if (expiracao) {
+    var partes = expiracao.split('-');
+    var venc   = new Date(partes[0], partes[1]-1, partes[2]);
+    var hoje   = new Date(); hoje.setHours(0,0,0,0);
+    var diasVencido = Math.round((hoje - venc) / 86400000);
+    var txt = diasVencido === 0
+      ? 'Seu acesso venceu hoje.'
+      : 'Seu acesso venceu há ' + diasVencido + ' dia' + (diasVencido > 1 ? 's' : '') + '.';
+    document.getElementById('renovSubtitulo').textContent = txt;
+  }
+}
+
+window.sairRenovacao = async function() {
+  await auth.signOut();
+  document.getElementById('renovScreen').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'block';
+  _pendingUser = null;
+  _pixCodigo   = '';
+  if (_pixTimer) clearInterval(_pixTimer);
+};
+
+window.rSwitchTab = function(tab) {
+  document.getElementById('rtabPix').classList.toggle('active', tab==='pix');
+  document.getElementById('rtabCartao').classList.toggle('active', tab==='cartao');
+  document.getElementById('rpanelPix').classList.toggle('active', tab==='pix');
+  document.getElementById('rpanelCartao').classList.toggle('active', tab==='cartao');
+};
+
+function rSetMsg(id, txt, tipo) {
+  var el = document.getElementById(id);
+  el.textContent = txt;
+  el.className   = 'pay-msg' + (tipo ? ' '+tipo : '');
+  el.style.display = txt ? 'block' : 'none';
+}
+
+window.fmtCard = function(el) {
+  var v = el.value.replace(/\D/g,'').substring(0,16);
+  el.value = v.replace(/(.{4})/g,'$1 ').trim();
+};
+window.fmtExp = function(el) {
+  var v = el.value.replace(/\D/g,'').substring(0,4);
+  if (v.length > 2) v = v.substring(0,2)+'/'+v.substring(2);
+  el.value = v;
+};
+
+// Gera Pix
+window.rGerarPix = async function() {
+  var uid = _pendingUser ? _pendingUser.uid : null;
+  if (!uid) { rSetMsg('rPixMsg','Usuário não autenticado.','err'); return; }
+
+  var btn = document.getElementById('rBtnGerarPix');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner-dark"></span>Gerando...';
+  rSetMsg('rPixMsg','','');
+
+  try {
+    var resp = await fetch(WEBHOOK_URL+'/criarPix', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ uid, valor: VALOR_MENSALIDADE, descricao: 'StreamDesk — Assinatura Mensal' })
+    });
+    var data = await resp.json();
+    if (!resp.ok || !data.qr_code) throw new Error(data.error || 'Erro ao gerar Pix');
+
+    _pixCodigo = data.qr_code;
+    var qrUrl  = 'https://api.qrserver.com/v1/create-qr-code/?size=148x148&data='+encodeURIComponent(_pixCodigo);
+
+    document.getElementById('rPixQrWrap').innerHTML =
+      '<img class="pix-qr-img" src="'+qrUrl+'" alt="QR Code Pix">'+
+      '<div style="font-size:12px;color:var(--muted)">Escaneie com seu banco</div>';
+
+    document.getElementById('rPixCopyArea').style.display = 'block';
+    btn.innerHTML = '🔄 Gerar novo QR Code';
+    btn.disabled  = false;
+
+    // Timer 30 min
+    var expira = Date.now() + 30*60*1000;
+    if (_pixTimer) clearInterval(_pixTimer);
+    _pixTimer = setInterval(function() {
+      var resto = Math.max(0, expira - Date.now());
+      var m = Math.floor(resto/60000), s = Math.floor((resto%60000)/1000);
+      document.getElementById('rPixTimer').textContent = 'Expira em '+m+'m '+String(s).padStart(2,'0')+'s';
+      if (resto === 0) clearInterval(_pixTimer);
+    }, 1000);
+
+    // Polling: verifica se pagamento foi aprovado a cada 5s
+    var pollInterval = setInterval(async function() {
+      try {
+        var snap = await getDoc(doc(db,'usuarios',_pendingUser.uid));
+        if (!snap.exists()) return;
+        var d = snap.data();
+        var partes = (d.expiracao||'').split('-');
+        var novaExp = partes.length === 3 ? new Date(partes[0], partes[1]-1, partes[2]) : null;
+        var hoje = new Date(); hoje.setHours(0,0,0,0);
+        if (novaExp && novaExp >= hoje) {
+          clearInterval(pollInterval);
+          clearInterval(_pixTimer);
+          rSetMsg('rPixMsg','✅ Pagamento confirmado! Entrando...','ok');
+          setTimeout(function() { location.href='index.html'; }, 1500);
+        }
+      } catch(e) {}
+    }, 5000);
+
+    // Para o polling após 35 min
+    setTimeout(function() { clearInterval(pollInterval); }, 35*60*1000);
+
+  } catch(e) {
+    rSetMsg('rPixMsg', e.message || 'Erro ao gerar Pix. Tente novamente.', 'err');
+    btn.disabled = false;
+    btn.innerHTML = '⚡ Gerar QR Code Pix';
+  }
+};
+
+window.rCopiarPix = function() {
+  if (!_pixCodigo) return;
+  navigator.clipboard.writeText(_pixCodigo).then(function() {
+    var btn = document.querySelector('.pix-copy-btn');
+    btn.textContent = '✅ Copiado!';
+    setTimeout(function(){ btn.textContent = '📋 Copiar código Pix'; }, 2000);
+  });
+};
+
+// Paga com cartão
+window.rPagarCartao = async function() {
+  var uid  = _pendingUser ? _pendingUser.uid : null;
+  var num  = document.getElementById('rCardNum').value.replace(/\s/g,'');
+  var name = document.getElementById('rCardName').value.trim().toUpperCase();
+  var exp  = document.getElementById('rCardExp').value;
+  var cvv  = document.getElementById('rCardCvv').value;
+
+  if (!uid)            { rSetMsg('rCartaoMsg','Usuário não autenticado.','err'); return; }
+  if (num.length < 16) { rSetMsg('rCartaoMsg','Número do cartão inválido.','err'); return; }
+  if (!name)           { rSetMsg('rCartaoMsg','Informe o nome do cartão.','err'); return; }
+  if (exp.length < 5)  { rSetMsg('rCartaoMsg','Validade inválida.','err'); return; }
+  if (cvv.length < 3)  { rSetMsg('rCartaoMsg','CVV inválido.','err'); return; }
+
+  var btn = document.getElementById('rBtnCartao');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner-dark"></span>Processando...';
+  rSetMsg('rCartaoMsg','','');
+
+  try {
+    var partes  = exp.split('/');
+    var mp      = new MercadoPago(MP_PUBLIC_KEY, {locale:'pt-BR'});
+    var token   = await mp.createCardToken({
+      cardNumber:          num,
+      cardholderName:      name,
+      cardExpirationMonth: partes[0],
+      cardExpirationYear:  '20'+partes[1],
+      securityCode:        cvv
+    });
+
+    var resp = await fetch(WEBHOOK_URL+'/criarAssinatura', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        uid, token: token.id,
+        email: _pendingUser.email || '',
+        valor: VALOR_MENSALIDADE
+      })
+    });
+    var data = await resp.json();
+    if (!resp.ok) throw new Error(data.error || 'Erro ao criar assinatura');
+
+    rSetMsg('rCartaoMsg','✅ Assinatura ativada! Entrando...','ok');
+    setTimeout(function() { location.href='index.html'; }, 1500);
+
+  } catch(e) {
+    rSetMsg('rCartaoMsg', e.message || 'Erro ao processar. Verifique os dados.', 'err');
+    btn.disabled = false;
+    btn.innerHTML = '💳 Assinar — R$ '+VALOR_MENSALIDADE.toFixed(2).replace('.',',')+'/mês';
+  }
+};
+
+// ── LÓGICA DE LOGIN ───────────────────────────────────────────────────────────
 async function processUser(user, tipo) {
   var snap = await getDoc(doc(db,'usuarios',user.uid));
+
   if (!snap.exists()) {
     if (tipo==='login') {
       await auth.signOut();
@@ -241,6 +534,7 @@ async function processUser(user, tipo) {
       window.switchTab('cadastro');
       return;
     }
+    // Novo cadastro — ganha 30 dias
     var expDate = new Date();
     expDate.setDate(expDate.getDate() + 30);
     var expStr = expDate.getFullYear()+'-'+String(expDate.getMonth()+1).padStart(2,'0')+'-'+String(expDate.getDate()).padStart(2,'0');
@@ -252,11 +546,39 @@ async function processUser(user, tipo) {
     showWAScreen(user);
     return;
   }
+
   var data = snap.data();
-  if (data.status==='bloqueado') { await auth.signOut(); showMsg('err','⚠️ Acesso bloqueado. Entre em contato com o administrador.'); return; }
-  if (data.status==='pendente')  { await auth.signOut(); showMsg('ok','⏳ Aguardando aprovação do administrador.'); return; }
-  if (data.expiracao && new Date(data.expiracao) < new Date()) { await auth.signOut(); showMsg('err','⚠️ Seu acesso expirou. Entre em contato para renovar.'); return; }
+
+  // Bloqueado pelo admin
+  if (data.status==='bloqueado') {
+    await auth.signOut();
+    showMsg('err','⚠️ Acesso bloqueado. Entre em contato com o administrador.');
+    return;
+  }
+
+  // Pendente
+  if (data.status==='pendente') {
+    await auth.signOut();
+    showMsg('ok','⏳ Aguardando aprovação do administrador.');
+    return;
+  }
+
+  // Assinatura vencida (só bloqueia se tiver data definida)
+  if (data.expiracao) {
+    var partes = data.expiracao.split('-');
+    var venc   = new Date(partes[0], partes[1]-1, partes[2]);
+    var hoje   = new Date(); hoje.setHours(0,0,0,0);
+    if (venc < hoje) {
+      // Não faz signOut — mantém o usuário autenticado para o polling funcionar
+      showRenovScreen(user, data.expiracao);
+      return;
+    }
+  }
+
+  // WhatsApp não preenchido
   if (!data.whatsapp) { showWAScreen(user); return; }
+
+  // Tudo ok — entra no app
   await setDoc(doc(db,'usuarios',user.uid),{ultimoAcesso:todayStr()},{merge:true});
   location.href='index.html';
 }
@@ -278,7 +600,7 @@ window.doGoogle = async function(tipo) {
     sessionStorage.removeItem('sd_tipo');
     await processUser(result.user, tipo);
   } catch(e) {
-    var code=e.code||''
+    var code=e.code||'';
     showDebug('popup: '+code+' — '+(e.message||''));
     if (code==='auth/popup-blocked'||code==='auth/operation-not-supported-in-this-environment') {
       showMsg('ok','🔄 Redirecionando para o Google...');
@@ -292,5 +614,8 @@ window.doGoogle = async function(tipo) {
   }
 };
 </script>
+
+<!-- SDK Mercado Pago -->
+<script src="https://sdk.mercadopago.com/js/v2"></script>
 </body>
 </html>
