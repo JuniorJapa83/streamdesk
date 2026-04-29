@@ -39,7 +39,6 @@
   .row-label{font-size:14px;font-weight:500}
   .row-sub{font-size:12px;color:var(--muted);margin-top:2px}
   .row-right{flex-shrink:0;display:flex;align-items:center;gap:8px}
-  .row-val{font-size:13px;color:var(--muted)}
   .row-arrow{color:var(--muted);font-size:16px}
 
   .row-input{width:100%;background:none;border:none;outline:none;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;font-weight:500}
@@ -60,9 +59,6 @@
 
   .saved-toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);background:rgba(0,224,150,.15);border:1px solid var(--green);color:var(--green);border-radius:50px;padding:8px 20px;font-size:13px;font-weight:600;opacity:0;transition:opacity .3s;pointer-events:none;z-index:100}
   .saved-toast.show{opacity:1}
-
-  .msg-area{width:100%;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;resize:none;outline:none;min-height:80px;line-height:1.5;transition:border .2s;margin-top:8px}
-  .msg-area:focus{border-color:var(--accent)}
 
   .overlay{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:200;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .3s}
   .overlay.open{opacity:1;pointer-events:all}
@@ -163,7 +159,6 @@ onAuthStateChanged(_auth, async function(user) {
   document.getElementById('cfgNome').style.color  = 'var(--muted)';
   document.getElementById('cfgEmail').style.color = 'var(--muted)';
   window._currentUser = user;
-
   try {
     const snap = await getDoc(doc(_db, 'usuarios', user.uid));
     const data = snap.exists() ? snap.data() : {};
@@ -172,10 +167,6 @@ onAuthStateChanged(_auth, async function(user) {
   } catch(e) { console.error('Erro ao carregar assinatura:', e); }
 });
 
-function today() {
-  var d=new Date();
-  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-}
 function daysUntil(venc) {
   if (!venc) return null;
   var p = venc.split('-');
@@ -193,11 +184,9 @@ window.renderAssinatura = function(user, data) {
   var venc   = data.expiracao || data.vencimento || null;
   var dias   = daysUntil(venc);
   var status = dias === null ? 'sem-data' : dias < 0 ? 'vencido' : dias <= 7 ? 'vencendo' : 'ativo';
-
   var statusTxt = {ativo:'Ativo', vencendo:'Vencendo em breve', vencido:'Vencido', 'sem-data':'Sem data'}[status];
   var diasTxt   = dias === null ? '' : dias < 0 ? 'Venceu há '+Math.abs(dias)+' dia(s)' : dias === 0 ? 'Vence hoje!' : 'Vence em '+dias+' dia(s)';
   var btnTxt    = status === 'vencido' ? '🔄 Renovar Agora' : status === 'vencendo' ? '⚡ Renovar Antes de Vencer' : '💳 Gerenciar Assinatura';
-
   document.getElementById('assinCard').innerHTML = `
     <div class="assin-header">
       <div class="assin-status">
@@ -218,10 +207,9 @@ window.renderAssinatura = function(user, data) {
           ${diasTxt ? '<div class="assin-dias">'+diasTxt+'</div>' : ''}
         </div>
       </div>
-      <button class="btn-renovar ${status === 'vencido' ? 'vencido' : status === 'vencendo' ? 'vencendo' : ''}"
+      <button class="btn-renovar ${status==='vencido'?'vencido':status==='vencendo'?'vencendo':''}"
         onclick="openModal('ovPagamento')">${btnTxt}</button>
     </div>`;
-
   window._payUid  = user.uid;
   window._payVenc = venc;
 };
@@ -235,7 +223,6 @@ window.renderAssinatura = function(user, data) {
 
 <div class="content">
 
-  <!-- PERFIL -->
   <div class="sec-label">👤 Perfil do Usuário</div>
   <div class="group">
     <div class="row">
@@ -254,15 +241,11 @@ window.renderAssinatura = function(user, data) {
     </div>
   </div>
 
-  <!-- MINHA ASSINATURA -->
   <div class="sec-label">💳 Minha Assinatura</div>
   <div class="assin-card" id="assinCard">
-    <div class="assin-body" style="padding:20px;text-align:center;color:var(--muted);font-size:13px">
-      Carregando...
-    </div>
+    <div class="assin-body" style="padding:20px;text-align:center;color:var(--muted);font-size:13px">Carregando...</div>
   </div>
 
-  <!-- APARÊNCIA -->
   <div class="sec-label">🎨 Aparência</div>
   <div class="group">
     <div class="row">
@@ -279,7 +262,6 @@ window.renderAssinatura = function(user, data) {
     </div>
   </div>
 
-  <!-- RESPOSTAS RÁPIDAS -->
   <div class="sec-label">💬 Respostas Rápidas</div>
   <div class="group">
     <div class="btn-row btn-accent" onclick="openModal('ovRespostas')">
@@ -292,7 +274,6 @@ window.renderAssinatura = function(user, data) {
     </div>
   </div>
 
-  <!-- DADOS -->
   <div class="sec-label">💾 Dados</div>
   <div class="group">
     <div class="btn-row btn-green" onclick="exportCSV()">
@@ -305,20 +286,18 @@ window.renderAssinatura = function(user, data) {
     </div>
   </div>
 
-  <!-- SUPORTE -->
   <div class="sec-label">🆘 Suporte</div>
   <div class="group">
     <div class="btn-row btn-yellow" onclick="openModal('ovSuporte')">
-      <div class="row-icon">💬</div>
+      <div class="row-icon">📧</div>
       <div class="row-body">
         <div class="row-label">Abrir Chamado</div>
-        <div class="row-sub">Relate um problema ou envie sugestão</div>
+        <div class="row-sub">Envie um e-mail para contato@streamdesk.net.br</div>
       </div>
       <div class="row-arrow">›</div>
     </div>
   </div>
 
-  <!-- SAIR -->
   <div class="sec-label">🚪 Sessão</div>
   <div class="group">
     <div class="btn-row btn-red" onclick="doLogout()">
@@ -331,7 +310,6 @@ window.renderAssinatura = function(user, data) {
     </div>
   </div>
 
-  <!-- SOBRE -->
   <div class="sec-label">📱 Sobre o App</div>
   <div class="group">
     <div class="row">
@@ -362,13 +340,10 @@ window.renderAssinatura = function(user, data) {
     <div class="mhandle"></div>
     <div class="mtitle">💳 Renovar Assinatura</div>
     <div class="msub">Escolha a forma de pagamento</div>
-
     <div class="pay-tabs">
       <div class="pay-tab active" id="tabPix" onclick="switchTab('pix')">⚡ Pix</div>
       <div class="pay-tab" id="tabCartao" onclick="switchTab('cartao')">💳 Cartão</div>
     </div>
-
-    <!-- PAINEL PIX -->
     <div class="pay-panel active" id="panelPix">
       <div class="pix-qr-wrap" id="pixQrWrap">
         <div style="color:var(--muted);font-size:13px">Clique em "Gerar Pix" para criar o QR Code</div>
@@ -380,8 +355,6 @@ window.renderAssinatura = function(user, data) {
       <button class="btn-save" id="btnGerarPix" onclick="gerarPix()">⚡ Gerar QR Code Pix</button>
       <div class="pay-msg" id="pixMsg"></div>
     </div>
-
-    <!-- PAINEL CARTÃO -->
     <div class="pay-panel" id="panelCartao">
       <div class="card-field">
         <label>Número do cartão</label>
@@ -407,7 +380,6 @@ window.renderAssinatura = function(user, data) {
         🔒 Pagamento seguro via Mercado Pago.<br>Sua assinatura renova automaticamente todo mês.
       </div>
     </div>
-
     <button class="btn-cancel" onclick="closeModal('ovPagamento')">Cancelar</button>
   </div>
 </div>
@@ -418,18 +390,9 @@ window.renderAssinatura = function(user, data) {
     <div class="mhandle"></div>
     <div class="mtitle">✏️ Respostas Rápidas</div>
     <div class="msub">Edite as mensagens enviadas pelo WhatsApp. Use <strong style="color:var(--accent)">{nome}</strong> e <strong style="color:var(--accent)">{servidor}</strong> como variáveis.</div>
-    <div class="fg">
-      <label class="fl">🟡 Vence Hoje</label>
-      <textarea class="fi fi-area" id="mHoje"></textarea>
-    </div>
-    <div class="fg">
-      <label class="fl">🟠 Vence Amanhã</label>
-      <textarea class="fi fi-area" id="mAmanha"></textarea>
-    </div>
-    <div class="fg">
-      <label class="fl">🔴 Vencido</label>
-      <textarea class="fi fi-area" id="mVencido"></textarea>
-    </div>
+    <div class="fg"><label class="fl">🟡 Vence Hoje</label><textarea class="fi fi-area" id="mHoje"></textarea></div>
+    <div class="fg"><label class="fl">🟠 Vence Amanhã</label><textarea class="fi fi-area" id="mAmanha"></textarea></div>
+    <div class="fg"><label class="fl">🔴 Vencido</label><textarea class="fi fi-area" id="mVencido"></textarea></div>
     <div style="font-size:11px;color:var(--muted);margin-bottom:16px;line-height:1.5">
       💡 <strong>{nome}</strong> = primeiro nome do cliente &nbsp;|&nbsp; <strong>{servidor}</strong> = plataforma do cliente
     </div>
@@ -438,26 +401,12 @@ window.renderAssinatura = function(user, data) {
   </div>
 </div>
 
-<!-- MODAL SENHA -->
-<div class="overlay" id="ovSenha" onclick="if(event.target===this)closeModal('ovSenha')">
-  <div class="modal">
-    <div class="mhandle"></div>
-    <div class="mtitle">🔐 Alterar Senha</div>
-    <div class="msub">Digite sua nova senha abaixo</div>
-    <div class="fg"><label class="fl">Senha Atual</label><input class="fi" id="senhaAtual" type="password" placeholder="••••••••"></div>
-    <div class="fg"><label class="fl">Nova Senha</label><input class="fi" id="senhaNova" type="password" placeholder="••••••••"></div>
-    <div class="fg"><label class="fl">Confirmar Nova Senha</label><input class="fi" id="senhaConfirm" type="password" placeholder="••••••••"></div>
-    <button class="btn-save" onclick="salvarSenha()">✓ Salvar Senha</button>
-    <button class="btn-cancel" onclick="closeModal('ovSenha')">Cancelar</button>
-  </div>
-</div>
-
 <!-- MODAL SUPORTE -->
 <div class="overlay" id="ovSuporte" onclick="if(event.target===this)closeModal('ovSuporte')">
   <div class="modal">
     <div class="mhandle"></div>
-    <div class="mtitle">💬 Abrir Chamado</div>
-    <div class="msub">Descreva seu problema ou sugestão</div>
+    <div class="mtitle">📧 Abrir Chamado</div>
+    <div class="msub">Preencha o formulário e enviaremos um e-mail para nossa equipe.</div>
     <div class="fg"><label class="fl">Assunto</label>
       <select class="fi" id="supAssunto">
         <option>🐛 Reportar um bug</option>
@@ -470,21 +419,21 @@ window.renderAssinatura = function(user, data) {
     <div class="fg"><label class="fl">Mensagem</label>
       <textarea class="fi fi-area" id="supMsg" placeholder="Descreva com detalhes..."></textarea>
     </div>
-    <div class="fg"><label class="fl">Seu E-mail (para resposta)</label>
-      <input class="fi" id="supEmail" type="email" placeholder="seu@email.com">
+    <button class="btn-save" onclick="enviarChamado()">📧 Enviar E-mail</button>
+    <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:10px">
+      contato@streamdesk.net.br
     </div>
-    <button class="btn-save" onclick="enviarChamado()">📲 Enviar via WhatsApp</button>
     <button class="btn-cancel" onclick="closeModal('ovSuporte')">Cancelar</button>
   </div>
 </div>
 
 <script>
 var CFG_KEY           = 'streamdesk_config';
-var SUPORTE_WHATSAPP  = '';
+var SUPORTE_EMAIL     = 'contato@streamdesk.net.br';
 var MP_PUBLIC_KEY     = 'APP_USR-b9e0a4a9-be59-4ebb-87b0-c3fd2f4453a2';
 var VALOR_MENSALIDADE = 9.90;
-var URL_PIX        = 'https://criarpix-vsw4hqxmxq-rj.a.run.app';
-var URL_ASSINATURA = 'https://criarassinatura-vsw4hqxmxq-rj.a.run.app';
+var URL_PIX           = 'https://criarpix-vsw4hqxmxq-rj.a.run.app';
+var URL_ASSINATURA    = 'https://criarassinatura-vsw4hqxmxq-rj.a.run.app';
 
 var DEFAULT_MSG_HOJE   = 'Olá {nome}! 👋 Seu plano IPTV ({servidor}) vence HOJE. Renove para não ficar sem sinal! 📺';
 var DEFAULT_MSG_AMANHA = 'Olá {nome}! 👋 Lembrando que seu plano IPTV ({servidor}) vence amanhã. Renove com antecedência! 😊';
@@ -542,19 +491,24 @@ function salvarRespostas() {
   localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
   closeModal('ovRespostas'); showToast();
 }
-function salvarSenha() {
-  var nova = document.getElementById('senhaNova').value;
-  var conf = document.getElementById('senhaConfirm').value;
-  if (!nova) { alert('Informe a nova senha!'); return; }
-  if (nova !== conf) { alert('As senhas não coincidem!'); return; }
-  if (nova.length < 6) { alert('Mínimo 6 caracteres!'); return; }
-  var cfg = loadConfig(); cfg.senha = btoa(nova);
-  localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
-  closeModal('ovSenha');
-  document.getElementById('senhaAtual').value = '';
-  document.getElementById('senhaNova').value  = '';
-  document.getElementById('senhaConfirm').value = '';
-  showToast();
+function enviarChamado() {
+  var msg     = document.getElementById('supMsg').value.trim();
+  var assunto = document.getElementById('supAssunto').value;
+  if (!msg) { alert('Descreva o problema!'); return; }
+  var cfg     = window._currentUser;
+  var usuario = cfg ? cfg.displayName || cfg.email : '';
+  var corpo   = 'Assunto: ' + assunto + '\n\nMensagem:\n' + msg + (usuario ? '\n\nUsuário: ' + usuario : '');
+  var url     = 'mailto:' + SUPORTE_EMAIL +
+                '?subject=' + encodeURIComponent('[StreamDesk] ' + assunto) +
+                '&body='    + encodeURIComponent(corpo);
+  window.open(url, '_blank');
+  closeModal('ovSuporte');
+  document.getElementById('supMsg').value = '';
+}
+function doLogout() {
+  if (!confirm('Deseja sair?')) return;
+  if (window._firebaseAuth) window._firebaseAuth.signOut().then(function(){ location.href='login.html'; });
+  else location.href='login.html';
 }
 function exportCSV() {
   if (!window._currentUser || !window._firebaseDB) { alert('Aguarde!'); return; }
@@ -574,19 +528,6 @@ function exportCSV() {
       a.download = 'clientes_streamdesk.csv'; a.click();
     });
   });
-}
-function enviarChamado() {
-  var msg = document.getElementById('supMsg').value.trim();
-  if (!msg) { alert('Descreva o problema!'); return; }
-  var texto = '📋 *Chamado StreamDesk*\n\n*Assunto:* '+document.getElementById('supAssunto').value+'\n*Mensagem:* '+msg;
-  var url = SUPORTE_WHATSAPP ? 'https://wa.me/'+SUPORTE_WHATSAPP+'?text='+encodeURIComponent(texto) : 'https://wa.me/?text='+encodeURIComponent(texto);
-  window.open(url,'_blank'); closeModal('ovSuporte');
-  document.getElementById('supMsg').value = '';
-}
-function doLogout() {
-  if (!confirm('Deseja sair?')) return;
-  if (window._firebaseAuth) window._firebaseAuth.signOut().then(function(){ location.href='login.html'; });
-  else location.href='login.html';
 }
 
 // ── PAGAMENTO ─────────────────────────────────────────────────────────────────
@@ -619,7 +560,6 @@ function fmtExp(el) {
   if (v.length > 2) v = v.substring(0,2)+'/'+v.substring(2);
   el.value = v;
 }
-
 window.gerarPix = async function() {
   var uid = window._payUid;
   if (!uid) { setMsg('pixMsg','Usuário não autenticado.','err'); return; }
@@ -656,7 +596,6 @@ window.gerarPix = async function() {
     btn.innerHTML = '⚡ Gerar QR Code Pix';
   }
 };
-
 window.copiarPix = function() {
   if (!_pixCodigo) return;
   navigator.clipboard.writeText(_pixCodigo).then(function() {
@@ -665,7 +604,6 @@ window.copiarPix = function() {
     setTimeout(function(){ btn.textContent = '📋 Copiar código Pix'; }, 2000);
   });
 };
-
 window.pagarCartao = async function() {
   var uid  = window._payUid;
   var num  = document.getElementById('cardNum').value.replace(/\s/g,'');
@@ -706,7 +644,6 @@ window.pagarCartao = async function() {
 
 loadPage();
 </script>
-
 <script src="https://sdk.mercadopago.com/js/v2"></script>
 </body>
 </html>
