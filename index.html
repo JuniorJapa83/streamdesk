@@ -212,27 +212,25 @@ async function checkAviso(user) {
     const data = snap.data();
     if (!data.ativo || !data.texto) return;
 
+    const avisoId = data.atualizadoEm || 'v1';
+
     // Se frequencia = 'uma', aparece só uma vez para sempre
     if (data.frequencia === 'uma') {
-      const avisoId = data.atualizadoEm || 'v1';
-      const keyUma  = 'aviso_uma_' + avisoId + '_' + user.uid;
+      const keyUma = 'aviso_uma_' + avisoId + '_' + user.uid;
       if (localStorage.getItem(keyUma)) return;
       window._avisoKeyUma = keyUma;
     }
-    // 'sempre' ou qualquer outro valor → aparece sempre que logar
+
+    // Bloqueia repetição na mesma sessão (navegação entre páginas)
+    const keySessao = 'aviso_sessao_' + avisoId + '_' + user.uid;
+    if (sessionStorage.getItem(keySessao)) return;
+    sessionStorage.setItem(keySessao, '1');
 
     window._avisoFreq = data.frequencia || 'sempre';
     document.getElementById('avisoBoxBody').textContent = data.texto;
     document.getElementById('avisoOverlay').classList.add('show');
   } catch(e) { console.error('Aviso erro:', e); }
 }
-
-window.fecharAviso = function() {
-  document.getElementById('avisoOverlay').classList.remove('show');
-  if (window._avisoFreq === 'uma' && window._avisoKeyUma) {
-    localStorage.setItem(window._avisoKeyUma, '1');
-  }
-};
 
 // ── HELPERS ───────────────────────────────────────────────────────────────────
 function today() {
