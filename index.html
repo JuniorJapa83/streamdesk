@@ -229,6 +229,12 @@ async function checkAviso(user) {
     window._avisoFreq = data.frequencia || 'sempre';
     document.getElementById('avisoBoxBody').textContent = data.texto;
     document.getElementById('avisoOverlay').classList.add('show');
+    document.getElementById('avisoBoxBtn').onclick = function() {
+  document.getElementById('avisoOverlay').classList.remove('show');
+  if (window._avisoFreq === 'uma' && window._avisoKeyUma) {
+    localStorage.setItem(window._avisoKeyUma, '1');
+  }
+};
   } catch(e) { console.error('Aviso erro:', e); }
 }
 
