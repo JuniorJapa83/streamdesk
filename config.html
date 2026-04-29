@@ -120,14 +120,12 @@
   .pay-panel{display:none}
   .pay-panel.active{display:block}
 
-  /* PIX */
   .pix-qr-wrap{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center;margin-bottom:16px;min-height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
   .pix-qr-img{width:160px;height:160px;border-radius:8px;background:#fff;padding:4px}
   .pix-copy-btn{width:100%;background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.2);color:var(--accent);border-radius:10px;padding:12px;font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
   .pix-copy-btn:active{transform:scale(.97)}
   .pix-timer{font-size:12px;color:var(--muted);text-align:center;margin-top:8px}
 
-  /* CARTÃO */
   .card-field{margin-bottom:12px}
   .card-field label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;display:block}
   .card-field input{width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border .2s}
@@ -166,7 +164,6 @@ onAuthStateChanged(_auth, async function(user) {
   document.getElementById('cfgEmail').style.color = 'var(--muted)';
   window._currentUser = user;
 
-  // Carrega dados da assinatura do gerente
   try {
     const snap = await getDoc(doc(_db, 'usuarios', user.uid));
     const data = snap.exists() ? snap.data() : {};
@@ -181,8 +178,10 @@ function today() {
 }
 function daysUntil(venc) {
   if (!venc) return null;
-  var diff = (new Date(venc) - new Date(today())) / 86400000;
-  return Math.round(diff);
+  var p = venc.split('-');
+  var vd = new Date(p[0], p[1]-1, p[2]);
+  var td = new Date(); td.setHours(0,0,0,0);
+  return Math.round((vd - td) / 86400000);
 }
 function formatDate(d) {
   if (!d) return '—';
@@ -223,7 +222,6 @@ window.renderAssinatura = function(user, data) {
         onclick="openModal('ovPagamento')">${btnTxt}</button>
     </div>`;
 
-  // Salva uid+venc para o modal de pagamento
   window._payUid  = user.uid;
   window._payVenc = venc;
 };
@@ -403,7 +401,7 @@ window.renderAssinatura = function(user, data) {
           <input type="tel" id="cardCvv" placeholder="123" maxlength="4">
         </div>
       </div>
-      <button class="btn-save" id="btnCartao" onclick="pagarCartao()">💳 Assinar — R$ 29,90/mês</button>
+      <button class="btn-save" id="btnCartao" onclick="pagarCartao()">💳 Assinar — R$ 9,90/mês</button>
       <div class="pay-msg" id="cartaoMsg"></div>
       <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:12px;line-height:1.5">
         🔒 Pagamento seguro via Mercado Pago.<br>Sua assinatura renova automaticamente todo mês.
@@ -481,10 +479,11 @@ window.renderAssinatura = function(user, data) {
 </div>
 
 <script>
-var CFG_KEY      = 'streamdesk_config';
-var SUPORTE_WHATSAPP = '';
-var MP_PUBLIC_KEY    = 'APP_USR-b9e0a4a9-be59-4ebb-87b0-c3fd2f4453a2';
-var VALOR_MENSALIDADE = 9.90; // altere aqui o valor da mensalidade
+var CFG_KEY           = 'streamdesk_config';
+var SUPORTE_WHATSAPP  = '';
+var MP_PUBLIC_KEY     = 'APP_USR-b9e0a4a9-be59-4ebb-87b0-c3fd2f4453a2';
+var VALOR_MENSALIDADE = 9.90;
+var WEBHOOK_URL       = 'https://southamerica-east1-streamdesk-5350d.cloudfunctions.net';
 
 var DEFAULT_MSG_HOJE   = 'Olá {nome}! 👋 Seu plano IPTV ({servidor}) vence HOJE. Renove para não ficar sem sinal! 📺';
 var DEFAULT_MSG_AMANHA = 'Olá {nome}! 👋 Lembrando que seu plano IPTV ({servidor}) vence amanhã. Renove com antecedência! 😊';
@@ -578,7 +577,6 @@ function exportCSV() {
 function enviarChamado() {
   var msg = document.getElementById('supMsg').value.trim();
   if (!msg) { alert('Descreva o problema!'); return; }
-  var cfg = loadConfig();
   var texto = '📋 *Chamado StreamDesk*\n\n*Assunto:* '+document.getElementById('supAssunto').value+'\n*Mensagem:* '+msg;
   var url = SUPORTE_WHATSAPP ? 'https://wa.me/'+SUPORTE_WHATSAPP+'?text='+encodeURIComponent(texto) : 'https://wa.me/?text='+encodeURIComponent(texto);
   window.open(url,'_blank'); closeModal('ovSuporte');
@@ -590,31 +588,27 @@ function doLogout() {
   else location.href='login.html';
 }
 
-// ── PAGAMENTO ────────────────────────────────────────────────────────────────
+// ── PAGAMENTO ─────────────────────────────────────────────────────────────────
 function switchTab(tab) {
   document.getElementById('tabPix').classList.toggle('active', tab==='pix');
   document.getElementById('tabCartao').classList.toggle('active', tab==='cartao');
   document.getElementById('panelPix').classList.toggle('active', tab==='pix');
   document.getElementById('panelCartao').classList.toggle('active', tab==='cartao');
 }
-
 function resetPagamento() {
   switchTab('pix');
   document.getElementById('pixQrWrap').innerHTML = '<div style="color:var(--muted);font-size:13px">Clique em "Gerar Pix" para criar o QR Code</div>';
   document.getElementById('pixCopyArea').style.display = 'none';
   document.getElementById('btnGerarPix').disabled = false;
   document.getElementById('btnGerarPix').innerHTML = '⚡ Gerar QR Code Pix';
-  setMsg('pixMsg', '', '');
-  setMsg('cartaoMsg', '', '');
+  setMsg('pixMsg','',''); setMsg('cartaoMsg','','');
   _pixCodigo = '';
   if (_pixTimer) clearInterval(_pixTimer);
 }
-
 function setMsg(id, txt, tipo) {
   var el = document.getElementById(id);
-  el.textContent = txt; el.className = 'pay-msg' + (tipo ? ' '+tipo : ''); el.style.display = txt ? 'block' : 'none';
+  el.textContent = txt; el.className = 'pay-msg'+(tipo?' '+tipo:''); el.style.display = txt?'block':'none';
 }
-
 function fmtCard(el) {
   var v = el.value.replace(/\D/g,'').substring(0,16);
   el.value = v.replace(/(.{4})/g,'$1 ').trim();
@@ -625,42 +619,28 @@ function fmtExp(el) {
   el.value = v;
 }
 
-// Gera Pix via backend (Mercado Pago Payments API)
 window.gerarPix = async function() {
   var uid = window._payUid;
   if (!uid) { setMsg('pixMsg','Usuário não autenticado.','err'); return; }
-
   var btn = document.getElementById('btnGerarPix');
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span>Gerando...';
   setMsg('pixMsg','','');
-
   try {
-    var resp = await fetch('https://webhookmp-vsw4hqxmxq-rj.a.run.app/criarPix', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({
-        uid: uid,
-        valor: VALOR_MENSALIDADE,
-        descricao: 'StreamDesk — Assinatura Mensal'
-      })
+    var resp = await fetch(WEBHOOK_URL+'/criarPix', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ uid, valor: VALOR_MENSALIDADE, descricao: 'StreamDesk — Assinatura Mensal' })
     });
     var data = await resp.json();
     if (!resp.ok || !data.qr_code) throw new Error(data.error || 'Erro ao gerar Pix');
-
     _pixCodigo = data.qr_code;
-
-    // Exibe QR Code
     var qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=160x160&data='+encodeURIComponent(_pixCodigo);
     document.getElementById('pixQrWrap').innerHTML =
       '<img class="pix-qr-img" src="'+qrUrl+'" alt="QR Code Pix">'+
       '<div style="font-size:12px;color:var(--muted)">Escaneie com seu banco</div>';
-
     document.getElementById('pixCopyArea').style.display = 'block';
     btn.innerHTML = '🔄 Gerar novo QR Code';
     btn.disabled  = false;
-
-    // Timer de 30 minutos
     var expira = Date.now() + 30*60*1000;
     if (_pixTimer) clearInterval(_pixTimer);
     _pixTimer = setInterval(function() {
@@ -669,7 +649,6 @@ window.gerarPix = async function() {
       document.getElementById('pixTimer').textContent = 'Expira em '+m+'m '+String(s).padStart(2,'0')+'s';
       if (resto === 0) clearInterval(_pixTimer);
     }, 1000);
-
   } catch(e) {
     setMsg('pixMsg', e.message || 'Erro ao gerar Pix. Tente novamente.', 'err');
     btn.disabled = false;
@@ -686,68 +665,47 @@ window.copiarPix = function() {
   });
 };
 
-// Pagamento com cartão via Mercado Pago SDK
 window.pagarCartao = async function() {
   var uid  = window._payUid;
   var num  = document.getElementById('cardNum').value.replace(/\s/g,'');
   var name = document.getElementById('cardName').value.trim().toUpperCase();
   var exp  = document.getElementById('cardExp').value;
   var cvv  = document.getElementById('cardCvv').value;
-
-  if (!uid)              { setMsg('cartaoMsg','Usuário não autenticado.','err'); return; }
-  if (num.length < 16)   { setMsg('cartaoMsg','Número do cartão inválido.','err'); return; }
-  if (!name)             { setMsg('cartaoMsg','Informe o nome do cartão.','err'); return; }
-  if (exp.length < 5)    { setMsg('cartaoMsg','Validade inválida.','err'); return; }
-  if (cvv.length < 3)    { setMsg('cartaoMsg','CVV inválido.','err'); return; }
-
+  if (!uid)            { setMsg('cartaoMsg','Usuário não autenticado.','err'); return; }
+  if (num.length < 16) { setMsg('cartaoMsg','Número do cartão inválido.','err'); return; }
+  if (!name)           { setMsg('cartaoMsg','Informe o nome do cartão.','err'); return; }
+  if (exp.length < 5)  { setMsg('cartaoMsg','Validade inválida.','err'); return; }
+  if (cvv.length < 3)  { setMsg('cartaoMsg','CVV inválido.','err'); return; }
   var btn = document.getElementById('btnCartao');
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span>Processando...';
   setMsg('cartaoMsg','','');
-
   try {
-    var partes  = exp.split('/');
-    var mesExp  = partes[0];
-    var anoExp  = '20'+partes[1];
-
-    // Tokeniza o cartão via Mercado Pago SDK
-    var mp = new MercadoPago(MP_PUBLIC_KEY, {locale:'pt-BR'});
-    var token = await mp.createCardToken({
-      cardNumber:      num,
-      cardholderName:  name,
-      cardExpirationMonth: mesExp,
-      cardExpirationYear:  anoExp,
-      securityCode:    cvv
+    var partes = exp.split('/');
+    var mp     = new MercadoPago(MP_PUBLIC_KEY, {locale:'pt-BR'});
+    var token  = await mp.createCardToken({
+      cardNumber: num, cardholderName: name,
+      cardExpirationMonth: partes[0], cardExpirationYear: '20'+partes[1],
+      securityCode: cvv
     });
-
-    // Envia token para o backend criar a assinatura
-    var resp = await fetch('https://webhookmp-vsw4hqxmxq-rj.a.run.app/criarAssinatura', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({
-        uid:   uid,
-        token: token.id,
-        email: window._currentUser ? window._currentUser.email : '',
-        valor: VALOR_MENSALIDADE
-      })
+    var resp = await fetch(WEBHOOK_URL+'/criarAssinatura', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ uid, token: token.id, email: window._currentUser?.email||'', valor: VALOR_MENSALIDADE })
     });
     var data = await resp.json();
     if (!resp.ok) throw new Error(data.error || 'Erro ao criar assinatura');
-
     setMsg('cartaoMsg','✅ Assinatura ativada com sucesso! Seu acesso foi renovado.','ok');
     btn.innerHTML = '✅ Assinatura ativa';
-
   } catch(e) {
     setMsg('cartaoMsg', e.message || 'Erro ao processar. Verifique os dados.', 'err');
     btn.disabled = false;
-    btn.innerHTML = '💳 Assinar — R$ '+VALOR_MENSALIDADE.toFixed(2).replace('.',',')+'/mês';
+    btn.innerHTML = '💳 Assinar — R$ 9,90/mês';
   }
 };
 
 loadPage();
 </script>
 
-<!-- SDK Mercado Pago (carregado só quando necessário) -->
 <script src="https://sdk.mercadopago.com/js/v2"></script>
 </body>
 </html>
