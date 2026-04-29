@@ -507,8 +507,11 @@ function enviarChamado() {
 }
 function doLogout() {
   if (!confirm('Deseja sair?')) return;
-  if (window._firebaseAuth) window._firebaseAuth.signOut().then(function(){ location.href='login.html'; });
-  else location.href='login.html';
+  if (window._firebaseAuth) window._firebaseAuth.signOut().then(function(){ 
+    sessionStorage.clear();
+    location.href='login.html'; 
+  });
+  else { sessionStorage.clear(); location.href='login.html'; }
 }
 function exportCSV() {
   if (!window._currentUser || !window._firebaseDB) { alert('Aguarde!'); return; }
