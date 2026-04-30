@@ -699,5 +699,10 @@ window.pagarCartao = async function() {
 loadPage();
 </script>
 <script src="https://sdk.mercadopago.com/js/v2"></script>
+  <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js');
+  }
+</script>
 </body>
 </html>
