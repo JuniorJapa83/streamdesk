@@ -398,20 +398,117 @@
 .loading-skeleton { display: flex; flex-direction: column; gap: 10px; padding: 4px 0; animation: fadeIn .3s ease; }
 .sk-card { height: 82px; border-radius: 18px; }
 
-/* ── Seção de Arquivados ── */
-.archive-toggle-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 28px;
-  margin-bottom: 10px;
-  cursor: pointer;
-  padding: 12px 16px;
+/* ── MODAL DE ARQUIVAMENTO ── */
+.archive-modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.55);
+  backdrop-filter: blur(6px);
+  z-index: 600;
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+  opacity: 0; pointer-events: none;
+  transition: opacity .25s;
+}
+.archive-modal-overlay.open { opacity: 1; pointer-events: all; }
+.archive-modal-box {
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 14px;
-  box-shadow: var(--shadow-sm);
-  transition: all .2s;
+  border-radius: 22px;
+  padding: 24px 22px 20px;
+  width: 100%; max-width: 380px;
+  transform: scale(.96) translateY(8px);
+  transition: transform .25s cubic-bezier(.32,.72,0,1);
+  box-shadow: var(--shadow-lg);
+}
+.archive-modal-overlay.open .archive-modal-box { transform: scale(1) translateY(0); }
+
+.am-icon-wrap {
+  width: 52px; height: 52px; border-radius: 16px;
+  background: rgba(148,163,184,.1);
+  border: 1px solid var(--border2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; margin: 0 auto 16px;
+}
+.am-title { font-size: 18px; font-weight: 800; color: var(--text); text-align: center; margin-bottom: 8px; }
+.am-desc  { font-size: 13px; color: var(--muted2); text-align: center; line-height: 1.55; margin-bottom: 20px; }
+.am-client-preview {
+  background: var(--card2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 18px;
+}
+.am-client-avatar {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: rgba(148,163,184,.15);
+  border: 1px solid var(--border2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 800; color: var(--muted2);
+  flex-shrink: 0;
+}
+.am-client-name { font-size: 14px; font-weight: 700; color: var(--text); }
+.am-client-meta { font-size: 11px; color: var(--muted2); margin-top: 2px; }
+
+.am-motivo-group { margin-bottom: 16px; }
+.am-motivo-label {
+  font-size: 11px; font-weight: 700; color: var(--muted2);
+  text-transform: uppercase; letter-spacing: .6px;
+  margin-bottom: 8px; display: block;
+}
+/* chips de motivo */
+.am-motivo-chips { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 10px; }
+.am-chip {
+  padding: 6px 13px; border-radius: 50px;
+  font-size: 12px; font-weight: 600;
+  background: var(--card2); border: 1px solid var(--border);
+  color: var(--muted2); cursor: pointer;
+  transition: all .15s; font-family: var(--font);
+}
+.am-chip.selected {
+  background: var(--accent-bg); border-color: var(--accent-border);
+  color: var(--accent); font-weight: 700;
+}
+.am-chip:active { transform: scale(.95); }
+.am-motivo-input {
+  width: 100%;
+  background: var(--card2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 10px 13px;
+  color: var(--text); font-size: 13px;
+  outline: none; transition: border .2s;
+  font-family: var(--font);
+  display: none; /* mostrado ao selecionar "Outro" */
+}
+.am-motivo-input.visible { display: block; }
+.am-motivo-input:focus { border-color: var(--accent); }
+.am-motivo-input::placeholder { color: var(--muted); }
+
+.am-actions { display: flex; gap: 8px; }
+.am-btn-cancel {
+  flex: 1; background: var(--card2); border: 1px solid var(--border);
+  border-radius: 12px; padding: 13px;
+  font-size: 14px; font-weight: 600; color: var(--muted2);
+  cursor: pointer; transition: all .15s; font-family: var(--font);
+}
+.am-btn-cancel:active { transform: scale(.97); }
+.am-btn-confirm {
+  flex: 2; background: var(--text); color: var(--card);
+  border: none; border-radius: 12px; padding: 13px;
+  font-size: 14px; font-weight: 800;
+  cursor: pointer; transition: all .15s; font-family: var(--font);
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+}
+.am-btn-confirm:hover { opacity: .88; }
+.am-btn-confirm:active { transform: scale(.97); }
+.am-btn-confirm:disabled { opacity: .4; cursor: not-allowed; }
+
+/* ── Seção de Arquivados — visual neutro/CRM ── */
+.archive-toggle-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 28px; margin-bottom: 10px; cursor: pointer;
+  padding: 13px 16px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 14px; box-shadow: var(--shadow-sm); transition: all .2s;
 }
 .archive-toggle-row:active { transform: scale(.98); }
 .archive-toggle-left { display: flex; align-items: center; gap: 10px; }
@@ -423,13 +520,10 @@
 .archive-toggle-title { font-size: 14px; font-weight: 700; color: var(--text2); }
 .archive-toggle-sub   { font-size: 11px; color: var(--muted2); margin-top: 2px; }
 .archive-toggle-badge {
-  background: rgba(148,163,184,.12);
-  color: var(--muted2);
-  border: 1px solid var(--border2);
-  border-radius: 50px; padding: 3px 10px;
-  font-size: 11px; font-weight: 700;
-  flex-shrink: 0;
-  margin-right: 8px;
+  background: rgba(148,163,184,.12); color: var(--muted2);
+  border: 1px solid var(--border2); border-radius: 50px;
+  padding: 3px 10px; font-size: 11px; font-weight: 700;
+  flex-shrink: 0; margin-right: 8px;
 }
 .archive-chevron { color: var(--muted); font-size: 18px; transition: transform .3s; flex-shrink: 0; }
 .archive-chevron.open { transform: rotate(90deg); }
@@ -437,48 +531,72 @@
 .archived-list { display: none; margin-top: 8px; }
 .archived-list.visible { display: block; }
 
+/* Card arquivado — neutro, sem vermelho */
 .archived-card {
   background: var(--card);
   border: 1px solid var(--border);
-  border-left: 3px solid var(--border2);
   border-radius: 14px;
-  padding: 14px 16px;
+  padding: 0;
   margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  opacity: .85;
+  overflow: hidden;
   box-shadow: var(--shadow-sm);
   transition: all .2s;
   animation: fadeUp .3s ease both;
 }
-.archived-card:hover { opacity: 1; }
+.arc-card-inner {
+  display: flex; align-items: flex-start; gap: 11px;
+  padding: 13px 14px 11px;
+}
 .arc-avatar {
   width: 38px; height: 38px; border-radius: 11px;
-  background: rgba(148,163,184,.1);
+  background: rgba(148,163,184,.12);
   border: 1px solid var(--border2);
   display: flex; align-items: center; justify-content: center;
-  font-size: 13px; font-weight: 800; color: var(--muted2);
-  flex-shrink: 0;
+  font-size: 13px; font-weight: 800; color: var(--muted2); flex-shrink: 0;
 }
 .arc-body { flex: 1; min-width: 0; }
-.arc-name  { font-size: 14px; font-weight: 600; color: var(--text2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.arc-meta  { font-size: 11px; color: var(--muted2); margin-top: 3px; }
-.arc-actions { display: flex; gap: 6px; flex-shrink: 0; }
-.arc-btn {
-  border: none; border-radius: 8px; padding: 7px 10px;
-  font-size: 12px; font-weight: 700; cursor: pointer;
-  transition: all .2s; font-family: var(--font); white-space: nowrap;
+.arc-name {
+  font-size: 14px; font-weight: 700; color: var(--text2);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-.arc-btn:active { transform: scale(.93); }
-.arc-btn-restore { background: var(--green-bg);  color: var(--green);  border: 1px solid var(--green-border);  }
-.arc-btn-delete  { background: var(--red-bg);    color: var(--red);    border: 1px solid var(--red-border);    }
+.arc-status-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: rgba(148,163,184,.1); border: 1px solid var(--border2);
+  color: var(--muted2); border-radius: 50px;
+  padding: 2px 8px; font-size: 10px; font-weight: 700;
+  margin-top: 3px; margin-bottom: 5px;
+  text-transform: uppercase; letter-spacing: .4px;
+}
+.arc-info-row {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  font-size: 11px; color: var(--muted2);
+}
+.arc-info-item { display: flex; align-items: center; gap: 3px; }
+.arc-motivo-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: var(--yellow-bg); border: 1px solid var(--yellow-border);
+  color: var(--yellow); border-radius: 6px;
+  padding: 2px 7px; font-size: 10px; font-weight: 700;
+  margin-top: 5px;
+}
+.arc-footer {
+  border-top: 1px solid var(--border);
+  display: flex;
+}
+.arc-action-btn {
+  flex: 1; padding: 10px 8px; border: none; background: none;
+  font-size: 12px; font-weight: 700; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+  transition: all .15s; font-family: var(--font);
+}
+.arc-action-btn:active { opacity: .6; }
+.arc-action-btn.restore { color: var(--green); }
+.arc-action-btn.del     { color: var(--red); border-left: 1px solid var(--border); }
 
 .archived-empty {
   text-align: center; padding: 24px 16px;
   color: var(--muted2); font-size: 13px;
-  background: var(--card2); border: 1px dashed var(--border2);
-  border-radius: 12px;
+  background: var(--card2); border: 1px dashed var(--border2); border-radius: 12px;
 }
 
 /* Tema força */
@@ -796,6 +914,45 @@ body.dark { background: #080b12 !important; }
       <span id="waProgress" style="font-size:12px;color:var(--muted2)"></span>
     </div>
     <button class="cancel-btn" onclick="CL.waClose()">Fechar</button>
+  </div>
+</div>
+
+<!-- ══ MODAL: ARQUIVAR CLIENTE ══ -->
+<div class="archive-modal-overlay" id="archiveModalOverlay" onclick="if(event.target===this)CL.closeArchiveModal()">
+  <div class="archive-modal-box">
+    <div class="am-icon-wrap">🗂️</div>
+    <div class="am-title">Arquivar cliente?</div>
+    <div class="am-desc">Este cliente será removido da lista principal e das estatísticas, mas poderá ser restaurado a qualquer momento.</div>
+
+    <!-- Preview do cliente -->
+    <div class="am-client-preview">
+      <div class="am-client-avatar" id="amAvatar">?</div>
+      <div>
+        <div class="am-client-name" id="amNome">—</div>
+        <div class="am-client-meta" id="amMeta">—</div>
+      </div>
+    </div>
+
+    <!-- Motivo (opcional) -->
+    <div class="am-motivo-group">
+      <label class="am-motivo-label">Motivo (opcional)</label>
+      <div class="am-motivo-chips">
+        <button class="am-chip" data-motivo="Cancelou o plano"    onclick="CL.selectMotivo(this)">Cancelou</button>
+        <button class="am-chip" data-motivo="Inadimplente"        onclick="CL.selectMotivo(this)">Inadimplente</button>
+        <button class="am-chip" data-motivo="Trocou de provedor"  onclick="CL.selectMotivo(this)">Trocou provedor</button>
+        <button class="am-chip" data-motivo="Sem retorno"         onclick="CL.selectMotivo(this)">Sem retorno</button>
+        <button class="am-chip" data-motivo="outro"               onclick="CL.selectMotivo(this)">Outro…</button>
+      </div>
+      <input class="am-motivo-input" id="amMotivoInput" placeholder="Descreva o motivo..." maxlength="120">
+    </div>
+
+    <input type="hidden" id="amClienteId">
+    <div class="am-actions">
+      <button class="am-btn-cancel"  onclick="CL.closeArchiveModal()">Cancelar</button>
+      <button class="am-btn-confirm" id="amConfirmBtn" onclick="CL.confirmArchive()">
+        🗂️ Arquivar cliente
+      </button>
+    </div>
   </div>
 </div>
 
@@ -1458,39 +1615,141 @@ function waClose() {
 }
 
 // ──────────────────────────────────────────────────────────────
-// ARQUIVAMENTO
+// ARQUIVAMENTO — modal customizado + dados enriquecidos
 // ──────────────────────────────────────────────────────────────
 
+/** Motivo selecionado no modal (estado local) */
+let _archiveMotivoSelecionado = '';
+
 /**
- * Arquiva um cliente vencido.
- * Pede confirmação, salva arquivado=true no Firestore,
- * remove da lista principal e recarrega.
+ * Abre o modal de arquivamento para um cliente vencido.
+ * Substitui o confirm() nativo por modal premium.
  */
-async function arquivarCliente(id) {
+function arquivarCliente(id) {
   const c = S.clientes.find(c => c.id === id);
   if (!c) return;
-  if (!confirm(`Arquivar "${c.nome}"?\n\nEle sairá da lista principal e das estatísticas, mas poderá ser restaurado a qualquer momento.`)) return;
+
+  // Reseta estado do modal
+  _archiveMotivoSelecionado = '';
+  document.querySelectorAll('.am-chip').forEach(ch => ch.classList.remove('selected'));
+  document.getElementById('amMotivoInput').value = '';
+  document.getElementById('amMotivoInput').classList.remove('visible');
+
+  // Preenche preview do cliente
+  document.getElementById('amClienteId').value    = id;
+  document.getElementById('amAvatar').textContent = initials(c.nome);
+  document.getElementById('amNome').textContent   = `${c.pais || ''} ${c.nome}`.trim();
+  document.getElementById('amMeta').textContent   =
+    `${c.plataforma} · ${SD.fmtBRL(parseFloat(c.plano) || 0)} · Venceu em ${SD.formatDate(c.vencimento)}`;
+
+  document.getElementById('archiveModalOverlay').classList.add('open');
+}
+
+/** Seleciona um chip de motivo */
+function selectMotivo(chip) {
+  document.querySelectorAll('.am-chip').forEach(ch => ch.classList.remove('selected'));
+  chip.classList.add('selected');
+  _archiveMotivoSelecionado = chip.dataset.motivo;
+
+  const input = document.getElementById('amMotivoInput');
+  if (_archiveMotivoSelecionado === 'outro') {
+    input.classList.add('visible');
+    input.focus();
+    _archiveMotivoSelecionado = ''; // será preenchido pelo input
+  } else {
+    input.classList.remove('visible');
+    input.value = '';
+  }
+}
+
+/** Fecha o modal de arquivamento */
+function closeArchiveModal() {
+  document.getElementById('archiveModalOverlay').classList.remove('open');
+}
+
+/**
+ * Confirma o arquivamento:
+ * - Salva arquivado=true + dataArquivado + motivoArquivado no Firestore
+ * - Atualiza S.clientes e S.arquivados localmente (SEM loadData)
+ * - Chama renderAll() + renderArchivedSection()
+ */
+async function confirmArchive() {
+  const id  = document.getElementById('amClienteId').value;
+  const c   = S.clientes.find(c => c.id === id);
+  if (!c) return;
+
+  // Motivo: chip selecionado ou campo livre
+  const motivoInput = document.getElementById('amMotivoInput').value.trim();
+  const motivo = motivoInput || _archiveMotivoSelecionado || '';
+
+  const btn = document.getElementById('amConfirmBtn');
+  btn.disabled = true;
+  btn.textContent = 'Arquivando...';
 
   try {
-    await SD.arquivarCliente(S.user.uid, id);
+    // 1. Dados enriquecidos salvos no Firestore
+    const arquivadoData = {
+      arquivado:       true,
+      dataArquivado:   new Date().toISOString(),   // ISO para precisão e ordenação
+      motivoArquivado: motivo,
+    };
+    await setDoc(doc(SD.db, 'usuarios', S.user.uid, 'clientes', id), arquivadoData, { merge: true });
+
+    // 2. Atualiza estado LOCAL (sem reload completo)
+    const clienteAtualizado = { ...c, ...arquivadoData };
+    S.clientes   = S.clientes.filter(cl => cl.id !== id);   // remove da lista ativa
+    S.arquivados = [clienteAtualizado, ...S.arquivados];     // adiciona no topo dos arquivados
+
     if (S.openCardId === id) S.openCardId = null;
+
+    closeArchiveModal();
     toast('🗂️ Cliente arquivado com sucesso.');
-    await loadData();
+
+    // 3. Re-renderiza apenas o necessário
+    renderAll();
+    renderArchivedSection();
+
   } catch (e) {
     console.error('Erro ao arquivar:', e);
     toast('❌ Erro ao arquivar. Tente novamente.');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '🗂️ Arquivar cliente';
   }
 }
 
 /**
- * Restaura um cliente arquivado: arquivado = false.
- * Ele volta para a lista principal imediatamente.
+ * Restaura um cliente arquivado.
+ * - Remove campos de arquivamento no Firestore
+ * - Atualiza estado local sem reload
  */
 async function restaurarCliente(id) {
+  const c = S.arquivados.find(c => c.id === id);
+  if (!c) return;
+
   try {
-    await SD.restaurarCliente(S.user.uid, id);
+    // Remove flags de arquivamento mantendo o restante do documento
+    await setDoc(
+      doc(SD.db, 'usuarios', S.user.uid, 'clientes', id),
+      { arquivado: false, dataArquivado: null, motivoArquivado: null },
+      { merge: true }
+    );
+
+    // Atualiza estado local
+    const clienteRestaurado = {
+      ...c,
+      arquivado: false,
+      dataArquivado: null,
+      motivoArquivado: null,
+    };
+    S.arquivados = S.arquivados.filter(cl => cl.id !== id);
+    S.clientes   = [...S.clientes, clienteRestaurado]
+      .sort((a, b) => (a.vencimento || '').localeCompare(b.vencimento || ''));
+
     toast('♻️ Cliente restaurado com sucesso!');
-    await loadData();
+    renderAll();
+    renderArchivedSection();
+
   } catch (e) {
     console.error('Erro ao restaurar:', e);
     toast('❌ Erro ao restaurar. Tente novamente.');
@@ -1499,32 +1758,48 @@ async function restaurarCliente(id) {
 
 /**
  * Exclui permanentemente um cliente arquivado.
- * Ação irreversível — pede confirmação dupla.
+ * Usa modal de confirmação nativo apenas aqui (ação destrutiva irreversível).
  */
 async function deletarArquivado(id) {
   const c = S.arquivados.find(c => c.id === id);
   if (!c) return;
-  if (!confirm(`Excluir permanentemente "${c.nome}"?\n\nEsta ação não pode ser desfeita.`)) return;
+  if (!confirm(`Excluir permanentemente "${c.nome}"?\n\nEsta ação NÃO pode ser desfeita.`)) return;
+
   try {
     await deleteDoc(doc(SD.db, 'usuarios', S.user.uid, 'clientes', id));
+    S.arquivados = S.arquivados.filter(cl => cl.id !== id);
     toast('🗑️ Cliente excluído permanentemente.');
-    await loadData();
+    renderArchivedSection();
+    // Atualiza badge se a seção ficar vazia
+    if (!S.arquivados.length) {
+      document.getElementById('archivedSection').style.display = 'none';
+    }
   } catch (e) {
     console.error('Erro ao excluir:', e);
     toast('❌ Erro ao excluir. Tente novamente.');
   }
 }
 
+// ── Helper: tempo relativo desde arquivamento ─────────────────
+function tempoDesdeArquivado(isoString) {
+  if (!isoString) return null;
+  const dias = Math.round((Date.now() - new Date(isoString).getTime()) / 86_400_000);
+  if (dias === 0) return 'hoje';
+  if (dias === 1) return 'há 1 dia';
+  if (dias < 30)  return `há ${dias} dias`;
+  const meses = Math.round(dias / 30);
+  return `há ${meses} ${meses === 1 ? 'mês' : 'meses'}`;
+}
+
 /**
  * Renderiza a seção de clientes arquivados.
- * Fica colapsada por padrão; expande ao clicar no header.
+ * Visual neutro/CRM — sem vermelho, com dados enriquecidos.
  */
 function renderArchivedSection() {
   const section = document.getElementById('archivedSection');
   const badge   = document.getElementById('archivedBadge');
   const list    = document.getElementById('archivedList');
 
-  // Mostra seção somente se houver arquivados
   if (!S.arquivados.length) {
     section.style.display = 'none';
     return;
@@ -1537,32 +1812,38 @@ function renderArchivedSection() {
     list.classList.remove('visible');
     return;
   }
-
   list.classList.add('visible');
 
-  if (!S.arquivados.length) {
-    list.innerHTML = '<div class="archived-empty">📭 Nenhum cliente arquivado.</div>';
-    return;
-  }
-
   list.innerHTML = S.arquivados.map((c, i) => {
-    const ini  = initials(c.nome);
-    const diff = SD.daysFrom(c.vencimento);
-    const atraso = diff < 0 ? `${Math.abs(diff)}d em atraso` : 'Vencido';
+    const ini    = initials(c.nome);
+    const tempo  = tempoDesdeArquivado(c.dataArquivado);
+    const motivo = c.motivoArquivado || '';
+
     return `
-    <div class="archived-card" style="animation-delay:${i*.04}s">
-      <div class="arc-avatar">${ini}</div>
-      <div class="arc-body">
-        <div class="arc-name">${c.pais || ''} ${c.nome}</div>
-        <div class="arc-meta">
-          📡 ${c.plataforma || '—'} &nbsp;·&nbsp; 📅 ${SD.formatDate(c.vencimento)} &nbsp;·&nbsp;
-          <span style="color:var(--red)">${atraso}</span>
-          &nbsp;·&nbsp; 💰 ${SD.fmtBRL(parseFloat(c.plano) || 0)}
+    <div class="archived-card" style="animation-delay:${i * .04}s">
+      <div class="arc-card-inner">
+        <div class="arc-avatar">${ini}</div>
+        <div class="arc-body">
+          <div class="arc-name">${c.pais || ''} ${c.nome}</div>
+          <div class="arc-status-tag">
+            <span>📦</span> Cliente inativo
+            ${tempo ? `<span style="opacity:.7">· ${tempo}</span>` : ''}
+          </div>
+          <div class="arc-info-row">
+            <span class="arc-info-item">📡 ${c.plataforma || '—'}</span>
+            <span class="arc-info-item">💰 ${SD.fmtBRL(parseFloat(c.plano) || 0)}</span>
+            <span class="arc-info-item">📅 ${SD.formatDate(c.vencimento)}</span>
+          </div>
+          ${motivo ? `<div class="arc-motivo-tag">💬 ${motivo}</div>` : ''}
         </div>
       </div>
-      <div class="arc-actions">
-        <button class="arc-btn arc-btn-restore" onclick="CL.restaurarCliente('${c.id}')">♻️ Restaurar</button>
-        <button class="arc-btn arc-btn-delete"  onclick="CL.deletarArquivado('${c.id}')">🗑️</button>
+      <div class="arc-footer">
+        <button class="arc-action-btn restore" onclick="CL.restaurarCliente('${c.id}')">
+          ♻️ Restaurar cliente
+        </button>
+        <button class="arc-action-btn del" onclick="CL.deletarArquivado('${c.id}')">
+          🗑️ Excluir
+        </button>
       </div>
     </div>`;
   }).join('');
@@ -1587,7 +1868,8 @@ window.CL = {
   openCobrar, closeCobrar, cobrarToggleItem, cobrarToggleAll, cobrarEnviar,
   sendWA, startWAQueue, waOpenCurrent, waNext, waClose,
   // ── Arquivamento ──
-  arquivarCliente, restaurarCliente, deletarArquivado, toggleArchivedSection,
+  arquivarCliente, closeArchiveModal, confirmArchive, selectMotivo,
+  restaurarCliente, deletarArquivado, toggleArchivedSection,
 };
 
 // ──────────────────────────────────────────────────────────────

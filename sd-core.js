@@ -117,24 +117,31 @@ export async function getClientesArquivados(uid) {
 }
 
 /**
- * Arquiva um cliente: define arquivado = true no Firestore.
+ * Arquiva um cliente: define arquivado=true + metadados no Firestore.
  * O documento NÃO é deletado.
+ * @param {string} uid
+ * @param {string} clienteId
+ * @param {object} [extras] — { dataArquivado, motivoArquivado }
  */
-export async function arquivarCliente(uid, clienteId) {
+export async function arquivarCliente(uid, clienteId, extras = {}) {
   await setDoc(
     doc(db, 'usuarios', uid, 'clientes', clienteId),
-    { arquivado: true },
+    {
+      arquivado:       true,
+      dataArquivado:   extras.dataArquivado   || new Date().toISOString(),
+      motivoArquivado: extras.motivoArquivado || '',
+    },
     { merge: true }
   );
 }
 
 /**
- * Restaura um cliente arquivado: define arquivado = false.
+ * Restaura um cliente arquivado: limpa todos os campos de arquivamento.
  */
 export async function restaurarCliente(uid, clienteId) {
   await setDoc(
     doc(db, 'usuarios', uid, 'clientes', clienteId),
-    { arquivado: false },
+    { arquivado: false, dataArquivado: null, motivoArquivado: null },
     { merge: true }
   );
 }
