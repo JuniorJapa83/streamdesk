@@ -288,7 +288,9 @@
   .btn-save:active{transform:scale(.97)}
   .btn-cancel{width:100%;background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:12px;padding:12px;font-family:'DM Sans',sans-serif;font-size:15px;cursor:pointer;margin-top:8px}
 
-  /* ── TOAST ── */
+  .btn-prorrogar{background:rgba(0,212,255,.12)!important;color:var(--accent)!important;border-color:rgba(0,212,255,.25)!important;font-weight:700!important}
+  .btn-prorrogar:active{background:rgba(0,212,255,.22)!important}
+  .btn-prorrogar:disabled{opacity:.5;cursor:not-allowed}
   .toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);background:rgba(0,224,150,.15);border:1px solid var(--green);color:var(--green);border-radius:50px;padding:8px 20px;font-size:13px;font-weight:600;opacity:0;transition:opacity .3s;pointer-events:none;z-index:300;white-space:nowrap}
   .toast.show{opacity:1}
 </style>
@@ -813,6 +815,7 @@ function renderCard(u, i, container) {
             ${u.status!=='ativo'     ? `<button class="det-btn btn-aprovar"  data-action="aprovar">✅ Aprovar</button>`  : ''}
             ${u.status!=='bloqueado' ? `<button class="det-btn btn-bloquear" data-action="bloquear">🔴 Bloquear</button>` : ''}
             ${u.status==='bloqueado' ? `<button class="det-btn btn-aprovar"  data-action="aprovar">✅ Reativar</button>`  : ''}
+            <button class="det-btn btn-prorrogar" data-action="prorrogar">⚡ +30 dias</button>
             <button class="det-btn btn-exp" data-action="exp">📅 Expiração</button>
             <button class="det-btn btn-wa"  data-action="wa">📲 WhatsApp</button>
             <button class="det-btn btn-del" data-action="del">🗑️ Excluir Usuário</button>
@@ -840,6 +843,14 @@ function renderCard(u, i, container) {
         } else if (action==='bloquear') {
           await updateDoc(doc(db,'usuarios',u.id),{status:'bloqueado'});
           showToast('🔴 Usuário bloqueado!','red');
+        } else if (action==='prorrogar') {
+          btn.disabled = true;
+          btn.textContent = '⏳ Salvando...';
+          const base = (u.expiracao && daysUntil(u.expiracao) > 0) ? new Date(u.expiracao+'T12:00:00') : new Date();
+          base.setDate(base.getDate() + 30);
+          const iso = base.getFullYear()+'-'+String(base.getMonth()+1).padStart(2,'0')+'-'+String(base.getDate()).padStart(2,'0');
+          await updateDoc(doc(db,'usuarios',u.id),{expiracao:iso, status:'ativo'});
+          showToast('⚡ +30 dias aplicados! Vence em '+formatDate(iso));
         } else if (action==='exp') {
           document.getElementById('expUserId').value         = u.id;
           document.getElementById('expSubtitle').textContent = 'Definir acesso para '+(u.nome||u.email);
