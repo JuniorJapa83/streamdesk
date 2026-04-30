@@ -99,7 +99,7 @@ body {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(245,247,250,0.92);
+  background: rgba(245,247,250,0.95) !important;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
@@ -111,7 +111,7 @@ body {
   transition: background .3s;
 }
 body.dark .header {
-  background: rgba(8,11,18,0.92);
+  background: rgba(8,11,18,0.95) !important;
 }
 @keyframes slideDown { from { opacity:0; transform:translateY(-16px); } to { opacity:1; transform:translateY(0); } }
 
@@ -661,6 +661,14 @@ body.dark .bottom-nav { background: rgba(8,11,18,0.97); }
   border-radius: 8px;
 }
 @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+/* ── THEME FORCE OVERRIDES (garante tema claro por padrão) ── */
+body:not(.dark) .header    { background: rgba(245,247,250,0.97) !important; border-bottom-color: #e8ecf2 !important; }
+body:not(.dark) .bottom-nav { background: rgba(245,247,250,0.97) !important; border-top-color: #e8ecf2 !important; }
+body:not(.dark) { background: #f5f7fa !important; color: #0f172a !important; }
+body.dark .header     { background: rgba(8,11,18,0.95) !important; border-bottom-color: #1c2236 !important; }
+body.dark .bottom-nav { background: rgba(8,11,18,0.97) !important; border-top-color: #1c2236 !important; }
+body.dark { background: #080b12 !important; color: #e4e8f4 !important; }
 </style>
 </head>
 <body>
@@ -669,6 +677,7 @@ body.dark .bottom-nav { background: rgba(8,11,18,0.97); }
 (function(){
   var c = JSON.parse(localStorage.getItem('streamdesk_config')||'{}');
   if (c.darkMode === true) document.body.classList.add('dark');
+  document.body.classList.remove('light');
 })();
 </script>
 
