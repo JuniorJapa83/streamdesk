@@ -416,5 +416,10 @@ onAuthStateChanged(auth,async function(user){
 
 document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'&&currentUser)loadData();});
 </script>
+  <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js');
+  }
+</script>
 </body>
 </html>
