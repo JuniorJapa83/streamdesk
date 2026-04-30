@@ -470,7 +470,7 @@ function renderList(g) {
 
         <div class="srv-actions">
           <button class="srv-act-edit" onclick="SRV.openModalEdit('${s.id}')">✏️ Editar</button>
-          <button class="srv-act-del"  onclick="SRV.askDelete('${s.id}','${s.nome.replace(/'/g,'\\'')}',${st.total})">🗑️ Excluir</button>
+          <button class="srv-act-del"  onclick="SRV.askDelete('${s.id}', ${JSON.stringify(s.nome)}, ${st.total})">🗑️ Excluir</button>
         </div>
       </div>
     </div>`;
