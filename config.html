@@ -7,6 +7,7 @@
 <title>StreamDesk — Configurações</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="theme.css">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
   :root {
     --bg:#080b12;--surface:#0e1220;--card:#131825;--card2:#161c2c;
@@ -430,6 +431,9 @@ window.renderAssinatura = function(user, data) {
 <script>
 var CFG_KEY           = 'streamdesk_config';
 var SUPORTE_EMAIL     = 'contato@streamdesk.net.br';
+var EMAILJS_SERVICE   = 'service_qiay61y';
+var EMAILJS_TEMPLATE  = 'template_q870hiI';
+var EMAILJS_PUBKEY    = 'qAdvYOpPxeDBi_Sjk';
 var MP_PUBLIC_KEY     = 'APP_USR-b9e0a4a9-be59-4ebb-87b0-c3fd2f4453a2';
 var VALOR_MENSALIDADE = 9.90;
 var URL_PIX           = 'https://criarpix-vsw4hqxmxq-rj.a.run.app';
@@ -495,15 +499,28 @@ function enviarChamado() {
   var msg     = document.getElementById('supMsg').value.trim();
   var assunto = document.getElementById('supAssunto').value;
   if (!msg) { alert('Descreva o problema!'); return; }
-  var cfg     = window._currentUser;
-  var usuario = cfg ? cfg.displayName || cfg.email : '';
-  var corpo   = 'Assunto: ' + assunto + '\n\nMensagem:\n' + msg + (usuario ? '\n\nUsuário: ' + usuario : '');
-  var url     = 'mailto:' + SUPORTE_EMAIL +
-                '?subject=' + encodeURIComponent('[StreamDesk] ' + assunto) +
-                '&body='    + encodeURIComponent(corpo);
-  window.open(url, '_blank');
-  closeModal('ovSuporte');
-  document.getElementById('supMsg').value = '';
+  var usuario = window._currentUser ? (window._currentUser.displayName || window._currentUser.email) : 'Desconhecido';
+  var btnSave = document.querySelector('#ovSuporte .btn-save');
+  btnSave.disabled = true;
+  btnSave.textContent = '⏳ Enviando...';
+  emailjs.init(EMAILJS_PUBKEY);
+  emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, {
+    assunto:  assunto,
+    mensagem: msg,
+    usuario:  usuario
+  }).then(function() {
+    btnSave.textContent = '✅ Enviado!';
+    setTimeout(function() {
+      closeModal('ovSuporte');
+      document.getElementById('supMsg').value = '';
+      btnSave.disabled = false;
+      btnSave.textContent = '📧 Enviar E-mail';
+    }, 1500);
+  }, function(err) {
+    alert('Erro ao enviar: ' + (err.text || JSON.stringify(err)));
+    btnSave.disabled = false;
+    btnSave.textContent = '📧 Enviar E-mail';
+  });
 }
 function doLogout() {
   if (!confirm('Deseja sair?')) return;
