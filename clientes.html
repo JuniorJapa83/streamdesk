@@ -1405,15 +1405,19 @@ async function saveClient() {
   const vencimento = document.getElementById('fVencimento').value;
   if (!vencimento) { toast('⚠️ Informe a data de vencimento!'); return; }
 
-  const data = {
-    nome,
-    plataforma: document.getElementById('fPlataforma').value,
-    plano:      document.getElementById('fPlano').value,
-    vencimento,
-    pais:       document.getElementById('fPais').value,
-    contato:    document.getElementById('fContato').value,
-    obs:        document.getElementById('fObs').value,
-  };
+  const servidorNome = document.getElementById('fPlataforma').value;
+const srv = S.servidores.find(s => s.nome === servidorNome);
+
+const data = {
+  nome,
+  plataforma: servidorNome,
+  servidorId: srv ? srv.id : null, // 🔥 ESSA LINHA É A CORREÇÃO
+  plano:      document.getElementById('fPlano').value,
+  vencimento,
+  pais:       document.getElementById('fPais').value,
+  contato:    document.getElementById('fContato').value,
+  obs:        document.getElementById('fObs').value,
+};
 
   const editId = document.getElementById('editId').value;
   const btn    = document.getElementById('btnSaveClient');
