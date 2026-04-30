@@ -11,7 +11,7 @@
  */
 
 // ── FIREBASE ──────────────────────────────────────────────────
-import { initializeApp }          from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
+import { initializeApp, getApps, getApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
 import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
 import {
   getFirestore,
@@ -30,7 +30,7 @@ const FB_CONFIG = {
   appId:             '1:36684694847:web:0f6f3a27933e3d84cfff8a',
 };
 
-const _app  = initializeApp(FB_CONFIG);
+const _app  = getApps().length ? getApp() : initializeApp(FB_CONFIG);
 export const auth = getAuth(_app);
 export const db   = getFirestore(_app);
 

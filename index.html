@@ -918,7 +918,7 @@ body.dark { background: #080b12 !important; color: #e4e8f4 !important; }
 </div>
 
 <script type="module">
-import { initializeApp }     from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 import { getFirestore, collection, getDocs, doc, getDoc, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
@@ -930,7 +930,7 @@ const firebaseConfig = {
   messagingSenderId: "36684694847",
   appId: "1:36684694847:web:0f6f3a27933e3d84cfff8a"
 };
-const app  = initializeApp(firebaseConfig);
+const app  = getApps().length ? getApp() : initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
 
