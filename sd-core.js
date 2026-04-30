@@ -86,6 +86,7 @@ export async function getClientesPorServidor(uid, servidor, max = 500) {
  * Busca TODOS os clientes (para Home e relatórios).
  * Use com moderação — prefira queries filtradas acima.
  * Limite de segurança: 2.000 registros.
+ * ⚠️  Inclui arquivados — filtre com ativos() quando necessário.
  */
 export async function getTodosClientes(uid) {
   const q = query(
@@ -95,6 +96,47 @@ export async function getTodosClientes(uid) {
   );
   const snap = await getDocs(q);
   return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+}
+
+/**
+ * Busca apenas clientes ATIVOS (arquivado !== true).
+ * Use este em vez de getTodosClientes em todas as telas principais.
+ */
+export async function getClientesAtivos(uid) {
+  const todos = await getTodosClientes(uid);
+  return todos.filter(c => !c.arquivado);
+}
+
+/**
+ * Busca apenas clientes ARQUIVADOS (arquivado === true).
+ * Usado na seção de gerenciamento de arquivados.
+ */
+export async function getClientesArquivados(uid) {
+  const todos = await getTodosClientes(uid);
+  return todos.filter(c => c.arquivado === true);
+}
+
+/**
+ * Arquiva um cliente: define arquivado = true no Firestore.
+ * O documento NÃO é deletado.
+ */
+export async function arquivarCliente(uid, clienteId) {
+  await setDoc(
+    doc(db, 'usuarios', uid, 'clientes', clienteId),
+    { arquivado: true },
+    { merge: true }
+  );
+}
+
+/**
+ * Restaura um cliente arquivado: define arquivado = false.
+ */
+export async function restaurarCliente(uid, clienteId) {
+  await setDoc(
+    doc(db, 'usuarios', uid, 'clientes', clienteId),
+    { arquivado: false },
+    { merge: true }
+  );
 }
 
 /**
@@ -177,17 +219,19 @@ export const STATUS_META = {
 // ── CÁLCULOS / INSIGHTS ───────────────────────────────────────
 /**
  * Calcula métricas de inadimplência por servidor.
- * @param {Array} clientes
+ * ✅ Ignora clientes arquivados automaticamente.
+ * @param {Array} clientes  — já deve vir filtrado (só ativos)
  * @param {Array} servidores
  * @returns {Array} — cada item: { ...servidor, total, inad, pct }
  */
 export function calcInadimplencia(clientes, servidores) {
-  const t = today();
+  const t      = today();
+  const ativos = clientes.filter(c => !c.arquivado); // dupla segurança
   return servidores
     .filter(s => s.status !== 'offline')
     .map(s => {
-      const total = clientes.filter(c => c.plataforma === s.nome).length;
-      const inad  = clientes.filter(c => c.plataforma === s.nome && c.vencimento < t).length;
+      const total = ativos.filter(c => c.plataforma === s.nome).length;
+      const inad  = ativos.filter(c => c.plataforma === s.nome && c.vencimento < t).length;
       const pct   = total > 0 ? Math.round((inad / total) * 100) : 0;
       return { ...s, total, inad, pct };
     })
@@ -196,17 +240,20 @@ export function calcInadimplencia(clientes, servidores) {
 
 /**
  * Retorna totais de clientes por status e valor total de cada grupo.
+ * ✅ Ignora clientes arquivados — estatísticas refletem só ativos.
  * Corrige o bug de "if (valV)" — sempre retorna número, inclusive 0.
  */
 export function calcResumo(clientes) {
-  const t  = today();
-  const tm = tomorrow();
+  const t      = today();
+  const tm     = tomorrow();
+  // Filtra arquivados antes de qualquer cálculo
+  const ativos = clientes.filter(c => !c.arquivado);
 
   const grupos = {
-    vencido: clientes.filter(c => c.vencimento <  t),
-    hoje:    clientes.filter(c => c.vencimento === t),
-    amanha:  clientes.filter(c => c.vencimento === tm),
-    emDia:   clientes.filter(c => c.vencimento >  t),
+    vencido: ativos.filter(c => c.vencimento <  t),
+    hoje:    ativos.filter(c => c.vencimento === t),
+    amanha:  ativos.filter(c => c.vencimento === tm),
+    emDia:   ativos.filter(c => c.vencimento >  t),
   };
 
   const somaValor = (arr) =>
@@ -217,7 +264,7 @@ export function calcResumo(clientes) {
     hoje:    { count: grupos.hoje.length,    valor: somaValor(grupos.hoje)    },
     amanha:  { count: grupos.amanha.length,  valor: somaValor(grupos.amanha)  },
     emDia:   { count: grupos.emDia.length,   valor: somaValor(grupos.emDia)   },
-    total:   clientes.length,
+    total:   ativos.length,
   };
 }
 

@@ -316,6 +316,20 @@
 .btn-wa    { background: rgba(37,211,102,.1); color: #25d366; }
 .btn-renew { background: var(--yellow-bg);  color: var(--yellow); grid-column: 1 / -1; padding: 12px; font-size: 14px; }
 
+/* — Botão arquivar (ocupa linha inteira, tom neutro/warning) — */
+.btn-archive {
+  grid-column: 1 / -1;
+  background: rgba(148,163,184,.1);
+  color: var(--muted2);
+  border: 1px solid var(--border2);
+  padding: 10px;
+  font-size: 13px;
+  border-radius: 10px;
+  transition: all .2s;
+}
+.btn-archive:hover { background: var(--orange-bg); color: var(--orange); border-color: var(--orange-border); }
+.btn-archive:active { transform: scale(.96); }
+
 /* Status pill modernos */
 .status-pill   { font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 50px; white-space: nowrap; flex-shrink: 0; }
 .pill-vencido  { background: var(--red-bg);    color: var(--red);    }
@@ -383,6 +397,89 @@
 /* Loading skeleton */
 .loading-skeleton { display: flex; flex-direction: column; gap: 10px; padding: 4px 0; animation: fadeIn .3s ease; }
 .sk-card { height: 82px; border-radius: 18px; }
+
+/* ── Seção de Arquivados ── */
+.archive-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 28px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  padding: 12px 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow-sm);
+  transition: all .2s;
+}
+.archive-toggle-row:active { transform: scale(.98); }
+.archive-toggle-left { display: flex; align-items: center; gap: 10px; }
+.archive-toggle-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: rgba(148,163,184,.1); border: 1px solid var(--border2);
+  display: flex; align-items: center; justify-content: center; font-size: 17px;
+}
+.archive-toggle-title { font-size: 14px; font-weight: 700; color: var(--text2); }
+.archive-toggle-sub   { font-size: 11px; color: var(--muted2); margin-top: 2px; }
+.archive-toggle-badge {
+  background: rgba(148,163,184,.12);
+  color: var(--muted2);
+  border: 1px solid var(--border2);
+  border-radius: 50px; padding: 3px 10px;
+  font-size: 11px; font-weight: 700;
+  flex-shrink: 0;
+  margin-right: 8px;
+}
+.archive-chevron { color: var(--muted); font-size: 18px; transition: transform .3s; flex-shrink: 0; }
+.archive-chevron.open { transform: rotate(90deg); }
+
+.archived-list { display: none; margin-top: 8px; }
+.archived-list.visible { display: block; }
+
+.archived-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--border2);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  opacity: .85;
+  box-shadow: var(--shadow-sm);
+  transition: all .2s;
+  animation: fadeUp .3s ease both;
+}
+.archived-card:hover { opacity: 1; }
+.arc-avatar {
+  width: 38px; height: 38px; border-radius: 11px;
+  background: rgba(148,163,184,.1);
+  border: 1px solid var(--border2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 800; color: var(--muted2);
+  flex-shrink: 0;
+}
+.arc-body { flex: 1; min-width: 0; }
+.arc-name  { font-size: 14px; font-weight: 600; color: var(--text2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.arc-meta  { font-size: 11px; color: var(--muted2); margin-top: 3px; }
+.arc-actions { display: flex; gap: 6px; flex-shrink: 0; }
+.arc-btn {
+  border: none; border-radius: 8px; padding: 7px 10px;
+  font-size: 12px; font-weight: 700; cursor: pointer;
+  transition: all .2s; font-family: var(--font); white-space: nowrap;
+}
+.arc-btn:active { transform: scale(.93); }
+.arc-btn-restore { background: var(--green-bg);  color: var(--green);  border: 1px solid var(--green-border);  }
+.arc-btn-delete  { background: var(--red-bg);    color: var(--red);    border: 1px solid var(--red-border);    }
+
+.archived-empty {
+  text-align: center; padding: 24px 16px;
+  color: var(--muted2); font-size: 13px;
+  background: var(--card2); border: 1px dashed var(--border2);
+  border-radius: 12px;
+}
 
 /* Tema força */
 body:not(.dark) .header    { background: rgba(245,247,250,.97) !important; }
@@ -503,6 +600,24 @@ body.dark { background: #080b12 !important; }
       <div class="skeleton sk-card"></div>
       <div class="skeleton sk-card" style="opacity:.6"></div>
     </div>
+  </div>
+
+  <!-- ── SEÇÃO: CLIENTES ARQUIVADOS ── -->
+  <div id="archivedSection" style="display:none">
+    <div class="archive-toggle-row" onclick="CL.toggleArchivedSection()">
+      <div class="archive-toggle-left">
+        <div class="archive-toggle-icon">🗂️</div>
+        <div>
+          <div class="archive-toggle-title">Clientes Arquivados</div>
+          <div class="archive-toggle-sub">Inativos — fora das estatísticas</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:0">
+        <span class="archive-toggle-badge" id="archivedBadge">0</span>
+        <span class="archive-chevron" id="archivedChevron">›</span>
+      </div>
+    </div>
+    <div class="archived-list" id="archivedList"></div>
   </div>
 
 </div><!-- /content -->
@@ -706,6 +821,7 @@ const PAGE_SIZE = 10;
 const S = {
   clientes:       [],
   servidores:     [],
+  arquivados:     [],   // ← clientes arquivados (lista separada)
   user:           null,
   filter:         'todos',
   server:         'todos',
@@ -713,9 +829,10 @@ const S = {
   openCardId:     null,
   page:           0,
   filteredList:   [],
-  cobrarSel:      new Set(),  // ids selecionados no modal cobrar
+  cobrarSel:      new Set(),
   waQueue:        [],
   waIdx:          0,
+  archivedOpen:   false, // controla expansão da seção
 };
 
 // ── COLEÇÕES FIREBASE ────────────────────────────────────────
@@ -726,13 +843,16 @@ const fCol = () => SD.finCol(S.user.uid);
 // CARGA
 // ──────────────────────────────────────────────────────────────
 async function loadData() {
-  const [clientes, servidores] = await Promise.all([
-    SD.getTodosClientes(S.user.uid),
+  const [clientes, servidores, arquivados] = await Promise.all([
+    SD.getClientesAtivos(S.user.uid),       // lista principal — sem arquivados
     SD.getServidores(S.user.uid),
+    SD.getClientesArquivados(S.user.uid),   // lista separada
   ]);
   S.clientes   = clientes;
   S.servidores = servidores;
+  S.arquivados = arquivados;
   renderAll();
+  renderArchivedSection();
   updateTime();
 }
 
@@ -952,6 +1072,7 @@ function renderList() {
             <button class="det-btn btn-wa"    onclick="CL.sendWA('${c.id}')">📲 WhatsApp</button>
             <button class="det-btn btn-del"   onclick="CL.deleteClient('${c.id}')">🗑️ Excluir</button>
             <button class="det-btn btn-renew" onclick="CL.openRenew('${c.id}')">🔄 Renovar Plano</button>
+            ${s === 'vencido' ? `<button class="det-btn btn-archive" onclick="CL.arquivarCliente('${c.id}')">🗂️ Arquivar cliente</button>` : ''}
           </div>
         </div>
       </div>
@@ -1337,6 +1458,124 @@ function waClose() {
 }
 
 // ──────────────────────────────────────────────────────────────
+// ARQUIVAMENTO
+// ──────────────────────────────────────────────────────────────
+
+/**
+ * Arquiva um cliente vencido.
+ * Pede confirmação, salva arquivado=true no Firestore,
+ * remove da lista principal e recarrega.
+ */
+async function arquivarCliente(id) {
+  const c = S.clientes.find(c => c.id === id);
+  if (!c) return;
+  if (!confirm(`Arquivar "${c.nome}"?\n\nEle sairá da lista principal e das estatísticas, mas poderá ser restaurado a qualquer momento.`)) return;
+
+  try {
+    await SD.arquivarCliente(S.user.uid, id);
+    if (S.openCardId === id) S.openCardId = null;
+    toast('🗂️ Cliente arquivado com sucesso.');
+    await loadData();
+  } catch (e) {
+    console.error('Erro ao arquivar:', e);
+    toast('❌ Erro ao arquivar. Tente novamente.');
+  }
+}
+
+/**
+ * Restaura um cliente arquivado: arquivado = false.
+ * Ele volta para a lista principal imediatamente.
+ */
+async function restaurarCliente(id) {
+  try {
+    await SD.restaurarCliente(S.user.uid, id);
+    toast('♻️ Cliente restaurado com sucesso!');
+    await loadData();
+  } catch (e) {
+    console.error('Erro ao restaurar:', e);
+    toast('❌ Erro ao restaurar. Tente novamente.');
+  }
+}
+
+/**
+ * Exclui permanentemente um cliente arquivado.
+ * Ação irreversível — pede confirmação dupla.
+ */
+async function deletarArquivado(id) {
+  const c = S.arquivados.find(c => c.id === id);
+  if (!c) return;
+  if (!confirm(`Excluir permanentemente "${c.nome}"?\n\nEsta ação não pode ser desfeita.`)) return;
+  try {
+    await deleteDoc(doc(SD.db, 'usuarios', S.user.uid, 'clientes', id));
+    toast('🗑️ Cliente excluído permanentemente.');
+    await loadData();
+  } catch (e) {
+    console.error('Erro ao excluir:', e);
+    toast('❌ Erro ao excluir. Tente novamente.');
+  }
+}
+
+/**
+ * Renderiza a seção de clientes arquivados.
+ * Fica colapsada por padrão; expande ao clicar no header.
+ */
+function renderArchivedSection() {
+  const section = document.getElementById('archivedSection');
+  const badge   = document.getElementById('archivedBadge');
+  const list    = document.getElementById('archivedList');
+
+  // Mostra seção somente se houver arquivados
+  if (!S.arquivados.length) {
+    section.style.display = 'none';
+    return;
+  }
+
+  section.style.display = 'block';
+  badge.textContent = S.arquivados.length;
+
+  if (!S.archivedOpen) {
+    list.classList.remove('visible');
+    return;
+  }
+
+  list.classList.add('visible');
+
+  if (!S.arquivados.length) {
+    list.innerHTML = '<div class="archived-empty">📭 Nenhum cliente arquivado.</div>';
+    return;
+  }
+
+  list.innerHTML = S.arquivados.map((c, i) => {
+    const ini  = initials(c.nome);
+    const diff = SD.daysFrom(c.vencimento);
+    const atraso = diff < 0 ? `${Math.abs(diff)}d em atraso` : 'Vencido';
+    return `
+    <div class="archived-card" style="animation-delay:${i*.04}s">
+      <div class="arc-avatar">${ini}</div>
+      <div class="arc-body">
+        <div class="arc-name">${c.pais || ''} ${c.nome}</div>
+        <div class="arc-meta">
+          📡 ${c.plataforma || '—'} &nbsp;·&nbsp; 📅 ${SD.formatDate(c.vencimento)} &nbsp;·&nbsp;
+          <span style="color:var(--red)">${atraso}</span>
+          &nbsp;·&nbsp; 💰 ${SD.fmtBRL(parseFloat(c.plano) || 0)}
+        </div>
+      </div>
+      <div class="arc-actions">
+        <button class="arc-btn arc-btn-restore" onclick="CL.restaurarCliente('${c.id}')">♻️ Restaurar</button>
+        <button class="arc-btn arc-btn-delete"  onclick="CL.deletarArquivado('${c.id}')">🗑️</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/** Alterna expansão/colapso da seção de arquivados */
+function toggleArchivedSection() {
+  S.archivedOpen = !S.archivedOpen;
+  document.getElementById('archivedChevron').classList.toggle('open', S.archivedOpen);
+  renderArchivedSection();
+}
+
+// ──────────────────────────────────────────────────────────────
 // EXPOSIÇÃO GLOBAL
 // ──────────────────────────────────────────────────────────────
 window.CL = {
@@ -1347,6 +1586,8 @@ window.CL = {
   openRenew, confirmRenew,
   openCobrar, closeCobrar, cobrarToggleItem, cobrarToggleAll, cobrarEnviar,
   sendWA, startWAQueue, waOpenCurrent, waNext, waClose,
+  // ── Arquivamento ──
+  arquivarCliente, restaurarCliente, deletarArquivado, toggleArchivedSection,
 };
 
 // ──────────────────────────────────────────────────────────────

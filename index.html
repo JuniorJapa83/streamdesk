@@ -1143,10 +1143,13 @@ function render(clientes, servidores, config) {
   var tm = tomorrow();
   _cobrarCfg = config;
 
-  var vencidos = clientes.filter(c => c.vencimento < t);
-  var hoje     = clientes.filter(c => c.vencimento === t);
-  var amanha   = clientes.filter(c => c.vencimento === tm);
-  var emDia    = clientes.filter(c => c.vencimento > t);
+  // ✅ Remove arquivados de TODOS os cálculos da Home
+  var ativos = clientes.filter(function(c) { return !c.arquivado; });
+
+  var vencidos = ativos.filter(c => c.vencimento < t);
+  var hoje     = ativos.filter(c => c.vencimento === t);
+  var amanha   = ativos.filter(c => c.vencimento === tm);
+  var emDia    = ativos.filter(c => c.vencimento > t);
 
   // ── STATUS CARDS
   document.getElementById('numVencido').textContent = vencidos.length;
@@ -1182,10 +1185,10 @@ function render(clientes, servidores, config) {
   // ── INSIGHTS INTELIGENTES
   var insights = [];
 
-  // Servidor com maior inadimplência
+  // Servidor com maior inadimplência — usa ativos
   var srvInadimpl = servidores.map(function(s) {
-    var total = clientes.filter(c => c.plataforma === s.nome).length;
-    var inad  = clientes.filter(c => c.plataforma === s.nome && c.vencimento < t).length;
+    var total = ativos.filter(c => c.plataforma === s.nome).length;
+    var inad  = ativos.filter(c => c.plataforma === s.nome && c.vencimento < t).length;
     return { ...s, total, inad, pct: total > 0 ? Math.round((inad/total)*100) : 0 };
   }).filter(s => s.total > 0).sort((a,b) => b.pct - a.pct);
 
@@ -1224,17 +1227,17 @@ function render(clientes, servidores, config) {
   }
 
   // Insight quando tudo em dia
-  if (vencidos.length === 0 && hoje.length === 0 && clientes.length > 0) {
+  if (vencidos.length === 0 && hoje.length === 0 && ativos.length > 0) {
     insights.push({
       tipo: 'ok',
       icon: '✅',
       title: 'Tudo em dia! Parabéns.',
-      sub: 'Todos os ' + clientes.length + ' clientes estão com pagamento em dia.',
+      sub: 'Todos os ' + ativos.length + ' clientes estão com pagamento em dia.',
       action: () => {}
     });
   }
 
-  if (!insights.length && clientes.length === 0) {
+  if (!insights.length && ativos.length === 0) {
     insights.push({
       tipo: 'info',
       icon: '💡',
@@ -1263,8 +1266,8 @@ function render(clientes, servidores, config) {
   } else {
     // Calcula métricas por servidor
     var srvComMetricas = online.map(function(s) {
-      var total = clientes.filter(c => c.plataforma === s.nome).length;
-      var inad  = clientes.filter(c => c.plataforma === s.nome && c.vencimento < t).length;
+      var total = ativos.filter(c => c.plataforma === s.nome).length;
+      var inad  = ativos.filter(c => c.plataforma === s.nome && c.vencimento < t).length;
       var pct   = total > 0 ? Math.round((inad/total)*100) : 0;
       return { ...s, total, inad, pct };
     }).sort((a,b) => a.pct - b.pct);
@@ -1300,8 +1303,8 @@ function render(clientes, servidores, config) {
     }).join('');
   }
 
-  // ── ATENÇÃO HOJE (vencidos + hoje + amanhã)
-  var urgent = clientes
+  // ── ATENÇÃO HOJE (vencidos + hoje + amanhã) — sem arquivados
+  var urgent = ativos
     .filter(c => c.vencimento <= tm)
     .sort((a,b) => a.vencimento.localeCompare(b.vencimento))
     .slice(0, 8);
@@ -1437,7 +1440,7 @@ async function loadAndRender(user) {
     var clientes   = clientSnap.docs.map(d=>({id:d.id,...d.data()}));
     var servidores = srvSnap.docs.map(d=>({id:d.id,...d.data()}));
     var cfg        = JSON.parse(localStorage.getItem('streamdesk_config')||'{}');
-    _cobrarClientes = clientes;
+    _cobrarClientes = ativos;  // ✅ só ativos no modal de cobrança
     render(clientes, servidores, cfg);
     updateTime();
   } catch(e) { console.error('Clientes/servidores erro:', e); }
