@@ -386,5 +386,10 @@ function render(clientes, servidores, config) {
     <button class="aviso-box-btn" id="avisoBoxBtn">Entendido ✓</button>
   </div>
 </div>
+  <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js');
+  }
+</script>
 </body>
 </html>
