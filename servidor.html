@@ -255,16 +255,23 @@ async function loadData() {
 }
 
 // ── CÁLCULOS ─────────────────────────────────────────────────
-function getStats(nome) {
+function getStats(nome, id) {
   const t = today(), tm = tomorrow();
-  const list     = S.clientes.filter(c=>c.plataforma===nome);
+
+  const list = S.clientes.filter(c =>
+    (c.servidorId && c.servidorId === id) ||
+    (!c.servidorId && c.plataforma && c.plataforma === nome)
+  );
+
   const total    = list.length;
   const vencidos = list.filter(c=>c.vencimento<t).length;
   const hoje     = list.filter(c=>c.vencimento===t).length;
   const amanha   = list.filter(c=>c.vencimento===tm).length;
   const emDia    = list.filter(c=>c.vencimento>t).length;
-  const pct      = total>0 ? Math.round((emDia/total)*100) : 100;
-  const pctInad  = total>0 ? Math.round((vencidos/total)*100) : 0;
+
+  const pct     = total>0 ? Math.round((emDia/total)*100) : 100;
+  const pctInad = total>0 ? Math.round((vencidos/total)*100) : 0;
+
   return {total,vencidos,hoje,amanha,emDia,pct,pctInad};
 }
 
@@ -275,7 +282,7 @@ function calcGlobal() {
   const totalVenc = S.clientes.filter(c=>c.vencimento<t).length;
   const pctMedio  = totalCli>0 ? Math.round((totalVenc/totalCli)*100) : 0;
   const ranking   = S.servidores
-    .map(s=>({...s, stats:getStats(s.nome)}))
+    .map(s=>({...s, stats:getStats(s.nome, s.id)}))
     .sort((a,b)=>b.stats.pctInad - a.stats.pctInad);
   return {totalSrv,totalCli,totalVenc,pctMedio,ranking};
 }
@@ -375,7 +382,7 @@ function renderList(g) {
 
   el.innerHTML = '';
   S.servidores.forEach((s, idx) => {
-    const st     = getStats(s.nome);
+    const st     = getStats(s.nome, s.id);
     const isOn   = s.status === 'online';
     const isPior   = s.id === piorId && st.pctInad >= 10 && st.total > 0;
     const isMelhor = s.id === melhorId && st.total > 0;
@@ -504,7 +511,11 @@ async function toggleStatus(id, idx) {
   const t   = today();
 
   if (!nowOn) {
-    const ativos = S.clientes.filter(c=>c.plataforma===s.nome&&c.vencimento>=t).length;
+    const ativos = S.clientes.filter(c =>
+  ((c.servidorId && c.servidorId === s.id) ||
+   (!c.servidorId && c.plataforma === s.nome)) &&
+  c.vencimento >= t
+).length;
     if (ativos > 0) {
       toast(`⚠️ "${s.nome}" tem ${ativos} cliente${ativos!==1?'s':''} ativo${ativos!==1?'s':''} — não é possível colocar offline.`);
       return;
