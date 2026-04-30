@@ -499,28 +499,47 @@ function enviarChamado() {
   var msg     = document.getElementById('supMsg').value.trim();
   var assunto = document.getElementById('supAssunto').value;
   if (!msg) { alert('Descreva o problema!'); return; }
-  var usuario = window._currentUser ? (window._currentUser.displayName || window._currentUser.email) : 'Desconhecido';
+  var user    = window._currentUser;
+  var usuario = user ? (user.displayName || user.email) : 'Desconhecido';
+  var email   = user ? (user.email || '—') : '—';
   var btnSave = document.querySelector('#ovSuporte .btn-save');
   btnSave.disabled = true;
   btnSave.textContent = '⏳ Enviando...';
-  emailjs.init(EMAILJS_PUBKEY);
-  emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, {
-    assunto:  assunto,
-    mensagem: msg,
-    usuario:  usuario
-  }).then(function() {
-    btnSave.textContent = '✅ Enviado!';
-    setTimeout(function() {
-      closeModal('ovSuporte');
-      document.getElementById('supMsg').value = '';
+
+  function doEnvio(whatsapp) {
+    emailjs.init(EMAILJS_PUBKEY);
+    emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, {
+      assunto:   assunto,
+      mensagem:  msg,
+      usuario:   usuario,
+      email:     email,
+      whatsapp:  whatsapp || '—'
+    }).then(function() {
+      btnSave.textContent = '✅ Enviado!';
+      setTimeout(function() {
+        closeModal('ovSuporte');
+        document.getElementById('supMsg').value = '';
+        btnSave.disabled = false;
+        btnSave.textContent = '📧 Enviar E-mail';
+      }, 1500);
+    }, function(err) {
+      alert('Erro ao enviar: ' + (err.text || JSON.stringify(err)));
       btnSave.disabled = false;
       btnSave.textContent = '📧 Enviar E-mail';
-    }, 1500);
-  }, function(err) {
-    alert('Erro ao enviar: ' + (err.text || JSON.stringify(err)));
-    btnSave.disabled = false;
-    btnSave.textContent = '📧 Enviar E-mail';
-  });
+    });
+  }
+
+  // Tenta buscar whatsapp do Firestore
+  if (window._firebaseDB && user) {
+    import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js").then(function(fs) {
+      fs.getDoc(fs.doc(window._firebaseDB, 'usuarios', user.uid)).then(function(snap) {
+        var wa = snap.exists() ? (snap.data().whatsapp || '—') : '—';
+        doEnvio(wa);
+      }).catch(function() { doEnvio('—'); });
+    }).catch(function() { doEnvio('—'); });
+  } else {
+    doEnvio('—');
+  }
 }
 function doLogout() {
   if (!confirm('Deseja sair?')) return;
