@@ -1382,36 +1382,59 @@ async function loadFinancas(user) {
   try {
     var now  = new Date();
     var ym   = now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
-    var snap = await getDocs(collection(db,'usuarios',user.uid,'financas'));
-    var docs = snap.docs.map(d=>({id:d.id,...d.data()}));
-    // filtra mes atual
-    var mesAtual  = docs.filter(d=>d.data && d.data.startsWith(ym));
-    var receita   = mesAtual.filter(d=>d.tipo==='receita').reduce((a,d)=>a+(parseFloat(d.valor)||0),0);
-    var despesas  = mesAtual.filter(d=>d.tipo==='despesa').reduce((a,d)=>a+(parseFloat(d.valor)||0),0);
-    var lucro     = receita - despesas;
+
+    // Busca financas e servidores em paralelo
+    var [fSnap, sSnap] = await Promise.all([
+      getDocs(collection(db,'usuarios',user.uid,'financas')),
+      getDocs(collection(db,'usuarios',user.uid,'servidores'))
+    ]);
+    var docs      = fSnap.docs.map(d=>({id:d.id,...d.data()}));
+    var servidores= sSnap.docs.map(d=>({id:d.id,...d.data()}));
+
+    // Helper: custo do servidor (igual ao financas.html original)
+    function getCusto(plat) {
+      var s = servidores.find(x=>x.nome===plat);
+      return s ? parseFloat(s.custo)||0 : 0;
+    }
+
+    // Filtra mês atual (campo 'data' no formato YYYY-MM-DD)
+    var mesAtual = docs.filter(d=>d.data && d.data.startsWith(ym));
+
+    // Receita = soma de todos os valores do mês
+    // Custo   = soma dos custos do servidor para cada pagamento
+    var receita  = mesAtual.reduce((a,d)=>a+(parseFloat(d.valor)||0), 0);
+    var despesas = mesAtual.reduce((a,d)=>a+getCusto(d.plataforma), 0);
+    var lucro    = receita - despesas;
+
     document.getElementById('finReceita').textContent  = fmtBRL(receita);
     document.getElementById('finDespesas').textContent = fmtBRL(despesas);
     document.getElementById('finLucro').textContent    = fmtBRL(Math.abs(lucro));
     if (lucro < 0) document.getElementById('finLucro').style.color = 'var(--red)';
 
-    // Mês anterior para comparação
+    // Mês anterior para % de variação
     var prevMonth = new Date(now.getFullYear(), now.getMonth()-1, 1);
-    var ym2 = prevMonth.getFullYear()+'-'+String(prevMonth.getMonth()+1).padStart(2,'0');
-    var mesAnt = docs.filter(d=>d.data && d.data.startsWith(ym2));
-    var recAnt = mesAnt.filter(d=>d.tipo==='receita').reduce((a,d)=>a+(parseFloat(d.valor)||0),0);
-    var despAnt= mesAnt.filter(d=>d.tipo==='despesa').reduce((a,d)=>a+(parseFloat(d.valor)||0),0);
-    var lucroAnt = recAnt - despAnt;
-    if (lucroAnt > 0 && receita > 0) {
-      var pct = Math.round(((lucro - lucroAnt) / Math.abs(lucroAnt)) * 100);
+    var ym2       = prevMonth.getFullYear()+'-'+String(prevMonth.getMonth()+1).padStart(2,'0');
+    var mesAnt    = docs.filter(d=>d.data && d.data.startsWith(ym2));
+    var recAnt    = mesAnt.reduce((a,d)=>a+(parseFloat(d.valor)||0), 0);
+    var despAnt   = mesAnt.reduce((a,d)=>a+getCusto(d.plataforma), 0);
+    var lucroAnt  = recAnt - despAnt;
+
+    if (lucroAnt > 0 && lucro !== 0) {
+      var pct   = Math.round(((lucro - lucroAnt) / Math.abs(lucroAnt)) * 100);
       var trend = document.getElementById('finTrend');
       trend.style.display = 'flex';
       trend.className = 'lucro-trend ' + (pct >= 0 ? 'up' : 'down');
       document.getElementById('finTrendArrow').textContent = pct >= 0 ? '↑' : '↓';
-      document.getElementById('finTrendText').textContent = Math.abs(pct) + '% vs mês anterior';
+      document.getElementById('finTrendText').textContent  = Math.abs(pct) + '% vs mês anterior';
       var badge = document.getElementById('financeBadge');
       badge.style.display = 'flex';
       document.getElementById('financePct').textContent = Math.abs(pct) + '%';
-      if (pct < 0) { badge.style.background = 'var(--red-bg)'; badge.style.color = 'var(--red)'; badge.style.borderColor = 'var(--red-border)'; badge.querySelector('span:first-child').textContent = '↓'; }
+      if (pct < 0) {
+        badge.style.background   = 'var(--red-bg)';
+        badge.style.color        = 'var(--red)';
+        badge.style.borderColor  = 'var(--red-border)';
+        badge.querySelector('span:first-child').textContent = '↓';
+      }
     }
   } catch(e) { console.warn('Finanças não carregadas:', e); }
 }
@@ -1440,7 +1463,9 @@ async function loadAndRender(user) {
     var clientes   = clientSnap.docs.map(d=>({id:d.id,...d.data()}));
     var servidores = srvSnap.docs.map(d=>({id:d.id,...d.data()}));
     var cfg        = JSON.parse(localStorage.getItem('streamdesk_config')||'{}');
-    _cobrarClientes = ativos;  // ✅ só ativos no modal de cobrança
+    // ✅ filtra arquivados ANTES de passar para render e cobrar
+    var ativos = clientes.filter(function(c){ return !c.arquivado; });
+    _cobrarClientes = ativos;
     render(clientes, servidores, cfg);
     updateTime();
   } catch(e) { console.error('Clientes/servidores erro:', e); }
