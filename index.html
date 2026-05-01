@@ -669,6 +669,53 @@ body:not(.dark) { background: #f5f7fa !important; color: #0f172a !important; }
 body.dark .header     { background: rgba(8,11,18,0.95) !important; border-bottom-color: #1c2236 !important; }
 body.dark .bottom-nav { background: rgba(8,11,18,0.97) !important; border-top-color: #1c2236 !important; }
 body.dark { background: #080b12 !important; color: #e4e8f4 !important; }
+
+/* ── SPLASH LOADER ── */
+#sd-splash {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  background: #f5f7fa;
+  transition: opacity .35s ease, visibility .35s ease;
+}
+body.dark #sd-splash { background: #080b12; }
+
+#sd-splash.hide {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+#sd-splash img {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  animation: splashPop .5s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes splashPop {
+  from { opacity:0; transform: scale(.6); }
+  to   { opacity:1; transform: scale(1); }
+}
+.sd-spinner {
+  width: 28px; height: 28px;
+  border: 3px solid rgba(99,102,241,0.2);
+  border-top-color: #6366f1;
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.sd-splash-label {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #94a3b8;
+  margin-top: -8px;
+  letter-spacing: .3px;
+}
 </style>
 </head>
 <body>
@@ -680,6 +727,13 @@ body.dark { background: #080b12 !important; color: #e4e8f4 !important; }
   document.body.classList.remove('light');
 })();
 </script>
+
+  <!-- ── SPLASH SCREEN ── -->
+<div id="sd-splash">
+  <img src="logo.png" alt="StreamDesk">
+  <div class="sd-spinner"></div>
+  <div class="sd-splash-label">Carregando...</div>
+</div>
 
 <!-- ── HEADER ── -->
 <div class="header">
@@ -1445,6 +1499,13 @@ async function loadFinancas(user) {
 }
 
 // ── CARGA PRINCIPAL ───────────────────────────────────────
+function hideSplash() {
+  const splash = document.getElementById('sd-splash');
+  if (splash) splash.classList.add('hide');
+  // Remove do DOM após animação para não ocupar memória
+  setTimeout(() => splash && splash.remove(), 400);
+}
+
 async function loadAndRender(user) {
   // Nome do usuário
   var nome = user.displayName ? user.displayName.split(' ')[0] : user.email.split('@')[0];
@@ -1480,6 +1541,8 @@ async function loadAndRender(user) {
 
   // 4. Aviso da administração
   await checkAviso(user);
+  // ✅ Esconde splash após tudo carregado
+  hideSplash();
 }
 
 onAuthStateChanged(auth, async function(user) {
