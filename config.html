@@ -1496,10 +1496,27 @@ if(!token || !token.id){
   throw new Error('Erro ao gerar token do cartão.');
 }
     
-    var resp=await fetch(URL_ASSINATURA,{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({uid,token:token.id,email:window._currentUser?.email||'',valor:VALOR_MENSALIDADE})});
-    var data=await resp.json();
-    if(!resp.ok)throw new Error(data.error||'Erro ao criar assinatura');
+    var resp = await fetch(URL_ASSINATURA, {
+  method:'POST',
+  headers:{'Content-Type':'application/json'},
+  body:JSON.stringify({
+    uid,
+    token:token.id,
+    email:window._currentUser?.email||'',
+    valor:VALOR_MENSALIDADE
+  })
+});
+
+if(!resp.ok){
+  const text = await resp.text();
+  throw new Error(text || 'Erro ao processar pagamento.');
+}
+
+var data = await resp.json();
+
+if(data && data.error){
+  throw new Error(data.error);
+}
     setMsg('cartaoMsg','✅ Assinatura ativada! Seu acesso foi renovado.','ok');
     btn.disabled = false;
     btn.innerHTML = '💳 Assinar agora';
