@@ -661,6 +661,7 @@ body.dark .about-card{background:rgba(19,24,37,.85);border-color:rgba(28,34,54,.
   display:flex;padding:10px 0 24px;z-index:50;transition:background .3s;
 }
 body.dark .bottom-nav{background:rgba(8,11,18,.97)}
+body.sd-leaving{opacity:0;transform:translateY(6px);transition:opacity .15s ease,transform .15s ease;pointer-events:none;}
 .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:4px 0}
 .nav-icon{font-size:20px;transition:transform .2s}
 .nav-label{font-size:8px;color:var(--muted2);font-weight:600;text-transform:uppercase;letter-spacing:.3px}
@@ -1153,11 +1154,11 @@ onAuthStateChanged(_auth,async function(user){
 
 <!-- ══ BOTTOM NAV ══ -->
 <div class="bottom-nav">
-  <div class="nav-item" onclick="location.href='index.html'"><div class="nav-icon">🏠</div><div class="nav-label">Início</div><div class="nav-dot"></div></div>
-  <div class="nav-item" onclick="location.href='clientes.html'"><div class="nav-icon">👥</div><div class="nav-label">Clientes</div><div class="nav-dot"></div></div>
-  <div class="nav-item" onclick="location.href='servidor.html'"><div class="nav-icon">🖥️</div><div class="nav-label">Servidor</div><div class="nav-dot"></div></div>
-  <div class="nav-item" onclick="location.href='financas.html'"><div class="nav-icon">💰</div><div class="nav-label">Finanças</div><div class="nav-dot"></div></div>
-  <div class="nav-item" onclick="location.href='avisos.html'"><div class="nav-icon">📢</div><div class="nav-label">Avisos</div><div class="nav-dot"></div></div>
+  <div class="nav-item" onclick="sdNavigate('index.html')"><div class="nav-icon">🏠</div><div class="nav-label">Início</div><div class="nav-dot"></div></div>
+  <div class="nav-item" onclick="sdNavigate('clientes.html')"><div class="nav-icon">👥</div><div class="nav-label">Clientes</div><div class="nav-dot"></div></div>
+  <div class="nav-item" onclick="sdNavigate('servidor.html')"><div class="nav-icon">🖥️</div><div class="nav-label">Servidor</div><div class="nav-dot"></div></div>
+  <div class="nav-item" onclick="sdNavigate('financas.html')"><div class="nav-icon">💰</div><div class="nav-label">Finanças</div><div class="nav-dot"></div></div>
+  <div class="nav-item" onclick="sdNavigate('avisos.html')"><div class="nav-icon">📢</div><div class="nav-label">Avisos</div><div class="nav-dot"></div></div>
   <div class="nav-item active"><div class="nav-icon">⚙️</div><div class="nav-label">Config.</div><div class="nav-dot"></div></div>
 </div>
 
@@ -1542,6 +1543,12 @@ if(data && data.error){
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');
   
 // ── Notificações ──
+  function sdNavigate(url){
+    if(window.location.pathname.endsWith(url))return;
+    document.body.classList.add('sd-leaving');
+    setTimeout(()=>{ window.location.href=url; },160);
+  }
+  window.sdNavigate = sdNavigate;
   function handleNotifToggle() {
     if (!('Notification' in window)) {
       alert('Seu navegador não suporta notificações.');
