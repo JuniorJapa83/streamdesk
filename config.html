@@ -735,11 +735,14 @@ function calcFase(data){
   const expStr=data.expiracao||data.vencimento||null;
 
   if(expStr){
-    const exp=fromStr(expStr),dias=diffDays(now,exp);
-    if(dias>7)  return {fase:'fa',dias,expStr};
-    if(dias>=0) return {fase:'f3',dias,expStr};
-    return           {fase:'f4',dias,expStr};
+  const exp=fromStr(expStr),dias=diffDays(now,exp);
+
+  if(dias >= 0){
+    return {fase:'fa',dias,expStr};
   }
+
+  return {fase:'f4',dias,expStr};
+}
 
   const trialFimStr=data.trialFim||null;
   if(!trialFimStr) return {fase:'f1',dias:30,diasUsados:0};
@@ -888,7 +891,7 @@ window.renderAssinatura=function(user,data,nClientes){
     </div>
   ` : ``}
 </div>
-      </div>
+      
       ${barHTML}
       ${metaHTML}
       <div class="ac-insight">
