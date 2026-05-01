@@ -2,266 +2,697 @@
 <html lang="pt-BR">
 <head>
   <link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#00d4ff">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="StreamDesk">
-<link rel="apple-touch-icon" href="favicon.png">
-  <!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-PN7SZSWQR4"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-PN7SZSWQR4');
-</script>
+  <meta name="theme-color" content="#6366f1">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="StreamDesk">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PN7SZSWQR4"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PN7SZSWQR4');</script>
   <link rel="icon" href="favicon.png" type="image/png">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>StreamDesk — Configurações</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="theme.css">
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>StreamDesk — Configurações</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="theme.css">
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
 <style>
-  :root {
-    --bg:#080b12;--surface:#0e1220;--card:#131825;--card2:#161c2c;
-    --border:#1c2236;--accent:#00d4ff;--red:#ff3b5c;--green:#00e096;
-    --yellow:#ffbb00;--purple:#a78bfa;--text:#e4e8f4;--muted:#5a6480;--radius:16px;
-  }
-  body.light {
-    --bg:#f0f4f8;--surface:#ffffff;--card:#ffffff;--card2:#f7f9fc;
-    --border:#e2e8f0;--text:#1a202c;--muted:#718096;
-  }
-  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:420px;margin:0 auto;transition:background .3s,color .3s}
+/* ═══════════════════════════════════════════
+   CONFIG — estilos locais
+═══════════════════════════════════════════ */
 
-  .header{position:sticky;top:0;z-index:50;background:rgba(8,11,18,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:16px 20px}
-  body.light .bottom-nav { background: rgba(255,255,255,.97); }
-  body.light .header { background: rgba(255,255,255,.96); }
-  .page-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800}
-  .page-title span{color:var(--accent)}
+/* ── Layout base ── */
+.content { padding: 16px 20px 110px; display: flex; flex-direction: column; gap: 6px; }
 
-  .content{padding:16px 20px 110px;display:flex;flex-direction:column;gap:6px}
+/* ── Group / Row (config items) ── */
+.group { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm); }
+.row { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--border); }
+.row:last-child { border-bottom: none; }
+.row-icon { font-size: 20px; flex-shrink: 0; width: 32px; text-align: center; }
+.row-body { flex: 1; min-width: 0; }
+.row-label { font-size: 14px; font-weight: 600; }
+.row-sub { font-size: 12px; color: var(--muted2); margin-top: 2px; }
+.row-right { flex-shrink: 0; display: flex; align-items: center; gap: 8px; }
+.row-arrow { color: var(--muted2); font-size: 16px; }
+.row-input { width: 100%; background: none; border: none; outline: none; color: var(--text2); font-size: 14px; font-family: var(--font); font-weight: 500; }
+.row-input::placeholder { color: var(--muted); }
+.btn-row { display: flex; align-items: center; gap: 12px; padding: 14px 16px; cursor: pointer; border-bottom: 1px solid var(--border); transition: background .2s; }
+.btn-row:last-child { border-bottom: none; }
+.btn-row:active { background: var(--card2); }
+.btn-accent { color: var(--accent); }
+.btn-red    { color: var(--red); }
+.btn-green  { color: var(--green); }
+.btn-yellow { color: var(--yellow); }
 
-  .sec-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin:16px 0 8px 4px;display:flex;align-items:center;gap:8px}
-  .sec-label::after{content:'';flex:1;height:1px;background:var(--border)}
+/* ── Toggle ── */
+.tog { width: 44px; height: 24px; border-radius: 50px; position: relative; border: 1px solid var(--border); background: var(--card2); transition: background .3s, border-color .3s; cursor: pointer; flex-shrink: 0; }
+.tog.on { background: var(--green-bg); border-color: var(--green); }
+.tog-thumb { position: absolute; top: 4px; left: 4px; width: 14px; height: 14px; border-radius: 50%; background: var(--muted); transition: left .3s, background .3s; }
+.tog.on .tog-thumb { left: 24px; background: var(--green); }
 
-  .group{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
-  .row{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border)}
-  .row:last-child{border-bottom:none}
-  .row-icon{font-size:20px;flex-shrink:0;width:32px;text-align:center}
-  .row-body{flex:1;min-width:0}
-  .row-label{font-size:14px;font-weight:500}
-  .row-sub{font-size:12px;color:var(--muted);margin-top:2px}
-  .row-right{flex-shrink:0;display:flex;align-items:center;gap:8px}
-  .row-arrow{color:var(--muted);font-size:16px}
+/* ── Version badge ── */
+.version-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--accent-bg); border: 1px solid var(--accent-border); border-radius: 50px; padding: 3px 10px; font-size: 11px; color: var(--accent); font-weight: 700; }
 
-  .row-input{width:100%;background:none;border:none;outline:none;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;font-weight:500}
-  .row-input::placeholder{color:var(--muted)}
+/* ── Toast ── */
+.saved-toast {
+  position: fixed; top: 80px; left: 50%; transform: translateX(-50%);
+  background: var(--green-bg); border: 1px solid var(--green-border);
+  color: var(--green); border-radius: 50px; padding: 8px 20px;
+  font-size: 13px; font-weight: 700; opacity: 0; transition: opacity .3s;
+  pointer-events: none; z-index: 9000; white-space: nowrap;
+}
+.saved-toast.show { opacity: 1; }
 
-  .tog{width:44px;height:24px;border-radius:50px;position:relative;border:1px solid var(--border);background:var(--card2);transition:background .3s,border-color .3s;cursor:pointer;flex-shrink:0}
-  .tog.on{background:rgba(0,224,150,.15);border-color:var(--green)}
-  .tog-thumb{position:absolute;top:4px;left:4px;width:14px;height:14px;border-radius:50%;background:var(--muted);transition:left .3s,background .3s}
-  .tog.on .tog-thumb{left:24px;background:var(--green)}
+/* ── Overlay / Modal ── */
+.overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.72);
+  z-index: 200; display: flex; align-items: flex-end;
+  opacity: 0; pointer-events: none; transition: opacity .3s;
+  backdrop-filter: blur(4px);
+}
+.overlay.open { opacity: 1; pointer-events: all; }
+.modal {
+  background: var(--surface); border-radius: 24px 24px 0 0;
+  padding: 24px 20px 44px; width: 100%; max-height: 90vh;
+  overflow-y: auto; transform: translateY(100%);
+  transition: transform .35s cubic-bezier(.32,.72,0,1);
+  border-top: 1px solid var(--border);
+}
+.overlay.open .modal { transform: translateY(0); }
+.mhandle { width: 40px; height: 4px; background: var(--border); border-radius: 2px; margin: 0 auto 20px; }
+.mtitle { font-size: 20px; font-weight: 800; margin-bottom: 6px; }
+.msub { font-size: 13px; color: var(--muted2); margin-bottom: 20px; line-height: 1.5; }
+.fg { margin-bottom: 14px; }
+.fl { font-size: 11px; color: var(--muted2); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 6px; display: block; font-weight: 700; }
+.fi {
+  width: 100%; background: var(--card); border: 1px solid var(--border);
+  border-radius: 10px; padding: 11px 14px; color: var(--text);
+  font-size: 14px; font-family: var(--font); outline: none;
+  transition: border-color .2s; appearance: none;
+}
+.fi:focus { border-color: var(--accent); }
+.fi-area { min-height: 100px; resize: none; line-height: 1.5; }
+.btn-save {
+  width: 100%; background: var(--accent); color: #fff; border: none;
+  border-radius: var(--radius-md); padding: 14px; font-family: var(--font);
+  font-weight: 800; font-size: 16px; cursor: pointer; margin-top: 8px;
+  transition: opacity .2s, transform .15s;
+}
+.btn-save:active { transform: scale(.97); opacity: .9; }
+.btn-save:disabled { opacity: .5; cursor: not-allowed; }
+.btn-cancel {
+  width: 100%; background: transparent; color: var(--muted2);
+  border: 1px solid var(--border); border-radius: var(--radius-md);
+  padding: 12px; font-family: var(--font); font-size: 15px; cursor: pointer; margin-top: 8px;
+}
 
-  .btn-row{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;border-bottom:1px solid var(--border);transition:background .2s}
-  .btn-row:last-child{border-bottom:none}
-  .btn-row:active{background:var(--card2)}
-  .btn-accent{color:var(--accent)}
-  .btn-red{color:var(--red)}
-  .btn-green{color:var(--green)}
-  .btn-yellow{color:var(--yellow)}
+/* ══════════════════════════════════════════
+   CARD DE ASSINATURA — SISTEMA DE FASES
+══════════════════════════════════════════ */
+.assin-card {
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: border-color .4s, box-shadow .4s;
+  position: relative;
+}
 
-  .saved-toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);background:rgba(0,224,150,.15);border:1px solid var(--green);color:var(--green);border-radius:50px;padding:8px 20px;font-size:13px;font-weight:600;opacity:0;transition:opacity .3s;pointer-events:none;z-index:100}
-  .saved-toast.show{opacity:1}
+/* Cores por fase/status */
+.assin-card.phase-trial  { border-color: var(--accent-border); }
+.assin-card.phase-warn   { border-color: var(--yellow-border); box-shadow: 0 0 0 3px var(--yellow-glow), var(--shadow); }
+.assin-card.phase-urgent { border-color: var(--red-border);    box-shadow: 0 0 0 3px var(--red-glow),    var(--shadow); }
+.assin-card.phase-active { border-color: var(--green-border);  }
+.assin-card.phase-expired{ border-color: var(--red-border);    box-shadow: 0 0 0 4px var(--red-glow),    var(--shadow); }
 
-  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:200;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .3s}
-  .overlay.open{opacity:1;pointer-events:all}
-  .modal{background:var(--surface);border-radius:24px 24px 0 0;padding:24px 20px 40px;width:100%;max-height:88vh;overflow-y:auto;transform:translateY(100%);transition:transform .35s cubic-bezier(.32,.72,0,1);border-top:1px solid var(--border)}
-  .overlay.open .modal{transform:translateY(0)}
-  .mhandle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 20px}
-  .mtitle{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:6px}
-  .msub{font-size:13px;color:var(--muted);margin-bottom:20px}
-  .fg{margin-bottom:14px}
-  .fl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;display:block}
-  .fi{width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border .2s;appearance:none}
-  .fi:focus{border-color:var(--accent)}
-  .fi-area{min-height:100px;resize:none;line-height:1.5}
-  .btn-save{width:100%;background:var(--accent);color:#000;border:none;border-radius:12px;padding:14px;font-family:'Syne',sans-serif;font-weight:700;font-size:16px;cursor:pointer;margin-top:8px}
-  .btn-save:active{transform:scale(.97)}
-  .btn-cancel{width:100%;background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:12px;padding:12px;font-family:'DM Sans',sans-serif;font-size:15px;cursor:pointer;margin-top:8px}
+/* Header do card */
+.assin-header {
+  padding: 16px 18px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.assin-status { display: flex; align-items: center; gap: 8px; }
+.assin-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.assin-dot.trial  { background: var(--accent); box-shadow: 0 0 6px var(--accent-glow); }
+.assin-dot.active { background: var(--green);  box-shadow: 0 0 6px var(--green-glow);  animation: pulse 2s infinite; }
+.assin-dot.warn   { background: var(--yellow); box-shadow: 0 0 6px var(--yellow-glow); animation: pulse 2s infinite; }
+.assin-dot.urgent { background: var(--red);    box-shadow: 0 0 6px var(--red-glow);    animation: pulse 1.4s infinite; }
+.assin-dot.expired{ background: var(--red);    }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
 
-  .version-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.15);border-radius:50px;padding:3px 10px;font-size:11px;color:var(--accent);font-weight:600}
+.assin-status-txt { font-size: 13px; font-weight: 700; }
+.assin-status-txt.trial  { color: var(--accent); }
+.assin-status-txt.active { color: var(--green); }
+.assin-status-txt.warn   { color: var(--yellow); }
+.assin-status-txt.urgent { color: var(--red); }
+.assin-status-txt.expired{ color: var(--red); }
+.assin-plan-badge {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .6px; background: var(--card2);
+  border: 1px solid var(--border); border-radius: 50px;
+  padding: 3px 10px; color: var(--muted2);
+}
 
-  .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:420px;background:rgba(14,18,32,.97);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;padding:10px 0 24px;z-index:50}
-  .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:4px 0}
-  .nav-icon{font-size:20px;transition:transform .2s}
-  .nav-label{font-size:8px;color:var(--muted);font-weight:500}
-  .nav-item.active .nav-label{color:var(--accent)}
-  .nav-item.active .nav-icon{transform:translateY(-2px)}
-  .nav-dot{width:4px;height:4px;border-radius:50%;background:var(--accent);margin-top:-2px;opacity:0}
-  .nav-item.active .nav-dot{opacity:1}
+/* Hero do card (valor/dias) */
+.assin-hero {
+  padding: 20px 18px 4px;
+  display: flex; align-items: flex-end; justify-content: space-between;
+}
+.assin-hero-val { font-size: 36px; font-weight: 800; line-height: 1; }
+.assin-hero-val.trial  { color: var(--accent); }
+.assin-hero-val.active { color: var(--green); }
+.assin-hero-val.warn   { color: var(--yellow); }
+.assin-hero-val.urgent { color: var(--red); }
+.assin-hero-val.expired{ color: var(--red); }
+.assin-hero-sub { font-size: 12px; color: var(--muted2); margin-top: 4px; }
+.assin-hero-right { text-align: right; }
+.assin-hero-price { font-size: 22px; font-weight: 800; color: var(--text); }
+.assin-hero-price-sub { font-size: 11px; color: var(--muted2); }
 
-  /* ── ASSINATURA ── */
-  .assin-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
-  .assin-header{padding:16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-  .assin-status{display:flex;align-items:center;gap:8px}
-  .assin-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-  .assin-dot.ativo{background:var(--green);box-shadow:0 0 6px rgba(0,224,150,.5)}
-  .assin-dot.vencendo{background:var(--yellow);box-shadow:0 0 6px rgba(255,187,0,.5)}
-  .assin-dot.vencido{background:var(--red);box-shadow:0 0 6px rgba(255,59,92,.5)}
-  .assin-status-txt{font-size:13px;font-weight:600}
-  .assin-status-txt.ativo{color:var(--green)}
-  .assin-status-txt.vencendo{color:var(--yellow)}
-  .assin-status-txt.vencido{color:var(--red)}
-  .assin-body{padding:16px;display:flex;flex-direction:column;gap:10px}
-  .assin-row{display:flex;justify-content:space-between;align-items:center}
-  .assin-lbl{font-size:12px;color:var(--muted)}
-  .assin-val{font-size:14px;font-weight:500}
-  .assin-dias{font-size:11px;color:var(--muted);margin-top:2px}
-  .btn-renovar{width:100%;background:var(--accent);color:#000;border:none;border-radius:12px;padding:13px;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;cursor:pointer;margin-top:4px;transition:transform .15s,box-shadow .15s}
-  .btn-renovar:active{transform:scale(.97)}
-  .btn-renovar.vencendo{background:var(--yellow)}
-  .btn-renovar.vencido{background:var(--red);color:#fff}
+/* Body do card */
+.assin-body { padding: 12px 18px 18px; display: flex; flex-direction: column; gap: 10px; }
+.assin-row  { display: flex; justify-content: space-between; align-items: center; }
+.assin-lbl  { font-size: 12px; color: var(--muted2); }
+.assin-val  { font-size: 13px; font-weight: 600; }
 
-  /* ── MODAL PAGAMENTO ── */
-  .pay-tabs{display:flex;gap:8px;margin-bottom:20px}
-  .pay-tab{flex:1;padding:10px;border-radius:10px;border:1px solid var(--border);background:var(--card);text-align:center;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;color:var(--muted)}
-  .pay-tab.active{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,.06)}
-  .pay-panel{display:none}
-  .pay-panel.active{display:block}
+/* Barra de progresso trial */
+.trial-bar-wrap {
+  background: var(--card2); border-radius: 4px; height: 6px; overflow: hidden;
+  margin: 2px 0 4px;
+}
+.trial-bar {
+  height: 100%; border-radius: 4px;
+  background: var(--accent);
+  transition: width .6s ease;
+}
+.trial-bar.warn   { background: var(--yellow); }
+.trial-bar.urgent { background: var(--red); }
 
-  .pix-qr-wrap{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center;margin-bottom:16px;min-height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
-  .pix-qr-img{width:160px;height:160px;border-radius:8px;background:#fff;padding:4px}
-  .pix-copy-btn{width:100%;background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.2);color:var(--accent);border-radius:10px;padding:12px;font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
-  .pix-copy-btn:active{transform:scale(.97)}
-  .pix-timer{font-size:12px;color:var(--muted);text-align:center;margin-top:8px}
+/* Value prop / insight */
+.assin-insight {
+  background: var(--card2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 11px 14px;
+  font-size: 12px; color: var(--text2); line-height: 1.5;
+  display: flex; align-items: center; gap: 10px;
+}
+.assin-insight-ico { font-size: 18px; flex-shrink: 0; }
 
-  .card-field{margin-bottom:12px}
-  .card-field label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;display:block}
-  .card-field input{width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border .2s}
-  .card-field input:focus{border-color:var(--accent)}
-  .card-row{display:flex;gap:10px}
-  .card-row .card-field{flex:1}
+/* Botões de assinatura */
+.btn-renovar {
+  width: 100%; border: none; border-radius: var(--radius-md);
+  padding: 14px; font-family: var(--font); font-weight: 800;
+  font-size: 15px; cursor: pointer;
+  transition: transform .15s, opacity .2s, box-shadow .2s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.btn-renovar:active { transform: scale(.97); opacity: .9; }
+.btn-renovar.trial  { background: var(--accent); color: #fff; }
+.btn-renovar.active { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+.btn-renovar.warn   { background: var(--yellow); color: #000; box-shadow: 0 4px 14px var(--yellow-glow); }
+.btn-renovar.urgent { background: var(--red); color: #fff; box-shadow: 0 4px 16px var(--red-glow); }
+.btn-renovar.expired{ background: var(--red); color: #fff; box-shadow: 0 4px 20px var(--red-glow); font-size: 16px; }
 
-  .spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(0,0,0,.2);border-top-color:#000;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px}
-  @keyframes spin{to{transform:rotate(360deg)}}
+/* Bloco expirado */
+.assin-expired-banner {
+  background: var(--red-bg); border-bottom: 1px solid var(--red-border);
+  padding: 12px 18px; display: flex; align-items: center; gap: 10px;
+}
+.assin-expired-ico { font-size: 22px; }
+.assin-expired-txt { font-size: 12px; color: var(--red); font-weight: 600; line-height: 1.4; }
 
-  .pay-msg{font-size:13px;text-align:center;padding:10px;border-radius:8px;margin-top:10px;display:none}
-  .pay-msg.ok{background:rgba(0,224,150,.1);color:var(--green);border:1px solid rgba(0,224,150,.2);display:block}
-  .pay-msg.err{background:rgba(255,59,92,.1);color:var(--red);border:1px solid rgba(255,59,92,.2);display:block}
+/* ── MODAL PAGAMENTO ── */
+.pay-tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+.pay-tab {
+  flex: 1; padding: 10px; border-radius: 10px;
+  border: 1px solid var(--border); background: var(--card);
+  text-align: center; font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: all .2s; color: var(--muted2);
+}
+.pay-tab.active { border-color: var(--accent); color: var(--accent); background: var(--accent-bg); }
+.pay-panel { display: none; }
+.pay-panel.active { display: block; }
+.pix-qr-wrap {
+  background: var(--card2); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 20px; text-align: center;
+  margin-bottom: 16px; min-height: 180px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+}
+.pix-qr-img { width: 160px; height: 160px; border-radius: 8px; background: #fff; padding: 4px; }
+.pix-copy-btn {
+  width: 100%; background: var(--accent-bg);
+  border: 1px solid var(--accent-border); color: var(--accent);
+  border-radius: 10px; padding: 12px; font-size: 14px; font-weight: 700;
+  cursor: pointer; font-family: var(--font); transition: all .2s;
+}
+.pix-copy-btn:active { transform: scale(.97); }
+.pix-timer { font-size: 12px; color: var(--muted2); text-align: center; margin-top: 8px; }
+.card-field { margin-bottom: 12px; }
+.card-field label { font-size: 11px; color: var(--muted2); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 6px; display: block; font-weight: 700; }
+.card-field input {
+  width: 100%; background: var(--card); border: 1px solid var(--border);
+  border-radius: 10px; padding: 11px 14px; color: var(--text);
+  font-size: 14px; font-family: var(--font); outline: none; transition: border-color .2s;
+}
+.card-field input:focus { border-color: var(--accent); }
+.card-row { display: flex; gap: 10px; }
+.card-row .card-field { flex: 1; }
+.spinner {
+  display: inline-block; width: 16px; height: 16px;
+  border: 2px solid rgba(255,255,255,.3); border-top-color: #fff;
+  border-radius: 50%; animation: spin .7s linear infinite;
+  vertical-align: middle; margin-right: 6px;
+}
+.spinner.dark { border-color: rgba(0,0,0,.2); border-top-color: #000; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.pay-msg {
+  font-size: 13px; text-align: center; padding: 10px;
+  border-radius: 8px; margin-top: 10px; display: none;
+}
+.pay-msg.ok  { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); display: block; }
+.pay-msg.err { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); display: block; }
+
+/* ── Pix copiado feedback ── */
+.pix-copied-overlay {
+  position: absolute; inset: 0; background: var(--green-bg);
+  border: 2px solid var(--green); border-radius: var(--radius-md);
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 8px; opacity: 0;
+  transition: opacity .3s; pointer-events: none;
+}
+.pix-copied-overlay.show { opacity: 1; }
+.pix-qr-wrap { position: relative; }
+
+/* ── Bottom nav ── */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 100%; max-width: 430px; background: var(--nav-bg);
+  backdrop-filter: blur(20px); border-top: 1px solid var(--border);
+  display: flex; padding: 10px 0 24px; z-index: 50;
+}
+.nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; padding: 4px 0; }
+.nav-icon  { font-size: 20px; transition: transform .2s; }
+.nav-label { font-size: 8px; color: var(--muted2); font-weight: 600; text-transform: uppercase; letter-spacing: .3px; }
+.nav-dot   { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); margin-top: -2px; opacity: 0; }
+.nav-item.active .nav-label { color: var(--accent); }
+.nav-item.active .nav-icon  { transform: translateY(-2px); }
+.nav-item.active .nav-dot   { opacity: 1; }
+
+/* ── Animações ── */
+@keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+.assin-card { animation: fadeUp .4s ease both; }
+
+/* ── Segurança badge ── */
+.security-note {
+  font-size: 11px; color: var(--muted2); text-align: center;
+  margin-top: 14px; line-height: 1.5;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
 </style>
 </head>
 <body>
-<script>(function(){var c=JSON.parse(localStorage.getItem('streamdesk_config')||'{}');if(c.darkMode!==true)document.body.classList.add('light');})()</script>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+<script>(function(){var c=JSON.parse(localStorage.getItem('streamdesk_config')||'{}');if(c.darkMode===true)document.body.classList.add('dark');})()</script>
 
-const _app  = initializeApp({apiKey:"AIzaSyAGHvkDpeSbCTriZCvRf-jJ6z8PQSSWLHI",authDomain:"streamdesk-5350d.firebaseapp.com",projectId:"streamdesk-5350d",storageBucket:"streamdesk-5350d.firebasestorage.app",messagingSenderId:"36684694847",appId:"1:36684694847:web:0f6f3a27933e3d84cfff8a"});
+<!-- ══ MÓDULO FIREBASE (module) ══ -->
+<script type="module">
+import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, collection, getDocs }
+        from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+const FB = {
+  apiKey:"AIzaSyAGHvkDpeSbCTriZCvRf-jJ6z8PQSSWLHI",
+  authDomain:"streamdesk-5350d.firebaseapp.com",
+  projectId:"streamdesk-5350d",
+  storageBucket:"streamdesk-5350d.firebasestorage.app",
+  messagingSenderId:"36684694847",
+  appId:"1:36684694847:web:0f6f3a27933e3d84cfff8a"
+};
+const _app  = initializeApp(FB);
 const _auth = getAuth(_app);
 const _db   = getFirestore(_app);
+
+// Expõe globalmente para funções não-module
 window._firebaseAuth = _auth;
 window._firebaseDB   = _db;
 
-onAuthStateChanged(_auth, async function(user) {
-  if (!user) { location.href='login.html'; return; }
-  document.getElementById('cfgNome').value     = user.displayName || '';
-  document.getElementById('cfgEmail').value    = user.email || '';
-  document.getElementById('cfgNome').readOnly  = true;
-  document.getElementById('cfgEmail').readOnly = true;
-  document.getElementById('cfgNome').style.color  = 'var(--muted)';
-  document.getElementById('cfgEmail').style.color = 'var(--muted)';
-  window._currentUser = user;
-  try {
-    const snap = await getDoc(doc(_db, 'usuarios', user.uid));
-    const data = snap.exists() ? snap.data() : {};
-    window._userData = data;
-    renderAssinatura(user, data);
-  } catch(e) { console.error('Erro ao carregar assinatura:', e); }
-});
-
-function daysUntil(venc) {
-  if (!venc) return null;
-  var p = venc.split('-');
-  var vd = new Date(p[0], p[1]-1, p[2]);
-  var td = new Date(); td.setHours(0,0,0,0);
-  return Math.round((vd - td) / 86400000);
+/* ─── Helpers de data ─── */
+function today() {
+  const d = new Date(); d.setHours(0,0,0,0); return d;
 }
-function formatDate(d) {
-  if (!d) return '—';
-  var p = d.split('-');
-  return p[2]+'/'+p[1]+'/'+p[0];
+function dateFromStr(s) {
+  if(!s) return null;
+  const p = s.split('-');
+  return new Date(p[0], p[1]-1, p[2]);
+}
+function diffDays(from, to) {
+  return Math.round((to - from) / 86400000);
+}
+function toDateStr(d) {
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 }
 
-window.renderAssinatura = function(user, data) {
-  var venc   = data.expiracao || data.vencimento || null;
-  var dias   = daysUntil(venc);
-  var status = dias === null ? 'sem-data' : dias < 0 ? 'vencido' : dias <= 7 ? 'vencendo' : 'ativo';
-  var statusTxt = {ativo:'Ativo', vencendo:'Vencendo em breve', vencido:'Vencido', 'sem-data':'Sem data'}[status];
-  var diasTxt   = dias === null ? '' : dias < 0 ? 'Venceu há '+Math.abs(dias)+' dia(s)' : dias === 0 ? 'Vence hoje!' : 'Vence em '+dias+' dia(s)';
-  var btnTxt    = status === 'vencido' ? '🔄 Renovar Agora' : status === 'vencendo' ? '⚡ Renovar Antes de Vencer' : '💳 Gerenciar Assinatura';
-  document.getElementById('assinCard').innerHTML = `
+/* ─── LÓGICA DE TRIAL ─── */
+// Garante que o usuário tem trialInicio/trialFim.
+// Preserva expiracao/vencimento existentes como statusAssinatura ativo.
+async function ensureTrial(db, uid, data) {
+  const updates = {};
+  let changed = false;
+
+  // Se não tem plano definido
+  if(!data.plano) {
+    updates.plano = 'trial';
+    changed = true;
+  }
+
+  // Se não tem trialInicio (usuário novo ou migrado)
+  if(!data.trialInicio) {
+    const inicio = today();
+    const fim    = new Date(inicio); fim.setDate(fim.getDate() + 30);
+    updates.trialInicio = toDateStr(inicio);
+    updates.trialFim    = toDateStr(fim);
+    changed = true;
+  }
+
+  if(changed) {
+    try {
+      await setDoc(doc(db,'usuarios',uid), updates, {merge:true});
+      Object.assign(data, updates);
+    } catch(e) {
+      console.error('ensureTrial error', e);
+    }
+  }
+  return data;
+}
+
+/* ─── Determinar fase (1–4 + active) ─── */
+// Retorna: { fase, diasRestantes, statusAssin, label, dotClass }
+function calcFase(data) {
+  const now = today();
+
+  // Usuário com assinatura paga ativa (expiracao futura)
+  const expStr = data.expiracao || data.vencimento || null;
+  if(expStr) {
+    const exp = dateFromStr(expStr);
+    const dias = diffDays(now, exp);
+    if(dias > 7)  return { fase:'active', diasRestantes: dias, expStr, label:'Ativo', dotClass:'active' };
+    if(dias >= 0) return { fase:'warn',   diasRestantes: dias, expStr, label:'Vencendo em breve', dotClass:'warn' };
+    return           { fase:'expired', diasRestantes: dias, expStr, label:'Vencido', dotClass:'expired' };
+  }
+
+  // Trial
+  const trialFimStr = data.trialFim || null;
+  if(!trialFimStr) return { fase:'trial', diasRestantes:30, expStr:null, label:'Período gratuito', dotClass:'trial' };
+
+  const trialFim  = dateFromStr(trialFimStr);
+  const diasRestantes = diffDays(now, trialFim);
+
+  if(diasRestantes < 0)  return { fase:'expired', diasRestantes, expStr:null, label:'Trial expirado', dotClass:'expired' };
+  if(diasRestantes <= 3) return { fase:'urgent',  diasRestantes, expStr:null, label:'Expirando hoje', dotClass:'urgent' };
+  if(diasRestantes <= 10) return { fase:'warn',   diasRestantes, expStr:null, label:'Período gratuito', dotClass:'warn' };
+  return                         { fase:'trial',  diasRestantes, expStr:null, label:'Período gratuito', dotClass:'trial' };
+}
+
+/* ─── Render do card de assinatura ─── */
+window.renderAssinatura = function(user, data, numClientes) {
+  window._payUid  = user.uid;
+  window._payVenc = data.expiracao || data.vencimento || null;
+
+  const { fase, diasRestantes, expStr } = calcFase(data);
+  const card = document.getElementById('assinCard');
+  if(!card) return;
+
+  // Classe visual no card
+  const phaseClass = {
+    trial:'phase-trial', warn:'phase-warn',
+    urgent:'phase-urgent', active:'phase-active', expired:'phase-expired'
+  }[fase] || 'phase-trial';
+  card.className = 'assin-card ' + phaseClass;
+
+  // Dados do trial
+  const trialInicioStr = data.trialInicio || null;
+  const trialFimStr    = data.trialFim    || null;
+  const trialInicio    = trialInicioStr ? dateFromStr(trialInicioStr) : null;
+  const diasUsados     = trialInicio ? diffDays(trialInicio, today()) : 0;
+  const totalTrial     = 30;
+  const pctTrial       = Math.min(100, Math.round((diasUsados / totalTrial) * 100));
+
+  // String dias
+  const diasStr = diasRestantes < 0
+    ? 'Expirado há ' + Math.abs(diasRestantes) + ' dia(s)'
+    : diasRestantes === 0 ? 'Expira hoje!'
+    : diasRestantes + ' dia(s) restante' + (diasRestantes>1?'s':'');
+
+  // Mensagem de valor percebido (baseado em clientes)
+  function valorMsg() {
+    if(fase === 'active') {
+      return { ico:'✅', txt: numClientes > 0
+        ? 'Você gerencia <b>' + numClientes + ' cliente(s)</b> com o StreamDesk. Tudo organizado.'
+        : 'Assinatura ativa. Aproveite todos os recursos.' };
+    }
+    if(fase === 'expired') {
+      return { ico:'🔒', txt: numClientes > 20
+        ? '🚨 Você tem <b>' + numClientes + ' clientes</b> cadastrados. Reative agora para não perder sua base.'
+        : numClientes > 0
+          ? 'Você tem <b>' + numClientes + ' cliente(s)</b> no app. Reative para continuar gerenciando.'
+          : 'Reative seu acesso para continuar usando o StreamDesk.' };
+    }
+    if(fase === 'urgent') {
+      return { ico:'⚠️', txt: numClientes > 0
+        ? 'Você gerencia <b>' + numClientes + ' cliente(s)</b>. Renove antes de perder o acesso em <b>' + diasRestantes + ' dia(s)</b>.'
+        : 'Seu acesso expira em <b>' + diasRestantes + ' dia(s)</b>. Renove agora.' };
+    }
+    if(fase === 'warn') {
+      return { ico:'⏳', txt: numClientes > 10
+        ? 'Você já gerencia <b>' + numClientes + ' clientes</b>. Seu período gratuito termina em <b>' + diasRestantes + ' dias</b>.'
+        : 'Período gratuito termina em <b>' + diasRestantes + ' dias</b>.' };
+    }
+    // trial livre (fase 1)
+    return { ico:'🎉', txt: numClientes > 0
+      ? 'Você já tem <b>' + numClientes + ' cliente(s)</b> cadastrado(s). Continue aproveitando gratuitamente!'
+      : 'Aproveite o período gratuito para cadastrar seus clientes e testar todos os recursos.' };
+  }
+
+  const vm = valorMsg();
+
+  // Status label e dot
+  const dotClass = { trial:'trial', active:'active', warn:'warn', urgent:'urgent', expired:'expired' }[fase];
+  const statusTxt = { trial:'Período gratuito', active:'Ativo', warn:'Expirando em breve', urgent:'Expirando hoje!', expired:'Acesso expirado' }[fase];
+
+  // Botão: mostrar só nas fases certas
+  function btnHTML() {
+    if(fase === 'trial') {
+      // Fase 1 (dias 1-20): SEM botão de pagamento
+      if(diasUsados <= 20) return '';
+      // Fase 2 (dias 21-27): aviso leve sem botão de pagamento
+      if(diasRestantes > 3) return `
+        <div style="background:var(--yellow-bg);border:1px solid var(--yellow-border);border-radius:var(--radius-sm);padding:10px 14px;font-size:12px;color:var(--yellow);font-weight:600;display:flex;align-items:center;gap:8px">
+          <span>⏳</span>
+          <span>Seu período gratuito termina em <b>${diasRestantes} dias</b></span>
+        </div>`;
+      // Fase 3 (dias 28-30): botão de conversão
+      return `<button class="btn-renovar urgent" onclick="openModal('ovPagamento')">
+        🚀 Continue usando sem perder seus clientes
+      </button>`;
+    }
+    if(fase === 'active') return `
+      <button class="btn-renovar active" onclick="openModal('ovPagamento')">
+        ✅ Gerenciar Assinatura
+      </button>`;
+    if(fase === 'warn') return `
+      <button class="btn-renovar warn" onclick="openModal('ovPagamento')">
+        ⚡ Renovar Antes de Vencer
+      </button>`;
+    if(fase === 'urgent') return `
+      <button class="btn-renovar urgent" onclick="openModal('ovPagamento')">
+        🔥 Renovar Agora — Expira Hoje!
+      </button>`;
+    if(fase === 'expired') return `
+      <div class="assin-expired-banner">
+        <div class="assin-expired-ico">🔒</div>
+        <div class="assin-expired-txt">Seu acesso está bloqueado. Renove para continuar usando o app.</div>
+      </div>
+      <div class="assin-body">
+        <button class="btn-renovar expired" onclick="openModal('ovPagamento')">
+          🔄 Reativar Meu Acesso — R$ 9,90/mês
+        </button>
+      </div>`;
+    return '';
+  }
+
+  // Barra de progresso (trial)
+  function barHTML() {
+    if(fase !== 'trial' && fase !== 'warn' && fase !== 'urgent') return '';
+    const barClass = diasRestantes <= 3 ? 'urgent' : diasRestantes <= 10 ? 'warn' : '';
+    return `
+      <div style="padding: 0 0 4px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+          <span style="font-size:10px;color:var(--muted2)">Período gratuito</span>
+          <span style="font-size:10px;font-weight:700;color:var(--muted2)">${diasUsados}/${totalTrial} dias</span>
+        </div>
+        <div class="trial-bar-wrap">
+          <div class="trial-bar ${barClass}" style="width:${pctTrial}%"></div>
+        </div>
+      </div>`;
+  }
+
+  // Linha de vencimento/data
+  function dateRowHTML() {
+    if(fase === 'active' && expStr) {
+      const p = expStr.split('-');
+      return `<div class="assin-row">
+        <span class="assin-lbl">Vencimento</span>
+        <span class="assin-val">${p[2]}/${p[1]}/${p[0]}</span>
+      </div>`;
+    }
+    if(trialFimStr && (fase==='trial'||fase==='warn'||fase==='urgent')) {
+      const p = trialFimStr.split('-');
+      return `<div class="assin-row">
+        <span class="assin-lbl">Trial até</span>
+        <span class="assin-val">${p[2]}/${p[1]}/${p[0]}</span>
+      </div>`;
+    }
+    return '';
+  }
+
+  // Montar HTML completo do card
+  if(fase === 'expired') {
+    card.innerHTML = btnHTML();
+    return;
+  }
+
+  card.innerHTML = `
     <div class="assin-header">
       <div class="assin-status">
-        <div class="assin-dot ${status}"></div>
-        <div class="assin-status-txt ${status}">${statusTxt}</div>
+        <div class="assin-dot ${dotClass}"></div>
+        <div class="assin-status-txt ${dotClass}">${statusTxt}</div>
       </div>
-      <div style="font-size:11px;color:var(--muted)">StreamDesk</div>
+      <div class="assin-plan-badge">StreamDesk Pro</div>
+    </div>
+    <div style="padding:16px 18px 0">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:12px">
+        <div>
+          <div style="font-size:28px;font-weight:800;color:var(--${dotClass==='trial'?'accent':dotClass==='active'?'green':dotClass==='warn'?'yellow':'red'})">${diasStr}</div>
+          <div style="font-size:12px;color:var(--muted2);margin-top:3px">de acesso</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:18px;font-weight:800">R$ 9,90</div>
+          <div style="font-size:11px;color:var(--muted2)">/mês</div>
+        </div>
+      </div>
+      ${barHTML()}
     </div>
     <div class="assin-body">
       <div class="assin-row">
         <span class="assin-lbl">Plano</span>
         <span class="assin-val">Mensal</span>
       </div>
-      <div class="assin-row">
-        <span class="assin-lbl">Vencimento</span>
-        <div style="text-align:right">
-          <div class="assin-val">${venc ? formatDate(venc) : '—'}</div>
-          ${diasTxt ? '<div class="assin-dias">'+diasTxt+'</div>' : ''}
-        </div>
+      ${dateRowHTML()}
+      <div class="assin-insight">
+        <span class="assin-insight-ico">${vm.ico}</span>
+        <span>${vm.txt}</span>
       </div>
-      <button class="btn-renovar ${status==='vencido'?'vencido':status==='vencendo'?'vencendo':''}"
-        onclick="openModal('ovPagamento')">${btnTxt}</button>
+      ${btnHTML()}
     </div>`;
-  window._payUid  = user.uid;
-  window._payVenc = venc;
 };
+
+/* ─── Auth ─── */
+onAuthStateChanged(_auth, async function(user) {
+  if(!user) { location.href='login.html'; return; }
+
+  window._currentUser = user;
+
+  // Preenche campos de perfil (read-only)
+  const nomeEl  = document.getElementById('cfgNome');
+  const emailEl = document.getElementById('cfgEmail');
+  if(nomeEl)  { nomeEl.value = user.displayName||''; nomeEl.readOnly = true; nomeEl.style.color='var(--muted2)'; }
+  if(emailEl) { emailEl.value = user.email||''; emailEl.readOnly = true; emailEl.style.color='var(--muted2)'; }
+
+  try {
+    const userDoc = doc(_db,'usuarios',user.uid);
+    let snap = await getDoc(userDoc);
+    let data = snap.exists() ? snap.data() : {};
+
+    // Garante trial inicializado
+    data = await ensureTrial(_db, user.uid, data);
+    window._userData = data;
+
+    // Contar clientes para personalização das mensagens
+    let numClientes = 0;
+    try {
+      const cSnap = await getDocs(collection(_db,'usuarios',user.uid,'clientes'));
+      numClientes  = cSnap.size;
+    } catch(e) {}
+
+    window._numClientes = numClientes;
+    renderAssinatura(user, data, numClientes);
+
+    // Aplicar tema salvo
+    const cfg = JSON.parse(localStorage.getItem('streamdesk_config')||'{}');
+    if(cfg.darkMode === true) applyTheme(true);
+
+    // Calcular "usa há X dias"
+    if(data.trialInicio) {
+      const inicio = dateFromStr(data.trialInicio);
+      const usaDias = diffDays(inicio, today());
+      const diasEl = document.getElementById('usaDias');
+      if(diasEl) diasEl.textContent = usaDias > 0
+        ? 'Você usa o StreamDesk há ' + usaDias + ' dia(s)'
+        : 'Primeiro acesso hoje';
+    }
+
+  } catch(e) {
+    console.error('Erro config:', e);
+  }
+});
 </script>
 
+<!-- ══ TOAST ══ -->
 <div class="saved-toast" id="toast">✓ Salvo!</div>
 
+<!-- ══ HEADER ══ -->
 <div class="header">
-  <div class="page-title">Config<span>.</span></div>
+  <div style="display:flex;align-items:center;justify-content:space-between">
+    <div>
+      <div class="page-title">Config<span>.</span></div>
+      <div style="font-size:11px;color:var(--muted2);margin-top:2px" id="usaDias">Carregando...</div>
+    </div>
+    <div class="version-badge">v 2.0</div>
+  </div>
 </div>
 
+<!-- ══ CONTEÚDO ══ -->
 <div class="content">
 
+  <!-- ── Perfil ── -->
   <div class="sec-label">👤 Perfil do Usuário</div>
   <div class="group">
     <div class="row">
       <div class="row-icon">🧑</div>
       <div class="row-body">
         <div class="row-label">Nome</div>
-        <input class="row-input" id="cfgNome" placeholder="Seu nome" onchange="saveConfig()">
+        <input class="row-input" id="cfgNome" placeholder="Seu nome">
       </div>
     </div>
     <div class="row">
       <div class="row-icon">📧</div>
       <div class="row-body">
         <div class="row-label">E-mail</div>
-        <input class="row-input" id="cfgEmail" placeholder="seu@email.com" type="email" onchange="saveConfig()">
+        <input class="row-input" id="cfgEmail" placeholder="seu@email.com" type="email">
       </div>
     </div>
   </div>
 
+  <!-- ── Assinatura ── -->
   <div class="sec-label">💳 Minha Assinatura</div>
   <div class="assin-card" id="assinCard">
-    <div class="assin-body" style="padding:20px;text-align:center;color:var(--muted);font-size:13px">Carregando...</div>
+    <div class="assin-body" style="padding:24px;text-align:center;color:var(--muted2);font-size:13px">
+      <div style="font-size:24px;margin-bottom:8px">⏳</div>
+      Carregando...
+    </div>
   </div>
 
+  <!-- ── Aparência ── -->
   <div class="sec-label">🎨 Aparência</div>
   <div class="group">
     <div class="row">
@@ -278,6 +709,7 @@ window.renderAssinatura = function(user, data) {
     </div>
   </div>
 
+  <!-- ── Respostas rápidas ── -->
   <div class="sec-label">💬 Respostas Rápidas</div>
   <div class="group">
     <div class="btn-row btn-accent" onclick="openModal('ovRespostas')">
@@ -290,6 +722,7 @@ window.renderAssinatura = function(user, data) {
     </div>
   </div>
 
+  <!-- ── Dados ── -->
   <div class="sec-label">💾 Dados</div>
   <div class="group">
     <div class="btn-row btn-green" onclick="exportCSV()">
@@ -302,6 +735,7 @@ window.renderAssinatura = function(user, data) {
     </div>
   </div>
 
+  <!-- ── Suporte ── -->
   <div class="sec-label">🆘 Suporte</div>
   <div class="group">
     <div class="btn-row btn-yellow" onclick="openModal('ovSuporte')">
@@ -314,6 +748,7 @@ window.renderAssinatura = function(user, data) {
     </div>
   </div>
 
+  <!-- ── Sessão ── -->
   <div class="sec-label">🚪 Sessão</div>
   <div class="group">
     <div class="btn-row btn-red" onclick="doLogout()">
@@ -326,21 +761,22 @@ window.renderAssinatura = function(user, data) {
     </div>
   </div>
 
+  <!-- ── Sobre ── -->
   <div class="sec-label">📱 Sobre o App</div>
   <div class="group">
     <div class="row">
       <div class="row-icon">📡</div>
       <div class="row-body">
         <div class="row-label">StreamDesk</div>
-        <div class="row-sub">Gestão de clientes</div>
+        <div class="row-sub">Gestão inteligente de clientes</div>
       </div>
-      <div class="row-right"><span class="version-badge">v 1.0</span></div>
+      <div class="row-right"><span class="version-badge">v 2.0</span></div>
     </div>
   </div>
 
-</div>
+</div><!-- /content -->
 
-<!-- BOTTOM NAV -->
+<!-- ══ BOTTOM NAV ══ -->
 <div class="bottom-nav">
   <div class="nav-item" onclick="location.href='index.html'"><div class="nav-icon">🏠</div><div class="nav-label">Início</div><div class="nav-dot"></div></div>
   <div class="nav-item" onclick="location.href='clientes.html'"><div class="nav-icon">👥</div><div class="nav-label">Clientes</div><div class="nav-dot"></div></div>
@@ -350,19 +786,31 @@ window.renderAssinatura = function(user, data) {
   <div class="nav-item active"><div class="nav-icon">⚙️</div><div class="nav-label">Config.</div><div class="nav-dot"></div></div>
 </div>
 
-<!-- MODAL PAGAMENTO -->
+<!-- ══ MODAL: PAGAMENTO ══ -->
 <div class="overlay" id="ovPagamento" onclick="if(event.target===this)closeModal('ovPagamento')">
   <div class="modal">
     <div class="mhandle"></div>
-    <div class="mtitle">💳 Renovar Assinatura</div>
-    <div class="msub">Escolha a forma de pagamento</div>
+    <div class="mtitle">💳 Assinar StreamDesk</div>
+    <div class="msub">Acesso completo por apenas <strong style="color:var(--accent)">R$ 9,90/mês</strong>. Cancele quando quiser.</div>
+
+    <!-- Tabs -->
     <div class="pay-tabs">
-      <div class="pay-tab active" id="tabPix" onclick="switchTab('pix')">⚡ Pix</div>
-      <div class="pay-tab" id="tabCartao" onclick="switchTab('cartao')">💳 Cartão</div>
+      <div class="pay-tab active" id="tabPix"    onclick="switchTab('pix')">⚡ Pix</div>
+      <div class="pay-tab"        id="tabCartao" onclick="switchTab('cartao')">💳 Cartão</div>
     </div>
+
+    <!-- PIX -->
     <div class="pay-panel active" id="panelPix">
       <div class="pix-qr-wrap" id="pixQrWrap">
-        <div style="color:var(--muted);font-size:13px">Clique em "Gerar Pix" para criar o QR Code</div>
+        <div style="color:var(--muted2);font-size:13px;text-align:center">
+          <div style="font-size:32px;margin-bottom:8px">⚡</div>
+          Clique em "Gerar Pix" para criar o QR Code
+        </div>
+        <div class="pix-copied-overlay" id="pixCopiedFeedback">
+          <div style="font-size:32px">✅</div>
+          <div style="font-weight:700;color:var(--green)">Código copiado!</div>
+          <div style="font-size:12px;color:var(--muted2)">Cole no seu banco para pagar</div>
+        </div>
       </div>
       <div id="pixCopyArea" style="display:none">
         <button class="pix-copy-btn" onclick="copiarPix()">📋 Copiar código Pix</button>
@@ -371,6 +819,8 @@ window.renderAssinatura = function(user, data) {
       <button class="btn-save" id="btnGerarPix" onclick="gerarPix()">⚡ Gerar QR Code Pix</button>
       <div class="pay-msg" id="pixMsg"></div>
     </div>
+
+    <!-- CARTÃO -->
     <div class="pay-panel" id="panelCartao">
       <div class="card-field">
         <label>Número do cartão</label>
@@ -390,17 +840,20 @@ window.renderAssinatura = function(user, data) {
           <input type="tel" id="cardCvv" placeholder="123" maxlength="4">
         </div>
       </div>
-      <button class="btn-save" id="btnCartao" onclick="pagarCartao()">💳 Assinar — R$ 9,90/mês</button>
+      <button class="btn-save" id="btnCartao" onclick="pagarCartao()">
+        💳 Assinar — R$ 9,90/mês
+      </button>
       <div class="pay-msg" id="cartaoMsg"></div>
-      <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:12px;line-height:1.5">
-        🔒 Pagamento seguro via Mercado Pago.<br>Sua assinatura renova automaticamente todo mês.
-      </div>
+    </div>
+
+    <div class="security-note">
+      🔒 Pagamento seguro via Mercado Pago.<br>Renovação automática mensal. Cancele quando quiser.
     </div>
     <button class="btn-cancel" onclick="closeModal('ovPagamento')">Cancelar</button>
   </div>
 </div>
 
-<!-- MODAL RESPOSTAS RÁPIDAS -->
+<!-- ══ MODAL: RESPOSTAS RÁPIDAS ══ -->
 <div class="overlay" id="ovRespostas" onclick="if(event.target===this)closeModal('ovRespostas')">
   <div class="modal">
     <div class="mhandle"></div>
@@ -409,21 +862,22 @@ window.renderAssinatura = function(user, data) {
     <div class="fg"><label class="fl">🟡 Vence Hoje</label><textarea class="fi fi-area" id="mHoje"></textarea></div>
     <div class="fg"><label class="fl">🟠 Vence Amanhã</label><textarea class="fi fi-area" id="mAmanha"></textarea></div>
     <div class="fg"><label class="fl">🔴 Vencido</label><textarea class="fi fi-area" id="mVencido"></textarea></div>
-    <div style="font-size:11px;color:var(--muted);margin-bottom:16px;line-height:1.5">
-      💡 <strong>{nome}</strong> = primeiro nome do cliente &nbsp;|&nbsp; <strong>{servidor}</strong> = plataforma do cliente
+    <div style="font-size:11px;color:var(--muted2);margin-bottom:16px;line-height:1.5">
+      💡 <strong>{nome}</strong> = primeiro nome do cliente &nbsp;|&nbsp; <strong>{servidor}</strong> = plataforma
     </div>
     <button class="btn-save" onclick="salvarRespostas()">💾 Salvar Mensagens</button>
     <button class="btn-cancel" onclick="closeModal('ovRespostas')">Cancelar</button>
   </div>
 </div>
 
-<!-- MODAL SUPORTE -->
+<!-- ══ MODAL: SUPORTE ══ -->
 <div class="overlay" id="ovSuporte" onclick="if(event.target===this)closeModal('ovSuporte')">
   <div class="modal">
     <div class="mhandle"></div>
     <div class="mtitle">📧 Abrir Chamado</div>
     <div class="msub">Preencha o formulário e enviaremos um e-mail para nossa equipe.</div>
-    <div class="fg"><label class="fl">Assunto</label>
+    <div class="fg">
+      <label class="fl">Assunto</label>
       <select class="fi" id="supAssunto">
         <option>🐛 Reportar um bug</option>
         <option>💡 Sugestão de melhoria</option>
@@ -432,20 +886,20 @@ window.renderAssinatura = function(user, data) {
         <option>📋 Outro</option>
       </select>
     </div>
-    <div class="fg"><label class="fl">Mensagem</label>
+    <div class="fg">
+      <label class="fl">Mensagem</label>
       <textarea class="fi fi-area" id="supMsg" placeholder="Descreva com detalhes..."></textarea>
     </div>
     <button class="btn-save" onclick="enviarChamado()">📧 Enviar E-mail</button>
-    <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:10px">
-      contato@streamdesk.net.br
-    </div>
+    <div style="font-size:11px;color:var(--muted2);text-align:center;margin-top:10px">contato@streamdesk.net.br</div>
     <button class="btn-cancel" onclick="closeModal('ovSuporte')">Cancelar</button>
   </div>
 </div>
 
+<!-- ══ SCRIPT NÃO-MODULE (funções globais) ══ -->
 <script>
+/* ─── Constantes ─── */
 var CFG_KEY           = 'streamdesk_config';
-var SUPORTE_EMAIL     = 'contato@streamdesk.net.br';
 var EMAILJS_SERVICE   = 'service_q4na3fy';
 var EMAILJS_TEMPLATE  = 'template_q870hil';
 var EMAILJS_PUBKEY    = 'qAdvYOpPxeDBi_Sjk';
@@ -461,62 +915,118 @@ var DEFAULT_MSG_VENC   = 'Olá {nome}! 👋 Seu plano IPTV ({servidor}) está ve
 var _pixCodigo = '';
 var _pixTimer  = null;
 
-function loadConfig() { return JSON.parse(localStorage.getItem(CFG_KEY) || '{}'); }
-function saveConfig() {
-  var cfg = {
-    nome:       document.getElementById('cfgNome').value,
-    email:      document.getElementById('cfgEmail').value,
-    darkMode:   document.getElementById('themeToggle').classList.contains('on'),
-    msgHoje:    document.getElementById('mHoje') ? document.getElementById('mHoje').value : (loadConfig().msgHoje || DEFAULT_MSG_HOJE),
-    msgAmanha:  document.getElementById('mAmanha') ? document.getElementById('mAmanha').value : (loadConfig().msgAmanha || DEFAULT_MSG_AMANHA),
-    msgVencido: document.getElementById('mVencido') ? document.getElementById('mVencido').value : (loadConfig().msgVencido || DEFAULT_MSG_VENC),
-  };
+/* ─── Config local ─── */
+function loadConfig()  { return JSON.parse(localStorage.getItem(CFG_KEY)||'{}'); }
+function saveConfig()  {
+  var cfg = loadConfig();
+  cfg.darkMode = document.getElementById('themeToggle').classList.contains('on');
   localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
 }
-function loadPage() {
-  var cfg = loadConfig();
-  document.getElementById('cfgNome').value  = cfg.nome  || '';
-  document.getElementById('cfgEmail').value = cfg.email || '';
-  applyTheme(cfg.darkMode === true);
-}
+
+/* ─── Tema ─── */
 function applyTheme(dark) {
   var tog = document.getElementById('themeToggle');
   var lbl = document.getElementById('themeLabel');
-  if (dark) { document.body.classList.remove('light'); tog.classList.add('on'); lbl.textContent='Ativado'; }
-  else       { document.body.classList.add('light'); tog.classList.remove('on'); lbl.textContent='Desativado'; }
+  if(dark) {
+    document.body.classList.add('dark');
+    document.body.classList.remove('light');
+    if(tog) tog.classList.add('on');
+    if(lbl) lbl.textContent = 'Ativado';
+  } else {
+    document.body.classList.remove('dark');
+    document.body.classList.add('light');
+    if(tog) tog.classList.remove('on');
+    if(lbl) lbl.textContent = 'Desativado';
+  }
 }
-function toggleTheme() { applyTheme(document.body.classList.contains('light')); saveConfig(); }
-function showToast() {
+function toggleTheme() {
+  applyTheme(!document.getElementById('themeToggle').classList.contains('on'));
+  saveConfig();
+}
+
+// Aplica tema salvo na inicialização
+(function(){
+  var c = JSON.parse(localStorage.getItem(CFG_KEY)||'{}');
+  applyTheme(c.darkMode === true);
+})();
+
+/* ─── Toast ─── */
+function showToast(msg) {
   var t = document.getElementById('toast');
+  t.textContent = msg || '✓ Salvo!';
   t.classList.add('show');
-  setTimeout(function(){ t.classList.remove('show'); }, 2000);
+  setTimeout(function(){ t.classList.remove('show'); }, 2400);
 }
+
+/* ─── Modais ─── */
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 function openModal(id) {
-  if (id === 'ovRespostas') {
+  if(id === 'ovRespostas') {
     var cfg = loadConfig();
     document.getElementById('mHoje').value    = cfg.msgHoje    || DEFAULT_MSG_HOJE;
     document.getElementById('mAmanha').value  = cfg.msgAmanha  || DEFAULT_MSG_AMANHA;
     document.getElementById('mVencido').value = cfg.msgVencido || DEFAULT_MSG_VENC;
   }
-  if (id === 'ovPagamento') { resetPagamento(); }
+  if(id === 'ovPagamento') { resetPagamento(); }
   document.getElementById(id).classList.add('open');
 }
+
+/* ─── Respostas Rápidas ─── */
 function salvarRespostas() {
   var cfg = loadConfig();
   cfg.msgHoje    = document.getElementById('mHoje').value.trim()    || DEFAULT_MSG_HOJE;
   cfg.msgAmanha  = document.getElementById('mAmanha').value.trim()  || DEFAULT_MSG_AMANHA;
   cfg.msgVencido = document.getElementById('mVencido').value.trim() || DEFAULT_MSG_VENC;
   localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
-  closeModal('ovRespostas'); showToast();
+  closeModal('ovRespostas');
+  showToast('✓ Mensagens salvas!');
 }
+
+/* ─── Logout ─── */
+function doLogout() {
+  if(!confirm('Deseja sair?')) return;
+  if(window._firebaseAuth) {
+    window._firebaseAuth.signOut().then(function(){
+      sessionStorage.clear(); location.href='login.html';
+    });
+  } else {
+    sessionStorage.clear(); location.href='login.html';
+  }
+}
+
+/* ─── Export CSV ─── */
+function exportCSV() {
+  if(!window._currentUser || !window._firebaseDB) { alert('Aguarde!'); return; }
+  var db  = window._firebaseDB;
+  var uid = window._currentUser.uid;
+  import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js").then(function(fs) {
+    fs.getDocs(fs.collection(db,'usuarios',uid,'clientes')).then(function(snap) {
+      var clientes = snap.docs.map(function(d){ return d.data(); });
+      if(!clientes.length) { alert('Nenhum cliente para exportar!'); return; }
+      var rows = [['Nome','Servidor','Plano','Vencimento','País','Contato','Observações']];
+      clientes.forEach(function(c) {
+        var venc = c.vencimento ? c.vencimento.split('-').reverse().join('/') : '';
+        rows.push([c.nome||'',c.plataforma||'',c.plano||'',venc,c.pais||'',c.contato||'',c.obs||'']);
+      });
+      var csv = '\uFEFF' + rows.map(function(r){
+        return r.map(function(v){ return '"'+String(v).replace(/"/g,'""')+'"'; }).join(',');
+      }).join('\n');
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));
+      a.download = 'clientes_streamdesk.csv';
+      a.click();
+    });
+  });
+}
+
+/* ─── Suporte / EmailJS ─── */
 function enviarChamado() {
   var msg     = document.getElementById('supMsg').value.trim();
   var assunto = document.getElementById('supAssunto').value;
-  if (!msg) { alert('Descreva o problema!'); return; }
+  if(!msg) { alert('Descreva o problema!'); return; }
   var user    = window._currentUser;
   var usuario = user ? (user.displayName || user.email) : 'Desconhecido';
-  var email   = user ? (user.email || '—') : '—';
+  var email   = user ? (user.email||'—') : '—';
   var btnSave = document.querySelector('#ovSuporte .btn-save');
   btnSave.disabled = true;
   btnSave.textContent = '⏳ Enviando...';
@@ -524,155 +1034,169 @@ function enviarChamado() {
   function doEnvio(whatsapp) {
     emailjs.init(EMAILJS_PUBKEY);
     emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, {
-      assunto:   assunto,
-      mensagem:  msg,
-      usuario:   usuario,
-      email:     email,
-      whatsapp:  whatsapp || '—'
+      assunto, mensagem: msg, usuario, email, whatsapp: whatsapp||'—'
     }).then(function() {
       btnSave.textContent = '✅ Enviado!';
-      setTimeout(function() {
+      setTimeout(function(){
         closeModal('ovSuporte');
         document.getElementById('supMsg').value = '';
         btnSave.disabled = false;
         btnSave.textContent = '📧 Enviar E-mail';
       }, 1500);
     }, function(err) {
-      alert('Erro ao enviar: ' + (err.text || JSON.stringify(err)));
+      alert('Erro ao enviar: ' + (err.text||JSON.stringify(err)));
       btnSave.disabled = false;
       btnSave.textContent = '📧 Enviar E-mail';
     });
   }
 
-  // Tenta buscar whatsapp do Firestore
-  if (window._firebaseDB && user) {
+  if(window._firebaseDB && user) {
     import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js").then(function(fs) {
-      fs.getDoc(fs.doc(window._firebaseDB, 'usuarios', user.uid)).then(function(snap) {
-        var wa = snap.exists() ? (snap.data().whatsapp || '—') : '—';
+      fs.getDoc(fs.doc(window._firebaseDB,'usuarios',user.uid)).then(function(snap) {
+        var wa = snap.exists() ? (snap.data().whatsapp||'—') : '—';
         doEnvio(wa);
-      }).catch(function() { doEnvio('—'); });
-    }).catch(function() { doEnvio('—'); });
+      }).catch(function(){ doEnvio('—'); });
+    }).catch(function(){ doEnvio('—'); });
   } else {
     doEnvio('—');
   }
 }
-function doLogout() {
-  if (!confirm('Deseja sair?')) return;
-  if (window._firebaseAuth) window._firebaseAuth.signOut().then(function(){ 
-    sessionStorage.clear();
-    location.href='login.html'; 
-  });
-  else { sessionStorage.clear(); location.href='login.html'; }
-}
-function exportCSV() {
-  if (!window._currentUser || !window._firebaseDB) { alert('Aguarde!'); return; }
-  var db = window._firebaseDB, uid = window._currentUser.uid;
-  import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js").then(function(fs) {
-    fs.getDocs(fs.collection(db,'usuarios',uid,'clientes')).then(function(snap) {
-      var clientes = snap.docs.map(function(d){return d.data();});
-      if (!clientes.length) { alert('Nenhum cliente para exportar!'); return; }
-      var rows = [['Nome','Servidor','Plano','Vencimento','País','Contato','Observações']];
-      clientes.forEach(function(c) {
-        var venc = c.vencimento ? c.vencimento.split('-').reverse().join('/') : '';
-        rows.push([c.nome||'', c.plataforma||'', c.plano||'', venc, c.pais||'', c.contato||'', c.obs||'']);
-      });
-      var csv = '\uFEFF' + rows.map(function(r){ return r.map(function(v){ return '"'+String(v).replace(/"/g,'""')+'"'; }).join(','); }).join('\n');
-      var a = document.createElement('a');
-      a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));
-      a.download = 'clientes_streamdesk.csv'; a.click();
-    });
-  });
-}
 
-// ── PAGAMENTO ─────────────────────────────────────────────────────────────────
+/* ─── PAGAMENTO: tabs ─── */
 function switchTab(tab) {
   document.getElementById('tabPix').classList.toggle('active', tab==='pix');
   document.getElementById('tabCartao').classList.toggle('active', tab==='cartao');
   document.getElementById('panelPix').classList.toggle('active', tab==='pix');
   document.getElementById('panelCartao').classList.toggle('active', tab==='cartao');
 }
+
 function resetPagamento() {
   switchTab('pix');
-  document.getElementById('pixQrWrap').innerHTML = '<div style="color:var(--muted);font-size:13px">Clique em "Gerar Pix" para criar o QR Code</div>';
+  document.getElementById('pixQrWrap').innerHTML = `
+    <div style="color:var(--muted2);font-size:13px;text-align:center">
+      <div style="font-size:32px;margin-bottom:8px">⚡</div>
+      Clique em "Gerar Pix" para criar o QR Code
+    </div>
+    <div class="pix-copied-overlay" id="pixCopiedFeedback">
+      <div style="font-size:32px">✅</div>
+      <div style="font-weight:700;color:var(--green)">Código copiado!</div>
+      <div style="font-size:12px;color:var(--muted2)">Cole no seu banco para pagar</div>
+    </div>`;
   document.getElementById('pixCopyArea').style.display = 'none';
   document.getElementById('btnGerarPix').disabled = false;
   document.getElementById('btnGerarPix').innerHTML = '⚡ Gerar QR Code Pix';
-  setMsg('pixMsg','',''); setMsg('cartaoMsg','','');
+  setMsg('pixMsg','','');
+  setMsg('cartaoMsg','','');
   _pixCodigo = '';
-  if (_pixTimer) clearInterval(_pixTimer);
+  if(_pixTimer) clearInterval(_pixTimer);
 }
+
 function setMsg(id, txt, tipo) {
   var el = document.getElementById(id);
-  el.textContent = txt; el.className = 'pay-msg'+(tipo?' '+tipo:''); el.style.display = txt?'block':'none';
+  if(!el) return;
+  el.textContent = txt;
+  el.className = 'pay-msg' + (tipo?' '+tipo:'');
+  el.style.display = txt ? 'block' : 'none';
 }
+
+/* ─── Formatadores cartão ─── */
 function fmtCard(el) {
   var v = el.value.replace(/\D/g,'').substring(0,16);
   el.value = v.replace(/(.{4})/g,'$1 ').trim();
 }
 function fmtExp(el) {
   var v = el.value.replace(/\D/g,'').substring(0,4);
-  if (v.length > 2) v = v.substring(0,2)+'/'+v.substring(2);
+  if(v.length > 2) v = v.substring(0,2)+'/'+v.substring(2);
   el.value = v;
 }
+
+/* ─── Gerar PIX ─── */
 window.gerarPix = async function() {
   var uid = window._payUid;
-  if (!uid) { setMsg('pixMsg','Usuário não autenticado.','err'); return; }
+  if(!uid) { setMsg('pixMsg','Usuário não autenticado.','err'); return; }
   var btn = document.getElementById('btnGerarPix');
   btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span>Gerando...';
+  btn.innerHTML = '<span class="spinner dark"></span>Gerando...';
   setMsg('pixMsg','','');
   try {
     var resp = await fetch(URL_PIX, {
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ uid, valor: VALOR_MENSALIDADE, descricao: 'StreamDesk — Assinatura Mensal' })
+      body: JSON.stringify({ uid, valor: VALOR_MENSALIDADE, descricao:'StreamDesk — Assinatura Mensal' })
     });
     var data = await resp.json();
-    if (!resp.ok || !data.qr_code) throw new Error(data.error || 'Erro ao gerar Pix');
+    if(!resp.ok || !data.qr_code) throw new Error(data.error||'Erro ao gerar Pix');
     _pixCodigo = data.qr_code;
     var qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=160x160&data='+encodeURIComponent(_pixCodigo);
     document.getElementById('pixQrWrap').innerHTML =
       '<img class="pix-qr-img" src="'+qrUrl+'" alt="QR Code Pix">'+
-      '<div style="font-size:12px;color:var(--muted)">Escaneie com seu banco</div>';
+      '<div style="font-size:11px;color:var(--muted2)">Escaneie com seu app bancário</div>'+
+      '<div class="pix-copied-overlay" id="pixCopiedFeedback"><div style="font-size:32px">✅</div><div style="font-weight:700;color:var(--green)">Código copiado!</div><div style="font-size:12px;color:var(--muted2)">Cole no seu banco para pagar</div></div>';
     document.getElementById('pixCopyArea').style.display = 'block';
     btn.innerHTML = '🔄 Gerar novo QR Code';
     btn.disabled  = false;
     var expira = Date.now() + 30*60*1000;
-    if (_pixTimer) clearInterval(_pixTimer);
-    _pixTimer = setInterval(function() {
+    if(_pixTimer) clearInterval(_pixTimer);
+    _pixTimer = setInterval(function(){
       var resto = Math.max(0, expira - Date.now());
       var m = Math.floor(resto/60000), s = Math.floor((resto%60000)/1000);
-      document.getElementById('pixTimer').textContent = 'Expira em '+m+'m '+String(s).padStart(2,'0')+'s';
-      if (resto === 0) clearInterval(_pixTimer);
+      var timerEl = document.getElementById('pixTimer');
+      if(timerEl) timerEl.textContent = 'Expira em '+m+'m '+String(s).padStart(2,'0')+'s';
+      if(resto === 0) clearInterval(_pixTimer);
     }, 1000);
   } catch(e) {
-    setMsg('pixMsg', e.message || 'Erro ao gerar Pix. Tente novamente.', 'err');
+    setMsg('pixMsg', e.message||'Erro ao gerar Pix. Tente novamente.', 'err');
     btn.disabled = false;
     btn.innerHTML = '⚡ Gerar QR Code Pix';
   }
 };
+
+/* ─── Copiar PIX (com feedback visual) ─── */
 window.copiarPix = function() {
-  if (!_pixCodigo) return;
+  if(!_pixCodigo) return;
   navigator.clipboard.writeText(_pixCodigo).then(function() {
+    // Feedback visual na caixa do QR
+    var overlay = document.getElementById('pixCopiedFeedback');
+    if(overlay) {
+      overlay.classList.add('show');
+      setTimeout(function(){ overlay.classList.remove('show'); }, 1800);
+    }
+    // Feedback no botão
     var btn = document.querySelector('.pix-copy-btn');
-    btn.textContent = '✅ Copiado!';
-    setTimeout(function(){ btn.textContent = '📋 Copiar código Pix'; }, 2000);
+    if(btn) {
+      btn.textContent = '✅ Copiado!';
+      btn.style.background = 'var(--green-bg)';
+      btn.style.borderColor = 'var(--green-border)';
+      btn.style.color = 'var(--green)';
+      setTimeout(function(){
+        btn.textContent = '📋 Copiar código Pix';
+        btn.style.background = ''; btn.style.borderColor = ''; btn.style.color = '';
+      }, 2000);
+    }
+    showToast('✅ Código Pix copiado!');
+  }).catch(function(){
+    showToast('⚠ Não foi possível copiar. Copie manualmente.');
   });
 };
+
+/* ─── Pagar com Cartão ─── */
 window.pagarCartao = async function() {
   var uid  = window._payUid;
   var num  = document.getElementById('cardNum').value.replace(/\s/g,'');
   var name = document.getElementById('cardName').value.trim().toUpperCase();
   var exp  = document.getElementById('cardExp').value;
   var cvv  = document.getElementById('cardCvv').value;
-  if (!uid)            { setMsg('cartaoMsg','Usuário não autenticado.','err'); return; }
-  if (num.length < 16) { setMsg('cartaoMsg','Número do cartão inválido.','err'); return; }
-  if (!name)           { setMsg('cartaoMsg','Informe o nome do cartão.','err'); return; }
-  if (exp.length < 5)  { setMsg('cartaoMsg','Validade inválida.','err'); return; }
-  if (cvv.length < 3)  { setMsg('cartaoMsg','CVV inválido.','err'); return; }
+
+  if(!uid)            { setMsg('cartaoMsg','Usuário não autenticado.','err'); return; }
+  if(num.length < 16) { setMsg('cartaoMsg','Número do cartão inválido. Verifique e tente novamente.','err'); return; }
+  if(!name)           { setMsg('cartaoMsg','Informe o nome exatamente como no cartão.','err'); return; }
+  if(exp.length < 5)  { setMsg('cartaoMsg','Validade inválida. Use o formato MM/AA.','err'); return; }
+  if(cvv.length < 3)  { setMsg('cartaoMsg','CVV inválido.','err'); return; }
+
   var btn = document.getElementById('btnCartao');
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span>Processando...';
   setMsg('cartaoMsg','','');
+
   try {
     var partes = exp.split('/');
     var mp     = new MercadoPago(MP_PUBLIC_KEY, {locale:'pt-BR'});
@@ -686,23 +1210,21 @@ window.pagarCartao = async function() {
       body: JSON.stringify({ uid, token: token.id, email: window._currentUser?.email||'', valor: VALOR_MENSALIDADE })
     });
     var data = await resp.json();
-    if (!resp.ok) throw new Error(data.error || 'Erro ao criar assinatura');
+    if(!resp.ok) throw new Error(data.error||'Erro ao criar assinatura');
     setMsg('cartaoMsg','✅ Assinatura ativada com sucesso! Seu acesso foi renovado.','ok');
     btn.innerHTML = '✅ Assinatura ativa';
+    showToast('🎉 Assinatura ativada!');
   } catch(e) {
-    setMsg('cartaoMsg', e.message || 'Erro ao processar. Verifique os dados.', 'err');
+    setMsg('cartaoMsg', e.message||'Erro ao processar. Verifique os dados e tente novamente.', 'err');
     btn.disabled = false;
     btn.innerHTML = '💳 Assinar — R$ 9,90/mês';
   }
 };
-
-loadPage();
 </script>
+
 <script src="https://sdk.mercadopago.com/js/v2"></script>
-  <script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js');
-  }
+<script>
+  if('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js');
 </script>
 </body>
 </html>
