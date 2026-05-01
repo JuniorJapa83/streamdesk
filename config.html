@@ -880,9 +880,12 @@ window.renderAssinatura=function(user,data,nClientes){
           <div class="ac-days-big ${fase}">${diasTxt}</div>
           <div class="ac-days-sub">${daysSub}</div>
         </div>
-        <div class="ac-price-col">
-          <div class="ac-price">R$ 9,90</div>
-          <div class="ac-price-sub">/mês</div>
+        ${(fase === 'f3' || fase === 'f4' || fase === 'fa') ? `
+  <div class="ac-price-col">
+    <div class="ac-price">R$ 9,90</div>
+    <div class="ac-price-sub">/mês</div>
+  </div>
+` : ``}iv class="ac-price-sub">/mês</div>
         </div>
       </div>
       ${barHTML}
