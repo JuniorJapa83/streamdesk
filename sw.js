@@ -162,6 +162,44 @@ function offlineFallback() {
 }
 
 // ============================================================
+// NOTIFICAÇÕES PUSH
+// ============================================================
+
+// Recebe mensagem push do servidor
+self.addEventListener('push', event => {
+  if (!event.data) return;
+
+  let data = {};
+  try { data = event.data.json(); } catch { data = { title: 'StreamDesk', body: event.data.text() }; }
+
+  const title   = data.title || 'StreamDesk';
+  const options = {
+    body:    data.body  || 'Você tem uma nova notificação.',
+    icon:    '/icon192.png',
+    badge:   '/favicon.png',
+    tag:     data.tag   || 'sd-notif',
+    data:    { url: data.url || '/' },
+    vibrate: [100, 50, 100],
+    requireInteraction: false
+  };
+
+  event.waitUntil(self.registration.showNotification(title, options));
+});
+
+// Usuário toca na notificação → abre a URL correta
+self.addEventListener('notificationclick', event => {
+  event.notification.close();
+  const url = event.notification.data?.url || '/';
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(list => {
+      const existing = list.find(c => c.url.includes(location.origin));
+      if (existing) { existing.focus(); existing.navigate(url); }
+      else clients.openWindow(url);
+    })
+  );
+});
+
+// ============================================================
 // HELPERS
 // ============================================================
 function isStaticAsset(path) {
