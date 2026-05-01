@@ -361,7 +361,8 @@ body:not(.dark) .header{background:rgba(245,247,250,.97)!important;border-bottom
 }
 body.dark .bottom-nav{background:rgba(8,11,18,.97)!important;border-top-color:#1c2236!important}
 body:not(.dark) .bottom-nav{background:rgba(245,247,250,.97)!important;border-top-color:#e8ecf2!important}
-body.sd-leaving{opacity:0;transform:translateY(6px);transition:opacity .15s ease,transform .15s ease;pointer-events:none;}
+body.sd-leaving .content{opacity:0;transform:translateY(6px);transition:opacity .15s ease,transform .15s ease;pointer-events:none;}
+body.sd-leaving .header{opacity:0;transition:opacity .15s ease;}
 .content { animation: fadeIn .3s ease both; }
 
 .nav-item{
