@@ -602,6 +602,7 @@
 /* Tema força */
 body:not(.dark) .header    { background: rgba(245,247,250,.97) !important; }
 body:not(.dark) .bottom-nav { background: rgba(245,247,250,.97) !important; }
+body.sd-leaving { opacity:0; transform:translateY(6px); transition:opacity .15s ease,transform .15s ease; pointer-events:none; }
 body:not(.dark) { background: #f5f7fa !important; }
 body.dark .header     { background: rgba(8,11,18,.95) !important; }
 body.dark .bottom-nav { background: rgba(8,11,18,.97) !important; }
@@ -744,8 +745,7 @@ body.dark { background: #080b12 !important; }
 <button class="fab" onclick="CL.openModal()" title="Novo cliente">＋</button>
 
 <!-- ══ BOTTOM NAV ══ -->
-<div class="bottom-nav">
-  <div class="nav-item" onclick="location.href='index.html'">
+<div class="nav-item" onclick="sdNavigate('index.html')">
     <div class="nav-icon">🏠</div>
     <div class="nav-label">Início</div>
     <div class="nav-dot"></div>
@@ -755,27 +755,26 @@ body.dark { background: #080b12 !important; }
     <div class="nav-label">Clientes</div>
     <div class="nav-dot"></div>
   </div>
-  <div class="nav-item" onclick="location.href='servidor.html'">
+  <div class="nav-item" onclick="sdNavigate('servidor.html')">
     <div class="nav-icon">🖥️</div>
     <div class="nav-label">Servidor</div>
     <div class="nav-dot"></div>
   </div>
-  <div class="nav-item" onclick="location.href='financas.html'">
+  <div class="nav-item" onclick="sdNavigate('financas.html')">
     <div class="nav-icon">💰</div>
     <div class="nav-label">Finanças</div>
     <div class="nav-dot"></div>
   </div>
- <div class="nav-item" onclick="location.href='avisos.html'">
+  <div class="nav-item" onclick="sdNavigate('avisos.html')">
     <div class="nav-icon">📢</div>
     <div class="nav-label">Avisos</div>
     <div class="nav-dot"></div>
   </div>
-  <div class="nav-item" id="premiumNav" onclick="location.href='config.html'">
+  <div class="nav-item" id="premiumNav" onclick="sdNavigate('config.html')">
     <div class="nav-icon" id="premiumIcon">⚙️</div>
     <div class="nav-label" id="premiumLabel">Config.</div>
     <div class="nav-dot"></div>
   </div>
-</div>
 
 <!-- ══ MODAL: SEM SERVIDOR ══ -->
 <div class="modal-overlay" id="noServerOverlay">
@@ -1903,7 +1902,13 @@ document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible' && S.user) loadData();
 });
 </script>
-
+<script>
+function sdNavigate(url){
+  if(window.location.pathname.endsWith(url))return;
+  document.body.classList.add('sd-leaving');
+  setTimeout(()=>{ window.location.href=url; },160);
+}
+</script>
 <script>if('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js');</script>
 </body>
 </html>
