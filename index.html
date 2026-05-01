@@ -1561,6 +1561,38 @@ onAuthStateChanged(auth, async function(user) {
 
 <script>
 
+// ── Notificações Push ──
+  async function requestNotifPermission() {
+    if (!('Notification' in window)) {
+      alert('Seu navegador não suporta notificações.');
+      return;
+    }
+    if (Notification.permission === 'granted') {
+      showToast('✅ Notificações já estão ativas!');
+      return;
+    }
+    if (Notification.permission === 'denied') {
+      showToast('🔕 Notificações bloqueadas. Habilite nas configurações do navegador.');
+      return;
+    }
+    const permission = await Notification.requestPermission();
+    if (permission === 'granted') {
+      showToast('🔔 Notificações ativadas com sucesso!');
+      localStorage.setItem('sd_notif', 'granted');
+    } else {
+      showToast('🔕 Permissão negada.');
+    }
+  }
+  window.requestNotifPermission = requestNotifPermission;
+
+  // Atualiza ícone do sino se já tiver permissão
+  (function syncNotifIcon() {
+    if (Notification.permission === 'granted') {
+      const dot = document.getElementById('notifDot');
+      if (dot) dot.classList.remove('show'); // sem ponto vermelho se ativo
+    }
+  })();
+  
 // ── Navegação com transição suave ──
   function sdNavigate(url) {
     if (window.location.pathname.endsWith(url.replace(/^\//, ''))) return;
