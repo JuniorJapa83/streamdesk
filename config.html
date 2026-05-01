@@ -699,7 +699,13 @@ window._firebaseDB=_db;
 /* ─── Helpers ─── */
 function today(){const d=new Date();d.setHours(0,0,0,0);return d;}
 function fromStr(s){if(!s)return null;const p=s.split('-');return new Date(+p[0],+p[1]-1,+p[2]);}
-function diffDays(a,b){return Math.floor((b - a) / 86400000);
+function diffDays(a,b){
+  if(!a || !b) return 0;
+
+  const msPerDay = 1000 * 60 * 60 * 24;
+  const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+  const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+  return Math.floor((utc2 - utc1) / msPerDay);
 }
 function toStr(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
 function fmt(s){if(!s)return '—';const p=s.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
@@ -815,9 +821,9 @@ window.renderAssinatura=function(user,data,nClientes){
       ?{ico:'💡',txt:`Você tem <b>${nClientes} cliente${nClientes!==1?'s':''}</b> cadastrado${nClientes!==1?'s':''}. O período gratuito acaba em <b>${dias} dias</b>.`}
       :{ico:'💡',txt:`Você ainda tem <b>${dias} dias</b> de acesso gratuito. Explore tudo à vontade!`};
     /* f1 — totalmente neutro */
-    return nClientes>0
-      ?{ico:'🎉',txt:`Você já cadastrou <b>${nClientes} cliente${nClientes!==1?'s':''}</b>. Continue personalizando o app do seu jeito.`}
-      :{ico:'👋',txt:'Você está usando o StreamDesk — personalize tudo do seu jeito durante o período gratuito.'};
+  return nClientes>0
+  ?{ico:'🎉',txt:`Você já cadastrou <b>${nClientes} cliente${nClientes!==1?'s':''}</b>. Continue organizando tudo no seu painel.`}
+  :{ico:'👋',txt:'Comece cadastrando seus primeiros clientes e organize tudo em um só lugar.'};
   })();
 
   /* Barra de progresso (trial f1/f2/f3) */
@@ -1445,13 +1451,38 @@ window.pagarCartao=async function(){
   btn.disabled=true;btn.innerHTML='<span class="spinner"></span>Processando...';
   setMsg('cartaoMsg','','');
   try{
-    var partes=exp.split('/');
+    
+    var partes = exp.split('/');
+
+if(partes.length !== 2){
+  throw new Error('Data de validade inválida.');
+}
+
+var mes = parseInt(partes[0], 10);
+var ano = parseInt(partes[1], 10);
+
+if(
+  isNaN(mes) || isNaN(ano) ||
+  mes < 1 || mes > 12 ||
+  partes[1].length !== 2
+){
+  throw new Error('Data de validade inválida.');
+}
+    var agora = new Date();
+agora.setHours(0,0,0,0);
+var anoCompleto = 2000 + ano;
+var dataCartao = new Date(anoCompleto, mes, 0);
+
+if(dataCartao < agora){
+  throw new Error('Cartão vencido. Verifique a validade.');
+}
+    
     // 🔐 Verifica se MercadoPago carregou
 if(typeof MercadoPago === 'undefined'){
   setMsg('cartaoMsg','Erro ao carregar pagamento. Verifique sua conexão e tente novamente.','err');
   
   btn.disabled=false;
-  btn.innerHTML='💳 Assinar — R$ 9,90/mês';
+  btn.innerHTML='💳 Assinar agora';
   
   return;
 }
@@ -1459,18 +1490,23 @@ if(typeof MercadoPago === 'undefined'){
 var mp=new MercadoPago(MP_PUBLIC_KEY,{locale:'pt-BR'});
     var token=await mp.createCardToken({
       cardNumber:num,cardholderName:name,
-      cardExpirationMonth:partes[0],cardExpirationYear:'20'+partes[1],securityCode:cvv
+      cardExpirationMonth: mes,cardExpirationYear: anoCompleto,securityCode:cvv
     });
+if(!token || !token.id){
+  throw new Error('Erro ao gerar token do cartão.');
+}
+    
     var resp=await fetch(URL_ASSINATURA,{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({uid,token:token.id,email:window._currentUser?.email||'',valor:VALOR_MENSALIDADE})});
     var data=await resp.json();
     if(!resp.ok)throw new Error(data.error||'Erro ao criar assinatura');
     setMsg('cartaoMsg','✅ Assinatura ativada! Seu acesso foi renovado.','ok');
-    btn.innerHTML='✅ Assinatura ativa';
+    btn.disabled = false;
+    btn.innerHTML = '💳 Assinar agora';
     showToast('🎉 Assinatura ativada!');
   }catch(e){
     setMsg('cartaoMsg',e.message||'Erro ao processar. Verifique os dados.','err');
-    btn.disabled=false;btn.innerHTML='💳 Assinar — R$ 9,90/mês';
+    btn.disabled=false;btn.innerHTML='💳 Assinar agora';
   }
 };
 </script>
