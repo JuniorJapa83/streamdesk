@@ -602,7 +602,8 @@
 /* Tema força */
 body:not(.dark) .header    { background: rgba(245,247,250,.97) !important; }
 body:not(.dark) .bottom-nav { background: rgba(245,247,250,.97) !important; }
-body.sd-leaving { opacity:0; transform:translateY(6px); transition:opacity .15s ease,transform .15s ease; pointer-events:none; }
+body.sd-leaving .content{opacity:0;transform:translateY(6px);transition:opacity .15s ease,transform .15s ease;pointer-events:none;}
+body.sd-leaving .header{opacity:0;transition:opacity .15s ease;}
 body:not(.dark) { background: #f5f7fa !important; }
 body.dark .header     { background: rgba(8,11,18,.95) !important; }
 body.dark .bottom-nav { background: rgba(8,11,18,.97) !important; }
