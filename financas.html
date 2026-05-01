@@ -406,6 +406,7 @@
   .nav-item.active .nav-dot { opacity: 1; }
 
   /* ── Animations ── */
+  body.sd-leaving { opacity:0; transform:translateY(6px); transition:opacity .15s ease,transform .15s ease; pointer-events:none; }
   @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
   @keyframes countUp { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
 
@@ -549,17 +550,17 @@
 
 <!-- ══ BOTTOM NAV ══ -->
 <div class="bottom-nav">
-  <div class="nav-item" onclick="location.href='index.html'">
+<div class="nav-item" onclick="sdNavigate('index.html')">
     <div class="nav-icon">🏠</div>
     <div class="nav-label">Início</div>
     <div class="nav-dot"></div>
   </div>
-  <div class="nav-item" onclick="location.href='clientes.html'">
+  <div class="nav-item" onclick="sdNavigate('clientes.html')">
     <div class="nav-icon">👥</div>
     <div class="nav-label">Clientes</div>
     <div class="nav-dot"></div>
   </div>
-  <div class="nav-item" onclick="location.href='servidor.html'">
+  <div class="nav-item" onclick="sdNavigate('servidor.html')">
     <div class="nav-icon">🖥️</div>
     <div class="nav-label">Servidor</div>
     <div class="nav-dot"></div>
@@ -569,17 +570,17 @@
     <div class="nav-label">Finanças</div>
     <div class="nav-dot"></div>
   </div>
-  <div class="nav-item" onclick="location.href='avisos.html'">
+  <div class="nav-item" onclick="sdNavigate('avisos.html')">
     <div class="nav-icon">📢</div>
     <div class="nav-label">Avisos</div>
     <div class="nav-dot"></div>
   </div>
-  <div class="nav-item" id="premiumNav" onclick="location.href='config.html'">
+  <div class="nav-item" id="premiumNav" onclick="sdNavigate('config.html')">
     <div class="nav-icon" id="premiumIcon">⚙️</div>
     <div class="nav-label" id="premiumLabel">Config.</div>
     <div class="nav-dot"></div>
   </div>
-</div>
+  </div>
 <!-- TOAST -->
 <div id="sd-toast"></div>
 
@@ -1427,7 +1428,13 @@ document.addEventListener('visibilitychange', () => {
   }
 });
 </script>
-
+<script>
+function sdNavigate(url){
+  if(window.location.pathname.endsWith(url))return;
+  document.body.classList.add('sd-leaving');
+  setTimeout(()=>{ window.location.href=url; },160);
+}
+</script>
 <script>
   if('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js');
 </script>
