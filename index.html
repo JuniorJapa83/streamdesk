@@ -1490,7 +1490,67 @@ onAuthStateChanged(auth, async function(user) {
 
 <script>
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js');
+    navigator.serviceWorker.register('/sw.js').then(reg => {
+
+      // Verifica atualização a cada 60 segundos (enquanto app aberto)
+      setInterval(() => reg.update(), 60000);
+
+      // Detecta novo SW aguardando para ativar
+      reg.addEventListener('updatefound', () => {
+        const newWorker = reg.installing;
+        newWorker.addEventListener('statechange', () => {
+          if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+            showUpdateBanner();
+          }
+        });
+      });
+
+    }).catch(err => console.warn('SW não registrado:', err));
+  }
+
+  function showUpdateBanner() {
+    // Evita duplicar o banner
+    if (document.getElementById('sw-update-banner')) return;
+
+    const banner = document.createElement('div');
+    banner.id = 'sw-update-banner';
+    banner.innerHTML = `
+      <span>🚀 Nova versão disponível</span>
+      <button onclick="window.location.reload()">Atualizar</button>
+    `;
+    Object.assign(banner.style, {
+      position: 'fixed',
+      bottom: '80px',
+      left: '50%',
+      transform: 'translateX(-50%)',
+      background: '#6366f1',
+      color: '#fff',
+      padding: '12px 20px',
+      borderRadius: '50px',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '14px',
+      fontSize: '13px',
+      fontWeight: '600',
+      boxShadow: '0 4px 20px rgba(99,102,241,0.45)',
+      zIndex: '9999',
+      whiteSpace: 'nowrap',
+      animation: 'fadeUp .3s ease'
+    });
+
+    const btn = banner.querySelector('button');
+    Object.assign(btn.style, {
+      background: 'rgba(255,255,255,0.25)',
+      border: 'none',
+      borderRadius: '50px',
+      color: '#fff',
+      padding: '6px 14px',
+      fontWeight: '700',
+      cursor: 'pointer',
+      fontSize: '13px'
+    });
+
+    document.body.appendChild(banner);
   }
 </script>
 </body>
