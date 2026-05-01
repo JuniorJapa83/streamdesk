@@ -2,145 +2,758 @@
 <html lang="pt-BR">
 <head>
   <link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#00d4ff">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="StreamDesk">
-<link rel="apple-touch-icon" href="favicon.png">
-  <!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-PN7SZSWQR4"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-PN7SZSWQR4');
-</script>
+  <meta name="theme-color" content="#6366f1">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="StreamDesk">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PN7SZSWQR4"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PN7SZSWQR4');</script>
   <link rel="icon" href="favicon.png" type="image/png">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>StreamDesk — Avisos</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="theme.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>StreamDesk — Avisos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="theme.css">
+
 <style>
-  :root {
-    --bg:#080b12;--surface:#0e1220;--card:#131825;--card2:#161c2c;
-    --border:#1c2236;--accent:#00d4ff;--text:#e4e8f4;--muted:#5a6480;--radius:16px;
-  }
-  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:420px;margin:0 auto;display:flex;flex-direction:column;}
+/* ═══════════════════════════════════════════════════
+   AVISOS — tokens idênticos à Home
+═══════════════════════════════════════════════════ */
+:root {
+  --bg:#f5f7fa; --surface:#ffffff; --card:#ffffff; --card2:#f8fafc;
+  --border:#e8ecf2; --border2:#dde3ed;
+  --accent:#6366f1; --accent2:#818cf8;
+  --accent-bg:rgba(99,102,241,.08); --accent-border:rgba(99,102,241,.2);
+  --red:#ef4444; --red-bg:rgba(239,68,68,.08); --red-border:rgba(239,68,68,.2);
+  --yellow:#f59e0b; --yellow-bg:rgba(245,158,11,.08); --yellow-border:rgba(245,158,11,.2);
+  --orange:#f97316; --orange-bg:rgba(249,115,22,.08); --orange-border:rgba(249,115,22,.2);
+  --green:#10b981; --green-bg:rgba(16,185,129,.08); --green-border:rgba(16,185,129,.2);
+  --purple:#8b5cf6;
+  --text:#0f172a; --text2:#334155; --muted:#94a3b8; --muted2:#64748b;
+  --radius:16px;
+  --shadow-sm:0 1px 3px rgba(15,23,42,.06),0 1px 2px rgba(15,23,42,.04);
+  --shadow:0 4px 16px rgba(15,23,42,.08),0 2px 6px rgba(15,23,42,.04);
+  --shadow-lg:0 10px 40px rgba(15,23,42,.12),0 4px 12px rgba(15,23,42,.06);
+  --font:'Plus Jakarta Sans',sans-serif;
+}
+body.dark {
+  --bg:#080b12; --surface:#0e1220; --card:#131825; --card2:#161c2c;
+  --border:#1c2236; --border2:#222a3d;
+  --accent:#6366f1; --accent2:#818cf8;
+  --accent-bg:rgba(99,102,241,.12); --accent-border:rgba(99,102,241,.25);
+  --red:#ff3b5c; --red-bg:rgba(255,59,92,.1); --red-border:rgba(255,59,92,.2);
+  --yellow:#f59e0b; --yellow-bg:rgba(245,158,11,.1); --yellow-border:rgba(245,158,11,.2);
+  --orange:#f97316; --orange-bg:rgba(249,115,22,.1); --orange-border:rgba(249,115,22,.2);
+  --green:#10b981; --green-bg:rgba(16,185,129,.1); --green-border:rgba(16,185,129,.2);
+  --text:#e4e8f4; --text2:#a0aec0; --muted:#5a6480; --muted2:#7284a8;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.3); --shadow:0 4px 16px rgba(0,0,0,.4); --shadow-lg:0 10px 40px rgba(0,0,0,.5);
+}
 
-  .header{position:sticky;top:0;z-index:50;background:rgba(8,11,18,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:16px 20px;display:flex;align-items:center;justify-content:space-between}
-  .page-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800}
-  .page-title span{color:var(--accent)}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{
+  font-family:var(--font);background:var(--bg);color:var(--text);
+  min-height:100vh;max-width:430px;margin:0 auto;
+  overflow-x:hidden;transition:background .3s,color .3s;
+  -webkit-font-smoothing:antialiased;
+}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
 
-  .content{flex:1;display:flex;align-items:center;justify-content:center;padding:20px 20px 110px;}
+/* ── Keyframes ── */
+@keyframes slideDown{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 3px var(--green-bg)}50%{box-shadow:0 0 0 5px var(--green-bg)}}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes glow{0%,100%{opacity:.7}50%{opacity:1}}
 
-  .construction-wrap{text-align:center;padding:40px 20px;}
-  .construction-icon{font-size:72px;margin-bottom:24px;animation:bounce 2s infinite;}
-  @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
-  .construction-title{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;margin-bottom:12px;}
-  .construction-title span{color:var(--accent)}
-  .construction-sub{font-size:15px;color:var(--muted);line-height:1.6;margin-bottom:32px;}
-  .construction-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.2);border-radius:50px;padding:10px 20px;font-size:13px;color:var(--accent);font-weight:600;}
+/* ── HEADER — idêntico à Home ── */
+.header{
+  position:sticky;top:0;z-index:50;
+  background:rgba(245,247,250,.95)!important;
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  padding:14px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  animation:slideDown .4s ease;
+  transition:background .3s;
+}
+body.dark .header{background:rgba(8,11,18,.95)!important;border-bottom-color:#1c2236!important}
+body:not(.dark) .header{background:rgba(245,247,250,.97)!important;border-bottom-color:#e8ecf2!important}
 
-  .features-wrap{margin-top:32px;display:flex;flex-direction:column;gap:10px;text-align:left;}
-  .feature-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px;}
-  .feature-icon{font-size:22px;flex-shrink:0;}
-  .feature-text{font-size:13px;color:var(--muted);line-height:1.4;}
-  .feature-text strong{color:var(--text);display:block;margin-bottom:2px;}
+.logo-wrap{display:flex;flex-direction:column}
+.logo-title{font-size:22px;font-weight:800;letter-spacing:-.4px;line-height:1;color:var(--text)}
+.logo-title span{color:var(--accent)}
+.logo-sub{font-size:12px;color:var(--muted2);margin-top:2px;font-weight:500}
+.header-right{display:flex;align-items:center;gap:10px}
+.notif-btn{
+  width:38px;height:38px;border-radius:12px;
+  background:var(--card);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:18px;
+  box-shadow:var(--shadow-sm);position:relative;transition:all .2s;
+}
+.notif-btn:active{transform:scale(.93)}
 
-  .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:420px;background:rgba(14,18,32,.97);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;padding:10px 0 24px;z-index:50}
-  .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:4px 0}
-  .nav-icon{font-size:20px;transition:transform .2s}
-  .nav-label{font-size:8px;color:var(--muted);font-weight:500}
-  .nav-item.active .nav-label{color:var(--accent)}
-  .nav-item.active .nav-icon{transform:translateY(-2px)}
-  .nav-dot{width:4px;height:4px;border-radius:50%;background:var(--accent);margin-top:-2px;opacity:0}
-  .nav-item.active .nav-dot{opacity:1}
+/* ── CONTENT — idêntico à Home ── */
+.content{padding:20px 20px 110px;position:relative;z-index:1}
 
-  body.light {
-    --bg:#f0f4f8;--surface:#ffffff;--card:#ffffff;--card2:#f7f9fc;
-    --border:#e2e8f0;--text:#1a202c;--muted:#718096;
-  }
-  body.light .header { background: rgba(255,255,255,.96); }
-  body.light .bottom-nav { background: rgba(255,255,255,.97); }
+/* ── GREETING — idêntico à Home ── */
+.greeting-row{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  margin-bottom:20px;animation:fadeUp .4s ease both;
+}
+.greeting-text h2{font-size:22px;font-weight:800;color:var(--text);letter-spacing:-.3px}
+.greeting-text p{font-size:13px;color:var(--muted2);margin-top:3px}
+.live-badge{
+  display:flex;align-items:center;gap:6px;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:50px;padding:7px 12px;
+  font-size:11px;font-weight:600;color:var(--muted2);
+  box-shadow:var(--shadow-sm);flex-shrink:0;margin-left:12px;margin-top:2px;
+}
+.live-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--yellow);box-shadow:0 0 0 3px var(--yellow-bg);
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 3px var(--yellow-bg)}50%{box-shadow:0 0 0 5px var(--yellow-bg)}}
+
+/* ── SECTION HEADER — idêntico à Home ── */
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.section-title{font-size:16px;font-weight:800;color:var(--text)}
+
+/* ── SKELETON — idêntico à Home ── */
+.skeleton{
+  background:linear-gradient(90deg,var(--border) 25%,var(--card2) 50%,var(--border) 75%);
+  background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:8px;
+}
+
+/* ── BANNER PLANO ── */
+.banner-venc{
+  display:none;border-radius:14px;padding:14px 16px;margin-bottom:18px;
+  border:1px solid;cursor:pointer;transition:opacity .2s,transform .2s;
+  animation:fadeUp .4s ease both;
+}
+.banner-venc:active{opacity:.8;transform:scale(.98)}
+.banner-venc.vencendo{background:var(--yellow-bg);border-color:var(--yellow-border)}
+.banner-venc.vencido{background:var(--red-bg);border-color:var(--red-border)}
+.banner-venc-row{display:flex;align-items:center;gap:10px}
+.banner-venc-icon{font-size:22px;flex-shrink:0}
+.banner-venc-body{flex:1}
+.banner-venc-titulo{font-size:13px;font-weight:700}
+.banner-venc.vencendo .banner-venc-titulo{color:var(--yellow)}
+.banner-venc.vencido  .banner-venc-titulo{color:var(--red)}
+.banner-venc-sub{font-size:11px;color:var(--muted2);margin-top:2px}
+.banner-venc-arrow{font-size:18px;color:var(--muted);flex-shrink:0}
+
+/* ══════════════════════════════════════════════════
+   HERO "EM CONSTRUÇÃO" — card premium, não centralizado
+══════════════════════════════════════════════════ */
+.coming-hero{
+  background:linear-gradient(135deg,var(--accent) 0%,var(--purple) 100%);
+  border-radius:22px;padding:22px 20px 20px;
+  margin-bottom:18px;
+  position:relative;overflow:hidden;
+  box-shadow:0 8px 32px rgba(99,102,241,.28);
+  animation:fadeUp .4s ease .05s both;
+}
+/* círculos decorativos de fundo */
+.coming-hero::before{
+  content:'';position:absolute;top:-40px;right:-40px;
+  width:160px;height:160px;border-radius:50%;
+  background:rgba(255,255,255,.07);pointer-events:none;
+}
+.coming-hero::after{
+  content:'';position:absolute;bottom:-30px;right:20px;
+  width:90px;height:90px;border-radius:50%;
+  background:rgba(255,255,255,.05);pointer-events:none;
+}
+.ch-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
+.ch-icon-wrap{
+  width:52px;height:52px;border-radius:16px;flex-shrink:0;
+  background:rgba(255,255,255,.18);
+  display:flex;align-items:center;justify-content:center;
+  font-size:26px;
+  animation:float 3s ease-in-out infinite;
+}
+.ch-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);
+  border-radius:50px;padding:5px 12px;
+  font-size:11px;font-weight:700;color:rgba(255,255,255,.9);
+  letter-spacing:.3px;flex-shrink:0;
+  animation:glow 2.5s ease-in-out infinite;
+}
+.ch-badge-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:#fff;opacity:.8;flex-shrink:0;
+}
+.ch-body{position:relative;z-index:1}
+.ch-label{
+  font-size:11px;font-weight:700;color:rgba(255,255,255,.65);
+  text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;
+}
+.ch-title{
+  font-size:22px;font-weight:800;color:#fff;
+  letter-spacing:-.4px;line-height:1.15;margin-bottom:8px;
+}
+.ch-sub{
+  font-size:13.5px;color:rgba(255,255,255,.78);
+  line-height:1.6;margin-bottom:16px;
+}
+.ch-footer{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ch-pill{
+  display:inline-flex;align-items:center;gap:5px;
+  background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2);
+  border-radius:50px;padding:6px 14px;
+  font-size:12px;font-weight:700;color:rgba(255,255,255,.88);
+}
+
+/* ══════════════════════════════════════════════════
+   FEATURES CARDS — padrão insight da Home
+══════════════════════════════════════════════════ */
+.features-section{animation:fadeUp .4s ease .1s both}
+
+.feature-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:16px;
+  display:flex;align-items:flex-start;gap:14px;
+  margin-bottom:8px;
+  box-shadow:var(--shadow-sm);
+  cursor:default;
+  transition:transform .2s,box-shadow .2s,border-color .2s;
+  position:relative;overflow:hidden;
+}
+/* linha colorida à esquerda */
+.feature-card::before{
+  content:'';
+  position:absolute;top:0;left:0;bottom:0;width:3px;
+  border-radius:16px 0 0 16px;
+  transition:opacity .2s;opacity:.6;
+}
+.feature-card.fc-purple::before{background:var(--purple)}
+.feature-card.fc-accent::before{background:var(--accent)}
+.feature-card.fc-green::before{background:var(--green)}
+.feature-card.fc-yellow::before{background:var(--yellow)}
+.feature-card.fc-orange::before{background:var(--orange)}
+
+.feature-card:hover{
+  transform:translateY(-2px);
+  box-shadow:var(--shadow);
+  border-color:var(--border2);
+}
+.feature-card:hover::before{opacity:1}
+.feature-card:active{transform:scale(.98);opacity:.9}
+
+.fc-icon-wrap{
+  width:44px;height:44px;border-radius:13px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;flex-shrink:0;
+  transition:transform .2s;
+}
+.feature-card:hover .fc-icon-wrap{transform:scale(1.08)}
+
+.fc-icon-wrap.purple{background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.18)}
+.fc-icon-wrap.accent{background:var(--accent-bg);border:1px solid var(--accent-border)}
+.fc-icon-wrap.green {background:var(--green-bg); border:1px solid var(--green-border)}
+.fc-icon-wrap.yellow{background:var(--yellow-bg);border:1px solid var(--yellow-border)}
+.fc-icon-wrap.orange{background:var(--orange-bg);border:1px solid var(--orange-border)}
+
+.fc-body{flex:1;min-width:0}
+.fc-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px;line-height:1.3}
+.fc-sub{font-size:12.5px;color:var(--muted2);line-height:1.5}
+.fc-right{flex-shrink:0;margin-top:2px}
+.fc-tag{
+  font-size:10px;font-weight:700;border-radius:50px;padding:3px 9px;
+  white-space:nowrap;
+}
+.fc-tag.soon{background:var(--yellow-bg);color:var(--yellow);border:1px solid var(--yellow-border)}
+.fc-tag.planned{background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-border)}
+.fc-tag.mvp{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+
+/* Skeleton dos feature cards */
+.feature-skel{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px;padding:16px;
+  display:flex;align-items:flex-start;gap:14px;
+  margin-bottom:8px;
+}
+.skel-icon{width:44px;height:44px;border-radius:13px}
+.skel-body{flex:1;display:flex;flex-direction:column;gap:8px;padding-top:4px}
+.skel-line{height:12px}
+.skel-line.long{width:70%}
+.skel-line.short{width:45%}
+
+/* ── ROADMAP CARD ── */
+.roadmap-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px;padding:18px 16px;
+  box-shadow:var(--shadow-sm);
+  animation:fadeUp .4s ease .15s both;
+}
+.roadmap-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:14px}
+.roadmap-step{
+  display:flex;align-items:flex-start;gap:12px;
+  margin-bottom:14px;
+  position:relative;
+}
+.roadmap-step:last-child{margin-bottom:0}
+/* linha vertical conectando steps */
+.roadmap-step:not(:last-child)::after{
+  content:'';position:absolute;left:15px;top:32px;bottom:-14px;
+  width:2px;background:var(--border);
+}
+.rs-dot{
+  width:32px;height:32px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;flex-shrink:0;position:relative;z-index:1;
+}
+.rs-dot.done{background:var(--green-bg);border:2px solid var(--green)}
+.rs-dot.current{background:var(--accent-bg);border:2px solid var(--accent)}
+.rs-dot.next{background:var(--card2);border:2px solid var(--border)}
+.rs-body{flex:1;min-width:0;padding-top:4px}
+.rs-label{font-size:13px;font-weight:700;color:var(--text);line-height:1.2}
+.rs-sub{font-size:11.5px;color:var(--muted2);margin-top:2px}
+.rs-badge{
+  display:inline-block;margin-top:5px;
+  font-size:10px;font-weight:700;border-radius:50px;padding:2px 8px;
+}
+.rs-badge.done{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.rs-badge.current{background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-border)}
+.rs-badge.next{background:var(--card2);color:var(--muted);border:1px solid var(--border)}
+
+/* ── CTA CARD ── */
+.cta-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px;padding:16px;
+  display:flex;align-items:center;gap:14px;
+  box-shadow:var(--shadow-sm);
+  cursor:pointer;transition:all .2s;
+  animation:fadeUp .4s ease .2s both;
+}
+.cta-card:hover{transform:translateY(-2px);box-shadow:var(--shadow);border-color:var(--accent-border)}
+.cta-card:active{transform:scale(.98);opacity:.9}
+.cta-icon{
+  width:46px;height:46px;border-radius:14px;flex-shrink:0;
+  background:var(--accent-bg);border:1px solid var(--accent-border);
+  display:flex;align-items:center;justify-content:center;font-size:22px;
+}
+.cta-body{flex:1;min-width:0}
+.cta-title{font-size:14px;font-weight:700;color:var(--text)}
+.cta-sub{font-size:12px;color:var(--muted2);margin-top:2px}
+.cta-arrow{color:var(--accent);font-size:20px;flex-shrink:0}
+
+/* ── BOTTOM NAV — idêntico à Home ── */
+.bottom-nav{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+  width:100%;max-width:430px;
+  background:rgba(245,247,250,.97);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-top:1px solid var(--border);
+  display:flex;padding:10px 0 24px;z-index:50;transition:background .3s;
+}
+body.dark .bottom-nav{background:rgba(8,11,18,.97)!important;border-top-color:#1c2236!important}
+body:not(.dark) .bottom-nav{background:rgba(245,247,250,.97)!important;border-top-color:#e8ecf2!important}
+
+.nav-item{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;gap:4px;cursor:pointer;transition:all .2s;padding:4px 0;
+}
+.nav-icon{font-size:22px;transition:transform .2s}
+.nav-label{font-size:9px;color:var(--muted);font-weight:600;letter-spacing:.3px}
+.nav-item.active .nav-label{color:var(--accent)}
+.nav-item.active .nav-icon{transform:translateY(-2px)}
+.nav-dot{width:4px;height:4px;border-radius:50%;background:var(--accent);margin-top:-2px;opacity:0;transition:opacity .2s}
+.nav-item.active .nav-dot{opacity:1}
+
+/* Item premium do nav */
+.nav-item.nav-premium .nav-label{color:var(--yellow)}
+.nav-item.nav-premium-warn .nav-label{color:var(--orange)}
+.nav-item.nav-premium-expired .nav-label{color:var(--red)}
+
+/* ── TOAST ── */
+.toast{
+  position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:var(--text);color:var(--card);
+  padding:11px 22px;border-radius:50px;
+  font-size:13px;font-weight:600;z-index:9000;pointer-events:none;
+  opacity:0;transition:all .3s;max-width:300px;text-align:center;white-space:nowrap;
+  box-shadow:var(--shadow-lg);
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── DARK OVERRIDES ── */
+body.dark .coming-hero{box-shadow:0 8px 32px rgba(99,102,241,.22)}
 </style>
 </head>
+
 <body>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-const _app  = initializeApp({apiKey:"AIzaSyAGHvkDpeSbCTriZCvRf-jJ6z8PQSSWLHI",authDomain:"streamdesk-5350d.firebaseapp.com",projectId:"streamdesk-5350d",storageBucket:"streamdesk-5350d.firebasestorage.app",messagingSenderId:"36684694847",appId:"1:36684694847:web:0f6f3a27933e3d84cfff8a"});
-const _auth = getAuth(_app);
-onAuthStateChanged(_auth, function(user) { if (!user) location.href='login.html'; });
-</script>
+<!-- Aplica tema antes de renderizar -->
 <script>
 (function(){
-  var cfg = JSON.parse(localStorage.getItem('streamdesk_config') || '{}');
-  if (cfg.darkMode !== true) document.body.classList.add('light');
+  var c=JSON.parse(localStorage.getItem('streamdesk_config')||'{}');
+  if(c.darkMode===true) document.body.classList.add('dark');
+  document.body.classList.remove('light');
 })();
-document.addEventListener('visibilitychange', function() {
-  if (document.visibilityState === 'visible') {
-    var cfg = JSON.parse(localStorage.getItem('streamdesk_config') || '{}');
-    if (cfg.darkMode === false) { document.body.classList.add('light'); } else { document.body.classList.remove('light'); }
+</script>
+
+<!-- ══ FIREBASE ══ -->
+<script type="module">
+import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+const FB={
+  apiKey:"AIzaSyAGHvkDpeSbCTriZCvRf-jJ6z8PQSSWLHI",
+  authDomain:"streamdesk-5350d.firebaseapp.com",
+  projectId:"streamdesk-5350d",
+  storageBucket:"streamdesk-5350d.firebasestorage.app",
+  messagingSenderId:"36684694847",
+  appId:"1:36684694847:web:0f6f3a27933e3d84cfff8a"
+};
+const app  = getApps().length ? getApp() : initializeApp(FB);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+
+/* ─── Helpers ─── */
+function getGreeting(){
+  var h=new Date().getHours();
+  if(h<12) return 'Bom dia';
+  if(h<18) return 'Boa tarde';
+  return 'Boa noite';
+}
+function today(){
+  var d=new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function fromStr(s){if(!s)return null;var p=s.split('-');return new Date(+p[0],+p[1]-1,+p[2]);}
+function diffDays(a,b){return Math.round((b-a)/86400000);}
+
+/* ─── Banner plano ─── */
+function mostrarBannerVenc(vencimento){
+  if(!vencimento) return;
+  var hoje=new Date();hoje.setHours(0,0,0,0);
+  var p=vencimento.split('-');
+  var venc=new Date(p[0],p[1]-1,p[2]);
+  var dias=Math.round((venc-hoje)/86400000);
+  var el=document.getElementById('bannerVenc');
+  if(!el) return;
+  if(dias<0){
+    el.className='banner-venc vencido';el.style.display='block';
+    document.getElementById('bannerTitulo').textContent='Sua assinatura venceu há '+Math.abs(dias)+' dia'+(Math.abs(dias)!==1?'s':'');
+  } else if(dias<=7){
+    el.className='banner-venc vencendo';el.style.display='block';
+    document.getElementById('bannerTitulo').textContent=dias===0?'Sua assinatura vence hoje!':'Sua assinatura vence em '+dias+' dia'+(dias!==1?'s':'');
   }
+}
+
+/* ─── Premium nav ─── */
+function updatePremiumNav(expiracao){
+  var el=document.getElementById('premiumNav');
+  var ico=document.getElementById('premiumIcon');
+  var lbl=document.getElementById('premiumLabel');
+  if(!el||!ico||!lbl) return;
+  if(!expiracao){
+    el.className='nav-item';ico.textContent='⚙️';lbl.textContent='Config.';return;
+  }
+  var hoje=new Date();hoje.setHours(0,0,0,0);
+  var exp=fromStr(expiracao);
+  var dias=diffDays(hoje,exp);
+  if(dias<0){
+    el.classList.add('nav-premium-expired');ico.textContent='🔴';lbl.textContent='Expirou';
+  } else if(dias<=7){
+    el.classList.add('nav-premium-warn');ico.textContent='⚠️';lbl.textContent=dias+'d';
+  } else if(dias<=14){
+    el.classList.add('nav-premium');ico.textContent='💳';lbl.textContent='Renovar';
+  }
+}
+
+/* ─── Auth ─── */
+onAuthStateChanged(auth, async function(user){
+  if(!user){location.href='login.html';return;}
+
+  /* Saudação */
+  var nome=user.displayName?user.displayName.split(' ')[0]:(user.email||'').split('@')[0];
+  var gr=getGreeting();
+  var gTitle=document.getElementById('greetingTitle');
+  var gSub=document.getElementById('greetingSub');
+  var logoSub=document.getElementById('logoSub');
+  if(gTitle) gTitle.textContent=gr+', '+nome+'! 📢';
+  if(gSub)   gSub.textContent='Confira as novidades e funcionalidades do app.';
+  if(logoSub) logoSub.textContent=gr+', '+nome;
+
+  /* Dados do usuário */
+  try{
+    var snap=await getDoc(doc(db,'usuarios',user.uid));
+    var data=snap.exists()?snap.data():{};
+    var venc=data.expiracao||data.vencimento||null;
+    mostrarBannerVenc(venc);
+    updatePremiumNav(venc);
+  }catch(e){console.warn('Erro ao carregar dados:',e);}
+
+  /* Remove skeletons e mostra conteúdo */
+  setTimeout(function(){
+    document.querySelectorAll('.feature-skel').forEach(function(el){el.style.display='none'});
+    document.querySelectorAll('.feature-card').forEach(function(el){el.style.display='flex'});
+  }, 600);
 });
 </script>
 
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- ══ HEADER ══ -->
 <div class="header">
-  <div class="page-title">Avisos<span>.</span></div>
-</div>
-
-<div class="content">
-  <div class="construction-wrap">
-    <div class="construction-icon">🚧</div>
-    <div class="construction-title">Em <span>Construção</span></div>
-    <div class="construction-sub">
-      Esta funcionalidade está sendo desenvolvida e em breve estará disponível para você.
-    </div>
-    <div class="construction-badge">
-      ⏳ Em breve
-    </div>
-
-    <div class="features-wrap">
-      <div class="feature-item">
-        <div class="feature-icon">📢</div>
-        <div class="feature-text">
-          <strong>Envio em massa</strong>
-          Envie mensagens para todos os clientes de uma só vez via WhatsApp.
-        </div>
-      </div>
-      <div class="feature-item">
-        <div class="feature-icon">🎯</div>
-        <div class="feature-text">
-          <strong>Filtro por grupo</strong>
-          Selecione só vencidos, em dia, por servidor ou todos.
-        </div>
-      </div>
-      <div class="feature-item">
-        <div class="feature-icon">📝</div>
-        <div class="feature-text">
-          <strong>Templates prontos</strong>
-          Mensagens pré-definidas para renovação, aviso de vencimento e comunicados.
-        </div>
-      </div>
+  <div class="logo-wrap">
+    <div class="logo-title">Avisos<span>.</span></div>
+    <div class="logo-sub" id="logoSub">Carregando...</div>
+  </div>
+  <div class="header-right">
+    <div class="notif-btn" onclick="location.href='index.html'" title="Voltar ao início">
+      🏠
     </div>
   </div>
 </div>
 
+<!-- ══ CONTENT ══ -->
+<div class="content">
+
+  <!-- Banner plano -->
+  <div class="banner-venc" id="bannerVenc" onclick="location.href='config.html'">
+    <div class="banner-venc-row">
+      <div class="banner-venc-icon" id="bannerIcon">⚠️</div>
+      <div class="banner-venc-body">
+        <div class="banner-venc-titulo" id="bannerTitulo"></div>
+        <div class="banner-venc-sub">Toque para renovar sua assinatura</div>
+      </div>
+      <div class="banner-venc-arrow">›</div>
+    </div>
+  </div>
+
+  <!-- GREETING -->
+  <div class="greeting-row">
+    <div class="greeting-text">
+      <h2 id="greetingTitle">Carregando... 📢</h2>
+      <p id="greetingSub">Novidades e funcionalidades do app.</p>
+    </div>
+    <div class="live-badge">
+      <div class="live-dot"></div>
+      <span>em breve</span>
+    </div>
+  </div>
+
+  <!-- ══ HERO EM CONSTRUÇÃO ══ -->
+  <div class="coming-hero">
+    <div class="ch-top">
+      <div class="ch-icon-wrap">📢</div>
+      <div class="ch-badge">
+        <div class="ch-badge-dot"></div>
+        Em desenvolvimento
+      </div>
+    </div>
+    <div class="ch-body">
+      <div class="ch-label">Nova funcionalidade</div>
+      <div class="ch-title">Central de Avisos</div>
+      <div class="ch-sub">
+        Envie mensagens em massa para todos os seus clientes com um toque. Filtros inteligentes, templates prontos e histórico de envios — tudo integrado ao WhatsApp.
+      </div>
+      <div class="ch-footer">
+        <div class="ch-pill">⚡ WhatsApp nativo</div>
+        <div class="ch-pill">🎯 Filtros avançados</div>
+        <div class="ch-pill">📝 Templates prontos</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ FEATURES ══ -->
+  <div class="features-section">
+    <div class="section-header">
+      <div class="section-title">O que está chegando</div>
+    </div>
+
+    <!-- Skeletons — visíveis enquanto carrega -->
+    <div class="feature-skel">
+      <div class="skel-icon skeleton"></div>
+      <div class="skel-body">
+        <div class="skel-line long skeleton"></div>
+        <div class="skel-line short skeleton"></div>
+      </div>
+    </div>
+    <div class="feature-skel">
+      <div class="skel-icon skeleton"></div>
+      <div class="skel-body">
+        <div class="skel-line long skeleton"></div>
+        <div class="skel-line short skeleton"></div>
+      </div>
+    </div>
+    <div class="feature-skel">
+      <div class="skel-icon skeleton"></div>
+      <div class="skel-body">
+        <div class="skel-line long skeleton"></div>
+        <div class="skel-line short skeleton"></div>
+      </div>
+    </div>
+
+    <!-- Feature cards — ocultos até carregar -->
+    <div class="feature-card fc-purple" style="display:none">
+      <div class="fc-icon-wrap purple">📢</div>
+      <div class="fc-body">
+        <div class="fc-title">Envio em massa via WhatsApp</div>
+        <div class="fc-sub">Selecione todos os clientes ou filtre por grupo e dispare mensagens com um toque. Sem abrir contato por contato.</div>
+      </div>
+      <div class="fc-right">
+        <div class="fc-tag mvp">Em breve</div>
+      </div>
+    </div>
+
+    <div class="feature-card fc-accent" style="display:none">
+      <div class="fc-icon-wrap accent">🎯</div>
+      <div class="fc-body">
+        <div class="fc-title">Filtros inteligentes por grupo</div>
+        <div class="fc-sub">Avise só os vencidos, os que vencem hoje, por servidor ou todos de uma vez. Precisão máxima, sem esforço.</div>
+      </div>
+      <div class="fc-right">
+        <div class="fc-tag soon">Em breve</div>
+      </div>
+    </div>
+
+    <div class="feature-card fc-green" style="display:none">
+      <div class="fc-icon-wrap green">📝</div>
+      <div class="fc-body">
+        <div class="fc-title">Templates prontos para usar</div>
+        <div class="fc-sub">Mensagens pré-escritas de renovação, aviso de vencimento e comunicados gerais. Edite e salve os seus favoritos.</div>
+      </div>
+      <div class="fc-right">
+        <div class="fc-tag planned">Planejado</div>
+      </div>
+    </div>
+
+    <div class="feature-card fc-yellow" style="display:none">
+      <div class="fc-icon-wrap yellow">📊</div>
+      <div class="fc-body">
+        <div class="fc-title">Relatório de envios</div>
+        <div class="fc-sub">Saiba quantas mensagens foram enviadas, quais clientes responderam e acompanhe o histórico de comunicações.</div>
+      </div>
+      <div class="fc-right">
+        <div class="fc-tag planned">Planejado</div>
+      </div>
+    </div>
+
+    <div class="feature-card fc-orange" style="display:none">
+      <div class="fc-icon-wrap orange">⏰</div>
+      <div class="fc-body">
+        <div class="fc-title">Agendamento automático</div>
+        <div class="fc-sub">Configure o app para enviar avisos automaticamente X dias antes do vencimento. Sem precisar lembrar de nada.</div>
+      </div>
+      <div class="fc-right">
+        <div class="fc-tag planned">Futuro</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ROADMAP ══ -->
+  <div style="margin-top:8px">
+    <div class="section-header" style="margin-bottom:12px">
+      <div class="section-title">Roadmap</div>
+    </div>
+    <div class="roadmap-card">
+      <div class="roadmap-title">Progresso do desenvolvimento</div>
+
+      <div class="roadmap-step">
+        <div class="rs-dot done">✓</div>
+        <div class="rs-body">
+          <div class="rs-label">Gestão de clientes</div>
+          <div class="rs-sub">Cadastro, vencimento e histórico completo</div>
+          <div class="rs-badge done">Lançado</div>
+        </div>
+      </div>
+
+      <div class="roadmap-step">
+        <div class="rs-dot done">✓</div>
+        <div class="rs-body">
+          <div class="rs-label">Painel financeiro</div>
+          <div class="rs-sub">Receita, despesas e lucro por mês</div>
+          <div class="rs-badge done">Lançado</div>
+        </div>
+      </div>
+
+      <div class="roadmap-step">
+        <div class="rs-dot current">📢</div>
+        <div class="rs-body">
+          <div class="rs-label">Central de Avisos</div>
+          <div class="rs-sub">Envio em massa e templates de mensagens</div>
+          <div class="rs-badge current">Em desenvolvimento</div>
+        </div>
+      </div>
+
+      <div class="roadmap-step">
+        <div class="rs-dot next">⏳</div>
+        <div class="rs-body">
+          <div class="rs-label">Agendamento automático</div>
+          <div class="rs-sub">Avisos programados sem intervenção manual</div>
+          <div class="rs-badge next">Próxima fase</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ CTA — ir para cobranças manuais ══ -->
+  <div style="margin-top:8px">
+    <div class="cta-card" onclick="location.href='index.html'">
+      <div class="cta-icon">💬</div>
+      <div class="cta-body">
+        <div class="cta-title">Cobrar clientes agora</div>
+        <div class="cta-sub">Enquanto esta seção chega, use a Home para enviar cobranças via WhatsApp</div>
+      </div>
+      <div class="cta-arrow">›</div>
+    </div>
+  </div>
+
+</div><!-- /content -->
+
+<!-- ══ BOTTOM NAV ══ -->
 <div class="bottom-nav">
-  <div class="nav-item" onclick="location.href='index.html'"><div class="nav-icon">🏠</div><div class="nav-label">Início</div><div class="nav-dot"></div></div>
-  <div class="nav-item" onclick="location.href='clientes.html'"><div class="nav-icon">👥</div><div class="nav-label">Clientes</div><div class="nav-dot"></div></div>
-  <div class="nav-item" onclick="location.href='servidor.html'"><div class="nav-icon">🖥️</div><div class="nav-label">Servidor</div><div class="nav-dot"></div></div>
-  <div class="nav-item" onclick="location.href='financas.html'"><div class="nav-icon">💰</div><div class="nav-label">Finanças</div><div class="nav-dot"></div></div>
-  <div class="nav-item active"><div class="nav-icon">📢</div><div class="nav-label">Avisos</div><div class="nav-dot"></div></div>
-  <div class="nav-item" onclick="location.href='config.html'"><div class="nav-icon">⚙️</div><div class="nav-label">Config.</div><div class="nav-dot"></div></div>
+  <div class="nav-item" onclick="location.href='index.html'">
+    <div class="nav-icon">🏠</div>
+    <div class="nav-label">Início</div>
+    <div class="nav-dot"></div>
+  </div>
+  <div class="nav-item" onclick="location.href='clientes.html'">
+    <div class="nav-icon">👥</div>
+    <div class="nav-label">Clientes</div>
+    <div class="nav-dot"></div>
+  </div>
+  <div class="nav-item" onclick="location.href='servidor.html'">
+    <div class="nav-icon">🖥️</div>
+    <div class="nav-label">Servidor</div>
+    <div class="nav-dot"></div>
+  </div>
+  <div class="nav-item" onclick="location.href='financas.html'">
+    <div class="nav-icon">💰</div>
+    <div class="nav-label">Finanças</div>
+    <div class="nav-dot"></div>
+  </div>
+  <div class="nav-item active">
+    <div class="nav-icon">📢</div>
+    <div class="nav-label">Avisos</div>
+    <div class="nav-dot"></div>
+  </div>
+  <div class="nav-item" id="premiumNav" onclick="location.href='config.html'">
+    <div class="nav-icon" id="premiumIcon">⚙️</div>
+    <div class="nav-label" id="premiumLabel">Config.</div>
+    <div class="nav-dot"></div>
+  </div>
 </div>
+
 <script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js');
-  }
+if('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js');
 </script>
 </body>
 </html>
