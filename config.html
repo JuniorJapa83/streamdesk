@@ -216,40 +216,6 @@ body.dark .header{background:rgba(8,11,18,.96)}
 .c-row.clickable:hover .c-arrow{transform:translateX(2px)}
 
 /* ─────────────────────────────────────────────────
-   TOGGLE MODERNO
-───────────────────────────────────────────────── */
-.tog{
-  width:48px;height:28px;border-radius:50px;position:relative;
-  border:1px solid var(--border);background:var(--card2);
-  transition:background .3s,border-color .3s;
-  cursor:pointer;flex-shrink:0;
-}
-.tog.on{background:var(--green-bg);border-color:var(--green)}
-.tog-thumb{
-  position:absolute;top:5px;left:5px;width:16px;height:16px;
-  border-radius:50%;background:var(--muted);
-  transition:left .3s cubic-bezier(.34,1.56,.64,1),background .3s;
-  box-shadow:0 1px 4px rgba(0,0,0,.2);
-}
-.tog.on .tog-thumb{left:25px;background:var(--green)}
-
-/* Preview de tema ao lado do toggle */
-.theme-preview{
-  display:flex;gap:4px;align-items:center;
-}
-.tp-swatch{
-  width:16px;height:16px;border-radius:5px;border:1px solid var(--border);
-  transition:all .3s;
-}
-.tp-light{background:#f5f7fa}
-.tp-dark {background:#0e1220}
-.tp-active{
-  transform:scale(1.2);
-  box-shadow:0 0 0 2px var(--accent);
-  border-color:var(--accent);
-}
-
-/* ─────────────────────────────────────────────────
    CARD DE ASSINATURA — 5 VARIANTES (f1–f4 + fa)
    REGRAS:
    f1 (1-20d):  neutro total, sem urgência
@@ -266,17 +232,22 @@ body.dark .header{background:rgba(8,11,18,.96)}
   box-shadow:var(--shadow-sm);
   transition:border-color .5s,box-shadow .5s;
 }
-.assin-card.f1{border-color:var(--border)}
-.assin-card.f2{border-color:var(--border)}
+/* f1 — dias 1-20: neutro total, sem destaque */
+.assin-card.f1{border-color:var(--border);box-shadow:var(--shadow-sm)}
+/* f2 — dias 21-27: toque amarelo suave, sem urgência */
+.assin-card.f2{border-color:var(--yellow-border);box-shadow:var(--shadow-sm)}
+/* f3 — dias 28-30: borda amarela + glow suave */
 .assin-card.f3{
   border-color:var(--yellow-border);
-  box-shadow:0 0 0 3px rgba(245,158,11,.08),var(--shadow-sm);
+  box-shadow:0 0 0 3px rgba(245,158,11,.10),var(--shadow);
 }
+/* f4 — expirado: borda vermelha + glow */
 .assin-card.f4{
   border-color:var(--red-border);
-  box-shadow:0 0 0 3px rgba(239,68,68,.08),var(--shadow);
+  box-shadow:0 0 0 3px rgba(239,68,68,.10),var(--shadow);
 }
-.assin-card.fa{border-color:var(--green-border)}
+/* fa — ativo pago: borda verde discreta */
+.assin-card.fa{border-color:var(--green-border);box-shadow:var(--shadow-sm)}
 
 /* Topo gradient por fase */
 .assin-card::before{
@@ -284,7 +255,7 @@ body.dark .header{background:rgba(8,11,18,.96)}
   transition:background .5s;
 }
 .assin-card.f1::before{background:var(--border)}
-.assin-card.f2::before{background:linear-gradient(90deg,var(--accent),var(--border))}
+.assin-card.f2::before{background:linear-gradient(90deg,var(--yellow),rgba(245,158,11,.3))}
 .assin-card.f3::before{background:linear-gradient(90deg,var(--yellow),var(--orange,#f97316))}
 .assin-card.f4::before{background:var(--red)}
 .assin-card.fa::before{background:linear-gradient(90deg,var(--green),var(--accent))}
@@ -300,14 +271,19 @@ body.dark .header{background:rgba(8,11,18,.96)}
   width:8px;height:8px;border-radius:50%;flex-shrink:0;
   transition:background .4s,box-shadow .4s;
 }
+/* f1 — neutro, sem destaque */
 .ac-dot.f1{background:var(--muted)}
-.ac-dot.f2{background:var(--accent);box-shadow:0 0 0 3px var(--accent-bg)}
-.ac-dot.f3{background:var(--yellow);box-shadow:0 0 0 3px rgba(245,158,11,.12);animation:pulse 2s infinite}
-.ac-dot.f4{background:var(--red);  box-shadow:0 0 0 3px rgba(239,68,68,.12); animation:pulse 1.4s infinite}
+/* f2 — amarelo suave, sem animação */
+.ac-dot.f2{background:var(--yellow);box-shadow:0 0 0 3px rgba(245,158,11,.12)}
+/* f3 — amarelo, pulsante */
+.ac-dot.f3{background:var(--yellow);box-shadow:0 0 0 3px rgba(245,158,11,.15);animation:pulse 2s infinite}
+/* f4 — vermelho, pulsante urgente */
+.ac-dot.f4{background:var(--red);  box-shadow:0 0 0 3px rgba(239,68,68,.15); animation:pulse 1.4s infinite}
+/* fa — verde, pulsante suave */
 .ac-dot.fa{background:var(--green);box-shadow:0 0 0 3px var(--green-bg);    animation:pulse 2.5s infinite}
 .ac-stxt{font-size:13px;font-weight:700}
 .ac-stxt.f1{color:var(--muted2)}
-.ac-stxt.f2{color:var(--accent)}
+.ac-stxt.f2{color:var(--yellow)}
 .ac-stxt.f3{color:var(--yellow)}
 .ac-stxt.f4{color:var(--red)}
 .ac-stxt.fa{color:var(--green)}
@@ -333,7 +309,7 @@ body.dark .header{background:rgba(8,11,18,.96)}
 .ac-hero-row{display:flex;align-items:flex-end;justify-content:space-between}
 .ac-days-big{font-size:30px;font-weight:800;line-height:1;transition:color .4s}
 .ac-days-big.f1{color:var(--text2)}
-.ac-days-big.f2{color:var(--accent)}
+.ac-days-big.f2{color:var(--yellow)}
 .ac-days-big.f3{color:var(--yellow)}
 .ac-days-big.f4{color:var(--red)}
 .ac-days-big.fa{color:var(--green)}
@@ -346,7 +322,7 @@ body.dark .header{background:rgba(8,11,18,.96)}
 .ac-bar-wrap{height:5px;background:var(--card2);border-radius:50px;overflow:hidden;border:1px solid var(--border)}
 .ac-bar{height:100%;border-radius:50px;transition:width .7s ease,background .5s}
 .ac-bar.f1{background:var(--accent)}
-.ac-bar.f2{background:var(--accent)}
+.ac-bar.f2{background:var(--yellow)}
 .ac-bar.f3{background:var(--yellow)}
 
 /* Linha data */
@@ -363,12 +339,12 @@ body.dark .header{background:rgba(8,11,18,.96)}
 }
 .ac-insight-ico{font-size:16px;flex-shrink:0;margin-top:1px}
 
-/* Aviso fase 2 */
+/* Aviso fase 2 — amarelo discreto, SEM botão */
 .ac-warn-strip{
   display:flex;align-items:center;gap:10px;
-  background:var(--accent-bg);border:1px solid var(--accent-border);
+  background:var(--yellow-bg);border:1px solid var(--yellow-border);
   border-radius:12px;padding:12px 14px;
-  font-size:12px;color:var(--accent);font-weight:600;line-height:1.4;
+  font-size:12px;color:var(--yellow);font-weight:600;line-height:1.4;
 }
 
 /* Botões de assinatura */
@@ -630,12 +606,9 @@ body.dark .bottom-nav{background:rgba(8,11,18,.97)}
 </style>
 </head>
 
-<!-- tema antes do render -->
 <body>
-<script>(function(){
-  var c=JSON.parse(localStorage.getItem('streamdesk_config')||'{}');
-  if(c.darkMode===true) document.body.classList.add('dark');
-})()</script>
+<!-- Tema fixo: claro (toggle removido) -->
+<script>(function(){document.body.classList.remove('dark');})()</script>
 
 <!-- ══ FIREBASE module ══ -->
 <script type="module">
@@ -687,35 +660,37 @@ async function ensureTrial(uid,data){
 
 /* ─── Calcular fase ───────────────────────────────────
    Retorna {fase:'f1'|'f2'|'f3'|'f4'|'fa', dias, expStr, trialFimStr, diasUsados}
-   FASES AJUSTADAS:
+   FASES CALIBRADAS (por dias RESTANTES no trial):
    fa → assinatura paga ativa (>7d)
-   f1 → trial (1-20d restantes) — neutro
-   f2 → trial (10-20d) — leve toque accent, sem urgência
-   f3 → trial (1-10d) / renovação próxima — amarelo
-   f4 → expirado / vencido — vermelho
+   f1 → dias 1–20 (restantes >= 11) — neutro total, sem urgência
+   f2 → dias 21–27 (restantes 4–10) — aviso discreto amarelo, sem botão
+   f3 → dias 28–30 (restantes 0–3) — amarelo + botão de conversão
+   f4 → expirado / vencido — vermelho + reativar
 ─────────────────────────────────────────────────────── */
 function calcFase(data){
   const now=today();
   const expStr=data.expiracao||data.vencimento||null;
 
+  // Assinatura paga existente
   if(expStr){
     const exp=fromStr(expStr),dias=diffDays(now,exp);
     if(dias>7)  return {fase:'fa',dias,expStr};
-    if(dias>=0) return {fase:'f3',dias,expStr};
-    return           {fase:'f4',dias,expStr};
+    if(dias>=0) return {fase:'f3',dias,expStr};   // renovação iminente
+    return           {fase:'f4',dias,expStr};     // vencida
   }
 
+  // Trial
   const trialFimStr=data.trialFim||null;
   if(!trialFimStr) return {fase:'f1',dias:30,diasUsados:0};
   const trialFim=fromStr(trialFimStr);
   const trialIni=fromStr(data.trialInicio)||today();
-  const dias=diffDays(now,trialFim);
+  const dias=diffDays(now,trialFim);           // dias restantes
   const diasUsados=Math.max(0,diffDays(trialIni,now));
 
-  if(dias<0)   return {fase:'f4',dias,trialFimStr,diasUsados};
-  if(dias<=3)  return {fase:'f3',dias,trialFimStr,diasUsados};
-  if(dias<=10) return {fase:'f2',dias,trialFimStr,diasUsados};
-               return {fase:'f1',dias,trialFimStr,diasUsados};
+  if(dias<0)   return {fase:'f4',dias,trialFimStr,diasUsados};  // expirado
+  if(dias<=3)  return {fase:'f3',dias,trialFimStr,diasUsados};  // 28-30: conversão
+  if(dias<=10) return {fase:'f2',dias,trialFimStr,diasUsados};  // 21-27: awareness
+               return {fase:'f1',dias,trialFimStr,diasUsados};  // 1-20:  silêncio
 }
 
 /* ─── Render do card de assinatura ─── */
@@ -800,26 +775,27 @@ window.renderAssinatura=function(user,data,nClientes){
   })();
 
   /* CTA por fase ─────────────────────────────────────
-     f1 (1–20d): SILÊNCIO — nada
-     f2 (10–20d): aviso suave, SEM botão de pagamento
-     f3 (1–10d): botão de conversão moderado
-     f4 (expirado): botão de reativação forte
-     fa (ativo): gerenciar discreto
+     f1 (dias 1–20,  restantes >= 11): SILÊNCIO TOTAL — sem nada
+     f2 (dias 21–27, restantes 4–10): aviso suave amarelo — SEM botão de pagamento
+     f3 (dias 28–30, restantes 0–3):  botão amarelo de conversão
+     f4 (expirado):                   botão vermelho de reativação
+     fa (ativo pago):                 botão gerenciar discreto neutro
   ─────────────────────────────────────────────────── */
   const ctaHTML=(()=>{
-    if(fase==='f1') return '';
+    if(fase==='f1') return ''; // silêncio total — usuário não sente que o app é pago
     if(fase==='f2') return `<div class="ac-warn-strip">
-      <span style="font-size:16px;flex-shrink:0">💡</span>
-      <span>Período gratuito termina em <b>${dias} dias</b>. Aproveite enquanto pode!</span>
-    </div>`;
+      <span style="font-size:16px;flex-shrink:0">⏳</span>
+      <span>Seu período gratuito termina em <b>${dias} dia${dias!==1?'s':''}</b>. Aproveite enquanto pode!</span>
+    </div>`; // awareness suave, SEM botão de pagamento
     if(fase==='f3'){
-      const lbl=expStr?'⚡ Renovar antes de perder o acesso':'🚀 Continuar sem interrupções';
+      const lbl=expStr?'⚡ Renovar antes de perder o acesso':'🚀 Continuar usando sem perder seus clientes';
       const cls=expStr?'renew':'convert';
       return `<button class="btn-assin ${cls}" onclick="openModal('ovPagamento')">${lbl}</button>`;
     }
     if(fase==='f4') return `<button class="btn-assin reactivate" onclick="openModal('ovPagamento')">
       🔄 Reativar acesso — R$ 9,90/mês
     </button>`;
+    // fa — ativo pago
     return `<button class="btn-assin manage" onclick="openModal('ovPagamento')">⚙️ Gerenciar assinatura</button>`;
   })();
 
@@ -984,28 +960,7 @@ onAuthStateChanged(_auth,async function(user){
     </div>
   </div>
 
-  <!-- ━━━━ 3. APARÊNCIA ━━━━ -->
-  <div class="s3">
-    <div class="section-label">🎨 Aparência</div>
-    <div class="card">
-      <div class="c-row">
-        <div class="c-icon purple">🌙</div>
-        <div class="c-body">
-          <div class="c-label">Tema Escuro</div>
-          <div class="c-sub" id="themeLabel">Modo claro ativado</div>
-        </div>
-        <div class="c-right">
-          <div class="theme-preview" id="themePreview">
-            <div class="tp-swatch tp-light tp-active" id="swLight"></div>
-            <div class="tp-swatch tp-dark" id="swDark"></div>
-          </div>
-          <div class="tog" id="themeToggle" onclick="toggleTheme()">
-            <div class="tog-thumb"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+
 
   <!-- ━━━━ 4. MENSAGENS ━━━━ -->
   <div class="s4">
@@ -1223,30 +1178,8 @@ var _pixCodigo='',_pixTimer=null;
 function loadConfig(){return JSON.parse(localStorage.getItem(CFG_KEY)||'{}');}
 function saveConfig(){
   var cfg=loadConfig();
-  cfg.darkMode=document.getElementById('themeToggle').classList.contains('on');
   localStorage.setItem(CFG_KEY,JSON.stringify(cfg));
 }
-
-/* ─── Tema ─── */
-function applyTheme(dark){
-  document.body.classList.toggle('dark',!!dark);
-  document.body.classList.toggle('light',!dark);
-  var tog=document.getElementById('themeToggle');
-  var lbl=document.getElementById('themeLabel');
-  var swL=document.getElementById('swLight');
-  var swD=document.getElementById('swDark');
-  if(tog) tog.classList.toggle('on',!!dark);
-  if(lbl) lbl.textContent=dark?'Modo escuro ativado':'Modo claro ativado';
-  // swatches
-  if(swL){ swL.classList.toggle('tp-active',!dark); }
-  if(swD){ swD.classList.toggle('tp-active',!!dark); }
-}
-function toggleTheme(){
-  applyTheme(!document.getElementById('themeToggle').classList.contains('on'));
-  saveConfig();
-}
-// Aplica na inicialização
-(function(){var c=JSON.parse(localStorage.getItem(CFG_KEY)||'{}');applyTheme(c.darkMode===true);})();
 
 /* ─── Toast ─── */
 var _toastT;
