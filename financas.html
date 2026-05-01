@@ -715,19 +715,26 @@ const closeOverlay = id => document.getElementById(id).classList.remove('open');
 /* ─── getCor / getCusto — por servidorId com fallback plataforma ─── */
 function getSrv(f) {
   // Tenta por servidorId primeiro, fallback para nome (plataforma)
-  return servidores.find(s => s.id === (f.servidorId||''))
+if (!servidores || !servidores.length || !f) return null;
+
+  return servidores.find(s => s.id === (f.servidorId || ''))
       || servidores.find(s => (s.nome||'').toLowerCase() === (f.plataforma||'').toLowerCase())
       || null;
 }
 function getSrvById(id) {
+  if (!servidores || !servidores.length || !id) return null;
   return servidores.find(s => s.id === id) || null;
 }
 function getCor(f) {
+  if (!f) return '#999';
+
   const s = getSrv(f);
   if(s && s.cor) return s.cor;
-  // cor por índice determinístico baseado em nome
+
   const name = (f.nomeServidor||f.plataforma||'?');
-  let h = 0; for(let i=0;i<name.length;i++) h=(h*31+name.charCodeAt(i))%PALETA.length;
+  let h = 0;
+  for(let i=0;i<name.length;i++) h=(h*31+name.charCodeAt(i))%PALETA.length;
+
   return PALETA[h];
 }
 function getServerName(f) {
@@ -808,7 +815,7 @@ function render() {
 
   // ── Cálculos financeiros corretos ──
   const bruto = pays.reduce((s,f) => s+(f.valor||0), 0);
-  const custo = calcCustoCorreto(pays);   // ← CORRETO: por servidor único
+  const custo = calcCustoCorreto(pays);  // ← CORRETO: por servidor único
   const lucro = bruto - custo;
   const margem = bruto > 0 ? Math.round((lucro/bruto)*100) : 0;
 
@@ -871,7 +878,7 @@ function buildRanking(pays) {
     const key = srv ? srv.id : (f.plataforma||'?');
     const nome = srv?.nome || f.nomeServidor || f.plataforma || '?';
     const cor  = srv?.cor  || getCor(f);
-    const custo = 0; // custo alocado depois
+    // custo alocado depois
     if(!map[key]) map[key] = {
       id: key, srvId: srv?.id, nome, cor,
       receita: 0, clientes: 0, srv
@@ -892,6 +899,24 @@ function buildRanking(pays) {
   // Também inclui servidores que tem custo mas não tiveram pagamentos
   // (para mostrar que estão gerando custo sem receita)
   // Isso permite awareness de "custo oculto"
+
+  // adicionar servidores sem receita (IMPORTANTE)
+servidores.forEach(s => {
+  const exists = Object.values(map).find(i => i.id === s.id);
+  if (!exists) {
+    map[s.id] = {
+      id: s.id,
+      srvId: s.id,
+      nome: s.nome,
+      cor: s.cor || '#999',
+      receita: 0,
+      clientes: 0,
+      custo: parseFloat(s.custo) || 0,
+      lucro: -(parseFloat(s.custo) || 0),
+      margem: 0
+    };
+  }
+});
 
   return Object.values(map).sort((a,b) => b.lucro - a.lucro);
 }
