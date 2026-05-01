@@ -406,7 +406,8 @@
   .nav-item.active .nav-dot { opacity: 1; }
 
   /* ── Animations ── */
-  body.sd-leaving { opacity:0; transform:translateY(6px); transition:opacity .15s ease,transform .15s ease; pointer-events:none; }
+  body.sd-leaving .content{opacity:0;transform:translateY(6px);transition:opacity .15s ease,transform .15s ease;pointer-events:none;}
+  body.sd-leaving .header{opacity:0;transition:opacity .15s ease;}
   @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
   .content { animation: fadeIn .3s ease both; }
   @keyframes countUp { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
