@@ -1,12 +1,13 @@
 {
   "name": "StreamDesk",
   "short_name": "StreamDesk",
-  "description": "Gestão de clientes IPTV por assinatura",
+  "description": "Gestão de clientes",
   "start_url": "/login.html",
+  "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#080b12",
-  "theme_color": "#00d4ff",
+  "theme_color": "#6366f1",
   "lang": "pt-BR",
   "icons": [
     {
