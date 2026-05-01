@@ -480,7 +480,6 @@ function updatePremiumNav(expiracao){
 onAuthStateChanged(auth, async function(user){
   if(!user){location.href='login.html';return;}
 
-<span>🚧 Em desenvolvimento</span>
   
   /* Saudação */
   var nome=user.displayName?user.displayName.split(' ')[0]:(user.email||'').split('@')[0];
