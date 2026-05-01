@@ -699,7 +699,8 @@ window._firebaseDB=_db;
 /* ─── Helpers ─── */
 function today(){const d=new Date();d.setHours(0,0,0,0);return d;}
 function fromStr(s){if(!s)return null;const p=s.split('-');return new Date(+p[0],+p[1]-1,+p[2]);}
-function diffDays(a,b){return Math.round((b-a)/86400000);}
+function diffDays(a,b){return Math.floor((b - a) / 86400000);
+}
 function toStr(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
 function fmt(s){if(!s)return '—';const p=s.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
 function initials(name){
@@ -1445,7 +1446,17 @@ window.pagarCartao=async function(){
   setMsg('cartaoMsg','','');
   try{
     var partes=exp.split('/');
-    var mp=new MercadoPago(MP_PUBLIC_KEY,{locale:'pt-BR'});
+    // 🔐 Verifica se MercadoPago carregou
+if(typeof MercadoPago === 'undefined'){
+  setMsg('cartaoMsg','Erro ao carregar pagamento. Verifique sua conexão e tente novamente.','err');
+  
+  btn.disabled=false;
+  btn.innerHTML='💳 Assinar — R$ 9,90/mês';
+  
+  return;
+}
+
+var mp=new MercadoPago(MP_PUBLIC_KEY,{locale:'pt-BR'});
     var token=await mp.createCardToken({
       cardNumber:num,cardholderName:name,
       cardExpirationMonth:partes[0],cardExpirationYear:'20'+partes[1],securityCode:cvv
