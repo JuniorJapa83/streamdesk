@@ -1452,6 +1452,7 @@ async function loadAndRender(user) {
     var userSnap = await getDoc(doc(db, 'usuarios', user.uid));
     var userData = userSnap.exists() ? userSnap.data() : {};
     mostrarBannerVenc(userData.expiracao || userData.vencimento || null);
+    updatePremiumNav(userData.expiracao || userData.vencimento);
   } catch(e) { console.error('Banner venc erro:', e); }
 
   // 2. Clientes + Servidores
@@ -1481,6 +1482,40 @@ onAuthStateChanged(auth, async function(user) {
   if (!user) { location.href = 'login.html'; return; }
   await loadAndRender(user);
 });
+
+  function updatePremiumNav(expiracao){
+  const hoje = new Date();
+  const venc = new Date(expiracao);
+  const dias = Math.floor((venc - hoje)/86400000);
+
+  const icon  = document.getElementById('premiumIcon');
+  const label = document.getElementById('premiumLabel');
+  const item  = document.getElementById('premiumNav');
+
+  if(!icon || !label || !item) return;
+
+  if(!expiracao){
+    icon.textContent = '👑';
+    label.textContent = 'Premium';
+    return;
+  }
+
+  if(dias < 0){
+    icon.textContent = '❌';
+    label.textContent = 'Renovar';
+    item.style.color = '#ef4444';
+  }
+  else if(dias <= 7){
+    icon.textContent = '⚠️';
+    label.textContent = 'Vencendo';
+    item.style.color = '#f59e0b';
+  }
+  else{
+    icon.textContent = '👑';
+    label.textContent = 'Premium';
+    item.style.opacity = '0.7';
+  }
+}
 </script>
 
 <script>
