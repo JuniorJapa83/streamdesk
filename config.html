@@ -875,18 +875,19 @@ window.renderAssinatura=function(user,data,nClientes){
       <div class="ac-chip">StreamDesk Pro</div>
     </div>
     <div class="ac-body">
-      <div class="ac-hero-row">
-        <div>
-          <div class="ac-days-big ${fase}">${diasTxt}</div>
-          <div class="ac-days-sub">${daysSub}</div>
-        </div>
-        ${(fase === 'f3' || fase === 'f4' || fase === 'fa') ? `
-  <div class="ac-price-col">
-    <div class="ac-price">R$ 9,90</div>
-    <div class="ac-price-sub">/mês</div>
+     <div class="ac-hero-row">
+  <div>
+    <div class="ac-days-big ${fase}">${diasTxt}</div>
+    <div class="ac-days-sub">${daysSub}</div>
   </div>
-` : ``}iv class="ac-price-sub">/mês</div>
-        </div>
+
+  ${(fase === 'f3' || fase === 'f4' || fase === 'fa') ? `
+    <div class="ac-price-col">
+      <div class="ac-price">R$ 9,90</div>
+      <div class="ac-price-sub">/mês</div>
+    </div>
+  ` : ``}
+</div>
       </div>
       ${barHTML}
       ${metaHTML}
