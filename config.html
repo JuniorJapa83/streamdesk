@@ -1104,7 +1104,17 @@ onAuthStateChanged(_auth,async function(user){
       </div>
     </div>
   </div>
-
+<!-- NOTIFICAÇÕES -->
+<div class="action-row" onclick="handleNotifToggle()" id="notifRow">
+  <div class="c-icon accent" id="notifRowIcon">🔔</div>
+  <div class="c-body">
+    <div class="c-label">Notificações push</div>
+    <div class="c-sub" id="notifRowSub">Toque para ativar alertas de vencimento</div>
+  </div>
+  <div class="c-right">
+    <div class="c-arrow" id="notifArrow">›</div>
+  </div>
+</div>
   <!-- ━━━━ 6. SESSÃO ━━━━ -->
   <div class="s6">
     <div class="section-label">🚪 Sessão</div>
@@ -1529,6 +1539,50 @@ if(data && data.error){
 </script>
 
 <script src="https://sdk.mercadopago.com/js/v2"></script>
-<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');
+  
+// ── Notificações ──
+  function handleNotifToggle() {
+    if (!('Notification' in window)) {
+      alert('Seu navegador não suporta notificações.');
+      return;
+    }
+    if (Notification.permission === 'granted') {
+      document.getElementById('notifRowSub').textContent = '✅ Notificações já estão ativas';
+      document.getElementById('notifRowIcon').textContent = '🔔';
+      showToast && showToast('Notificações já estão ativas!');
+      return;
+    }
+    if (Notification.permission === 'denied') {
+      document.getElementById('notifRowSub').textContent = '🔕 Bloqueado — habilite no navegador';
+      showToast && showToast('Habilite nas configurações do navegador');
+      return;
+    }
+    Notification.requestPermission().then(p => {
+      if (p === 'granted') {
+        document.getElementById('notifRowSub').textContent = '✅ Notificações ativas';
+        document.getElementById('notifRowIcon').textContent = '✅';
+        localStorage.setItem('sd_notif', 'granted');
+        showToast && showToast('🔔 Notificações ativadas!');
+      } else {
+        document.getElementById('notifRowSub').textContent = '🔕 Permissão negada';
+      }
+    });
+  }
+
+  // Sincroniza estado ao abrir a página
+  (function syncNotifStatus() {
+    if (!('Notification' in window)) return;
+    const sub = document.getElementById('notifRowSub');
+    const ico = document.getElementById('notifRowIcon');
+    if (!sub) return;
+    if (Notification.permission === 'granted') {
+      sub.textContent = '✅ Notificações ativas';
+      if (ico) ico.textContent = '✅';
+    } else if (Notification.permission === 'denied') {
+      sub.textContent = '🔕 Bloqueado — habilite no navegador';
+    }
+  })();
+</script>
 </body>
 </html>
