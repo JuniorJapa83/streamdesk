@@ -670,6 +670,14 @@ body.dark .header     { background: rgba(8,11,18,0.95) !important; border-bottom
 body.dark .bottom-nav { background: rgba(8,11,18,0.97) !important; border-top-color: #1c2236 !important; }
 body.dark { background: #080b12 !important; color: #e4e8f4 !important; }
 
+/* ── TRANSIÇÃO DE NAVEGAÇÃO ── */
+body.sd-leaving {
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity .15s ease, transform .15s ease;
+  pointer-events: none;
+}
+
 /* ── SPLASH LOADER ── */
 #sd-splash {
   position: fixed;
@@ -944,38 +952,38 @@ body.dark #sd-splash { background: #080b12; }
 
 <!-- BOTTOM NAV -->
 <div class="bottom-nav">
-   <div class="nav-item active">
+  <div class="nav-item active">
     <div class="nav-icon">🏠</div>
     <div class="nav-label">Início</div>
     <div class="nav-dot"></div>
   </div>
-  <div class="nav-item" onclick="location.href='clientes.html'">
+  <div class="nav-item" onclick="sdNavigate('clientes.html')">
     <div class="nav-icon">👥</div>
     <div class="nav-label">Clientes</div>
     <div class="nav-dot"></div>
   </div>
-  <div class="nav-item" onclick="location.href='servidor.html'">
+  <div class="nav-item" onclick="sdNavigate('servidor.html')">
     <div class="nav-icon">🖥️</div>
     <div class="nav-label">Servidor</div>
     <div class="nav-dot"></div>
   </div>
-  <div class="nav-item" onclick="location.href='financas.html'">
+  <div class="nav-item" onclick="sdNavigate('financas.html')">
     <div class="nav-icon">💰</div>
     <div class="nav-label">Finanças</div>
     <div class="nav-dot"></div>
   </div>
-  <div class="nav-item" onclick="location.href='avisos.html'">
+  <div class="nav-item" onclick="sdNavigate('avisos.html')">
     <div class="nav-icon">📢</div>
     <div class="nav-label">Avisos</div>
     <div class="nav-dot"></div>
   </div>
-  <div class="nav-item" id="premiumNav" onclick="location.href='config.html'">
+  <div class="nav-item" id="premiumNav" onclick="sdNavigate('config.html')">
     <div class="nav-icon" id="premiumIcon">⚙️</div>
     <div class="nav-label" id="premiumLabel">Config.</div>
     <div class="nav-dot"></div>
   </div>
 </div>
-
+  
 <script type="module">
 import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
@@ -1552,6 +1560,15 @@ onAuthStateChanged(auth, async function(user) {
 </script>
 
 <script>
+
+// ── Navegação com transição suave ──
+  function sdNavigate(url) {
+    if (window.location.pathname.endsWith(url.replace(/^\//, ''))) return;
+    document.body.classList.add('sd-leaving');
+    setTimeout(() => { window.location.href = url; }, 160);
+  }
+  window.sdNavigate = sdNavigate;
+  
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js').then(reg => {
 
