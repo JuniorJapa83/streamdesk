@@ -400,15 +400,32 @@ body.dark .coming-hero{box-shadow:0 8px 32px rgba(99,102,241,.22)}
 
 <body>
 
-  <div class="header">
-  <div class="logo-wrap">
-    <div class="logo-title">Stream<span>Desk</span></div>
-    <div class="logo-sub" id="logoSub">Carregando...</div>
+  <div class="header" style="padding-bottom:12px">
+
+  <!-- Linha 1: título + status -->
+  <div class="cl-header-top">
+    
+    <!-- ESQUERDA -->
+    <div class="cl-title-block">
+      <h1>Avisos 📢</h1>
+      <p>Envios, notificações e comunicação com clientes</p>
+    </div>
+
+    <!-- DIREITA -->
+    <div class="cl-header-right">
+      
+      <!-- STATUS -->
+      <div class="live-badge" style="margin:0">
+        <div class="live-dot"></div>
+        <span>em breve</span>
+      </div>
+
+      <!-- BOTÃO -->
+      <div class="notif-btn">📢</div>
+
+    </div>
   </div>
 
-  <div class="header-right">
-    <div class="notif-btn">📢</div>
-  </div>
 </div>
 <!-- Aplica tema antes de renderizar -->
 <script>
