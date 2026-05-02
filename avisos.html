@@ -392,20 +392,26 @@ onAuthStateChanged(auth, async function(user){
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
-<!-- ══ HEADER ══ -->
-<div class="header">
-  <div class="logo-wrap">
-    <img src="logo.png" style="height:40px;object-fit:contain;display:block">
-    <div class="logo-sub" id="logoSub">Carregando...</div>
-  </div>
-  <div class="header-right">
-    <div class="live-badge">
-      <div class="live-dot"></div>
-      <span>em breve</span>
+<!-- ══════════════════════════════════════════════════
+     HEADER — topo premium
+══════════════════════════════════════════════════ -->
+<div class="header" style="padding-bottom:12px">
+  <!-- Linha 1: título + badge -->
+  <div class="cl-header-top">
+    <div class="cl-title-block">
+      <h1>Clientes 👥</h1>
+      <p>Gerencie sua base de assinantes</p>
+    </div>
+    <div class="cl-header-right">
+      <div class="live-badge" style="margin:0">
+        <div class="live-dot"></div>
+        <span id="updateTime">agora</span>
+      </div>
+      <div class="total-badge"><strong id="totalCount">—</strong></div>
     </div>
   </div>
-</div>
 
+  
 <!-- ══ CONTENT ══ -->
 <div class="content">
 
