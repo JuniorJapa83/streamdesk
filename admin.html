@@ -556,7 +556,8 @@
 <!-- ── FIREBASE ── -->
 <script type="module">
 import { initializeApp }    from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect,
+         getRedirectResult, signOut, onAuthStateChanged }
                             from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { getFirestore, collection, onSnapshot,
          doc, updateDoc, deleteDoc, setDoc, getDoc, getDocs }
@@ -634,33 +635,9 @@ window.switchTab = function(tab) {
 };
 
 // ── AUTH ──────────────────────────────────────────
-window.doAdminLogin = async function() {
-  const err    = document.getElementById('loginErr');
-  const errTxt = document.getElementById('loginErrTxt');
-  const btn    = document.querySelector('.btn-primary');
-  err.classList.remove('show');
-  btn.disabled = true;
-  btn.textContent = '⏳ Autenticando...';
-  try {
-    const result = await signInWithPopup(auth, provider);
-    const email  = result.user.email;
-    if (email !== ADMIN_EMAIL) {
-      await signOut(auth);
-      errTxt.textContent = '⛔ Acesso negado. Esta conta não tem permissão de admin.';
-      err.classList.add('show');
-      btn.disabled = false;
-      btn.textContent = 'Entrar com Google';
-      return;
-    }
-    showApp();
-  } catch(e) {
-    if (e.code !== 'auth/popup-closed-by-user') {
-      errTxt.textContent = '⚠️ Erro ao autenticar. Tente novamente.';
-      err.classList.add('show');
-    }
-    btn.disabled = false;
-    btn.textContent = 'Entrar com Google';
-  }
+window.doAdminLogin = function() {
+  // Redirect é mais confiável que popup — funciona mesmo com bloqueadores
+  signInWithRedirect(auth, provider);
 };
 
 window.doLogout = function() {
@@ -1131,7 +1108,21 @@ async function loadClientesSummary(uid) {
 }
 
 // ── INIT ──────────────────────────────────────────
-// Verifica se já há sessão Google ativa ao carregar a página
+// Processa resultado do redirect (volta do Google)
+getRedirectResult(auth).then(result => {
+  if (!result) return;
+  if (result.user.email !== ADMIN_EMAIL) {
+    signOut(auth);
+    const errTxt = document.getElementById('loginErrTxt');
+    const err    = document.getElementById('loginErr');
+    errTxt.textContent = '⛔ Acesso negado. Use a conta admin autorizada.';
+    err.classList.add('show');
+  }
+}).catch(e => {
+  console.error('Redirect result error:', e);
+});
+
+// Verifica sessão ativa ao carregar
 onAuthStateChanged(auth, user => {
   if (user && user.email === ADMIN_EMAIL) {
     showApp();
