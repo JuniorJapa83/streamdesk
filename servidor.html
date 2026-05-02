@@ -195,6 +195,7 @@ import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebase
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 import { getFirestore, collection, doc, getDocs, addDoc, setDoc, deleteDoc }
   from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+  import { EmptyState } from './onboarding.js';
 
 const FB = {
   apiKey:'AIzaSyAGHvkDpeSbCTriZCvRf-jJ6z8PQSSWLHI',
@@ -378,12 +379,7 @@ function renderInsight(g) {
 function renderList(g) {
   const el = document.getElementById('srvList');
   if (!S.servidores.length) {
-    el.innerHTML=`<div class="srv-empty">
-      <span class="srv-empty-icon">🖥️</span>
-      <div class="srv-empty-title">Nenhum servidor cadastrado</div>
-      <div class="srv-empty-sub">Adicione seu primeiro servidor para começar<br>a gerenciar seus clientes de IPTV.</div>
-      <button class="srv-empty-btn" onclick="SRV.openModal()">＋ Adicionar Servidor</button>
-    </div>`;
+     el.innerHTML = EmptyState.html('servidor-empty');
     return;
   }
 
