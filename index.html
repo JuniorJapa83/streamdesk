@@ -1573,14 +1573,8 @@ onAuthStateChanged(auth, async function(user) {
     setTimeout(() => { window.location.href = url; }, 160);
   }
   window.sdNavigate = sdNavigate;
-  
-  if ('serviceWorker' in navigator) {
-    
-    </script>
-<script type="module" src="./onboarding.js"></script>
-    <script>
-    
-      navigator.serviceWorker.register('/sw.js').then(reg => {
+    if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').then(reg => {
 
       // Verifica atualização a cada 60 segundos (enquanto app aberto)
       setInterval(() => reg.update(), 60000);
@@ -1643,5 +1637,6 @@ onAuthStateChanged(auth, async function(user) {
     document.body.appendChild(banner);
   }
 </script>
+  <script type="module" src="./onboarding.js"></script>
 </body>
 </html>
