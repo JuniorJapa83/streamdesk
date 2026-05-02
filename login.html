@@ -1,227 +1,732 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+  <!-- ── PWA / Meta ─────────────────────────────── -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>StreamDesk — Acesse sua plataforma</title>
   <link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#00d4ff">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="StreamDesk">
-<link rel="apple-touch-icon" href="favicon.png">
-  <!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-PN7SZSWQR4"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-PN7SZSWQR4');
-</script>
   <link rel="icon" href="favicon.png" type="image/png">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>StreamDesk — Login</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="theme.css">
-<style>
-  :root{--bg:#f0f4f8;--surface:#fff;--card:#fff;--card2:#f7f9fc;--border:#e2e8f0;--accent:#00d4ff;--red:#ff3b5c;--green:#00e096;--yellow:#ffbb00;--text:#1a202c;--muted:#718096}
-  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:420px;margin:0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
-  body::before{content:'';position:fixed;top:-120px;right:-80px;width:320px;height:320px;background:radial-gradient(circle,rgba(0,212,255,.12) 0%,transparent 70%);pointer-events:none}
-  body::after{content:'';position:fixed;bottom:-80px;left:-80px;width:280px;height:280px;background:radial-gradient(circle,rgba(0,224,150,.08) 0%,transparent 70%);pointer-events:none}
-  .wrap{width:100%;position:relative;z-index:1}
-  .logo-wrap{text-align:center;margin-bottom:32px}
-  .logo-img{width:260px;max-width:90%;display:block;margin:0 auto 6px;object-fit:contain}
-  .card{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:28px 24px;box-shadow:0 4px 24px rgba(0,0,0,.06)}
-  .card-title{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;margin-bottom:4px}
-  .card-sub{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.5}
-  .msg{display:none;border-radius:10px;padding:10px 14px;font-size:13px;margin-bottom:14px;align-items:center;gap:8px;line-height:1.4}
-  .msg.show{display:flex}
-  .msg.err{background:rgba(255,59,92,.08);border:1px solid rgba(255,59,92,.2);color:var(--red)}
-  .msg.ok{background:rgba(0,224,150,.08);border:1px solid rgba(0,224,150,.2);color:var(--green)}
-  .btn-google{width:100%;background:#fff;color:#3c4043;border:1.5px solid #dadce0;border-radius:12px;padding:13px 20px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
-  .btn-google:hover{background:#f8f9fa;box-shadow:0 4px 16px rgba(0,0,0,.12);transform:translateY(-1px)}
-  .btn-google:active{transform:scale(.97)}
-  .btn-google:disabled{opacity:.6;cursor:not-allowed;transform:none}
-  .btn-google svg{width:20px;height:20px;flex-shrink:0}
-  .spinner{width:18px;height:18px;border:2px solid rgba(60,64,67,.25);border-top-color:#3c4043;border-radius:50%;animation:spin .7s linear infinite;display:none}
-  .spinner-w{width:18px;height:18px;border:2px solid rgba(0,0,0,.2);border-top-color:#000;border-radius:50%;animation:spin .7s linear infinite;display:none}
-  .spinner-dark{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;margin-right:6px}
-  @keyframes spin{to{transform:rotate(360deg)}}
-  .tabs{display:flex;background:var(--card2);border-radius:12px;padding:4px;margin-bottom:22px;gap:4px}
-  .tab{flex:1;padding:9px;border:none;background:transparent;border-radius:9px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13px;color:var(--muted);cursor:pointer;transition:all .2s}
-  .tab.active{background:#fff;color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,.08)}
-  .panel{display:none}
-  .panel.active{display:block}
-  .wa-user-box{display:flex;align-items:center;gap:12px;background:var(--card2);border-radius:12px;padding:12px 14px;margin-bottom:20px}
-  .wa-avatar{width:44px;height:44px;border-radius:50%;border:2px solid var(--accent)}
-  .wa-user-name{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px}
-  .wa-user-email{font-size:12px;color:var(--muted)}
-  .form-group{margin-bottom:16px}
-  .form-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;display:flex;align-items:center;gap:6px}
-  .form-label .req{color:var(--red)}
-  .input-wrap{display:flex;align-items:center;background:var(--card2);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;transition:border .2s}
-  .input-wrap:focus-within{border-color:var(--accent)}
-  .input-prefix{padding:0 12px;font-size:18px;flex-shrink:0}
-  .form-input{flex:1;background:none;border:none;outline:none;color:var(--text);font-size:15px;font-family:'DM Sans',sans-serif;padding:13px 14px 13px 0}
-  .form-hint{font-size:11px;color:var(--muted);margin-top:5px;line-height:1.4}
-  .btn-primary{width:100%;background:linear-gradient(135deg,#00d4ff,#00b8e0);color:#000;border:none;border-radius:12px;padding:14px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;cursor:pointer;transition:all .2s;box-shadow:0 4px 16px rgba(0,212,255,.3);display:flex;align-items:center;justify-content:center;gap:8px}
-  .btn-primary:active{transform:scale(.97)}
-  .btn-primary:disabled{opacity:.6;cursor:not-allowed}
-  .version{text-align:center;font-size:11px;color:var(--muted);margin-top:20px}
-  .version span{color:var(--accent);font-weight:600}
-  .debug{background:#1a202c;color:#a0aec0;border-radius:8px;padding:10px 12px;font-size:11px;font-family:monospace;margin-top:10px;display:none;word-break:break-all;line-height:1.6}
-  .debug.show{display:block}
+  <link rel="apple-touch-icon" href="favicon.png">
+  <meta name="theme-color" content="#6366f1">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="StreamDesk">
 
-  .renov-badge{display:flex;align-items:center;gap:10px;background:rgba(255,59,92,.06);border:1px solid rgba(255,59,92,.18);border-radius:14px;padding:14px;margin-bottom:20px}
-  .renov-badge-icon{font-size:28px;flex-shrink:0}
-  .renov-badge-title{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;color:var(--red)}
-  .renov-badge-sub{font-size:12px;color:var(--muted);margin-top:2px}
-  .pay-tabs{display:flex;gap:8px;margin-bottom:18px}
-  .pay-tab{flex:1;padding:10px;border-radius:10px;border:1px solid var(--border);background:var(--card2);text-align:center;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;color:var(--muted);font-family:'Space Grotesk',sans-serif}
-  .pay-tab.active{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,.06)}
-  .pay-panel{display:none}
-  .pay-panel.active{display:block}
-  .pix-qr-wrap{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center;margin-bottom:14px;min-height:160px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
-  .pix-qr-img{width:148px;height:148px;border-radius:8px;background:#fff;padding:4px}
-  .pix-copy-btn{width:100%;background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.2);color:var(--accent);border-radius:10px;padding:11px;font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;margin-bottom:8px}
-  .pix-copy-btn:active{transform:scale(.97)}
-  .pix-timer{font-size:11px;color:var(--muted);text-align:center}
-  .card-field{margin-bottom:11px}
-  .card-field label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px;display:block}
-  .card-field input{width:100%;background:var(--card2);border:1.5px solid var(--border);border-radius:10px;padding:11px 13px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border .2s}
-  .card-field input:focus{border-color:var(--accent)}
-  .card-row{display:flex;gap:10px}
-  .card-row .card-field{flex:1}
-  .btn-pix{width:100%;background:linear-gradient(135deg,#00d4ff,#00b8e0);color:#000;border:none;border-radius:12px;padding:13px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;cursor:pointer;margin-bottom:8px;transition:transform .15s}
-  .btn-pix:active{transform:scale(.97)}
-  .btn-pix:disabled{opacity:.6;cursor:not-allowed}
-  .btn-cartao{width:100%;background:#1a202c;color:#fff;border:none;border-radius:12px;padding:13px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;cursor:pointer;transition:transform .15s}
-  .btn-cartao:active{transform:scale(.97)}
-  .btn-cartao:disabled{opacity:.6;cursor:not-allowed}
-  .pay-msg{font-size:13px;text-align:center;padding:10px;border-radius:8px;margin-top:8px;display:none}
-  .pay-msg.ok{background:rgba(0,224,150,.08);color:var(--green);border:1px solid rgba(0,224,150,.2);display:block}
-  .pay-msg.err{background:rgba(255,59,92,.08);color:var(--red);border:1px solid rgba(255,59,92,.2);display:block}
-  .btn-sair-renov{width:100%;background:transparent;color:var(--muted);border:none;padding:10px;font-size:13px;cursor:pointer;margin-top:4px;font-family:'DM Sans',sans-serif}
-  .btn-sair-renov:hover{color:var(--red)}
-</style>
+  <!-- ── Google Analytics ───────────────────────── -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PN7SZSWQR4"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-PN7SZSWQR4');
+  </script>
+
+  <!-- ── Fonts ──────────────────────────────────── -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- ── Design System ─────────────────────────── -->
+  <link rel="stylesheet" href="theme.css">
+
+  <style>
+    /* ════════════════════════════════════════════
+       login.css — StreamDesk Login Screen
+       Herda todas as variáveis de theme.css
+       NÃO usa CSS inline; tudo centralizado aqui.
+    ════════════════════════════════════════════ */
+
+    /* ── Layout base ──────────────────────────── */
+    .login-page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 20px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Gradiente decorativo de fundo */
+    .login-page::before {
+      content: '';
+      position: fixed;
+      top: -160px; right: -100px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .login-page::after {
+      content: '';
+      position: fixed;
+      bottom: -100px; left: -100px;
+      width: 360px; height: 360px;
+      background: radial-gradient(circle, var(--green-glow) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Splash / Loading inicial ─────────────── */
+    /* Previne FOUC: esconde tudo até auth ser verificado */
+    .login-page { opacity: 0; transition: opacity .3s ease; }
+    .login-page.ready { opacity: 1; }
+
+    /* ── Wrapper central ──────────────────────── */
+    .login-wrap {
+      width: 100%;
+      max-width: 400px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── Logo ─────────────────────────────────── */
+    .login-logo {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .login-logo img {
+      width: 200px;
+      max-width: 80%;
+      display: block;
+      margin: 0 auto;
+      object-fit: contain;
+    }
+
+    /* ── Hero (value proposition) ─────────────── */
+    .login-hero {
+      text-align: center;
+      margin-bottom: 28px;
+      animation: fadeUp .5s ease both;
+    }
+    .login-hero-title {
+      font-size: 22px;
+      font-weight: 800;
+      line-height: 1.3;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .login-hero-title span { color: var(--accent); }
+    .login-hero-sub {
+      font-size: 14px;
+      color: var(--muted2);
+      line-height: 1.6;
+    }
+
+    /* ── Benefícios ───────────────────────────── */
+    .login-benefits {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 28px;
+      animation: fadeUp .5s .1s ease both;
+    }
+    .benefit-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      box-shadow: var(--shadow-sm);
+    }
+    .benefit-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      background: var(--accent-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .benefit-text { flex: 1; }
+    .benefit-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.2;
+    }
+    .benefit-desc {
+      font-size: 11px;
+      color: var(--muted2);
+      margin-top: 2px;
+      line-height: 1.4;
+    }
+
+    /* ── Card de autenticação ─────────────────── */
+    .login-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      animation: fadeUp .5s .2s ease both;
+    }
+
+    /* ── Mensagens de feedback ────────────────── */
+    .login-msg {
+      display: none;
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      font-size: 13px;
+      margin-bottom: 16px;
+      align-items: center;
+      gap: 8px;
+      line-height: 1.4;
+    }
+    .login-msg.show { display: flex; }
+    .login-msg.err  { background: var(--red-bg);   border: 1px solid var(--red-border);   color: var(--red); }
+    .login-msg.ok   { background: var(--green-bg); border: 1px solid var(--green-border); color: var(--green); }
+    .login-msg.warn { background: var(--yellow-bg);border: 1px solid var(--yellow-border);color: var(--yellow); }
+
+    /* ── Botão Google ─────────────────────────── */
+    .btn-google {
+      width: 100%;
+      background: var(--surface);
+      color: var(--text);
+      border: 1.5px solid var(--border2);
+      border-radius: var(--radius-md);
+      padding: 14px 20px;
+      font-family: var(--font);
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all .2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: var(--shadow-sm);
+    }
+    .btn-google:hover  { background: var(--card2); box-shadow: var(--shadow); transform: translateY(-1px); }
+    .btn-google:active { transform: scale(.97); }
+    .btn-google:disabled { opacity: .6; cursor: not-allowed; transform: none; pointer-events: none; }
+    .btn-google svg { width: 20px; height: 20px; flex-shrink: 0; }
+
+    /* ── Spinner ──────────────────────────────── */
+    .login-spinner {
+      width: 18px; height: 18px;
+      border: 2px solid var(--border2);
+      border-top-color: var(--text2);
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      display: none;
+      flex-shrink: 0;
+    }
+    .login-spinner.show { display: block; }
+
+    /* ── Trust line ───────────────────────────── */
+    .login-trust {
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    /* ── Tela de WhatsApp ─────────────────────── */
+    .wa-user-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      margin-bottom: 20px;
+    }
+    .wa-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      border: 2px solid var(--accent-border);
+      flex-shrink: 0;
+    }
+    .wa-user-name { font-size: 15px; font-weight: 700; }
+    .wa-user-email { font-size: 12px; color: var(--muted2); margin-top: 2px; }
+
+    .form-group { margin-bottom: 16px; }
+    .form-label {
+      font-size: 11px;
+      color: var(--muted2);
+      text-transform: uppercase;
+      letter-spacing: .6px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-weight: 700;
+    }
+    .form-label .req { color: var(--red); }
+    .input-wrap {
+      display: flex;
+      align-items: center;
+      background: var(--card2);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      transition: border-color .2s;
+    }
+    .input-wrap:focus-within { border-color: var(--accent); }
+    .input-prefix { padding: 0 12px; font-size: 18px; flex-shrink: 0; }
+    .form-input {
+      flex: 1;
+      background: none;
+      border: none;
+      outline: none;
+      color: var(--text);
+      font-size: 15px;
+      font-family: var(--font);
+      padding: 13px 14px 13px 0;
+    }
+    .form-hint { font-size: 11px; color: var(--muted); margin-top: 5px; line-height: 1.4; }
+
+    /* ── Botão primário ───────────────────────── */
+    .btn-primary {
+      width: 100%;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 14px;
+      font-family: var(--font);
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all .2s;
+      box-shadow: 0 4px 16px var(--accent-glow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-primary:active  { transform: scale(.97); }
+    .btn-primary:disabled { opacity: .6; cursor: not-allowed; }
+
+    /* ── Spinner escuro (botão primário) ──────── */
+    .spinner-dark {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      display: none;
+      flex-shrink: 0;
+    }
+    .spinner-dark.show { display: block; }
+
+    /* ── Tela de Renovação ────────────────────── */
+    .renov-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--red-bg);
+      border: 1px solid var(--red-border);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      margin-bottom: 20px;
+    }
+    .renov-badge-icon { font-size: 28px; flex-shrink: 0; }
+    .renov-badge-title { font-size: 15px; font-weight: 700; color: var(--red); }
+    .renov-badge-sub   { font-size: 12px; color: var(--muted2); margin-top: 2px; }
+
+    .pay-tabs  { display: flex; gap: 8px; margin-bottom: 18px; }
+    .pay-tab {
+      flex: 1; padding: 10px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--card2);
+      text-align: center;
+      font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: all .2s;
+      color: var(--muted2);
+    }
+    .pay-tab.active {
+      border-color: var(--accent-border);
+      color: var(--accent);
+      background: var(--accent-bg);
+    }
+    .pay-panel { display: none; }
+    .pay-panel.active { display: block; }
+
+    .pix-qr-wrap {
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 14px;
+      min-height: 160px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .pix-qr-img {
+      width: 148px; height: 148px;
+      border-radius: 8px;
+      background: #fff;
+      padding: 4px;
+    }
+    .pix-copy-btn {
+      width: 100%;
+      background: var(--accent-bg);
+      border: 1px solid var(--accent-border);
+      color: var(--accent);
+      border-radius: var(--radius-sm);
+      padding: 11px;
+      font-size: 14px; font-weight: 600;
+      cursor: pointer;
+      font-family: var(--font);
+      transition: all .2s;
+      margin-bottom: 8px;
+    }
+    .pix-copy-btn:active { transform: scale(.97); }
+    .pix-timer { font-size: 11px; color: var(--muted); text-align: center; }
+
+    .card-field { margin-bottom: 11px; }
+    .card-field label {
+      font-size: 11px; color: var(--muted2);
+      text-transform: uppercase; letter-spacing: .6px;
+      margin-bottom: 5px; display: block; font-weight: 700;
+    }
+    .card-field input {
+      width: 100%;
+      background: var(--card2);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 11px 13px;
+      color: var(--text);
+      font-size: 14px;
+      font-family: var(--font);
+      outline: none;
+      transition: border-color .2s;
+    }
+    .card-field input:focus { border-color: var(--accent); }
+    .card-row { display: flex; gap: 10px; }
+    .card-row .card-field { flex: 1; }
+
+    .btn-pix {
+      width: 100%;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 13px;
+      font-family: var(--font);
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      margin-bottom: 8px;
+      transition: transform .15s;
+      box-shadow: 0 4px 16px var(--accent-glow);
+    }
+    .btn-pix:active    { transform: scale(.97); }
+    .btn-pix:disabled  { opacity: .6; cursor: not-allowed; }
+
+    .btn-cartao {
+      width: 100%;
+      background: var(--text);
+      color: var(--card);
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 13px;
+      font-family: var(--font);
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      transition: transform .15s;
+    }
+    .btn-cartao:active   { transform: scale(.97); }
+    .btn-cartao:disabled { opacity: .6; cursor: not-allowed; }
+
+    .pay-msg {
+      font-size: 13px; text-align: center;
+      padding: 10px; border-radius: 8px;
+      margin-top: 8px; display: none;
+    }
+    .pay-msg.ok  { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); display: block; }
+    .pay-msg.err { background: var(--red-bg);   color: var(--red);   border: 1px solid var(--red-border);   display: block; }
+
+    .btn-sair-renov {
+      width: 100%;
+      background: transparent;
+      color: var(--muted);
+      border: none;
+      padding: 10px;
+      font-size: 13px;
+      cursor: pointer;
+      margin-top: 4px;
+      font-family: var(--font);
+      transition: color .2s;
+    }
+    .btn-sair-renov:hover { color: var(--red); }
+
+    /* ── Segurança pagamento ───────────────────── */
+    .pay-security {
+      font-size: 11px;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 10px;
+      line-height: 1.5;
+    }
+
+    /* ── Debug box (oculto em produção) ───────── */
+    .debug-box {
+      background: var(--card2);
+      border: 1px solid var(--border);
+      color: var(--muted2);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      font-size: 11px;
+      font-family: monospace;
+      margin-top: 10px;
+      display: none;
+      word-break: break-all;
+      line-height: 1.6;
+    }
+    .debug-box.show { display: block; }
+
+    /* ── Versão ───────────────────────────────── */
+    .login-version {
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 20px;
+      animation: fadeUp .5s .4s ease both;
+    }
+    .login-version span { color: var(--accent); font-weight: 700; }
+
+    /* ── Heading de tela secundária ───────────── */
+    .screen-title {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+    .screen-sub {
+      font-size: 13px;
+      color: var(--muted2);
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    /* ── Animações ────────────────────────────── */
+    @keyframes spin    { to { transform: rotate(360deg); } }
+    @keyframes fadeUp  { from { opacity:0; transform:translateY(14px) } to { opacity:1; transform:translateY(0) } }
+    @keyframes fadeIn  { from { opacity:0 } to { opacity:1 } }
+  </style>
 </head>
+
 <body>
-<div class="wrap">
-  <div class="logo-wrap">
-    <img src="logo.png" class="logo-img" alt="StreamDesk">
-  </div>
+<div class="login-page" id="loginPage">
+  <div class="login-wrap">
 
-  <div id="loginScreen">
-    <div class="card">
-      <div class="tabs">
-        <button class="tab active" id="tabLogin" onclick="switchTab('login')">Entrar</button>
-        <button class="tab" id="tabCadastro" onclick="switchTab('cadastro')">Criar conta</button>
+    <!-- Logo -->
+    <div class="login-logo">
+      <img src="logo.png" alt="StreamDesk">
+    </div>
+
+    <!-- ── TELA 1: LOGIN ─────────────────────── -->
+    <div id="loginScreen">
+
+      <!-- Value proposition -->
+      <div class="login-hero">
+        <div class="login-hero-title">
+          Gerencie clientes,<br>cobranças e <span>servidores</span>
+        </div>
+        <div class="login-hero-sub">
+          Tudo em um só lugar. Acesse sua conta para continuar.
+        </div>
       </div>
-      <div class="msg err" id="msgErr"></div>
-      <div class="msg ok"  id="msgOk"></div>
-      <div class="panel active" id="panelLogin">
-        <div class="card-title">Bem-vindo! 👋</div>
-        <div class="card-sub">Entre com sua conta Google para acessar o sistema.</div>
-        <button class="btn-google" id="btnLogin" onclick="doGoogle('login')">
-          <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/><path fill="none" d="M0 0h48v48H0z"/></svg>
-          <span id="btnLoginTxt">Entrar com Google</span>
-          <div class="spinner" id="spinnerLogin"></div>
+
+      <!-- Benefícios rápidos -->
+      <div class="login-benefits">
+        <div class="benefit-item">
+          <div class="benefit-icon">👥</div>
+          <div class="benefit-text">
+            <div class="benefit-title">Clientes organizados</div>
+            <div class="benefit-desc">Cadastro, vencimentos e status em tempo real</div>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-icon">💰</div>
+          <div class="benefit-text">
+            <div class="benefit-title">Cobranças automáticas</div>
+            <div class="benefit-desc">Pix e cartão integrados, relatórios financeiros</div>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-icon">🖥️</div>
+          <div class="benefit-text">
+            <div class="benefit-title">Servidores monitorados</div>
+            <div class="benefit-desc">Status online/offline com gestão de credenciais</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card de autenticação -->
+      <div class="login-card">
+        <div class="login-msg err" id="msgErr"></div>
+        <div class="login-msg ok"  id="msgOk"></div>
+        <div class="login-msg warn" id="msgWarn"></div>
+
+        <button class="btn-google" id="btnGoogle" onclick="doGoogle()">
+          <!-- Ícone Google oficial -->
+          <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+            <path fill="none" d="M0 0h48v48H0z"/>
+          </svg>
+          <span id="btnGoogleTxt">Continuar com Google</span>
+          <div class="login-spinner" id="spinnerGoogle"></div>
+        </button>
+
+        <div class="login-trust">
+          🔒 Acesso seguro · Seus dados não são compartilhados
+        </div>
+
+        <div class="debug-box" id="debugBox"></div>
+      </div>
+    </div>
+
+    <!-- ── TELA 2: WHATSAPP (onboarding pós-cadastro) ── -->
+    <div id="waScreen" style="display:none">
+      <div class="login-card">
+        <div class="screen-title">Quase lá! 📲</div>
+        <div class="screen-sub">Informe seu WhatsApp para suporte e avisos de vencimento.</div>
+
+        <div class="wa-user-box" id="waUserBox">
+          <img class="wa-avatar" id="waAvatar" src="" alt="">
+          <div>
+            <div class="wa-user-name" id="waUserName"></div>
+            <div class="wa-user-email" id="waUserEmail"></div>
+          </div>
+        </div>
+
+        <div class="login-msg err" id="waErr"></div>
+
+        <div class="form-group">
+          <div class="form-label">WhatsApp <span class="req">*</span></div>
+          <div class="input-wrap">
+            <span class="input-prefix">📲</span>
+            <input class="form-input" id="waInput" type="tel"
+              placeholder="55 11 99999-9999" maxlength="20"
+              autocomplete="tel">
+          </div>
+          <div class="form-hint">Com código do país + DDD. Ex: <strong>55 11 99999-9999</strong></div>
+        </div>
+
+        <button class="btn-primary" id="btnSaveWA" onclick="saveWhatsApp()">
+          <span id="btnSaveWATxt">✓ Confirmar e Entrar</span>
+          <div class="spinner-dark" id="spinnerWA"></div>
         </button>
       </div>
-      <div class="panel" id="panelCadastro">
-        <div class="card-title">Criar conta ✨</div>
-        <div class="card-sub">Use sua conta Google. O acesso é liberado automaticamente.</div>
-        <button class="btn-google" id="btnCadastro" onclick="doGoogle('cadastro')">
-          <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/><path fill="none" d="M0 0h48v48H0z"/></svg>
-          <span id="btnCadastroTxt">Cadastrar com Google</span>
-          <div class="spinner" id="spinnerCadastro"></div>
-        </button>
-      </div>
-      <div class="debug" id="debugBox"></div>
     </div>
-  </div>
 
-  <div id="waScreen" style="display:none">
-    <div class="card">
-      <div class="card-title">Quase lá! 📲</div>
-      <div class="card-sub">Informe seu WhatsApp para contato e suporte. Ele não será compartilhado.</div>
-      <div class="wa-user-box" id="waUserBox">
-        <img class="wa-avatar" id="waAvatar" src="" alt="">
-        <div><div class="wa-user-name" id="waUserName"></div><div class="wa-user-email" id="waUserEmail"></div></div>
-      </div>
-      <div class="msg err" id="waErr"></div>
-      <div class="form-group">
-        <div class="form-label">WhatsApp <span class="req">*</span></div>
-        <div class="input-wrap">
-          <span class="input-prefix">📲</span>
-          <input class="form-input" id="waInput" type="tel" placeholder="55 11 99999-9999" maxlength="20">
+    <!-- ── TELA 3: RENOVAÇÃO (assinatura vencida) ──── -->
+    <div id="renovScreen" style="display:none">
+      <div class="login-card">
+        <div class="renov-badge">
+          <div class="renov-badge-icon">🔒</div>
+          <div>
+            <div class="renov-badge-title">Assinatura vencida</div>
+            <div class="renov-badge-sub" id="renovSubtitulo">Renove para continuar usando o StreamDesk</div>
+          </div>
         </div>
-        <div class="form-hint">Digite com código do país + DDD. Ex: <strong>55 11 99999-9999</strong></div>
+
+        <div class="pay-tabs">
+          <div class="pay-tab active" id="rtabPix"    onclick="rSwitchTab('pix')">⚡ Pix</div>
+          <div class="pay-tab"        id="rtabCartao" onclick="rSwitchTab('cartao')">💳 Cartão</div>
+        </div>
+
+        <!-- Painel Pix -->
+        <div class="pay-panel active" id="rpanelPix">
+          <div class="pix-qr-wrap" id="rPixQrWrap">
+            <div style="color:var(--muted);font-size:13px">Clique em "Gerar Pix" para criar o QR Code</div>
+          </div>
+          <div id="rPixCopyArea" style="display:none">
+            <button class="pix-copy-btn" onclick="rCopiarPix()">📋 Copiar código Pix</button>
+            <div class="pix-timer" id="rPixTimer"></div>
+          </div>
+          <button class="btn-pix" id="rBtnGerarPix" onclick="rGerarPix()">⚡ Gerar QR Code Pix</button>
+          <div class="pay-msg" id="rPixMsg"></div>
+        </div>
+
+        <!-- Painel Cartão -->
+        <div class="pay-panel" id="rpanelCartao">
+          <div class="card-field">
+            <label>Número do cartão</label>
+            <input type="tel" id="rCardNum" placeholder="0000 0000 0000 0000" maxlength="19" oninput="fmtCard(this)" autocomplete="cc-number">
+          </div>
+          <div class="card-field">
+            <label>Nome no cartão</label>
+            <input type="text" id="rCardName" placeholder="NOME SOBRENOME" style="text-transform:uppercase" autocomplete="cc-name">
+          </div>
+          <div class="card-row">
+            <div class="card-field">
+              <label>Validade</label>
+              <input type="tel" id="rCardExp" placeholder="MM/AA" maxlength="5" oninput="fmtExp(this)" autocomplete="cc-exp">
+            </div>
+            <div class="card-field">
+              <label>CVV</label>
+              <input type="tel" id="rCardCvv" placeholder="123" maxlength="4" autocomplete="cc-csc">
+            </div>
+          </div>
+          <button class="btn-cartao" id="rBtnCartao" onclick="rPagarCartao()">💳 Assinar — R$ 9,90/mês</button>
+          <div class="pay-msg" id="rCartaoMsg"></div>
+          <div class="pay-security">🔒 Pagamento seguro via Mercado Pago</div>
+        </div>
+
+        <button class="btn-sair-renov" onclick="sairRenovacao()">← Usar outra conta</button>
       </div>
-      <button class="btn-primary" id="btnSaveWA" onclick="saveWhatsApp()">
-        <span id="btnSaveWATxt">✓ Confirmar e Entrar</span>
-        <div class="spinner-w" id="spinnerWA"></div>
-      </button>
     </div>
-  </div>
 
-  <div id="renovScreen" style="display:none">
-    <div class="card">
-      <div class="renov-badge">
-        <div class="renov-badge-icon">🔒</div>
-        <div>
-          <div class="renov-badge-title">Assinatura vencida</div>
-          <div class="renov-badge-sub" id="renovSubtitulo">Renove para continuar usando o StreamDesk</div>
-        </div>
-      </div>
-      <div class="pay-tabs">
-        <div class="pay-tab active" id="rtabPix" onclick="rSwitchTab('pix')">⚡ Pix</div>
-        <div class="pay-tab" id="rtabCartao" onclick="rSwitchTab('cartao')">💳 Cartão</div>
-      </div>
-      <div class="pay-panel active" id="rpanelPix">
-        <div class="pix-qr-wrap" id="rPixQrWrap">
-          <div style="color:var(--muted);font-size:13px">Clique em "Gerar Pix" para criar o QR Code</div>
-        </div>
-        <div id="rPixCopyArea" style="display:none">
-          <button class="pix-copy-btn" onclick="rCopiarPix()">📋 Copiar código Pix</button>
-          <div class="pix-timer" id="rPixTimer"></div>
-        </div>
-        <button class="btn-pix" id="rBtnGerarPix" onclick="rGerarPix()">⚡ Gerar QR Code Pix</button>
-        <div class="pay-msg" id="rPixMsg"></div>
-      </div>
-      <div class="pay-panel" id="rpanelCartao">
-        <div class="card-field"><label>Número do cartão</label><input type="tel" id="rCardNum" placeholder="0000 0000 0000 0000" maxlength="19" oninput="fmtCard(this)"></div>
-        <div class="card-field"><label>Nome no cartão</label><input type="text" id="rCardName" placeholder="NOME SOBRENOME" style="text-transform:uppercase"></div>
-        <div class="card-row">
-          <div class="card-field"><label>Validade</label><input type="tel" id="rCardExp" placeholder="MM/AA" maxlength="5" oninput="fmtExp(this)"></div>
-          <div class="card-field"><label>CVV</label><input type="tel" id="rCardCvv" placeholder="123" maxlength="4"></div>
-        </div>
-        <button class="btn-cartao" id="rBtnCartao" onclick="rPagarCartao()">💳 Assinar — R$ 9,90/mês</button>
-        <div class="pay-msg" id="rCartaoMsg"></div>
-        <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:10px;line-height:1.5">🔒 Pagamento seguro via Mercado Pago</div>
-      </div>
-      <button class="btn-sair-renov" onclick="sairRenovacao()">← Usar outra conta</button>
-    </div>
+    <div class="login-version">StreamDesk <span>v1.0</span></div>
   </div>
-
-  <div class="version">StreamDesk <span>v1.0</span></div>
 </div>
 
+<!-- ── Mercado Pago SDK ──────────────────────── -->
+<script src="https://sdk.mercadopago.com/js/v2"></script>
+
+<!-- ── Firebase Auth + Firestore ────────────── -->
 <script type="module">
 import { initializeApp }      from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult }
-                              from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
+  setPersistence,
+  browserLocalPersistence,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc }
-                              from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+  from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
+/* ── Config Firebase ──────────────────────────
+   NOTA: As chaves abaixo são públicas (client-side).
+   A segurança real está nas Firestore Security Rules.
+─────────────────────────────────────────────── */
 const FB = {
-  apiKey:"AIzaSyAGHvkDpeSbCTriZCvRf-jJ6z8PQSSWLHI",
-  authDomain:"streamdesk-5350d.firebaseapp.com",
-  projectId:"streamdesk-5350d",
-  storageBucket:"streamdesk-5350d.firebasestorage.app",
-  messagingSenderId:"36684694847",
-  appId:"1:36684694847:web:0f6f3a27933e3d84cfff8a",
-  measurementId:"G-PN7SZSMQR4"
+  apiKey:            "AIzaSyAGHvkDpeSbCTriZCvRf-jJ6z8PQSSWLHI",
+  authDomain:        "streamdesk-5350d.firebaseapp.com",
+  projectId:         "streamdesk-5350d",
+  storageBucket:     "streamdesk-5350d.firebasestorage.app",
+  messagingSenderId: "36684694847",
+  appId:             "1:36684694847:web:0f6f3a27933e3d84cfff8a",
+  measurementId:     "G-PN7SZSMQR4"
 };
 
 const app      = initializeApp(FB);
@@ -230,80 +735,252 @@ const db       = getFirestore(app);
 const provider = new GoogleAuthProvider();
 provider.setCustomParameters({ prompt: 'select_account' });
 
+/* ── Constantes de pagamento ─────────────────── */
 const MP_PUBLIC_KEY     = 'APP_USR-b9e0a4a9-be59-4ebb-87b0-c3fd2f4453a2';
 const VALOR_MENSALIDADE = 9.90;
 const URL_PIX           = 'https://criarpix-vsw4hqxmxq-rj.a.run.app';
 const URL_ASSINATURA    = 'https://criarassinatura-vsw4hqxmxq-rj.a.run.app';
 
+/* ── Estado interno ──────────────────────────── */
 let _pendingUser = null;
 let _pixCodigo   = '';
 let _pixTimer    = null;
 
+/* ── Helpers de data ─────────────────────────── */
 function todayStr() {
-  var d=new Date();
-  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  var d = new Date();
+  return d.getFullYear() + '-'
+    + String(d.getMonth()+1).padStart(2,'0') + '-'
+    + String(d.getDate()).padStart(2,'0');
 }
+
+/* ── Helpers de UI ───────────────────────────── */
 function showMsg(type, msg) {
-  document.getElementById('msgErr').classList.remove('show');
-  document.getElementById('msgOk').classList.remove('show');
-  var el = document.getElementById(type==='err'?'msgErr':'msgOk');
-  el.textContent = msg; el.classList.add('show');
-}
-function showDebug(msg) {
-  var el=document.getElementById('debugBox');
-  el.textContent='🔍 '+msg; el.classList.add('show');
-}
-function setLoading(tipo, on) {
-  var btnId=tipo==='login'?'btnLogin':'btnCadastro';
-  var txtId=tipo==='login'?'btnLoginTxt':'btnCadastroTxt';
-  var spId=tipo==='login'?'spinnerLogin':'spinnerCadastro';
-  document.getElementById(btnId).disabled=on;
-  document.getElementById(txtId).style.display=on?'none':'inline';
-  document.getElementById(spId).style.display=on?'block':'none';
-}
-window.switchTab=function(tab){
-  document.getElementById('msgErr').classList.remove('show');
-  document.getElementById('msgOk').classList.remove('show');
-  ['Login','Cadastro'].forEach(function(t){
-    var key=t.toLowerCase();
-    document.getElementById('tab'+t).classList.toggle('active',key===tab);
-    document.getElementById('panel'+t).classList.toggle('active',key===tab);
+  ['msgErr','msgOk','msgWarn'].forEach(id => {
+    document.getElementById(id).classList.remove('show');
   });
+  if (!msg) return;
+  var id = type === 'err' ? 'msgErr' : type === 'warn' ? 'msgWarn' : 'msgOk';
+  var el = document.getElementById(id);
+  el.textContent = msg;
+  el.classList.add('show');
+}
+
+function showDebug(msg) {
+  var el = document.getElementById('debugBox');
+  el.textContent = '🔍 ' + msg;
+  el.classList.add('show');
+}
+
+function setGoogleLoading(on) {
+  var btn = document.getElementById('btnGoogle');
+  var txt = document.getElementById('btnGoogleTxt');
+  var sp  = document.getElementById('spinnerGoogle');
+  btn.disabled = on;
+  txt.style.display  = on ? 'none' : 'inline';
+  sp.classList.toggle('show', on);
+}
+
+/* ── FIX PWA: Persistência de sessão ────────────
+   Garante que o usuário não precise logar toda vez
+   que abre o app. IndexedDB persiste mesmo após
+   fechar o PWA no celular.
+─────────────────────────────────────────────── */
+async function initAuth() {
+  try {
+    await setPersistence(auth, browserLocalPersistence);
+  } catch(e) {
+    // Silencioso — fallback para sessão padrão
+  }
+
+  /* ── Verificação de sessão ativa ─────────────
+     onAuthStateChanged dispara imediatamente se
+     já existe token em localStorage. Se o usuário
+     já está autenticado, redireciona sem mostrar login.
+  ─────────────────────────────────────────────── */
+  onAuthStateChanged(auth, async function(user) {
+    if (user) {
+      // Usuário já autenticado — verificar status e redirecionar
+      try {
+        var snap = await getDoc(doc(db, 'usuarios', user.uid));
+        if (snap.exists()) {
+          var data = snap.data();
+          // Bloqueado ou pendente: deslogar e mostrar mensagem
+          if (data.status === 'bloqueado') {
+            await auth.signOut();
+            revealPage();
+            showMsg('err','⚠️ Acesso bloqueado. Entre em contato com o administrador.');
+            return;
+          }
+          if (data.status === 'pendente') {
+            await auth.signOut();
+            revealPage();
+            showMsg('warn','⏳ Aguardando aprovação do administrador.');
+            return;
+          }
+          // Verificar expiração
+          if (data.expiracao) {
+            var partes = data.expiracao.split('-');
+            var venc   = new Date(partes[0], partes[1]-1, partes[2]);
+            var hoje   = new Date(); hoje.setHours(0,0,0,0);
+            if (venc < hoje) {
+              // Assinatura vencida: mostrar tela de renovação sem fazer signOut
+              revealPage();
+              showRenovScreen(user, data.expiracao);
+              return;
+            }
+          }
+          // WhatsApp pendente: mostrar onboarding
+          if (!data.whatsapp) {
+            revealPage();
+            showWAScreen(user);
+            return;
+          }
+          // Tudo ok — atualizar lastAccess e redirecionar
+          await setDoc(doc(db,'usuarios',user.uid),{ultimoAcesso:todayStr()},{merge:true});
+          location.href = 'index.html';
+          return;
+        }
+        // Documento não existe mas usuário autenticado
+        // (caso raro: conta Google criada mas sem Firestore doc)
+        revealPage();
+        showWAScreen(user);
+      } catch(e) {
+        // Erro de rede: mostrar tela de login normalmente
+        revealPage();
+      }
+    } else {
+      // Nenhum usuário autenticado — mostrar login
+      revealPage();
+    }
+  });
+
+  // Processar resultado de redirect (fallback mobile)
+  getRedirectResult(auth).then(async function(result) {
+    if (!result) return;
+    await processUser(result.user);
+  }).catch(function(e) {
+    if (e && e.code) showDebug('redirect: ' + e.code + ' — ' + (e.message || ''));
+  });
+}
+
+/* ── Revela a página após verificação de auth ─── */
+function revealPage() {
+  document.getElementById('loginPage').classList.add('ready');
+}
+
+/* ── Processar usuário após login ────────────── */
+async function processUser(user) {
+  var snap = await getDoc(doc(db, 'usuarios', user.uid));
+
+  if (!snap.exists()) {
+    // Novo usuário: criar conta com 30 dias trial
+    var expDate = new Date();
+    expDate.setDate(expDate.getDate() + 30);
+    var expStr = expDate.getFullYear() + '-'
+      + String(expDate.getMonth()+1).padStart(2,'0') + '-'
+      + String(expDate.getDate()).padStart(2,'0');
+
+    await setDoc(doc(db,'usuarios',user.uid), {
+      uid:          user.uid,
+      nome:         user.displayName || '',
+      email:        user.email       || '',
+      foto:         user.photoURL    || '',
+      whatsapp:     '',
+      status:       'ativo',
+      dataCadastro: todayStr(),
+      expiracao:    expStr,
+      ultimoAcesso: todayStr()
+    });
+    showWAScreen(user);
+    return;
+  }
+
+  var data = snap.data();
+  if (data.status === 'bloqueado') {
+    await auth.signOut();
+    showMsg('err','⚠️ Acesso bloqueado. Entre em contato com o administrador.');
+    return;
+  }
+  if (data.status === 'pendente') {
+    await auth.signOut();
+    showMsg('warn','⏳ Aguardando aprovação do administrador.');
+    return;
+  }
+  if (data.expiracao) {
+    var partes = data.expiracao.split('-');
+    var venc   = new Date(partes[0], partes[1]-1, partes[2]);
+    var hoje   = new Date(); hoje.setHours(0,0,0,0);
+    if (venc < hoje) { showRenovScreen(user, data.expiracao); return; }
+  }
+  if (!data.whatsapp) { showWAScreen(user); return; }
+
+  await setDoc(doc(db,'usuarios',user.uid),{ultimoAcesso:todayStr()},{merge:true});
+  location.href = 'index.html';
+}
+
+/* ── Login com Google ────────────────────────── */
+window.doGoogle = async function() {
+  setGoogleLoading(true);
+  showMsg('', '');
+
+  try {
+    // Popup primeiro (desktop e maioria dos mobile)
+    var result = await signInWithPopup(auth, provider);
+    await processUser(result.user);
+  } catch(e) {
+    var code = e.code || '';
+    showDebug('popup: ' + code + ' — ' + (e.message || ''));
+
+    if (code === 'auth/popup-blocked' || code === 'auth/operation-not-supported-in-this-environment') {
+      // Fallback: redirect (PWA standalone, alguns browsers)
+      showMsg('ok','🔄 Redirecionando para o Google...');
+      setTimeout(function() { signInWithRedirect(auth, provider); }, 800);
+    } else if (code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') {
+      setGoogleLoading(false);
+    } else {
+      setGoogleLoading(false);
+      showMsg('err','⚠️ ' + (e.message || 'Erro ao conectar com Google.'));
+    }
+  }
 };
 
-// ── WHATSAPP ──────────────────────────────────────────────────────────────────
+/* ── Tela de WhatsApp ─────────────────────────── */
 function showWAScreen(user) {
   _pendingUser = user;
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('waScreen').style.display    = 'block';
-  document.getElementById('waAvatar').src              = user.photoURL || '';
-  document.getElementById('waUserName').textContent    = user.displayName || '';
-  document.getElementById('waUserEmail').textContent   = user.email || '';
-  document.getElementById('waInput').focus();
+  var av = document.getElementById('waAvatar');
+  av.src = user.photoURL || '';
+  av.onerror = function() { this.style.display = 'none'; };
+  document.getElementById('waUserName').textContent  = user.displayName || '';
+  document.getElementById('waUserEmail').textContent = user.email || '';
+  setTimeout(function() { document.getElementById('waInput').focus(); }, 100);
 }
+
 window.saveWhatsApp = async function() {
-  var wa = document.getElementById('waInput').value.trim();
+  var wa     = document.getElementById('waInput').value.trim();
   var digits = wa.replace(/\D/g,'');
   if (digits.length < 10) {
-    var el=document.getElementById('waErr');
-    el.textContent='⚠️ Informe um WhatsApp válido com DDD (mínimo 10 dígitos).';
+    var el = document.getElementById('waErr');
+    el.textContent = '⚠️ Informe um WhatsApp válido com DDD (mínimo 10 dígitos).';
     el.classList.add('show');
     return;
   }
-  var btn=document.getElementById('btnSaveWA');
-  btn.disabled=true;
-  document.getElementById('btnSaveWATxt').style.display='none';
-  document.getElementById('spinnerWA').style.display='block';
-  var user=_pendingUser;
-  await setDoc(doc(db,'usuarios',user.uid),{whatsapp: wa},{merge:true});
-  sessionStorage.clear(); // ← limpa sessão para aviso aparecer no próximo login
-  location.href='index.html';
+  var btn = document.getElementById('btnSaveWA');
+  btn.disabled = true;
+  document.getElementById('btnSaveWATxt').style.display  = 'none';
+  document.getElementById('spinnerWA').classList.add('show');
+
+  await setDoc(doc(db,'usuarios',_pendingUser.uid),{whatsapp: wa},{merge:true});
+  location.href = 'index.html';
 };
+
 document.getElementById('waInput').addEventListener('input', function() {
   document.getElementById('waErr').classList.remove('show');
 });
 
-// ── RENOVAÇÃO ─────────────────────────────────────────────────────────────────
+/* ── Tela de Renovação ───────────────────────── */
 function showRenovScreen(user, expiracao) {
   _pendingUser = user;
   document.getElementById('loginScreen').style.display = 'none';
@@ -312,11 +989,14 @@ function showRenovScreen(user, expiracao) {
     var partes = expiracao.split('-');
     var venc   = new Date(partes[0], partes[1]-1, partes[2]);
     var hoje   = new Date(); hoje.setHours(0,0,0,0);
-    var diasVencido = Math.round((hoje - venc) / 86400000);
-    var txt = diasVencido === 0 ? 'Seu acesso venceu hoje.' : 'Seu acesso venceu há ' + diasVencido + ' dia' + (diasVencido > 1 ? 's' : '') + '.';
+    var dias   = Math.round((hoje - venc) / 86400000);
+    var txt    = dias === 0
+      ? 'Seu acesso venceu hoje.'
+      : 'Seu acesso venceu há ' + dias + ' dia' + (dias > 1 ? 's' : '') + '.';
     document.getElementById('renovSubtitulo').textContent = txt;
   }
 }
+
 window.sairRenovacao = async function() {
   await auth.signOut();
   document.getElementById('renovScreen').style.display = 'none';
@@ -324,169 +1004,163 @@ window.sairRenovacao = async function() {
   _pendingUser = null; _pixCodigo = '';
   if (_pixTimer) clearInterval(_pixTimer);
 };
+
 window.rSwitchTab = function(tab) {
-  document.getElementById('rtabPix').classList.toggle('active', tab==='pix');
-  document.getElementById('rtabCartao').classList.toggle('active', tab==='cartao');
-  document.getElementById('rpanelPix').classList.toggle('active', tab==='pix');
-  document.getElementById('rpanelCartao').classList.toggle('active', tab==='cartao');
+  ['Pix','Cartao'].forEach(function(t) {
+    var key = t.toLowerCase();
+    document.getElementById('rtab' + t).classList.toggle('active', key === tab);
+    document.getElementById('rpanel' + t).classList.toggle('active', key === tab);
+  });
 };
+
 function rSetMsg(id, txt, tipo) {
   var el = document.getElementById(id);
-  el.textContent = txt; el.className = 'pay-msg'+(tipo?' '+tipo:''); el.style.display = txt?'block':'none';
+  el.textContent = txt;
+  el.className = 'pay-msg' + (tipo ? ' ' + tipo : '');
+  el.style.display = txt ? 'block' : 'none';
 }
-window.fmtCard = function(el) { var v=el.value.replace(/\D/g,'').substring(0,16); el.value=v.replace(/(.{4})/g,'$1 ').trim(); };
-window.fmtExp  = function(el) { var v=el.value.replace(/\D/g,'').substring(0,4); if(v.length>2)v=v.substring(0,2)+'/'+v.substring(2); el.value=v; };
 
+/* ── Formatação de cartão ────────────────────── */
+window.fmtCard = function(el) {
+  var v = el.value.replace(/\D/g,'').substring(0,16);
+  el.value = v.replace(/(.{4})/g,'$1 ').trim();
+};
+window.fmtExp = function(el) {
+  var v = el.value.replace(/\D/g,'').substring(0,4);
+  if (v.length > 2) v = v.substring(0,2) + '/' + v.substring(2);
+  el.value = v;
+};
+
+/* ── Pagamento PIX ───────────────────────────── */
 window.rGerarPix = async function() {
   var uid = _pendingUser ? _pendingUser.uid : null;
   if (!uid) { rSetMsg('rPixMsg','Usuário não autenticado.','err'); return; }
+
   var btn = document.getElementById('rBtnGerarPix');
-  btn.disabled = true; btn.innerHTML = '<span class="spinner-dark"></span>Gerando...';
+  btn.disabled = true;
+  btn.innerHTML = '⏳ Gerando...';
   rSetMsg('rPixMsg','','');
+
   try {
-    var resp = await fetch(URL_PIX, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ uid, valor: VALOR_MENSALIDADE, descricao: 'StreamDesk — Assinatura Mensal' }) });
+    var resp = await fetch(URL_PIX, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ uid, valor: VALOR_MENSALIDADE, descricao: 'StreamDesk — Assinatura Mensal' })
+    });
     var data = await resp.json();
     if (!resp.ok || !data.qr_code) throw new Error(data.error || 'Erro ao gerar Pix');
+
     _pixCodigo = data.qr_code;
-    var qrUrl  = 'https://api.qrserver.com/v1/create-qr-code/?size=148x148&data='+encodeURIComponent(_pixCodigo);
-    document.getElementById('rPixQrWrap').innerHTML = '<img class="pix-qr-img" src="'+qrUrl+'" alt="QR Code Pix"><div style="font-size:12px;color:var(--muted)">Escaneie com seu banco</div>';
+    var qrUrl  = 'https://api.qrserver.com/v1/create-qr-code/?size=148x148&data=' + encodeURIComponent(_pixCodigo);
+    document.getElementById('rPixQrWrap').innerHTML =
+      '<img class="pix-qr-img" src="'+qrUrl+'" alt="QR Code Pix">' +
+      '<div style="font-size:12px;color:var(--muted)">Escaneie com seu banco</div>';
     document.getElementById('rPixCopyArea').style.display = 'block';
-    btn.innerHTML = '🔄 Gerar novo QR Code'; btn.disabled = false;
-    var expira = Date.now() + 30*60*1000;
+    btn.innerHTML = '🔄 Gerar novo QR Code';
+    btn.disabled  = false;
+
+    // Timer de expiração
+    var expira = Date.now() + 30 * 60 * 1000;
     if (_pixTimer) clearInterval(_pixTimer);
     _pixTimer = setInterval(function() {
       var resto = Math.max(0, expira - Date.now());
-      var m = Math.floor(resto/60000), s = Math.floor((resto%60000)/1000);
-      document.getElementById('rPixTimer').textContent = 'Expira em '+m+'m '+String(s).padStart(2,'0')+'s';
+      var m = Math.floor(resto / 60000);
+      var s = Math.floor((resto % 60000) / 1000);
+      document.getElementById('rPixTimer').textContent = 'Expira em ' + m + 'm ' + String(s).padStart(2,'0') + 's';
       if (resto === 0) clearInterval(_pixTimer);
     }, 1000);
+
+    // Polling de confirmação
     var pollInterval = setInterval(async function() {
       try {
         var snap = await getDoc(doc(db,'usuarios',_pendingUser.uid));
         if (!snap.exists()) return;
         var d = snap.data();
-        var partes = (d.expiracao||'').split('-');
+        var partes  = (d.expiracao || '').split('-');
         var novaExp = partes.length === 3 ? new Date(partes[0], partes[1]-1, partes[2]) : null;
-        var hoje = new Date(); hoje.setHours(0,0,0,0);
+        var hoje    = new Date(); hoje.setHours(0,0,0,0);
         if (novaExp && novaExp >= hoje) {
-          clearInterval(pollInterval); clearInterval(_pixTimer);
+          clearInterval(pollInterval);
+          clearInterval(_pixTimer);
           rSetMsg('rPixMsg','✅ Pagamento confirmado! Entrando...','ok');
-          sessionStorage.clear(); // ← limpa sessão para aviso aparecer
           setTimeout(function() { location.href='index.html'; }, 1500);
         }
       } catch(e) {}
     }, 5000);
     setTimeout(function() { clearInterval(pollInterval); }, 35*60*1000);
+
   } catch(e) {
     rSetMsg('rPixMsg', e.message || 'Erro ao gerar Pix. Tente novamente.', 'err');
-    btn.disabled = false; btn.innerHTML = '⚡ Gerar QR Code Pix';
+    btn.disabled = false;
+    btn.innerHTML = '⚡ Gerar QR Code Pix';
   }
 };
+
 window.rCopiarPix = function() {
   if (!_pixCodigo) return;
   navigator.clipboard.writeText(_pixCodigo).then(function() {
     var btn = document.querySelector('.pix-copy-btn');
     btn.textContent = '✅ Copiado!';
-    setTimeout(function(){ btn.textContent = '📋 Copiar código Pix'; }, 2000);
+    setTimeout(function() { btn.textContent = '📋 Copiar código Pix'; }, 2000);
   });
 };
+
+/* ── Pagamento Cartão ────────────────────────── */
 window.rPagarCartao = async function() {
   var uid  = _pendingUser ? _pendingUser.uid : null;
   var num  = document.getElementById('rCardNum').value.replace(/\s/g,'');
   var name = document.getElementById('rCardName').value.trim().toUpperCase();
   var exp  = document.getElementById('rCardExp').value;
   var cvv  = document.getElementById('rCardCvv').value;
+
   if (!uid)            { rSetMsg('rCartaoMsg','Usuário não autenticado.','err'); return; }
   if (num.length < 16) { rSetMsg('rCartaoMsg','Número do cartão inválido.','err'); return; }
-  if (!name)           { rSetMsg('rCartaoMsg','Informe o nome do cartão.','err'); return; }
+  if (!name)           { rSetMsg('rCartaoMsg','Informe o nome no cartão.','err'); return; }
   if (exp.length < 5)  { rSetMsg('rCartaoMsg','Validade inválida.','err'); return; }
   if (cvv.length < 3)  { rSetMsg('rCartaoMsg','CVV inválido.','err'); return; }
+
   var btn = document.getElementById('rBtnCartao');
-  btn.disabled = true; btn.innerHTML = '<span class="spinner-dark"></span>Processando...';
+  btn.disabled = true;
+  btn.innerHTML = '⏳ Processando...';
   rSetMsg('rCartaoMsg','','');
+
   try {
     var partes = exp.split('/');
     var mp     = new MercadoPago(MP_PUBLIC_KEY, {locale:'pt-BR'});
-    var token  = await mp.createCardToken({ cardNumber: num, cardholderName: name, cardExpirationMonth: partes[0], cardExpirationYear: '20'+partes[1], securityCode: cvv });
-    var resp = await fetch(URL_ASSINATURA, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ uid, token: token.id, email: _pendingUser.email || '', valor: VALOR_MENSALIDADE }) });
+    var token  = await mp.createCardToken({
+      cardNumber:          num,
+      cardholderName:      name,
+      cardExpirationMonth: partes[0],
+      cardExpirationYear:  '20' + partes[1],
+      securityCode:        cvv
+    });
+    var resp = await fetch(URL_ASSINATURA, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ uid, token: token.id, email: _pendingUser.email || '', valor: VALOR_MENSALIDADE })
+    });
     var data = await resp.json();
     if (!resp.ok) throw new Error(data.error || 'Erro ao criar assinatura');
+
     rSetMsg('rCartaoMsg','✅ Assinatura ativada! Entrando...','ok');
-    sessionStorage.clear(); // ← limpa sessão para aviso aparecer
     setTimeout(function() { location.href='index.html'; }, 1500);
   } catch(e) {
     rSetMsg('rCartaoMsg', e.message || 'Erro ao processar. Verifique os dados.', 'err');
-    btn.disabled = false; btn.innerHTML = '💳 Assinar — R$ '+VALOR_MENSALIDADE.toFixed(2).replace('.',',')+'/mês';
+    btn.disabled = false;
+    btn.innerHTML = '💳 Assinar — R$ ' + VALOR_MENSALIDADE.toFixed(2).replace('.',',') + '/mês';
   }
 };
 
-// ── LOGIN ─────────────────────────────────────────────────────────────────────
-async function processUser(user, tipo) {
-  var snap = await getDoc(doc(db,'usuarios',user.uid));
-  if (!snap.exists()) {
-    if (tipo==='login') {
-      await auth.signOut();
-      showMsg('err','⚠️ Conta não encontrada. Use "Criar conta" para se registrar.');
-      window.switchTab('cadastro');
-      return;
-    }
-    var expDate = new Date(); expDate.setDate(expDate.getDate() + 30);
-    var expStr = expDate.getFullYear()+'-'+String(expDate.getMonth()+1).padStart(2,'0')+'-'+String(expDate.getDate()).padStart(2,'0');
-    await setDoc(doc(db,'usuarios',user.uid), { uid:user.uid, nome:user.displayName||'', email:user.email||'', foto:user.photoURL||'', whatsapp:'', status:'ativo', dataCadastro:todayStr(), expiracao:expStr, ultimoAcesso:todayStr() });
-    showWAScreen(user);
-    return;
-  }
-  var data = snap.data();
-  if (data.status==='bloqueado') { await auth.signOut(); showMsg('err','⚠️ Acesso bloqueado. Entre em contato com o administrador.'); return; }
-  if (data.status==='pendente')  { await auth.signOut(); showMsg('ok','⏳ Aguardando aprovação do administrador.'); return; }
-  if (data.expiracao) {
-    var partes = data.expiracao.split('-');
-    var venc   = new Date(partes[0], partes[1]-1, partes[2]);
-    var hoje   = new Date(); hoje.setHours(0,0,0,0);
-    if (venc < hoje) { showRenovScreen(user, data.expiracao); return; }
-  }
-  if (!data.whatsapp) { showWAScreen(user); return; }
-  await setDoc(doc(db,'usuarios',user.uid),{ultimoAcesso:todayStr()},{merge:true});
-  sessionStorage.clear(); // ← limpa sessão para aviso aparecer no próximo login
-  location.href='index.html';
-}
-
-getRedirectResult(auth).then(async function(result) {
-  if (!result) return;
-  var tipo=sessionStorage.getItem('sd_tipo')||'login';
-  sessionStorage.removeItem('sd_tipo');
-  await processUser(result.user, tipo);
-}).catch(function(e) {
-  if (e&&e.code) showDebug('redirect: '+e.code+' — '+(e.message||''));
-});
-
-window.doGoogle = async function(tipo) {
-  setLoading(tipo, true);
-  sessionStorage.setItem('sd_tipo', tipo);
-  try {
-    var result = await signInWithPopup(auth, provider);
-    sessionStorage.removeItem('sd_tipo');
-    await processUser(result.user, tipo);
-  } catch(e) {
-    var code=e.code||'';
-    showDebug('popup: '+code+' — '+(e.message||''));
-    if (code==='auth/popup-blocked'||code==='auth/operation-not-supported-in-this-environment') {
-      showMsg('ok','🔄 Redirecionando para o Google...');
-      setTimeout(function(){signInWithRedirect(auth,provider);},800);
-    } else if (code==='auth/popup-closed-by-user'||code==='auth/cancelled-popup-request') {
-      setLoading(tipo,false);
-    } else {
-      setLoading(tipo,false);
-      showMsg('err','⚠️ '+(e.message||'Erro ao conectar com Google.'));
-    }
-  }
-};
+/* ── Init ────────────────────────────────────── */
+initAuth();
 </script>
-<script src="https://sdk.mercadopago.com/js/v2"></script>
-  <script>
+
+<!-- ── Service Worker (PWA) ──────────────────── -->
+<script>
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js');
   }
 </script>
+
 </body>
 </html>
