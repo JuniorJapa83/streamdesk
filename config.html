@@ -584,6 +584,22 @@ body.dark .about-card{background:rgba(19,24,37,.85);border-color:rgba(28,34,54,.
 .btn-save:hover{opacity:.93;box-shadow:0 6px 20px rgba(99,102,241,.36)}
 .btn-save:active{transform:scale(.97)}
 .btn-save:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
+
+  /* ─── Modal de Cancelamento ─── */
+.cancel-steps{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.cancel-step{display:flex;align-items:flex-start;gap:12px;background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:12px 14px}
+.cancel-step-icon{font-size:20px;flex-shrink:0;margin-top:1px}
+.cancel-step-body{flex:1}
+.cancel-step-title{font-size:13px;font-weight:700;color:var(--text)}
+.cancel-step-desc{font-size:12px;color:var(--muted2);margin-top:2px;line-height:1.4}
+.cancel-warn{background:var(--red-bg);border:1px solid var(--red-border);border-radius:12px;padding:14px;margin-bottom:18px;font-size:13px;color:var(--red);line-height:1.5}
+.cancel-confirm-wrap{display:flex;flex-direction:column;gap:10px;margin-bottom:4px}
+.btn-cancel-sub{width:100%;background:var(--red-bg);color:var(--red);border:1.5px solid var(--red-border);border-radius:12px;padding:13px;font-family:var(--font);font-weight:700;font-size:14px;cursor:pointer;transition:all .2s}
+.btn-cancel-sub:hover{background:var(--red);color:#fff}
+.btn-cancel-sub:disabled{opacity:.5;cursor:not-allowed}
+.cancel-step-confirm{display:none}
+.cancel-step-confirm.show{display:block}
+  
 .btn-cancel{
   width:100%;background:transparent;color:var(--muted2);
   border:1px solid var(--border);border-radius:13px;
@@ -869,7 +885,10 @@ window.renderAssinatura=function(user,data,nClientes){
     if(fase==='f4') return `<button class="btn-assin reactivate" onclick="openModal('ovPagamento')">
       🔄 Reativar acesso — R$ 9,90/mês
     </button>`;
-    return `<button class="btn-assin manage" onclick="openModal('ovPagamento')">⚙️ Gerenciar assinatura</button>`;
+    return `<div style="display:flex;flex-direction:column;gap:8px">
+  <button class="btn-assin manage" onclick="openModal('ovPagamento')">⚙️ Renovar / Gerenciar</button>
+  <button class="btn-assin" style="background:transparent;color:var(--muted2);border:1px solid var(--border);font-size:13px;padding:10px" onclick="openModal('ovCancelar')">Cancelar assinatura</button>
+</div>`;
   })();
 
   const expiredBanner=fase==='f4'?`
@@ -1218,6 +1237,66 @@ onAuthStateChanged(_auth,async function(user){
   </div>
 </div>
 
+<!-- ══ MODAL: CANCELAMENTO ══ -->
+<div class="overlay" id="ovCancelar" onclick="if(event.target===this)closeModal('ovCancelar')">
+  <div class="modal">
+    <div class="mhandle"></div>
+    <div class="mtitle">Cancelar assinatura</div>
+    <div class="msub">Sentimos muito ver você partir. Antes de confirmar, veja o que acontece:</div>
+
+    <div class="cancel-steps">
+      <div class="cancel-step">
+        <div class="cancel-step-icon">📅</div>
+        <div class="cancel-step-body">
+          <div class="cancel-step-title">Acesso até o fim do período pago</div>
+          <div class="cancel-step-desc">Você continua usando o StreamDesk normalmente até a data de vencimento atual.</div>
+        </div>
+      </div>
+      <div class="cancel-step">
+        <div class="cancel-step-icon">💾</div>
+        <div class="cancel-step-body">
+          <div class="cancel-step-title">Seus dados ficam salvos por 30 dias</div>
+          <div class="cancel-step-desc">Clientes, servidores e finanças ficam guardados. Se mudar de ideia, é só reativar.</div>
+        </div>
+      </div>
+      <div class="cancel-step">
+        <div class="cancel-step-icon">🔒</div>
+        <div class="cancel-step-body">
+          <div class="cancel-step-title">Após 30 dias os dados são removidos</div>
+          <div class="cancel-step-desc">Exporte seu CSV antes de cancelar para guardar uma cópia local.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cancel-warn">
+      ⚠️ Ao cancelar, <strong>novas cobranças são interrompidas imediatamente</strong>. Você não será cobrado no próximo ciclo.
+    </div>
+
+    <!-- Etapa 1: botões principais -->
+    <div id="cancelStep1" class="cancel-confirm-wrap show">
+      <button class="btn-save" style="background:var(--card2);color:var(--text2);border:1px solid var(--border);box-shadow:none" onclick="exportCSV();showToast('📥 Exportando dados...')">
+        📥 Exportar dados antes de cancelar
+      </button>
+      <button class="btn-cancel-sub" onclick="mostrarConfirmacaoCancelamento()">
+        Confirmar cancelamento
+      </button>
+      <button class="btn-cancel" onclick="closeModal('ovCancelar')">Voltar — manter assinatura</button>
+    </div>
+
+    <!-- Etapa 2: confirmação final -->
+    <div id="cancelStep2" class="cancel-confirm-wrap" style="display:none">
+      <div class="cancel-warn" style="margin-bottom:12px">
+        🚨 Tem certeza absoluta? Esta ação cancela sua assinatura e o acesso será encerrado ao fim do período pago.
+      </div>
+      <button class="btn-cancel-sub" id="btnConfirmarCancel" onclick="executarCancelamento()">
+        Sim, cancelar definitivamente
+      </button>
+      <button class="btn-cancel" onclick="voltarStep1Cancelamento()">← Voltar</button>
+    </div>
+
+  </div>
+</div>
+  
 <!-- ══ MODAL: RESPOSTAS RÁPIDAS ══ -->
 <div class="overlay" id="ovRespostas" onclick="if(event.target===this)closeModal('ovRespostas')">
   <div class="modal">
@@ -1313,6 +1392,70 @@ function salvarRespostas(){
   closeModal('ovRespostas');showToast('✓ Mensagens salvas!');
 }
 
+/* ─── Cancelamento de assinatura ─── */
+function mostrarConfirmacaoCancelamento(){
+  document.getElementById('cancelStep1').style.display='none';
+  document.getElementById('cancelStep2').style.display='flex';
+  document.getElementById('cancelStep2').style.flexDirection='column';
+  document.getElementById('cancelStep2').style.gap='10px';
+}
+
+function voltarStep1Cancelamento(){
+  document.getElementById('cancelStep1').style.display='flex';
+  document.getElementById('cancelStep1').style.flexDirection='column';
+  document.getElementById('cancelStep1').style.gap='10px';
+  document.getElementById('cancelStep2').style.display='none';
+}
+
+window.executarCancelamento = async function(){
+  var user = window._currentUser;
+  if(!user){ showToast('⚠️ Erro: usuário não encontrado.'); return; }
+
+  var btn = document.getElementById('btnConfirmarCancel');
+  btn.disabled = true;
+  btn.textContent = '⏳ Processando...';
+
+  try {
+    // Importa Firestore dinamicamente (mesmo padrão já usado no arquivo)
+    var fs = await import('https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js');
+    var db = window._firebaseDB;
+
+    // Marca o usuário como cancelado no Firestore
+    // O acesso continua até a data de expiracao existente
+    await fs.setDoc(
+      fs.doc(db, 'usuarios', user.uid),
+      {
+        cancelado:       true,
+        dataCancelamento: new Date().toISOString().split('T')[0],
+        // status permanece 'ativo' até vencer — admin pode ver o flag cancelado
+      },
+      { merge: true }
+    );
+
+    // Fecha o modal e notifica
+    closeModal('ovCancelar');
+    voltarStep1Cancelamento(); // reseta para próxima vez
+    showToast('✅ Assinatura cancelada. Acesso ativo até o vencimento.');
+
+    // Atualiza o card de assinatura para refletir o cancelamento
+    setTimeout(function(){
+      var card = document.getElementById('assinCard');
+      if(card){
+        var cancelBanner = document.createElement('div');
+        cancelBanner.style.cssText = 'background:var(--yellow-bg);border:1px solid var(--yellow-border);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--yellow);margin-top:10px;line-height:1.5';
+        cancelBanner.innerHTML = '⚠️ <strong>Cancelamento agendado.</strong> Seu acesso continua ativo até a data de vencimento. Não haverá nova cobrança.';
+        card.appendChild(cancelBanner);
+      }
+    }, 400);
+
+  } catch(e) {
+    btn.disabled = false;
+    btn.textContent = 'Sim, cancelar definitivamente';
+    showToast('❌ Erro ao cancelar. Tente novamente ou contate o suporte.');
+    console.error('Cancelamento erro:', e);
+  }
+};
+  
 /* ─── Logout ─── */
 function doLogout(){
   if(!confirm('Encerrar sessão e sair do StreamDesk?')) return;
