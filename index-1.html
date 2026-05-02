@@ -1,0 +1,1642 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#6366f1">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="StreamDesk">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PN7SZSWQR4"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-PN7SZSWQR4');
+  </script>
+  <link rel="icon" href="favicon.png" type="image/png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>StreamDesk — Home</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="theme.css">
+<style>
+/* ═══════════════════════════════════════════════════
+   STREAMDESK v1.1 — LIGHT PREMIUM THEME
+═══════════════════════════════════════════════════ */
+:root {
+  /* Light theme tokens */
+  --bg:       #f5f7fa;
+  --surface:  #ffffff;
+  --card:     #ffffff;
+  --card2:    #f8fafc;
+  --border:   #e8ecf2;
+  --border2:  #dde3ed;
+  --accent:   #6366f1;
+  --accent2:  #818cf8;
+  --accent-bg: rgba(99,102,241,0.08);
+  --accent-border: rgba(99,102,241,0.2);
+  --red:      #ef4444;
+  --red-bg:   rgba(239,68,68,0.08);
+  --red-border: rgba(239,68,68,0.2);
+  --yellow:   #f59e0b;
+  --yellow-bg: rgba(245,158,11,0.08);
+  --yellow-border: rgba(245,158,11,0.2);
+  --orange:   #f97316;
+  --orange-bg: rgba(249,115,22,0.08);
+  --orange-border: rgba(249,115,22,0.2);
+  --green:    #10b981;
+  --green-bg: rgba(16,185,129,0.08);
+  --green-border: rgba(16,185,129,0.2);
+  --purple:   #8b5cf6;
+  --text:     #0f172a;
+  --text2:    #334155;
+  --muted:    #94a3b8;
+  --muted2:   #64748b;
+  --radius:   16px;
+  --shadow-sm: 0 1px 3px rgba(15,23,42,0.06), 0 1px 2px rgba(15,23,42,0.04);
+  --shadow:    0 4px 16px rgba(15,23,42,0.08), 0 2px 6px rgba(15,23,42,0.04);
+  --shadow-lg: 0 10px 40px rgba(15,23,42,0.12), 0 4px 12px rgba(15,23,42,0.06);
+  --font: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Dark mode override */
+body.dark {
+  --bg:#080b12; --surface:#0e1220; --card:#131825; --card2:#161c2c;
+  --border:#1c2236; --border2:#222a3d;
+  --accent:#6366f1; --accent2:#818cf8;
+  --accent-bg:rgba(99,102,241,0.12); --accent-border:rgba(99,102,241,0.25);
+  --red:#ff3b5c; --red-bg:rgba(255,59,92,0.1); --red-border:rgba(255,59,92,0.2);
+  --yellow:#f59e0b; --yellow-bg:rgba(245,158,11,0.1); --yellow-border:rgba(245,158,11,0.2);
+  --orange:#f97316; --orange-bg:rgba(249,115,22,0.1); --orange-border:rgba(249,115,22,0.2);
+  --green:#10b981; --green-bg:rgba(16,185,129,0.1); --green-border:rgba(16,185,129,0.2);
+  --text:#e4e8f4; --text2:#a0aec0; --muted:#5a6480; --muted2:#7284a8;
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.3); --shadow:0 4px 16px rgba(0,0,0,0.4); --shadow-lg:0 10px 40px rgba(0,0,0,0.5);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  max-width: 430px;
+  margin: 0 auto;
+  position: relative;
+  overflow-x: hidden;
+  transition: background .3s, color .3s;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+
+/* ── HEADER ── */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(245,247,250,0.95) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  animation: slideDown .4s ease;
+  transition: background .3s;
+}
+body.dark .header {
+  background: rgba(8,11,18,0.95) !important;
+}
+@keyframes slideDown { from { opacity:0; transform:translateY(-16px); } to { opacity:1; transform:translateY(0); } }
+
+.logo-wrap { display: flex; flex-direction: column; }
+.logo-sub { font-size: 12px; color: var(--muted2); margin-top: 1px; font-weight: 500; }
+
+.header-right { display: flex; align-items: center; gap: 10px; }
+.notif-btn {
+  width: 38px; height: 38px;
+  border-radius: 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  transition: all .2s;
+}
+.notif-btn:active { transform: scale(.93); }
+.notif-dot {
+  position: absolute; top: 7px; right: 7px;
+  width: 7px; height: 7px;
+  border-radius: 50%; background: var(--red);
+  border: 2px solid var(--card);
+  display: none;
+}
+.notif-dot.show { display: block; }
+
+.add-btn {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 9px 18px;
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(99,102,241,0.35);
+  transition: all .2s;
+}
+.add-btn:hover { background: var(--accent2); box-shadow: 0 4px 20px rgba(99,102,241,0.45); }
+.add-btn:active { transform: scale(.95); }
+
+/* ── CONTENT ── */
+.content { padding: 20px 20px 110px; position: relative; z-index: 1; }
+
+/* ── GREETING ── */
+.greeting-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  animation: fadeUp .4s ease both;
+}
+.greeting-text h2 {
+  font-size: 22px; font-weight: 800; color: var(--text);
+  letter-spacing: -0.3px;
+}
+.greeting-text p { font-size: 13px; color: var(--muted2); margin-top: 3px; }
+.live-badge {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  padding: 7px 12px;
+  font-size: 11px; font-weight: 600; color: var(--muted2);
+  box-shadow: var(--shadow-sm);
+  flex-shrink: 0;
+  margin-left: 12px;
+  margin-top: 2px;
+}
+.live-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 0 3px var(--green-bg);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%,100% { box-shadow: 0 0 0 3px var(--green-bg); }
+  50% { box-shadow: 0 0 0 5px var(--green-bg); }
+}
+
+@keyframes fadeUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+/* ── BANNER VENCIMENTO (plano do admin) ── */
+.banner-venc {
+  display: none;
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 18px;
+  border: 1px solid;
+  cursor: pointer;
+  transition: opacity .2s, transform .2s;
+  animation: fadeUp .4s ease both;
+}
+.banner-venc:active { opacity:.8; transform: scale(.98); }
+.banner-venc.vencendo { background: var(--yellow-bg); border-color: var(--yellow-border); }
+.banner-venc.vencido  { background: var(--red-bg);    border-color: var(--red-border); }
+.banner-venc-row { display: flex; align-items: center; gap: 10px; }
+.banner-venc-icon { font-size: 22px; flex-shrink: 0; }
+.banner-venc-body { flex: 1; }
+.banner-venc-titulo { font-size: 13px; font-weight: 700; }
+.banner-venc.vencendo .banner-venc-titulo { color: var(--yellow); }
+.banner-venc.vencido  .banner-venc-titulo { color: var(--red); }
+.banner-venc-sub { font-size: 11px; color: var(--muted2); margin-top: 2px; }
+.banner-venc-arrow { font-size: 18px; color: var(--muted); flex-shrink: 0; }
+
+/* ── AÇÃO RECOMENDADA (destaque) ── */
+.action-card {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--purple) 100%);
+  border-radius: 20px;
+  padding: 18px 20px;
+  margin-bottom: 18px;
+  display: none;
+  animation: fadeUp .4s ease .05s both;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform .2s, box-shadow .2s;
+  box-shadow: 0 8px 28px rgba(99,102,241,0.3);
+}
+.action-card:active { transform: scale(.98); }
+.action-card::before {
+  content: '';
+  position: absolute; top: -40px; right: -40px;
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+}
+.action-card::after {
+  content: '';
+  position: absolute; bottom: -30px; right: 20px;
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+}
+.action-header {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 10px;
+}
+.action-icon-wrap {
+  width: 38px; height: 38px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.action-label { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 0.8px; }
+.action-title { font-size: 17px; font-weight: 800; color: #fff; line-height: 1.2; }
+.action-sub { font-size: 13px; color: rgba(255,255,255,0.75); margin-top: 4px; }
+.action-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 14px;
+}
+.cobrar-btn {
+  background: #fff;
+  color: var(--accent);
+  border: none;
+  border-radius: 50px;
+  padding: 9px 20px;
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 6px;
+  transition: all .2s;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  position: relative; z-index: 1;
+}
+.cobrar-btn:active { transform: scale(.95); }
+.action-arrow { color: rgba(255,255,255,0.5); font-size: 22px; }
+
+/* ── STATUS CARDS (4 colunas) ── */
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 18px;
+  animation: fadeUp .4s ease .1s both;
+}
+.status-card {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 14px 10px;
+  text-align: center;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  transition: transform .2s, box-shadow .2s;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.status-card::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 3px;
+  border-radius: 0 0 16px 16px;
+}
+.status-card.sc-red::after   { background: var(--red); }
+.status-card.sc-yellow::after { background: var(--yellow); }
+.status-card.sc-orange::after { background: var(--orange); }
+.status-card.sc-green::after  { background: var(--green); }
+.status-card:active { transform: scale(.95); }
+.sc-icon { font-size: 18px; margin-bottom: 6px; }
+.sc-num {
+  font-size: 24px; font-weight: 800; line-height: 1; margin-bottom: 4px;
+  letter-spacing: -0.5px;
+}
+.status-card.sc-red   .sc-num { color: var(--red); }
+.status-card.sc-yellow .sc-num { color: var(--yellow); }
+.status-card.sc-orange .sc-num { color: var(--orange); }
+.status-card.sc-green  .sc-num { color: var(--green); }
+.sc-val { font-size: 9px; font-weight: 700; color: var(--muted); margin-bottom: 2px; }
+.sc-label { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px; line-height: 1.3; font-weight: 600; }
+
+/* ── FINANCIAL CARD ── */
+.finance-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 18px 20px;
+  margin-bottom: 18px;
+  box-shadow: var(--shadow-sm);
+  animation: fadeUp .4s ease .15s both;
+}
+.finance-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 14px;
+}
+.finance-title { font-size: 15px; font-weight: 700; color: var(--text); }
+.finance-sub { font-size: 11px; color: var(--muted2); margin-top: 2px; }
+.finance-badge {
+  background: var(--green-bg); color: var(--green);
+  border: 1px solid var(--green-border);
+  border-radius: 50px; padding: 4px 10px;
+  font-size: 11px; font-weight: 700;
+  display: flex; align-items: center; gap: 4px;
+}
+.finance-row {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.finance-item {}
+.fi-label { font-size: 11px; color: var(--muted2); font-weight: 500; margin-bottom: 4px; }
+.fi-val { font-size: 17px; font-weight: 800; letter-spacing: -0.3px; }
+.fi-val.blue  { color: var(--accent); }
+.fi-val.red   { color: var(--red); }
+.fi-val.green { color: var(--green); }
+.finance-divider { height: 1px; background: var(--border); margin: 12px 0; }
+.finance-bottom { display: flex; align-items: flex-end; justify-content: space-between; }
+.lucro-label { font-size: 11px; color: var(--muted2); font-weight: 500; margin-bottom: 4px; }
+.lucro-val { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; color: var(--text); }
+.lucro-trend {
+  font-size: 12px; font-weight: 700; margin-top: 4px;
+  display: flex; align-items: center; gap: 4px;
+}
+.lucro-trend.up { color: var(--green); }
+.lucro-trend.down { color: var(--red); }
+/* mini sparkline */
+.sparkline { width: 120px; height: 48px; }
+
+/* ── INSIGHTS ── */
+.insights-section { margin-bottom: 18px; animation: fadeUp .4s ease .2s both; }
+.section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 12px;
+}
+.section-title { font-size: 16px; font-weight: 800; color: var(--text); }
+.ver-todos {
+  font-size: 12px; color: var(--accent); font-weight: 700;
+  cursor: pointer; display: flex; align-items: center; gap: 3px;
+}
+
+.insight-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 14px 16px;
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 8px;
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: all .2s;
+}
+.insight-card:active { transform: scale(.98); }
+.insight-card.warn { border-color: var(--red-border); background: var(--red-bg); }
+.insight-card.info { border-color: var(--accent-border); background: var(--accent-bg); }
+.insight-card.ok   { border-color: var(--green-border); background: var(--green-bg); }
+.insight-icon {
+  width: 42px; height: 42px; border-radius: 13px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+}
+.insight-card.warn .insight-icon { background: rgba(239,68,68,0.15); }
+.insight-card.info .insight-icon { background: rgba(99,102,241,0.15); }
+.insight-card.ok   .insight-icon { background: rgba(16,185,129,0.15); }
+.insight-body { flex: 1; min-width: 0; }
+.insight-title { font-size: 13px; font-weight: 700; color: var(--text); line-height: 1.3; }
+.insight-sub { font-size: 11px; color: var(--muted2); margin-top: 3px; }
+.insight-arrow { color: var(--muted); font-size: 16px; flex-shrink: 0; }
+
+/* ── SERVIDOR RANKING ── */
+.servers-section { margin-bottom: 18px; animation: fadeUp .4s ease .25s both; }
+.server-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 14px 16px;
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 8px;
+  box-shadow: var(--shadow-sm);
+  transition: all .2s;
+  cursor: pointer;
+}
+.server-card:active { transform: scale(.98); }
+.server-rank {
+  width: 28px; height: 28px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 800; flex-shrink: 0;
+  background: var(--card2); color: var(--muted2);
+  border: 1px solid var(--border);
+}
+.server-rank.best { background: var(--green-bg); color: var(--green); border-color: var(--green-border); }
+.server-rank.worst { background: var(--red-bg); color: var(--red); border-color: var(--red-border); }
+.server-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+.server-name { font-size: 14px; font-weight: 600; color: var(--text); }
+.server-meta { font-size: 11px; color: var(--muted2); margin-top: 2px; }
+.server-right { margin-left: auto; text-align: right; }
+.server-clients { font-size: 16px; font-weight: 800; color: var(--text); }
+.server-inadimpl { font-size: 10px; font-weight: 700; margin-top: 2px; }
+.inadimpl-ok   { color: var(--green); }
+.inadimpl-warn { color: var(--yellow); }
+.inadimpl-bad  { color: var(--red); }
+.server-bar-wrap { width: 80px; height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; margin-top: 6px; margin-left: auto; }
+.server-bar { height: 100%; border-radius: 3px; transition: width .6s ease; }
+
+/* ── ATENÇÃO HOJE ── */
+.attention-section { margin-bottom: 18px; animation: fadeUp .4s ease .3s both; }
+.att-card {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 0;
+  margin-bottom: 8px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  overflow: hidden;
+  align-items: stretch;
+  transition: all .2s;
+}
+.att-card:active { transform: scale(.98); }
+.att-stripe { width: 4px; flex-shrink: 0; }
+.att-stripe.vencido { background: var(--red); }
+.att-stripe.hoje    { background: var(--yellow); }
+.att-stripe.amanha  { background: var(--orange); }
+.att-stripe.em-dia  { background: var(--green); }
+.att-inner { display: flex; align-items: center; gap: 12px; padding: 14px 14px 14px 12px; flex: 1; }
+.att-avatar {
+  width: 40px; height: 40px; border-radius: 12px;
+  background: var(--card2); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 800; color: var(--muted2);
+  flex-shrink: 0;
+}
+.att-body { flex: 1; min-width: 0; }
+.att-name { font-size: 14px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.att-status { font-size: 11px; color: var(--muted2); margin-top: 2px; }
+.att-right { text-align: right; flex-shrink: 0; }
+.att-valor { font-size: 14px; font-weight: 800; color: var(--red); }
+.wa-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px;
+  background: rgba(37,211,102,0.1);
+  color: #25d366;
+  border: none; border-radius: 10px;
+  cursor: pointer; font-size: 18px;
+  transition: all .2s;
+  margin-left: 8px; flex-shrink: 0;
+}
+.wa-btn:active { transform: scale(.9); }
+
+/* ── BOTTOM NAV ── */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 100%; max-width: 430px;
+  background: rgba(245,247,250,0.97);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border);
+  display: flex; padding: 10px 0 24px;
+  z-index: 50;
+  transition: background .3s;
+}
+body.dark .bottom-nav { background: rgba(8,11,18,0.97); }
+.nav-item {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; gap: 4px;
+  cursor: pointer; transition: all .2s; padding: 4px 0;
+}
+.nav-icon { font-size: 22px; transition: transform .2s; }
+.nav-label { font-size: 9px; color: var(--muted); font-weight: 600; letter-spacing: 0.3px; }
+.nav-item.active .nav-label { color: var(--accent); }
+.nav-item.active .nav-icon { transform: translateY(-2px); }
+.nav-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); margin-top: -2px; opacity: 0; transition: opacity .2s; }
+.nav-item.active .nav-dot { opacity: 1; }
+
+/* ── AVISO OVERLAY ── */
+.aviso-overlay {
+  position: fixed; inset: 0; z-index: 9999;
+  display: flex; align-items: center; justify-content: center; padding: 20px;
+  background: rgba(0,0,0,.6); backdrop-filter: blur(6px);
+  opacity: 0; pointer-events: none; transition: opacity .35s;
+}
+.aviso-overlay.show { opacity: 1; pointer-events: all; }
+.aviso-box {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 24px; padding: 24px 20px 20px;
+  width: 100%; max-width: 400px; max-height: 80vh; overflow-y: auto;
+  transform: translateY(20px) scale(.97);
+  transition: transform .35s cubic-bezier(.32,.72,0,1);
+  box-shadow: var(--shadow-lg);
+}
+.aviso-overlay.show .aviso-box { transform: translateY(0) scale(1); }
+.aviso-box-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+.aviso-box-icon {
+  width: 42px; height: 42px; border-radius: 13px;
+  background: var(--yellow-bg); border: 1px solid var(--yellow-border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+}
+.aviso-box-title { font-size: 16px; font-weight: 800; color: var(--text); }
+.aviso-box-sub { font-size: 11px; color: var(--muted2); margin-top: 2px; text-transform: uppercase; letter-spacing: .5px; }
+.aviso-box-body {
+  font-size: 14px; color: var(--text2); line-height: 1.7;
+  white-space: pre-wrap; background: var(--card2);
+  border: 1px solid var(--border); border-radius: 12px;
+  padding: 14px; margin-bottom: 16px;
+}
+.aviso-box-btn {
+  width: 100%; background: var(--accent); color: #fff;
+  border: none; border-radius: 12px; padding: 13px;
+  font-family: var(--font); font-weight: 800; font-size: 14px;
+  cursor: pointer; transition: transform .15s;
+}
+.aviso-box-btn:active { transform: scale(.97); }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--text); color: var(--card);
+  padding: 11px 22px; border-radius: 50px;
+  font-size: 13px; font-weight: 600;
+  z-index: 9000; pointer-events: none;
+  opacity: 0; transition: all .3s;
+  max-width: 300px; text-align: center;
+  white-space: nowrap;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ── COBRAR MODAL ── */
+.cobrar-modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.6); z-index: 500;
+  display: flex; align-items: flex-end;
+  opacity: 0; pointer-events: none; transition: opacity .3s;
+}
+.cobrar-modal-overlay.open { opacity: 1; pointer-events: all; }
+.cobrar-modal {
+  background: var(--card); border-radius: 24px 24px 0 0;
+  padding: 20px 20px 40px;
+  width: 100%; max-height: 75vh; overflow-y: auto;
+  transform: translateY(100%);
+  transition: transform .35s cubic-bezier(.32,.72,0,1);
+  border-top: 1px solid var(--border);
+}
+.cobrar-modal-overlay.open .cobrar-modal { transform: translateY(0); }
+.modal-handle { width: 40px; height: 4px; background: var(--border); border-radius: 2px; margin: 0 auto 16px; }
+.modal-title { font-size: 20px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+.modal-sub { font-size: 13px; color: var(--muted2); margin-bottom: 18px; }
+.cobrar-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px; }
+.cobrar-item {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--card2); border: 1px solid var(--border);
+  border-radius: 12px; padding: 12px 14px;
+  cursor: pointer; transition: all .2s;
+}
+.cobrar-item.selected { background: var(--accent-bg); border-color: var(--accent-border); }
+.cobrar-check {
+  width: 22px; height: 22px; border-radius: 7px;
+  border: 2px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: all .2s;
+  font-size: 13px;
+}
+.cobrar-item.selected .cobrar-check {
+  background: var(--accent); border-color: var(--accent); color: #fff;
+}
+.cobrar-item-body { flex: 1; min-width: 0; }
+.cobrar-item-name { font-size: 13px; font-weight: 700; color: var(--text); }
+.cobrar-item-sub { font-size: 11px; color: var(--muted2); margin-top: 2px; }
+.cobrar-item-valor { font-size: 13px; font-weight: 800; color: var(--red); flex-shrink: 0; }
+.cobrar-actions { display: flex; flex-direction: column; gap: 8px; }
+.cobrar-send-btn {
+  width: 100%; background: var(--accent); color: #fff;
+  border: none; border-radius: 12px; padding: 14px;
+  font-family: var(--font); font-weight: 800; font-size: 15px;
+  cursor: pointer; transition: all .2s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.cobrar-send-btn:active { transform: scale(.97); }
+.cobrar-send-btn:disabled { opacity: .5; cursor: not-allowed; }
+.cobrar-cancel-btn {
+  width: 100%; background: transparent; color: var(--muted2);
+  border: 1px solid var(--border); border-radius: 12px; padding: 12px;
+  font-family: var(--font); font-size: 14px; font-weight: 500;
+  cursor: pointer;
+}
+.select-all-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10px;
+}
+.select-all-btn {
+  font-size: 12px; font-weight: 700; color: var(--accent);
+  background: none; border: none; cursor: pointer; padding: 0;
+}
+
+/* ── EMPTY STATE ── */
+.empty-state {
+  text-align: center; padding: 28px 20px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); color: var(--muted2); font-size: 13px;
+  box-shadow: var(--shadow-sm);
+}
+.empty-state .emo { font-size: 32px; margin-bottom: 8px; display: block; }
+
+/* ── LOADING SKELETON ── */
+.skeleton {
+  background: linear-gradient(90deg, var(--border) 25%, var(--card2) 50%, var(--border) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: 8px;
+}
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+/* ── THEME FORCE OVERRIDES (garante tema claro por padrão) ── */
+body:not(.dark) .header    { background: rgba(245,247,250,0.97) !important; border-bottom-color: #e8ecf2 !important; }
+body:not(.dark) .bottom-nav { background: rgba(245,247,250,0.97) !important; border-top-color: #e8ecf2 !important; }
+body:not(.dark) { background: #f5f7fa !important; color: #0f172a !important; }
+body.dark .header     { background: rgba(8,11,18,0.95) !important; border-bottom-color: #1c2236 !important; }
+body.dark .bottom-nav { background: rgba(8,11,18,0.97) !important; border-top-color: #1c2236 !important; }
+body.dark { background: #080b12 !important; color: #e4e8f4 !important; }
+.content { animation: fadeIn .3s ease both; }
+
+
+/* ── TRANSIÇÃO DE NAVEGAÇÃO ── */
+body.sd-leaving .content{opacity:0;transform:translateY(6px);transition:opacity .15s ease,transform .15s ease;pointer-events:none;}
+body.sd-leaving .header{opacity:0;transition:opacity .15s ease;}
+
+
+
+#sd-splash.hide {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+#sd-splash img {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  animation: splashPop .5s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes splashPop {
+  from { opacity:0; transform: scale(.6); }
+  to   { opacity:1; transform: scale(1); }
+}
+.sd-spinner {
+  width: 28px; height: 28px;
+  border: 3px solid rgba(99,102,241,0.2);
+  border-top-color: #6366f1;
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.sd-splash-label {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #94a3b8;
+  margin-top: -8px;
+  letter-spacing: .3px;
+}
+</style>
+</head>
+<body>
+<!-- Aplica tema antes de renderizar -->
+<script>
+(function(){
+  var c = JSON.parse(localStorage.getItem('streamdesk_config')||'{}');
+  if (c.darkMode === true) document.body.classList.add('dark');
+  document.body.classList.remove('light');
+})();
+</script>
+
+  
+
+<!-- ── HEADER ── -->
+<div class="header">
+  <div class="logo-wrap">
+    <img src="logo.png" style="height:40px;object-fit:contain;display:block">
+    <div class="logo-sub" id="logoSub">Carregando...</div>
+  </div>
+  <div class="header-right">
+    <div class="notif-btn" id="notifBtn" onclick="location.href='avisos.html'">
+      🔔
+      <div class="notif-dot" id="notifDot"></div>
+    </div>
+    <button class="add-btn" onclick="location.href='clientes.html'">
+      <span>＋</span> Cliente
+    </button>
+  </div>
+</div>
+
+<!-- ── CONTENT ── -->
+<div class="content">
+
+  <!-- BANNER VENCIMENTO DO PLANO -->
+  <div class="banner-venc" id="bannerVenc" onclick="location.href='config.html'">
+    <div class="banner-venc-row">
+      <div class="banner-venc-icon" id="bannerIcon">⚠️</div>
+      <div class="banner-venc-body">
+        <div class="banner-venc-titulo" id="bannerTitulo"></div>
+        <div class="banner-venc-sub" id="bannerSub">Toque para renovar sua assinatura</div>
+      </div>
+      <div class="banner-venc-arrow">›</div>
+    </div>
+  </div>
+
+  <!-- GREETING -->
+  <div class="greeting-row">
+    <div class="greeting-text">
+      <h2 id="greetingTitle">Bom dia! 👋</h2>
+      <p id="greetingSub">Aqui está o resumo do seu negócio hoje.</p>
+    </div>
+    <div class="live-badge">
+      <div class="live-dot"></div>
+      <span id="updateTime">agora</span>
+    </div>
+  </div>
+
+  <!-- AÇÃO RECOMENDADA (visível quando há vencidos) -->
+  <div class="action-card" id="actionCard" onclick="openCobrarModal()">
+    <div class="action-header">
+      <div class="action-icon-wrap">⚡</div>
+      <div>
+        <div class="action-label">Ação rápida recomendada</div>
+      </div>
+    </div>
+    <div class="action-title" id="actionTitle">Você tem 8 clientes vencidos</div>
+    <div class="action-sub" id="actionSub">Recupere até R$ 320,00 agora</div>
+    <div class="action-footer">
+      <button class="cobrar-btn" onclick="event.stopPropagation();openCobrarModal()">
+        💬 Cobrar todos
+      </button>
+      <div class="action-arrow">›</div>
+    </div>
+  </div>
+
+  <!-- STATUS GRID (4 cards) -->
+  <div class="status-grid">
+    <div class="status-card sc-red"   onclick="location.href='clientes.html?filter=vencido'">
+      <div class="sc-icon">🔴</div>
+      <div class="sc-num" id="numVencido">-</div>
+      <div class="sc-val" id="valVencido"></div>
+      <div class="sc-label">Vencidos</div>
+    </div>
+    <div class="status-card sc-yellow" onclick="location.href='clientes.html?filter=hoje'">
+      <div class="sc-icon">🟡</div>
+      <div class="sc-num" id="numHoje">-</div>
+      <div class="sc-val" id="valHoje"></div>
+      <div class="sc-label">Vencem<br>Hoje</div>
+    </div>
+    <div class="status-card sc-orange" onclick="location.href='clientes.html?filter=amanha'">
+      <div class="sc-icon">🟠</div>
+      <div class="sc-num" id="numAmanha">-</div>
+      <div class="sc-val" id="valAmanha"></div>
+      <div class="sc-label">Vencem<br>Amanhã</div>
+    </div>
+    <div class="status-card sc-green"  onclick="location.href='clientes.html?filter=em_dia'">
+      <div class="sc-icon">🟢</div>
+      <div class="sc-num" id="numEmDia">-</div>
+      <div class="sc-val" id="valEmDia"></div>
+      <div class="sc-label">Em Dia</div>
+    </div>
+  </div>
+
+  <!-- RESUMO FINANCEIRO -->
+  <div class="finance-card" id="financeCard">
+    <div class="finance-header">
+      <div>
+        <div class="finance-title">Resumo financeiro</div>
+        <div class="finance-sub">Este mês</div>
+      </div>
+      <div class="finance-badge" id="financeBadge" style="display:none">
+        <span>↑</span> <span id="financePct">0%</span>
+      </div>
+    </div>
+    <div class="finance-row">
+      <div class="finance-item">
+        <div class="fi-label">Receita</div>
+        <div class="fi-val blue" id="finReceita">R$ —</div>
+      </div>
+      <div class="finance-item">
+        <div class="fi-label">Despesas</div>
+        <div class="fi-val red" id="finDespesas">R$ —</div>
+      </div>
+    </div>
+    <div class="finance-divider"></div>
+    <div class="finance-bottom">
+      <div>
+        <div class="lucro-label">Lucro líquido</div>
+        <div class="lucro-val" id="finLucro">R$ —</div>
+        <div class="lucro-trend up" id="finTrend" style="display:none">
+          <span id="finTrendArrow">↑</span>
+          <span id="finTrendText">15% vs mês anterior</span>
+        </div>
+      </div>
+      <svg class="sparkline" id="sparkline" viewBox="0 0 120 48" preserveAspectRatio="none">
+        <path id="sparkPath" d="" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path id="sparkFill" d="" fill="url(#sparkGrad)" opacity="0.3"/>
+        <defs>
+          <linearGradient id="sparkGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="var(--green)" stop-opacity="0.5"/>
+            <stop offset="100%" stop-color="var(--green)" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+  </div>
+
+  <!-- INSIGHTS INTELIGENTES -->
+  <div class="insights-section" id="insightsSection">
+    <div class="section-header">
+      <div class="section-title">Insights inteligentes</div>
+      <div class="ver-todos" onclick="location.href='servidor.html'">Ver todos ›</div>
+    </div>
+    <div id="insightsList">
+      <!-- gerado via JS -->
+    </div>
+  </div>
+
+  <!-- RANKING DE SERVIDORES -->
+  <div class="servers-section" id="serversSection">
+    <div class="section-header">
+      <div class="section-title">Servidores</div>
+      <div class="ver-todos" onclick="location.href='servidor.html'">Gerenciar ›</div>
+    </div>
+    <div id="serverList">
+      <!-- gerado via JS -->
+    </div>
+  </div>
+
+  <!-- ATENÇÃO HOJE -->
+  <div class="attention-section" id="attentionSection">
+    <div class="section-header">
+      <div class="section-title">Atenção hoje</div>
+      <div class="ver-todos" onclick="location.href='clientes.html'">Ver todos ›</div>
+    </div>
+    <div id="attentionList">
+      <!-- gerado via JS -->
+    </div>
+  </div>
+
+</div><!-- /content -->
+
+<!-- COBRAR TODOS MODAL -->
+<div class="cobrar-modal-overlay" id="cobrarModalOverlay">
+  <div class="cobrar-modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">📲 Cobrar clientes</div>
+    <div class="modal-sub" id="cobrarModalSub">Selecione os clientes para enviar cobrança via WhatsApp.</div>
+    <div class="select-all-row">
+      <span style="font-size:12px;color:var(--muted2)" id="cobrarSelectedCount">0 selecionados</span>
+      <button class="select-all-btn" id="selectAllBtn" onclick="toggleSelectAll()">Selecionar todos</button>
+    </div>
+    <div class="cobrar-list" id="cobrarList"></div>
+    <div class="cobrar-actions">
+      <button class="cobrar-send-btn" id="cobrarSendBtn" onclick="enviarCobrancas()" disabled>
+        💬 Enviar cobranças
+      </button>
+      <button class="cobrar-cancel-btn" onclick="closeCobrarModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- AVISO OVERLAY -->
+<div class="aviso-overlay" id="avisoOverlay">
+  <div class="aviso-box">
+    <div class="aviso-box-header">
+      <div class="aviso-box-icon">📢</div>
+      <div>
+        <div class="aviso-box-title">Aviso Importante</div>
+        <div class="aviso-box-sub">da administração</div>
+      </div>
+    </div>
+    <div class="aviso-box-body" id="avisoBoxBody"></div>
+    <button class="aviso-box-btn" id="avisoBoxBtn">Entendido ✓</button>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <div class="nav-item active">
+    <div class="nav-icon">🏠</div>
+    <div class="nav-label">Início</div>
+    <div class="nav-dot"></div>
+  </div>
+  <div class="nav-item" onclick="sdNavigate('clientes.html')">
+    <div class="nav-icon">👥</div>
+    <div class="nav-label">Clientes</div>
+    <div class="nav-dot"></div>
+  </div>
+  <div class="nav-item" onclick="sdNavigate('servidor.html')">
+    <div class="nav-icon">🖥️</div>
+    <div class="nav-label">Servidor</div>
+    <div class="nav-dot"></div>
+  </div>
+  <div class="nav-item" onclick="sdNavigate('financas.html')">
+    <div class="nav-icon">💰</div>
+    <div class="nav-label">Finanças</div>
+    <div class="nav-dot"></div>
+  </div>
+  <div class="nav-item" onclick="sdNavigate('avisos.html')">
+    <div class="nav-icon">📢</div>
+    <div class="nav-label">Avisos</div>
+    <div class="nav-dot"></div>
+  </div>
+  <div class="nav-item" id="premiumNav" onclick="sdNavigate('config.html')">
+    <div class="nav-icon" id="premiumIcon">⚙️</div>
+    <div class="nav-label" id="premiumLabel">Config.</div>
+    <div class="nav-dot"></div>
+  </div>
+</div>
+  
+<script type="module">
+import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+import { getFirestore, collection, getDocs, doc, getDoc, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAGHvkDpeSbCTriZCvRf-jJ6z8PQSSWLHI",
+  authDomain: "streamdesk-5350d.firebaseapp.com",
+  projectId: "streamdesk-5350d",
+  storageBucket: "streamdesk-5350d.firebasestorage.app",
+  messagingSenderId: "36684694847",
+  appId: "1:36684694847:web:0f6f3a27933e3d84cfff8a"
+};
+const app  = getApps().length ? getApp() : initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+
+// ── HELPERS ─────────────────────────────────────────────────
+function today() {
+  var d = new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function tomorrow() {
+  var d = new Date(); d.setDate(d.getDate()+1);
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function fmtBRL(v) {
+  return 'R$ ' + (v||0).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.') ;
+}
+function getGreeting() {
+  var h = new Date().getHours();
+  if (h < 12) return 'Bom dia';
+  if (h < 18) return 'Boa tarde';
+  return 'Boa noite';
+}
+function initials(nome) {
+  var parts = (nome||'').trim().split(' ');
+  return (parts[0]?.[0]||'') + (parts[1]?.[0]||'');
+}
+function showToast(msg, dur) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), dur||2800);
+}
+
+// Atualiza hora do badge
+function updateTime() {
+  var now = new Date();
+  document.getElementById('updateTime').textContent =
+    'atualizado '+now.getHours()+':'+String(now.getMinutes()).padStart(2,'0');
+}
+updateTime();
+
+// ── BANNER PLANO DO ADMIN ─────────────────────────────────
+function mostrarBannerVenc(vencimento) {
+  if (!vencimento) return;
+  var hoje  = new Date(); hoje.setHours(0,0,0,0);
+  var p = vencimento.split('-');
+  var venc = new Date(p[0], p[1]-1, p[2]);
+  var dias = Math.round((venc - hoje) / 86400000);
+  var banner = document.getElementById('bannerVenc');
+  if (!banner) return;
+  if (dias < 0) {
+    banner.className = 'banner-venc vencido';
+    document.getElementById('bannerIcon').textContent   = '🔴';
+    document.getElementById('bannerTitulo').textContent = 'Sua assinatura está vencida!';
+    document.getElementById('bannerSub').textContent    = 'Renove agora para continuar usando o StreamDesk';
+    banner.style.display = 'block';
+    document.getElementById('notifDot').classList.add('show');
+  } else if (dias <= 7) {
+    var txt = dias === 0 ? 'Vence hoje!' : 'Vence em '+dias+' dia'+(dias>1?'s':'')+'!';
+    banner.className = 'banner-venc vencendo';
+    document.getElementById('bannerIcon').textContent   = '⚡';
+    document.getElementById('bannerTitulo').textContent = txt;
+    banner.style.display = 'block';
+  }
+}
+
+// ── AVISO DA ADMINISTRAÇÃO ────────────────────────────────
+async function checkAviso(user) {
+  try {
+    const snap = await getDoc(doc(db, 'config', 'aviso'));
+    if (!snap.exists()) return;
+    const data = snap.data();
+    if (!data.ativo || !data.texto) return;
+    const avisoId = data.atualizadoEm || 'v1';
+    if (data.frequencia === 'uma') {
+      const keyUma = 'aviso_uma_' + avisoId + '_' + user.uid;
+      if (localStorage.getItem(keyUma)) return;
+      window._avisoKeyUma = keyUma;
+    }
+    const keySessao = 'aviso_sessao_' + avisoId + '_' + user.uid;
+    if (sessionStorage.getItem(keySessao)) return;
+    sessionStorage.setItem(keySessao, '1');
+    window._avisoFreq = data.frequencia || 'sempre';
+    document.getElementById('avisoBoxBody').textContent = data.texto;
+    document.getElementById('avisoOverlay').classList.add('show');
+    document.getElementById('avisoBoxBtn').onclick = function() {
+      document.getElementById('avisoOverlay').classList.remove('show');
+      if (window._avisoFreq === 'uma' && window._avisoKeyUma)
+        localStorage.setItem(window._avisoKeyUma, '1');
+    };
+  } catch(e) { console.error('Aviso erro:', e); }
+}
+
+// ── WHATSAPP ──────────────────────────────────────────────
+function getWAMsg(nome, plataforma, vencimento, config) {
+  var t = today();
+  var tpl = vencimento < t
+    ? (config.msgVencido || 'Olá {nome}! 👋 Seu plano IPTV ({servidor}) está vencido. Entre em contato para renovar! 🙏')
+    : vencimento === t
+    ? (config.msgHoje    || 'Olá {nome}! 👋 Seu plano IPTV ({servidor}) vence HOJE. Renove para não ficar sem sinal! 📺')
+    : (config.msgAmanha  || 'Olá {nome}! 👋 Seu plano IPTV ({servidor}) vence amanhã. Renove! 😊');
+  return tpl.replace(/{nome}/g, nome.split(' ')[0]).replace(/{servidor}/g, plataforma);
+}
+
+window.sendWA = function(nome, plataforma, vencimento, contato, cfg) {
+  var msg   = getWAMsg(nome, plataforma, vencimento, cfg||{});
+  var phone = contato ? contato.replace(/\D/g,'') : '';
+  window.open(phone ? 'https://wa.me/'+phone+'?text='+encodeURIComponent(msg) : 'https://wa.me/?text='+encodeURIComponent(msg), '_blank');
+};
+
+// ── COBRAR TODOS MODAL ────────────────────────────────────
+var _cobrarClientes = [];
+var _cobrarCfg = {};
+
+window.openCobrarModal = function() {
+  var t = today();
+  var vencidos = _cobrarClientes.filter(c => c.vencimento <= t);
+  if (!vencidos.length) {
+    showToast('✅ Nenhum cliente vencido no momento!');
+    return;
+  }
+  _cobrarSelecionados = new Set(vencidos.map(c=>c.id));
+  renderCobrarList(vencidos);
+  document.getElementById('cobrarModalSub').textContent =
+    vencidos.length + ' cliente' + (vencidos.length>1?'s':'') + ' com cobrança pendente.';
+  document.getElementById('cobrarModalOverlay').classList.add('open');
+  updateCobrarBtn();
+};
+
+window.closeCobrarModal = function() {
+  document.getElementById('cobrarModalOverlay').classList.remove('open');
+};
+document.getElementById('cobrarModalOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeCobrarModal();
+});
+
+var _cobrarSelecionados = new Set();
+
+function renderCobrarList(vencidos) {
+  var t = today();
+  document.getElementById('cobrarList').innerHTML = vencidos.map(c => {
+    var selected = _cobrarSelecionados.has(c.id);
+    var diasAtraso = '';
+    if (c.vencimento < t) {
+      var diff = Math.round((new Date(t.replace(/-/g,'/')) - new Date(c.vencimento.replace(/-/g,'/'))) / 86400000);
+      diasAtraso = diff + 'd atraso';
+    } else {
+      diasAtraso = 'Vence hoje';
+    }
+    return `<div class="cobrar-item ${selected?'selected':''}" onclick="toggleCobrarItem('${c.id}')">
+      <div class="cobrar-check">${selected?'✓':''}</div>
+      <div class="cobrar-item-body">
+        <div class="cobrar-item-name">${c.pais||''} ${c.nome}</div>
+        <div class="cobrar-item-sub">${c.plataforma} · ${diasAtraso}</div>
+      </div>
+      <div class="cobrar-item-valor">${fmtBRL(parseFloat(c.plano)||0)}</div>
+    </div>`;
+  }).join('');
+}
+
+window.toggleCobrarItem = function(id) {
+  if (_cobrarSelecionados.has(id)) _cobrarSelecionados.delete(id);
+  else _cobrarSelecionados.add(id);
+  var t = today();
+  renderCobrarList(_cobrarClientes.filter(c => c.vencimento <= t));
+  updateCobrarBtn();
+};
+
+window.toggleSelectAll = function() {
+  var t = today();
+  var vencidos = _cobrarClientes.filter(c => c.vencimento <= t);
+  if (_cobrarSelecionados.size === vencidos.length) {
+    _cobrarSelecionados.clear();
+    document.getElementById('selectAllBtn').textContent = 'Selecionar todos';
+  } else {
+    vencidos.forEach(c => _cobrarSelecionados.add(c.id));
+    document.getElementById('selectAllBtn').textContent = 'Desmarcar todos';
+  }
+  renderCobrarList(vencidos);
+  updateCobrarBtn();
+};
+
+function updateCobrarBtn() {
+  var n = _cobrarSelecionados.size;
+  document.getElementById('cobrarSelectedCount').textContent = n + ' selecionado' + (n!==1?'s':'');
+  document.getElementById('cobrarSendBtn').disabled = n === 0;
+  document.getElementById('cobrarSendBtn').textContent = n > 0
+    ? '💬 Enviar para ' + n + ' cliente' + (n>1?'s':'')
+    : '💬 Enviar cobranças';
+}
+
+window.enviarCobrancas = function() {
+  if (!_cobrarSelecionados.size) return;
+  var t = today();
+  var selecionados = _cobrarClientes.filter(c => _cobrarSelecionados.has(c.id) && c.vencimento <= t);
+  var enviados = 0;
+  selecionados.forEach(function(c) {
+    var msg = getWAMsg(c.nome, c.plataforma, c.vencimento, _cobrarCfg);
+    var phone = c.contato ? c.contato.replace(/\D/g,'') : '';
+    var url = phone ? 'https://wa.me/'+phone+'?text='+encodeURIComponent(msg) : 'https://wa.me/?text='+encodeURIComponent(msg);
+    setTimeout(()=>window.open(url,'_blank'), enviados * 600);
+    enviados++;
+  });
+  closeCobrarModal();
+  showToast('📲 Abrindo WhatsApp para ' + enviados + ' cliente' + (enviados>1?'s':'') + '!', 3200);
+};
+
+// ── RENDER PRINCIPAL ──────────────────────────────────────
+function render(clientes, servidores, config) {
+  var t  = today();
+  var tm = tomorrow();
+  _cobrarCfg = config;
+
+  // ✅ Remove arquivados de TODOS os cálculos da Home
+  var ativos = clientes.filter(function(c) { return !c.arquivado; });
+
+  var vencidos = ativos.filter(c => c.vencimento < t);
+  var hoje     = ativos.filter(c => c.vencimento === t);
+  var amanha   = ativos.filter(c => c.vencimento === tm);
+  var emDia    = ativos.filter(c => c.vencimento > t);
+
+  // ── STATUS CARDS
+  document.getElementById('numVencido').textContent = vencidos.length;
+  document.getElementById('numHoje').textContent    = hoje.length;
+  document.getElementById('numAmanha').textContent  = amanha.length;
+  document.getElementById('numEmDia').textContent   = emDia.length;
+
+  // Valores por status (usando campo plano como valor)
+  function sumVal(arr) {
+    return arr.reduce((acc,c) => acc + (parseFloat(c.plano)||0), 0);
+  }
+  var valV = sumVal(vencidos);
+  var valH = sumVal(hoje);
+  var valA = sumVal(amanha);
+  var valE = sumVal(emDia);
+
+  if(valV) document.getElementById('valVencido').textContent = fmtBRL(valV);
+  if(valH) document.getElementById('valHoje').textContent    = fmtBRL(valH);
+  if(valA) document.getElementById('valAmanha').textContent  = fmtBRL(valA);
+  if(valE) document.getElementById('valEmDia').textContent   = fmtBRL(valE);
+
+  // ── AÇÃO RECOMENDADA
+  var totalVencidos = vencidos.length + hoje.length;
+  var totalValVenc  = valV + valH;
+  if (totalVencidos > 0) {
+    document.getElementById('actionCard').style.display = 'block';
+    document.getElementById('actionTitle').textContent =
+      totalVencidos === 1 ? 'Você tem 1 cliente em atraso' : 'Você tem ' + totalVencidos + ' clientes vencidos';
+    document.getElementById('actionSub').textContent =
+      'Recupere até ' + fmtBRL(totalValVenc) + ' agora';
+  }
+
+  // ── INSIGHTS INTELIGENTES
+  var insights = [];
+
+  // Servidor com maior inadimplência — usa ativos
+  var srvInadimpl = servidores.map(function(s) {
+    var total = ativos.filter(c => c.plataforma === s.nome).length;
+    var inad  = ativos.filter(c => c.plataforma === s.nome && c.vencimento < t).length;
+    return { ...s, total, inad, pct: total > 0 ? Math.round((inad/total)*100) : 0 };
+  }).filter(s => s.total > 0).sort((a,b) => b.pct - a.pct);
+
+  if (srvInadimpl.length > 0) {
+    var pior = srvInadimpl[0];
+    if (pior.pct >= 10) {
+      insights.push({
+        tipo: pior.pct >= 30 ? 'warn' : 'info',
+        icon: '📊',
+        title: pior.nome + ' está com ' + pior.pct + '% de inadimplência',
+        sub: pior.inad + ' de ' + pior.total + ' clientes em atraso. Atenção necessária!',
+        action: () => location.href='servidor.html'
+      });
+    }
+    var melhor = srvInadimpl[srvInadimpl.length - 1];
+    if (melhor.pct === 0 && srvInadimpl.length > 1) {
+      insights.push({
+        tipo: 'ok',
+        icon: '🏆',
+        title: melhor.nome + ' é o melhor servidor',
+        sub: '100% dos clientes em dia. Excelente!',
+        action: () => location.href='servidor.html'
+      });
+    }
+  }
+
+  // Insight de receita
+  if (valV + valH > 0) {
+    insights.push({
+      tipo: 'info',
+      icon: '💰',
+      title: fmtBRL(valV + valH) + ' a recuperar hoje',
+      sub: 'Cobre os clientes vencidos e regularize sua receita.',
+      action: () => openCobrarModal()
+    });
+  }
+
+  // Insight quando tudo em dia
+  if (vencidos.length === 0 && hoje.length === 0 && ativos.length > 0) {
+    insights.push({
+      tipo: 'ok',
+      icon: '✅',
+      title: 'Tudo em dia! Parabéns.',
+      sub: 'Todos os ' + ativos.length + ' clientes estão com pagamento em dia.',
+      action: () => {}
+    });
+  }
+
+  if (!insights.length && ativos.length === 0) {
+    insights.push({
+      tipo: 'info',
+      icon: '💡',
+      title: 'Adicione seus primeiros clientes',
+      sub: 'Comece cadastrando clientes para ver insights aqui.',
+      action: () => location.href='clientes.html'
+    });
+  }
+
+  document.getElementById('insightsList').innerHTML = insights.map(function(i) {
+    return `<div class="insight-card ${i.tipo}" onclick="(${i.action.toString()})()">
+      <div class="insight-icon">${i.icon}</div>
+      <div class="insight-body">
+        <div class="insight-title">${i.title}</div>
+        <div class="insight-sub">${i.sub}</div>
+      </div>
+      <div class="insight-arrow">›</div>
+    </div>`;
+  }).join('');
+
+  // ── RANKING SERVIDORES
+  var online = servidores.filter(s => s.status !== 'offline');
+  if (!online.length) {
+    document.getElementById('serverList').innerHTML =
+      '<div class="empty-state"><span class="emo">🖥️</span>Nenhum servidor cadastrado</div>';
+  } else {
+    // Calcula métricas por servidor
+    var srvComMetricas = online.map(function(s) {
+      var total = ativos.filter(c => c.plataforma === s.nome).length;
+      var inad  = ativos.filter(c => c.plataforma === s.nome && c.vencimento < t).length;
+      var pct   = total > 0 ? Math.round((inad/total)*100) : 0;
+      return { ...s, total, inad, pct };
+    }).sort((a,b) => a.pct - b.pct);
+
+    var maxClients = Math.max(...srvComMetricas.map(s=>s.total), 1);
+
+    document.getElementById('serverList').innerHTML = srvComMetricas.map(function(s, idx) {
+      var rankClass = '';
+      var rankTxt = idx + 1;
+      if (idx === 0) { rankClass = 'best'; rankTxt = '🏆'; }
+      else if (idx === srvComMetricas.length - 1 && srvComMetricas.length > 1) { rankClass = 'worst'; rankTxt = '⚠️'; }
+
+      var inadClass = s.pct === 0 ? 'inadimpl-ok' : s.pct < 20 ? 'inadimpl-warn' : 'inadimpl-bad';
+      var inadTxt   = s.pct === 0 ? '✓ 0% inadimplência' : s.pct + '% inadimplência';
+      var barColor  = s.pct === 0 ? 'var(--green)' : s.pct < 20 ? 'var(--yellow)' : 'var(--red)';
+      var barPct    = s.total > 0 ? Math.round((s.total/maxClients)*100) : 0;
+
+      return `<div class="server-card" onclick="location.href='servidor.html'">
+        <div class="server-rank ${rankClass}">${rankTxt}</div>
+        <div class="server-dot" style="background:${s.cor||'var(--accent)'}"></div>
+        <div style="flex:1;min-width:0">
+          <div class="server-name">${s.nome}</div>
+          <div class="server-meta ${inadClass}">${inadTxt}</div>
+          <div class="server-bar-wrap">
+            <div class="server-bar" style="width:${barPct}%;background:${s.cor||'var(--accent)'}"></div>
+          </div>
+        </div>
+        <div class="server-right">
+          <div class="server-clients">${s.total}</div>
+          <div style="font-size:10px;color:var(--muted2)">cliente${s.total!==1?'s':''}</div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // ── ATENÇÃO HOJE (vencidos + hoje + amanhã) — sem arquivados
+  var urgent = ativos
+    .filter(c => c.vencimento <= tm)
+    .sort((a,b) => a.vencimento.localeCompare(b.vencimento))
+    .slice(0, 8);
+
+  if (!urgent.length) {
+    document.getElementById('attentionList').innerHTML =
+      '<div class="empty-state"><span class="emo">✅</span>Nenhum cliente vencendo hoje ou amanhã</div>';
+    return;
+  }
+
+  document.getElementById('attentionList').innerHTML = urgent.map(function(c) {
+    var stripeClass = c.vencimento < t ? 'vencido' : c.vencimento === t ? 'hoje' : 'amanha';
+    var statusTxt   = c.vencimento < t ? 'Venceu' : c.vencimento === t ? 'Vence hoje' : 'Vence amanhã';
+    if (c.vencimento < t) {
+      var diff = Math.round((new Date(t.replace(/-/g,'/')) - new Date(c.vencimento.replace(/-/g,'/'))) / 86400000);
+      statusTxt = 'Venceu há ' + diff + 'd';
+    }
+    var ini  = initials(c.nome);
+    var valor = fmtBRL(parseFloat(c.plano)||0);
+    return `<div class="att-card">
+      <div class="att-stripe ${stripeClass}"></div>
+      <div class="att-inner">
+        <div class="att-avatar">${ini}</div>
+        <div class="att-body">
+          <div class="att-name">${c.pais||''} ${c.nome}</div>
+          <div class="att-status">${statusTxt} · ${c.plataforma}</div>
+        </div>
+        <div class="att-right">
+          <div class="att-valor">${valor}</div>
+        </div>
+        <button class="wa-btn" data-nome="${c.nome}" data-plat="${c.plataforma}" data-venc="${c.vencimento}" data-tel="${c.contato||''}">📲</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  document.querySelectorAll('.wa-btn').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var cfg = JSON.parse(localStorage.getItem('streamdesk_config')||'{}');
+      sendWA(btn.dataset.nome, btn.dataset.plat, btn.dataset.venc, btn.dataset.tel, cfg);
+    });
+  });
+
+  // ── SPARKLINE (simulado com distribuição dos 12 meses ou últimas semanas)
+  renderSparkline(clientes);
+}
+
+function renderSparkline(clientes) {
+  // Simula pontos usando contagem de clientes em dia por semanas (últimas 6)
+  var t = new Date();
+  var points = [];
+  for (var i = 5; i >= 0; i--) {
+    var d = new Date(t);
+    d.setDate(d.getDate() - i * 7);
+    var ds = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    var count = clientes.filter(c => c.vencimento >= ds).length;
+    points.push(count);
+  }
+  var min = Math.min(...points);
+  var max = Math.max(...points, min+1);
+  var w = 120, h = 48, pad = 4;
+  var pts = points.map(function(v, i) {
+    var x = pad + (i / (points.length-1)) * (w - pad*2);
+    var y = h - pad - ((v - min) / (max - min)) * (h - pad*2);
+    return [x, y];
+  });
+  var linePath = 'M ' + pts.map(p=>p[0]+' '+p[1]).join(' L ');
+  var fillPath = linePath + ' L '+pts[pts.length-1][0]+' '+h+' L '+pts[0][0]+' '+h+' Z';
+  document.getElementById('sparkPath').setAttribute('d', linePath);
+  document.getElementById('sparkFill').setAttribute('d', fillPath);
+}
+
+// ── FINANÇAS (busca do mês atual) ─────────────────────────
+async function loadFinancas(user) {
+  try {
+    var now  = new Date();
+    var ym   = now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
+
+    // Busca financas e servidores em paralelo
+    var [fSnap, sSnap] = await Promise.all([
+      getDocs(collection(db,'usuarios',user.uid,'financas')),
+      getDocs(collection(db,'usuarios',user.uid,'servidores'))
+    ]);
+    var docs      = fSnap.docs.map(d=>({id:d.id,...d.data()}));
+    var servidores= sSnap.docs.map(d=>({id:d.id,...d.data()}));
+
+    // Helper: custo do servidor (igual ao financas.html original)
+    function getCusto(plat) {
+      var s = servidores.find(x=>x.nome===plat);
+      return s ? parseFloat(s.custo)||0 : 0;
+    }
+
+    // Filtra mês atual (campo 'data' no formato YYYY-MM-DD)
+    var mesAtual = docs.filter(d=>d.data && d.data.startsWith(ym));
+
+    // Receita = soma de todos os valores do mês
+    // Custo   = soma dos custos do servidor para cada pagamento
+    var receita  = mesAtual.reduce((a,d)=>a+(parseFloat(d.valor)||0), 0);
+    var despesas = mesAtual.reduce((a,d)=>a+getCusto(d.plataforma), 0);
+    var lucro    = receita - despesas;
+
+    document.getElementById('finReceita').textContent  = fmtBRL(receita);
+    document.getElementById('finDespesas').textContent = fmtBRL(despesas);
+    document.getElementById('finLucro').textContent    = fmtBRL(Math.abs(lucro));
+    if (lucro < 0) document.getElementById('finLucro').style.color = 'var(--red)';
+
+    // Mês anterior para % de variação
+    var prevMonth = new Date(now.getFullYear(), now.getMonth()-1, 1);
+    var ym2       = prevMonth.getFullYear()+'-'+String(prevMonth.getMonth()+1).padStart(2,'0');
+    var mesAnt    = docs.filter(d=>d.data && d.data.startsWith(ym2));
+    var recAnt    = mesAnt.reduce((a,d)=>a+(parseFloat(d.valor)||0), 0);
+    var despAnt   = mesAnt.reduce((a,d)=>a+getCusto(d.plataforma), 0);
+    var lucroAnt  = recAnt - despAnt;
+
+    if (lucroAnt > 0 && lucro !== 0) {
+      var pct   = Math.round(((lucro - lucroAnt) / Math.abs(lucroAnt)) * 100);
+      var trend = document.getElementById('finTrend');
+      trend.style.display = 'flex';
+      trend.className = 'lucro-trend ' + (pct >= 0 ? 'up' : 'down');
+      document.getElementById('finTrendArrow').textContent = pct >= 0 ? '↑' : '↓';
+      document.getElementById('finTrendText').textContent  = Math.abs(pct) + '% vs mês anterior';
+      var badge = document.getElementById('financeBadge');
+      badge.style.display = 'flex';
+      document.getElementById('financePct').textContent = Math.abs(pct) + '%';
+      if (pct < 0) {
+        badge.style.background   = 'var(--red-bg)';
+        badge.style.color        = 'var(--red)';
+        badge.style.borderColor  = 'var(--red-border)';
+        badge.querySelector('span:first-child').textContent = '↓';
+      }
+    }
+  } catch(e) { console.warn('Finanças não carregadas:', e); }
+}
+
+
+
+async function loadAndRender(user) {
+  // Nome do usuário
+  var nome = user.displayName ? user.displayName.split(' ')[0] : user.email.split('@')[0];
+  var greeting = getGreeting();
+  document.getElementById('greetingTitle').textContent = greeting + ', ' + nome + '! 👋';
+  document.getElementById('logoSub').textContent = greeting + ', ' + nome;
+
+  // 1. Dados do plano (banner)
+  try {
+    var userSnap = await getDoc(doc(db, 'usuarios', user.uid));
+    var userData = userSnap.exists() ? userSnap.data() : {};
+    mostrarBannerVenc(userData.expiracao || userData.vencimento || null);
+  } catch(e) { console.error('Banner venc erro:', e); }
+
+  // 2. Clientes + Servidores
+  try {
+    var [clientSnap, srvSnap] = await Promise.all([
+      getDocs(collection(db,'usuarios',user.uid,'clientes')),
+      getDocs(collection(db,'usuarios',user.uid,'servidores'))
+    ]);
+    var clientes   = clientSnap.docs.map(d=>({id:d.id,...d.data()}));
+    var servidores = srvSnap.docs.map(d=>({id:d.id,...d.data()}));
+    var cfg        = JSON.parse(localStorage.getItem('streamdesk_config')||'{}');
+    // ✅ filtra arquivados ANTES de passar para render e cobrar
+    var ativos = clientes.filter(function(c){ return !c.arquivado; });
+    _cobrarClientes = ativos;
+    render(clientes, servidores, cfg);
+    updateTime();
+  } catch(e) { console.error('Clientes/servidores erro:', e); }
+
+  // 3. Finanças
+  await loadFinancas(user);
+
+  // 4. Aviso da administração
+  await checkAviso(user);
+  
+}
+
+onAuthStateChanged(auth, async function(user) {
+  if (!user) { location.href = 'login.html'; return; }
+  await loadAndRender(user);
+});
+</script>
+
+<script>
+
+// ── Notificações Push ──
+  async function requestNotifPermission() {
+    if (!('Notification' in window)) {
+      alert('Seu navegador não suporta notificações.');
+      return;
+    }
+    if (Notification.permission === 'granted') {
+      showToast('✅ Notificações já estão ativas!');
+      return;
+    }
+    if (Notification.permission === 'denied') {
+      showToast('🔕 Notificações bloqueadas. Habilite nas configurações do navegador.');
+      return;
+    }
+    const permission = await Notification.requestPermission();
+    if (permission === 'granted') {
+      showToast('🔔 Notificações ativadas com sucesso!');
+      localStorage.setItem('sd_notif', 'granted');
+    } else {
+      showToast('🔕 Permissão negada.');
+    }
+  }
+  window.requestNotifPermission = requestNotifPermission;
+
+  // Atualiza ícone do sino se já tiver permissão
+  (function syncNotifIcon() {
+    if (Notification.permission === 'granted') {
+      const dot = document.getElementById('notifDot');
+      if (dot) dot.classList.remove('show'); // sem ponto vermelho se ativo
+    }
+  })();
+  
+// ── Navegação com transição suave ──
+  function sdNavigate(url) {
+    if (window.location.pathname.endsWith(url.replace(/^\//, ''))) return;
+    document.body.classList.add('sd-leaving');
+    setTimeout(() => { window.location.href = url; }, 160);
+  }
+  window.sdNavigate = sdNavigate;
+    if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').then(reg => {
+
+      // Verifica atualização a cada 60 segundos (enquanto app aberto)
+      setInterval(() => reg.update(), 60000);
+
+      // Detecta novo SW aguardando para ativar
+      reg.addEventListener('updatefound', () => {
+        const newWorker = reg.installing;
+        newWorker.addEventListener('statechange', () => {
+          if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+            showUpdateBanner();
+          }
+        });
+      });
+
+    }).catch(err => console.warn('SW não registrado:', err));
+  }
+
+  function showUpdateBanner() {
+    // Evita duplicar o banner
+    if (document.getElementById('sw-update-banner')) return;
+
+    const banner = document.createElement('div');
+    banner.id = 'sw-update-banner';
+    banner.innerHTML = `
+      <span>🚀 Nova versão disponível</span>
+      <button onclick="window.location.reload()">Atualizar</button>
+    `;
+    Object.assign(banner.style, {
+      position: 'fixed',
+      bottom: '80px',
+      left: '50%',
+      transform: 'translateX(-50%)',
+      background: '#6366f1',
+      color: '#fff',
+      padding: '12px 20px',
+      borderRadius: '50px',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '14px',
+      fontSize: '13px',
+      fontWeight: '600',
+      boxShadow: '0 4px 20px rgba(99,102,241,0.45)',
+      zIndex: '9999',
+      whiteSpace: 'nowrap',
+      animation: 'fadeUp .3s ease'
+    });
+
+    const btn = banner.querySelector('button');
+    Object.assign(btn.style, {
+      background: 'rgba(255,255,255,0.25)',
+      border: 'none',
+      borderRadius: '50px',
+      color: '#fff',
+      padding: '6px 14px',
+      fontWeight: '700',
+      cursor: 'pointer',
+      fontSize: '13px'
+    });
+
+    document.body.appendChild(banner);
+  }
+</script>
+  <script type="module" src="./onboarding.js"></script>
+</body>
+</html>
