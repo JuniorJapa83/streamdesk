@@ -1575,7 +1575,12 @@ onAuthStateChanged(auth, async function(user) {
   window.sdNavigate = sdNavigate;
   
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js').then(reg => {
+    
+    </script>
+<script type="module" src="./onboarding.js"></script>
+    <script>
+    
+      navigator.serviceWorker.register('/sw.js').then(reg => {
 
       // Verifica atualização a cada 60 segundos (enquanto app aberto)
       setInterval(() => reg.update(), 60000);
