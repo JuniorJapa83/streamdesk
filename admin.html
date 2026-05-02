@@ -880,34 +880,43 @@ function renderCard(u, i, container) {
       btn.addEventListener('click', async e => {
         e.stopPropagation();
         const action = btn.getAttribute('data-action');
-        if (action==='aprovar') {
-          await updateDoc(doc(db,'usuarios',u.id),{status:'ativo'});
-          showToast('✅ Usuário aprovado!');
-        } else if (action==='bloquear') {
-          await updateDoc(doc(db,'usuarios',u.id),{status:'bloqueado'});
-          showToast('🔴 Usuário bloqueado!','red');
-        } else if (action==='prorrogar') {
-          btn.disabled = true;
-          btn.textContent = '⏳ Salvando...';
-          const base = (u.expiracao && daysUntil(u.expiracao) > 0) ? new Date(u.expiracao+'T12:00:00') : new Date();
-          base.setDate(base.getDate() + 30);
-          const iso = base.getFullYear()+'-'+String(base.getMonth()+1).padStart(2,'0')+'-'+String(base.getDate()).padStart(2,'0');
-          await updateDoc(doc(db,'usuarios',u.id),{expiracao:iso, status:'ativo'});
-          showToast('⚡ +30 dias aplicados! Vence em '+formatDate(iso));
-        } else if (action==='exp') {
-          document.getElementById('expUserId').value         = u.id;
-          document.getElementById('expSubtitle').textContent = 'Definir acesso para '+(u.nome||u.email);
-          document.getElementById('expData').value           = u.expiracao||'';
-          clearQuickBtns();
-          openModal('ovExp');
-        } else if (action==='wa') {
-          const msg   = `Olá ${(u.nome||'').split(' ')[0]}! 👋 Seu acesso ao StreamDesk vence em ${formatDate(u.expiracao)}. Renove para continuar usando! 😊`;
-          const phone = (u.whatsapp||'').replace(/\D/g,'');
-          window.open(phone?`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`:`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank');
-        } else if (action==='del') {
-          pendingDelId = u.id;
-          document.getElementById('delMsg').textContent=`Excluir o usuário ${u.nome||u.email}? Esta ação não pode ser desfeita.`;
-          openModal('ovDel');
+        try {
+          if (action==='aprovar') {
+            await updateDoc(doc(db,'usuarios',u.id),{status:'ativo'});
+            showToast('✅ Usuário aprovado!');
+          } else if (action==='bloquear') {
+            await updateDoc(doc(db,'usuarios',u.id),{status:'bloqueado'});
+            showToast('🔴 Usuário bloqueado!','red');
+          } else if (action==='prorrogar') {
+            btn.disabled = true;
+            btn.textContent = '⏳ Salvando...';
+            const base = (u.expiracao && daysUntil(u.expiracao) > 0) ? new Date(u.expiracao+'T12:00:00') : new Date();
+            base.setDate(base.getDate() + 30);
+            const iso = base.getFullYear()+'-'+String(base.getMonth()+1).padStart(2,'0')+'-'+String(base.getDate()).padStart(2,'0');
+            await updateDoc(doc(db,'usuarios',u.id),{expiracao:iso, status:'ativo'});
+            showToast('⚡ +30 dias aplicados! Vence em '+formatDate(iso));
+            btn.disabled = false;
+            btn.textContent = '📅 Salvando...'.replace('Salvando...','Prorrogar');
+          } else if (action==='exp') {
+            document.getElementById('expUserId').value         = u.id;
+            document.getElementById('expSubtitle').textContent = 'Definir acesso para '+(u.nome||u.email);
+            document.getElementById('expData').value           = u.expiracao||'';
+            clearQuickBtns();
+            openModal('ovExp');
+          } else if (action==='wa') {
+            const msg   = `Olá ${(u.nome||'').split(' ')[0]}! 👋 Seu acesso ao StreamDesk vence em ${formatDate(u.expiracao)}. Renove para continuar usando! 😊`;
+            const phone = (u.whatsapp||'').replace(/\D/g,'');
+            window.open(phone?`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`:`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank');
+          } else if (action==='del') {
+            pendingDelId = u.id;
+            document.getElementById('delMsg').textContent=`Excluir o usuário ${u.nome||u.email}? Esta ação não pode ser desfeita.`;
+            openModal('ovDel');
+          }
+        } catch(err) {
+          console.error('Admin action error:', err);
+          showToast('❌ Erro: ' + (err.message || 'Permissão negada. Verifique as rules.'), 'red');
+          btn.disabled = false;
+          if (btn.textContent.includes('Salvando')) btn.textContent = 'Prorrogar';
         }
       });
     });
@@ -929,18 +938,32 @@ window.salvarExpiracao = async function() {
   const uid = document.getElementById('expUserId').value;
   const dat = document.getElementById('expData').value;
   if (!dat) { alert('Informe a data!'); return; }
-  await updateDoc(doc(db,'usuarios',uid),{expiracao:dat,status:'ativo'});
-  closeModal('ovExp');
-  showToast('📅 Expiração definida!');
+  const btn = document.querySelector('#ovExp .btn-primary');
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ Salvando...'; }
+  try {
+    await updateDoc(doc(db,'usuarios',uid),{expiracao:dat,status:'ativo'});
+    closeModal('ovExp');
+    showToast('📅 Expiração definida!');
+  } catch(err) {
+    console.error('salvarExpiracao error:', err);
+    showToast('❌ Erro ao salvar: ' + (err.message || 'Permissão negada.'), 'red');
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = '✅ Salvar'; }
+  }
 };
 
 // ── DELETE ────────────────────────────────────────
 window.confirmDel = async function() {
   if (!pendingDelId) return;
-  await deleteDoc(doc(db,'usuarios',pendingDelId));
-  pendingDelId = null;
-  closeModal('ovDel');
-  showToast('🗑️ Usuário excluído.');
+  try {
+    await deleteDoc(doc(db,'usuarios',pendingDelId));
+    pendingDelId = null;
+    closeModal('ovDel');
+    showToast('🗑️ Usuário excluído.');
+  } catch(err) {
+    console.error('confirmDel error:', err);
+    showToast('❌ Erro ao excluir: ' + (err.message || 'Permissão negada.'), 'red');
+  }
 };
 
 // ── AVISOS ────────────────────────────────────────
