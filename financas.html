@@ -681,6 +681,7 @@
 import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 import { getFirestore, collection, doc, getDocs, setDoc, deleteDoc, addDoc }
+import { EmptyState } from './onboarding.js';
         from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
 /* ─── Config Firebase ─── */
@@ -1051,7 +1052,7 @@ function renderChart(pays, totalLucro, rankData) {
   const badge = document.getElementById('chartBadge');
 
   if(!rankData.length) {
-    el.innerHTML = '<div class="fin-empty" style="padding:30px"><span class="fin-empty-ico">📊</span><div class="fin-empty-txt">Nenhuma movimentação neste mês</div></div>';
+    el.innerHTML = EmptyState.html('financas-empty');
     badge.textContent = '—';
     return;
   }
@@ -1119,7 +1120,7 @@ function renderChart(pays, totalLucro, rankData) {
 function renderRanking(rankData) {
   const el = document.getElementById('rankingArea');
   if(!rankData.length) {
-    el.innerHTML = '<div class="fin-empty"><span class="fin-empty-ico">🏆</span><div class="fin-empty-txt">Sem dados de servidores</div></div>';
+    el.innerHTML = EmptyState.html('financas-empty');
     return;
   }
 
@@ -1157,7 +1158,7 @@ function renderPage() {
   el.innerHTML = '';
 
   if(!allPays.length) {
-    el.innerHTML = '<div class="fin-empty"><span class="fin-empty-ico">📭</span><div class="fin-empty-txt">Nenhuma movimentação neste mês.<br>Adicione um pagamento com o botão ＋</div></div>';
+    el.innerHTML = EmptyState.html('financas-empty');
     return;
   }
 
