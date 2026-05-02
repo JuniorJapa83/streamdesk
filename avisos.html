@@ -400,31 +400,24 @@ body.dark .coming-hero{box-shadow:0 8px 32px rgba(99,102,241,.22)}
 
 <body>
 
-  <div class="header" style="padding-bottom:12px">
-
-  <!-- Linha 1: título + status -->
+  <!-- ══════════════════════════════════════════════════
+     HEADER — topo premium
+══════════════════════════════════════════════════ -->
+<div class="header" style="padding-bottom:12px">
+  <!-- Linha 1: título + badge -->
   <div class="cl-header-top">
-    
-    <!-- ESQUERDA -->
     <div class="cl-title-block">
-      <h1>Avisos 📢</h1>
-      <p>Envios, notificações e comunicação com clientes</p>
+      <h1>Clientes 👥</h1>
+      <p>Gerencie sua base de assinantes</p>
     </div>
-<!-- DIREITA -->
     <div class="cl-header-right">
-      
-      <!-- STATUS -->
       <div class="live-badge" style="margin:0">
         <div class="live-dot"></div>
-        <span>em breve</span>
+        <span id="updateTime">agora</span>
       </div>
-
-      
-
+      <div class="total-badge"><strong id="totalCount">—</strong></div>
     </div>
   </div>
-
-</div>
     
 <!-- Aplica tema antes de renderizar -->
 <script>
