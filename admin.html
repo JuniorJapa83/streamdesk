@@ -635,10 +635,50 @@ window.switchTab = function(tab) {
 };
 
 // ── AUTH ──────────────────────────────────────────
-window.doAdminLogin = function() {
-  // Redirect é mais confiável que popup — funciona mesmo com bloqueadores
-  signInWithRedirect(auth, provider);
+window.doAdminLogin = async function() {
+  const err    = document.getElementById('loginErr');
+  const errTxt = document.getElementById('loginErrTxt');
+  const btn    = document.querySelector('.btn-primary');
+  err.classList.remove('show');
+  btn.disabled = true;
+  btn.textContent = '⏳ Conectando ao Google...';
+
+  try {
+    // Tenta popup primeiro
+    const result = await signInWithPopup(auth, provider);
+    await verificarAdmin(result.user);
+  } catch(e) {
+    const code = e.code || '';
+    if (code === 'auth/popup-blocked' || code === 'auth/operation-not-supported-in-this-environment') {
+      // Fallback: redirect
+      btn.textContent = '🔄 Redirecionando...';
+      setTimeout(() => signInWithRedirect(auth, provider), 500);
+    } else if (code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') {
+      btn.disabled = false;
+      btn.textContent = 'Entrar com Google';
+    } else {
+      errTxt.textContent = '⚠️ Erro: ' + (e.message || code || 'Tente novamente.');
+      err.classList.add('show');
+      btn.disabled = false;
+      btn.textContent = 'Entrar com Google';
+      console.error('Auth error:', e);
+    }
+  }
 };
+
+async function verificarAdmin(user) {
+  if (user.email !== ADMIN_EMAIL) {
+    await signOut(auth);
+    const errTxt = document.getElementById('loginErrTxt');
+    const err    = document.getElementById('loginErr');
+    errTxt.textContent = '⛔ Acesso negado. Use a conta admin autorizada.';
+    err.classList.add('show');
+    document.querySelector('.btn-primary').disabled = false;
+    document.querySelector('.btn-primary').textContent = 'Entrar com Google';
+    return;
+  }
+  showApp();
+}
 
 window.doLogout = function() {
   signOut(auth);
@@ -1110,23 +1150,12 @@ async function loadClientesSummary(uid) {
 // ── INIT ──────────────────────────────────────────
 // Processa resultado do redirect (volta do Google)
 getRedirectResult(auth).then(result => {
-  if (!result) return;
-  if (result.user.email !== ADMIN_EMAIL) {
-    signOut(auth);
-    const errTxt = document.getElementById('loginErrTxt');
-    const err    = document.getElementById('loginErr');
-    errTxt.textContent = '⛔ Acesso negado. Use a conta admin autorizada.';
-    err.classList.add('show');
-  }
-}).catch(e => {
-  console.error('Redirect result error:', e);
-});
+  if (result && result.user) verificarAdmin(result.user);
+}).catch(e => console.error('Redirect result error:', e));
 
 // Verifica sessão ativa ao carregar
 onAuthStateChanged(auth, user => {
-  if (user && user.email === ADMIN_EMAIL) {
-    showApp();
-  }
+  if (user && user.email === ADMIN_EMAIL) showApp();
 });
 </script>
   <script>
