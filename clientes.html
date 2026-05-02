@@ -612,6 +612,50 @@ body.dark { background: #080b12 !important; }
 @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
 @keyframes fadeIn { from{opacity:0} to{opacity:1} }
 .content { animation: fadeIn .3s ease both; }
+
+/* ── Bloco "Informar Pagamento" no modal de edição ── */
+.pag-toggle-btn {
+  width: 100%;
+  background: var(--green-bg);
+  border: 1.5px dashed var(--green-border);
+  border-radius: 12px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--green);
+  font-family: var(--font);
+  transition: all .2s;
+  margin-bottom: 12px;
+}
+.pag-toggle-btn:active { transform: scale(.97); }
+.pag-toggle-btn.active {
+  background: var(--green-bg);
+  border-style: solid;
+  border-color: var(--green);
+}
+.pag-toggle-icon { font-size: 18px; flex-shrink: 0; }
+.pag-toggle-label { flex: 1; text-align: left; }
+.pag-toggle-arrow {
+  font-size: 16px;
+  color: var(--green);
+  transition: transform .25s;
+}
+.pag-toggle-btn.active .pag-toggle-arrow { transform: rotate(90deg); }
+
+.pag-fields {
+  display: none;
+  background: var(--card2);
+  border: 1px solid var(--green-border);
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 12px;
+  animation: fadeUp .25s ease both;
+}
+.pag-fields.open { display: block; }
 </style>
 </head>
 <body>
@@ -848,6 +892,7 @@ body.dark { background: #080b12 !important; }
       <label class="form-label">Observações</label>
       <input class="form-input" id="fObs" placeholder="Ex: FP, desconto especial...">
     </div>
+    <!-- Ativação: só para novo cliente -->
     <div class="form-group" id="valorPagoGroup">
       <label class="form-label">Valor Pago na Ativação (R$)
         <span style="color:var(--muted2);font-size:10px;text-transform:none;letter-spacing:0"> — opcional</span>
@@ -861,6 +906,29 @@ body.dark { background: #080b12 !important; }
         <option>Transferência</option><option>Outro</option>
       </select>
     </div>
+
+    <!-- Informar pagamento: só para edição de cliente existente -->
+    <div id="informarPagamentoGroup" style="display:none">
+      <button type="button" class="pag-toggle-btn" id="btnTogglePag" onclick="CL.togglePagamentoFields()">
+        <span class="pag-toggle-icon">💰</span>
+        <span class="pag-toggle-label">Informar Pagamento</span>
+        <span class="pag-toggle-arrow">›</span>
+      </button>
+      <div class="pag-fields" id="pagamentoFields">
+        <div class="form-group" style="margin-bottom:10px">
+          <label class="form-label">Valor Recebido (R$)</label>
+          <input class="form-input" id="fValorPagamento" type="number" placeholder="0,00" step="0.01" min="0">
+        </div>
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label">Forma de Pagamento</label>
+          <select class="form-select" id="fFormaPagamento">
+            <option>PIX</option><option>Dinheiro</option><option>Cartão</option>
+            <option>Transferência</option><option>Outro</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
     <button class="save-btn" id="btnSaveClient" onclick="CL.saveClient()">✓ Salvar Cliente</button>
     <button class="cancel-btn" onclick="document.getElementById('modalOverlay').classList.remove('open')">Cancelar</button>
   </div>
@@ -1401,8 +1469,17 @@ function openModal(client) {
   sel.innerHTML = S.servidores.map(s => `<option value="${s.nome}">${s.nome}</option>`).join('');
   if (client) sel.value = client.plataforma;
 
-  document.getElementById('valorPagoGroup').style.display = isNew ? 'block' : 'none';
-  document.getElementById('pagamentoGroup').style.display = isNew ? 'block' : 'none';
+  document.getElementById('valorPagoGroup').style.display      = isNew ? 'block' : 'none';
+  document.getElementById('pagamentoGroup').style.display      = isNew ? 'block' : 'none';
+  document.getElementById('informarPagamentoGroup').style.display = isNew ? 'none' : 'block';
+
+  // Resetar o toggle de pagamento ao abrir modal de edição
+  const btnToggle = document.getElementById('btnTogglePag');
+  const pagFields = document.getElementById('pagamentoFields');
+  btnToggle.classList.remove('active');
+  pagFields.classList.remove('open');
+  document.getElementById('fValorPagamento').value = '';
+
   document.getElementById('modalOverlay').classList.add('open');
 }
 
@@ -1433,6 +1510,24 @@ const data = {
   try {
     if (editId) {
       await setDoc(doc(SD.db, 'usuarios', S.user.uid, 'clientes', editId), data, { merge: true });
+
+      // Lançar pagamento nas finanças se informado
+      const valPag = parseFloat(document.getElementById('fValorPagamento').value || '0');
+      if (valPag > 0) {
+        const srv = S.servidores.find(s => s.nome === data.plataforma);
+        await addDoc(fCol(), {
+          cliente:      nome,
+          servidorId:   srv?.id || null,
+          nomeServidor: data.plataforma,
+          plataforma:   data.plataforma,
+          custoServidor: parseFloat(srv?.custo) || 0,
+          valor:        valPag,
+          data:         SD.today(),
+          pagamento:    document.getElementById('fFormaPagamento').value,
+          obs:          'Pagamento do Mês',
+          criadoEm:     new Date().toISOString(),
+        });
+      }
     } else {
       await addDoc(cCol(), data);
       const val = parseFloat(document.getElementById('fValorPago').value || '0');
@@ -1868,6 +1963,20 @@ function toggleArchivedSection() {
 }
 
 // ──────────────────────────────────────────────────────────────
+// TOGGLE DO BLOCO DE PAGAMENTO (modal de edição)
+// ──────────────────────────────────────────────────────────────
+function togglePagamentoFields() {
+  const btn    = document.getElementById('btnTogglePag');
+  const fields = document.getElementById('pagamentoFields');
+  const isOpen = fields.classList.contains('open');
+  btn.classList.toggle('active', !isOpen);
+  fields.classList.toggle('open', !isOpen);
+  if (!isOpen) {
+    setTimeout(() => document.getElementById('fValorPagamento').focus(), 50);
+  }
+}
+
+// ──────────────────────────────────────────────────────────────
 // EXPOSIÇÃO GLOBAL
 // ──────────────────────────────────────────────────────────────
 window.CL = {
@@ -1878,6 +1987,7 @@ window.CL = {
   openRenew, confirmRenew,
   openCobrar, closeCobrar, cobrarToggleItem, cobrarToggleAll, cobrarEnviar,
   sendWA, startWAQueue, waOpenCurrent, waNext, waClose,
+  togglePagamentoFields,
   // ── Arquivamento ──
   arquivarCliente, closeArchiveModal, confirmArchive, selectMotivo,
   restaurarCliente, deletarArquivado, toggleArchivedSection,
