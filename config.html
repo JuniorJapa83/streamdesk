@@ -584,8 +584,7 @@ body.dark .about-card{background:rgba(19,24,37,.85);border-color:rgba(28,34,54,.
 .btn-save:hover{opacity:.93;box-shadow:0 6px 20px rgba(99,102,241,.36)}
 .btn-save:active{transform:scale(.97)}
 .btn-save:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
-
-  /* ─── Modal de Cancelamento ─── */
+/* ─── Modal de Cancelamento ─── */
 .cancel-steps{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
 .cancel-step{display:flex;align-items:flex-start;gap:12px;background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:12px 14px}
 .cancel-step-icon{font-size:20px;flex-shrink:0;margin-top:1px}
@@ -599,7 +598,7 @@ body.dark .about-card{background:rgba(19,24,37,.85);border-color:rgba(28,34,54,.
 .btn-cancel-sub:disabled{opacity:.5;cursor:not-allowed}
 .cancel-step-confirm{display:none}
 .cancel-step-confirm.show{display:block}
-  
+
 .btn-cancel{
   width:100%;background:transparent;color:var(--muted2);
   border:1px solid var(--border);border-radius:13px;
@@ -886,9 +885,9 @@ window.renderAssinatura=function(user,data,nClientes){
       🔄 Reativar acesso — R$ 9,90/mês
     </button>`;
     return `<div style="display:flex;flex-direction:column;gap:8px">
-  <button class="btn-assin manage" onclick="openModal('ovPagamento')">⚙️ Renovar / Gerenciar</button>
-  <button class="btn-assin" style="background:transparent;color:var(--muted2);border:1px solid var(--border);font-size:13px;padding:10px" onclick="openModal('ovCancelar')">Cancelar assinatura</button>
-</div>`;
+      <button class="btn-assin manage" onclick="openModal('ovPagamento')">⚙️ Renovar / Gerenciar</button>
+      <button class="btn-assin" style="background:transparent;color:var(--muted2);border:1px solid var(--border);font-size:13px;padding:10px" onclick="openModal('ovCancelar')">Cancelar assinatura</button>
+    </div>`;
   })();
 
   const expiredBanner=fase==='f4'?`
@@ -1273,7 +1272,7 @@ onAuthStateChanged(_auth,async function(user){
     </div>
 
     <!-- Etapa 1: botões principais -->
-    <div id="cancelStep1" class="cancel-confirm-wrap show">
+    <div id="cancelStep1" class="cancel-confirm-wrap">
       <button class="btn-save" style="background:var(--card2);color:var(--text2);border:1px solid var(--border);box-shadow:none" onclick="exportCSV();showToast('📥 Exportando dados...')">
         📥 Exportar dados antes de cancelar
       </button>
@@ -1293,10 +1292,9 @@ onAuthStateChanged(_auth,async function(user){
       </button>
       <button class="btn-cancel" onclick="voltarStep1Cancelamento()">← Voltar</button>
     </div>
-
   </div>
 </div>
-  
+
 <!-- ══ MODAL: RESPOSTAS RÁPIDAS ══ -->
 <div class="overlay" id="ovRespostas" onclick="if(event.target===this)closeModal('ovRespostas')">
   <div class="modal">
@@ -1416,46 +1414,43 @@ window.executarCancelamento = async function(){
   btn.textContent = '⏳ Processando...';
 
   try {
-    // Importa Firestore dinamicamente (mesmo padrão já usado no arquivo)
     var fs = await import('https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js');
     var db = window._firebaseDB;
 
-    // Marca o usuário como cancelado no Firestore
-    // O acesso continua até a data de expiracao existente
+    // Marca cancelamento no Firestore — status permanece 'ativo' até vencer
     await fs.setDoc(
       fs.doc(db, 'usuarios', user.uid),
       {
-        cancelado:       true,
+        cancelado:        true,
         dataCancelamento: new Date().toISOString().split('T')[0],
-        // status permanece 'ativo' até vencer — admin pode ver o flag cancelado
       },
       { merge: true }
     );
 
-    // Fecha o modal e notifica
     closeModal('ovCancelar');
-    voltarStep1Cancelamento(); // reseta para próxima vez
+    voltarStep1Cancelamento();
     showToast('✅ Assinatura cancelada. Acesso ativo até o vencimento.');
 
-    // Atualiza o card de assinatura para refletir o cancelamento
+    // Adiciona banner informativo no card de assinatura
     setTimeout(function(){
       var card = document.getElementById('assinCard');
-      if(card){
-        var cancelBanner = document.createElement('div');
-        cancelBanner.style.cssText = 'background:var(--yellow-bg);border:1px solid var(--yellow-border);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--yellow);margin-top:10px;line-height:1.5';
-        cancelBanner.innerHTML = '⚠️ <strong>Cancelamento agendado.</strong> Seu acesso continua ativo até a data de vencimento. Não haverá nova cobrança.';
-        card.appendChild(cancelBanner);
+      if(card && !card.querySelector('.cancel-banner')){
+        var banner = document.createElement('div');
+        banner.className = 'cancel-banner';
+        banner.style.cssText = 'background:var(--yellow-bg);border:1px solid var(--yellow-border);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--yellow);margin-top:10px;line-height:1.5';
+        banner.innerHTML = '⚠️ <strong>Cancelamento agendado.</strong> Acesso ativo até o vencimento. Sem novas cobranças.';
+        card.appendChild(banner);
       }
     }, 400);
 
   } catch(e) {
     btn.disabled = false;
     btn.textContent = 'Sim, cancelar definitivamente';
-    showToast('❌ Erro ao cancelar. Tente novamente ou contate o suporte.');
+    showToast('❌ Erro ao cancelar. Contate o suporte.');
     console.error('Cancelamento erro:', e);
   }
 };
-  
+
 /* ─── Logout ─── */
 function doLogout(){
   if(!confirm('Encerrar sessão e sair do StreamDesk?')) return;
