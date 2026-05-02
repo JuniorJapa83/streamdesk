@@ -18,189 +18,36 @@
   <link rel="stylesheet" href="theme.css">
 
 <style>
-/* ═══════════════════════════════════════════════════
-   AVISOS — tokens idênticos à Home
-═══════════════════════════════════════════════════ */
-:root {
-  --bg:#f5f7fa; --surface:#ffffff; --card:#ffffff; --card2:#f8fafc;
-  --border:#e8ecf2; --border2:#dde3ed;
-  --accent:#6366f1; --accent2:#818cf8;
-  --accent-bg:rgba(99,102,241,.08); --accent-border:rgba(99,102,241,.2);
-  --red:#ef4444; --red-bg:rgba(239,68,68,.08); --red-border:rgba(239,68,68,.2);
-  --yellow:#f59e0b; --yellow-bg:rgba(245,158,11,.08); --yellow-border:rgba(245,158,11,.2);
-  --orange:#f97316; --orange-bg:rgba(249,115,22,.08); --orange-border:rgba(249,115,22,.2);
-  --green:#10b981; --green-bg:rgba(16,185,129,.08); --green-border:rgba(16,185,129,.2);
-  --purple:#8b5cf6;
-  --text:#0f172a; --text2:#334155; --muted:#94a3b8; --muted2:#64748b;
-  --radius:16px;
-  --shadow-sm:0 1px 3px rgba(15,23,42,.06),0 1px 2px rgba(15,23,42,.04);
-  --shadow:0 4px 16px rgba(15,23,42,.08),0 2px 6px rgba(15,23,42,.04);
-  --shadow-lg:0 10px 40px rgba(15,23,42,.12),0 4px 12px rgba(15,23,42,.06);
-  --font:'Plus Jakarta Sans',sans-serif;
-}
-body.dark {
-  --bg:#080b12; --surface:#0e1220; --card:#131825; --card2:#161c2c;
-  --border:#1c2236; --border2:#222a3d;
-  --accent:#6366f1; --accent2:#818cf8;
-  --accent-bg:rgba(99,102,241,.12); --accent-border:rgba(99,102,241,.25);
-  --red:#ff3b5c; --red-bg:rgba(255,59,92,.1); --red-border:rgba(255,59,92,.2);
-  --yellow:#f59e0b; --yellow-bg:rgba(245,158,11,.1); --yellow-border:rgba(245,158,11,.2);
-  --orange:#f97316; --orange-bg:rgba(249,115,22,.1); --orange-border:rgba(249,115,22,.2);
-  --green:#10b981; --green-bg:rgba(16,185,129,.1); --green-border:rgba(16,185,129,.2);
-  --text:#e4e8f4; --text2:#a0aec0; --muted:#5a6480; --muted2:#7284a8;
-  --shadow-sm:0 1px 3px rgba(0,0,0,.3); --shadow:0 4px 16px rgba(0,0,0,.4); --shadow-lg:0 10px 40px rgba(0,0,0,.5);
-}
-
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{
-  font-family:var(--font);background:var(--bg);color:var(--text);
-  min-height:100vh;max-width:430px;margin:0 auto;
-  overflow-x:hidden;transition:background .3s,color .3s;
-  -webkit-font-smoothing:antialiased;
-}
-::-webkit-scrollbar{width:4px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
-
-/* ── Keyframes ── */
-@keyframes slideDown{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:translateY(0)}}
-@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-@keyframes pulse{0%,100%{box-shadow:0 0 0 3px var(--yellow-bg)}50%{box-shadow:0 0 0 5px var(--yellow-bg)}}
-@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+/* ── Apenas estilos exclusivos desta página ── */
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 @keyframes glow{0%,100%{opacity:.7}50%{opacity:1}}
+@keyframes shimmerAv{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
-/* ── HEADER ── */
-.header{
-  position:sticky;top:0;z-index:50;
-  background:rgba(245,247,250,.95)!important;
-  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--border);
-  padding:14px 20px;
-  display:flex;align-items:center;justify-content:space-between;
-  animation:slideDown .4s ease;
-  transition:background .3s;
-}
-body.dark .header{background:rgba(8,11,18,.95)!important;border-bottom-color:#1c2236!important}
-body:not(.dark) .header{background:rgba(245,247,250,.97)!important;border-bottom-color:#e8ecf2!important}
+/* Header título */
+.av-header-top{display:flex;align-items:center;justify-content:space-between;}
+.av-title-block h1{font-size:22px;font-weight:800;color:var(--text);letter-spacing:-.3px;line-height:1.1;}
+.av-title-block p{font-size:12px;color:var(--muted2);margin-top:2px;}
+.av-header-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
 
-.logo-wrap{display:flex;flex-direction:column}
-.logo-sub{font-size:12px;color:var(--muted2);margin-top:2px;font-weight:500}
-.header-right{display:flex;align-items:center;gap:10px}
-.live-badge{
-  display:flex;align-items:center;gap:6px;
-  background:var(--card);border:1px solid var(--border);
-  border-radius:50px;padding:7px 12px;
-  font-size:11px;font-weight:600;color:var(--muted2);
-  box-shadow:var(--shadow-sm);flex-shrink:0;
-}
-.live-dot{
-  width:7px;height:7px;border-radius:50%;
-  background:var(--yellow);box-shadow:0 0 0 3px var(--yellow-bg);
-  animation:pulse 2s infinite;
-}
-
-/* ── CONTENT ── */
-.content{padding:20px 20px 110px;position:relative;z-index:1;animation:fadeIn .3s ease both;}
-
-/* ── GREETING ── */
-.greeting-row{
-  display:flex;align-items:flex-start;justify-content:space-between;
-  margin-bottom:20px;animation:fadeUp .4s ease both;
-}
-.greeting-text h2{font-size:22px;font-weight:800;color:var(--text);letter-spacing:-.3px}
-.greeting-text p{font-size:13px;color:var(--muted2);margin-top:3px}
-
-/* ── SECTION HEADER ── */
-.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.section-title{font-size:16px;font-weight:800;color:var(--text)}
-
-/* ── SKELETON ── */
-.skeleton{
-  background:linear-gradient(90deg,var(--border) 25%,var(--card2) 50%,var(--border) 75%);
-  background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:8px;
-}
-
-/* ── BANNER PLANO ── */
-.banner-venc{
-  display:none;border-radius:14px;padding:14px 16px;margin-bottom:18px;
-  border:1px solid;cursor:pointer;transition:opacity .2s,transform .2s;
-  animation:fadeUp .4s ease both;
-}
-.banner-venc:active{opacity:.8;transform:scale(.98)}
-.banner-venc.vencendo{background:var(--yellow-bg);border-color:var(--yellow-border)}
-.banner-venc.vencido{background:var(--red-bg);border-color:var(--red-border)}
-.banner-venc-row{display:flex;align-items:center;gap:10px}
-.banner-venc-icon{font-size:22px;flex-shrink:0}
-.banner-venc-body{flex:1}
-.banner-venc-titulo{font-size:13px;font-weight:700}
-.banner-venc.vencendo .banner-venc-titulo{color:var(--yellow)}
-.banner-venc.vencido  .banner-venc-titulo{color:var(--red)}
-.banner-venc-sub{font-size:11px;color:var(--muted2);margin-top:2px}
-.banner-venc-arrow{font-size:18px;color:var(--muted);flex-shrink:0}
-
-/* ══ HERO ══ */
-.coming-hero{
-  background:linear-gradient(135deg,var(--accent) 0%,var(--purple) 100%);
-  border-radius:22px;padding:22px 20px 20px;
-  margin-bottom:18px;
-  position:relative;overflow:hidden;
-  box-shadow:0 8px 32px rgba(99,102,241,.28);
-  animation:fadeUp .4s ease .05s both;
-}
-.coming-hero::before{
-  content:'';position:absolute;top:-40px;right:-40px;
-  width:160px;height:160px;border-radius:50%;
-  background:rgba(255,255,255,.07);pointer-events:none;
-}
-.coming-hero::after{
-  content:'';position:absolute;bottom:-30px;right:20px;
-  width:90px;height:90px;border-radius:50%;
-  background:rgba(255,255,255,.05);pointer-events:none;
-}
+/* Hero */
+.coming-hero{background:linear-gradient(135deg,var(--accent) 0%,var(--purple) 100%);border-radius:22px;padding:22px 20px 20px;margin-bottom:18px;position:relative;overflow:hidden;box-shadow:0 8px 32px rgba(99,102,241,.28);animation:fadeUp .4s ease .05s both;}
+.coming-hero::before{content:'';position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.07);pointer-events:none;}
+.coming-hero::after{content:'';position:absolute;bottom:-30px;right:20px;width:90px;height:90px;border-radius:50%;background:rgba(255,255,255,.05);pointer-events:none;}
 .ch-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
-.ch-icon-wrap{
-  width:52px;height:52px;border-radius:16px;flex-shrink:0;
-  background:rgba(255,255,255,.18);
-  display:flex;align-items:center;justify-content:center;
-  font-size:26px;
-  animation:float 3s ease-in-out infinite;
-}
-.ch-badge{
-  display:inline-flex;align-items:center;gap:5px;
-  background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);
-  border-radius:50px;padding:5px 12px;
-  font-size:11px;font-weight:700;color:rgba(255,255,255,.9);
-  letter-spacing:.3px;flex-shrink:0;
-  animation:glow 2.5s ease-in-out infinite;
-}
+.ch-icon-wrap{width:52px;height:52px;border-radius:16px;flex-shrink:0;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:26px;animation:float 3s ease-in-out infinite;}
+.ch-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:50px;padding:5px 12px;font-size:11px;font-weight:700;color:rgba(255,255,255,.9);letter-spacing:.3px;flex-shrink:0;animation:glow 2.5s ease-in-out infinite;}
 .ch-badge-dot{width:6px;height:6px;border-radius:50%;background:#fff;opacity:.8;flex-shrink:0;}
 .ch-body{position:relative;z-index:1}
 .ch-label{font-size:11px;font-weight:700;color:rgba(255,255,255,.65);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;}
 .ch-title{font-size:22px;font-weight:800;color:#fff;letter-spacing:-.4px;line-height:1.15;margin-bottom:8px;}
 .ch-sub{font-size:13.5px;color:rgba(255,255,255,.78);line-height:1.6;margin-bottom:16px;}
 .ch-footer{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.ch-pill{
-  display:inline-flex;align-items:center;gap:5px;
-  background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2);
-  border-radius:50px;padding:6px 14px;
-  font-size:12px;font-weight:700;color:rgba(255,255,255,.88);
-}
+.ch-pill{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2);border-radius:50px;padding:6px 14px;font-size:12px;font-weight:700;color:rgba(255,255,255,.88);}
 
-/* ══ FEATURES ══ */
+/* Feature cards */
 .features-section{animation:fadeUp .4s ease .1s both}
-.feature-card{
-  background:var(--card);border:1px solid var(--border);border-radius:16px;
-  padding:16px;display:flex;align-items:flex-start;gap:14px;
-  margin-bottom:8px;box-shadow:var(--shadow-sm);cursor:default;
-  transition:transform .2s,box-shadow .2s,border-color .2s;
-  position:relative;overflow:hidden;
-}
-.feature-card::before{
-  content:'';position:absolute;top:0;left:0;bottom:0;width:3px;
-  border-radius:16px 0 0 16px;transition:opacity .2s;opacity:.6;
-}
+.feature-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;display:flex;align-items:flex-start;gap:14px;margin-bottom:8px;box-shadow:var(--shadow-sm);cursor:default;transition:transform .2s,box-shadow .2s,border-color .2s;position:relative;overflow:hidden;}
+.feature-card::before{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;border-radius:16px 0 0 16px;transition:opacity .2s;opacity:.6;}
 .feature-card.fc-purple::before{background:var(--purple)}
 .feature-card.fc-accent::before{background:var(--accent)}
 .feature-card.fc-green::before{background:var(--green)}
@@ -213,7 +60,7 @@ body:not(.dark) .header{background:rgba(245,247,250,.97)!important;border-bottom
 .feature-card:hover .fc-icon-wrap{transform:scale(1.08)}
 .fc-icon-wrap.purple{background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.18)}
 .fc-icon-wrap.accent{background:var(--accent-bg);border:1px solid var(--accent-border)}
-.fc-icon-wrap.green {background:var(--green-bg); border:1px solid var(--green-border)}
+.fc-icon-wrap.green{background:var(--green-bg);border:1px solid var(--green-border)}
 .fc-icon-wrap.yellow{background:var(--yellow-bg);border:1px solid var(--yellow-border)}
 .fc-icon-wrap.orange{background:var(--orange-bg);border:1px solid var(--orange-border)}
 .fc-body{flex:1;min-width:0}
@@ -224,16 +71,13 @@ body:not(.dark) .header{background:rgba(245,247,250,.97)!important;border-bottom
 .fc-tag.soon{background:var(--yellow-bg);color:var(--yellow);border:1px solid var(--yellow-border)}
 .fc-tag.planned{background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-border)}
 .fc-tag.mvp{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
-
-/* Skeleton dos feature cards */
 .feature-skel{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;display:flex;align-items:flex-start;gap:14px;margin-bottom:8px;}
-.skel-icon{width:44px;height:44px;border-radius:13px}
+.skel-icon{width:44px;height:44px;border-radius:13px;background:linear-gradient(90deg,var(--border) 25%,var(--card2) 50%,var(--border) 75%);background-size:200% 100%;animation:shimmerAv 1.4s infinite;}
 .skel-body{flex:1;display:flex;flex-direction:column;gap:8px;padding-top:4px}
-.skel-line{height:12px}
-.skel-line.long{width:70%}
-.skel-line.short{width:45%}
+.skel-line{background:linear-gradient(90deg,var(--border) 25%,var(--card2) 50%,var(--border) 75%);background-size:200% 100%;animation:shimmerAv 1.4s infinite;border-radius:6px;height:12px;}
+.skel-line.long{width:70%}.skel-line.short{width:45%}
 
-/* ── ROADMAP ── */
+/* Roadmap */
 .roadmap-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px 16px;box-shadow:var(--shadow-sm);animation:fadeUp .4s ease .15s both;}
 .roadmap-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:14px}
 .roadmap-step{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px;position:relative;}
@@ -251,7 +95,7 @@ body:not(.dark) .header{background:rgba(245,247,250,.97)!important;border-bottom
 .rs-badge.current{background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-border)}
 .rs-badge.next{background:var(--card2);color:var(--muted);border:1px solid var(--border)}
 
-/* ── CTA ── */
+/* CTA */
 .cta-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow-sm);cursor:pointer;transition:all .2s;animation:fadeUp .4s ease .2s both;}
 .cta-card:hover{transform:translateY(-2px);box-shadow:var(--shadow);border-color:var(--accent-border)}
 .cta-card:active{transform:scale(.98);opacity:.9}
@@ -261,38 +105,12 @@ body:not(.dark) .header{background:rgba(245,247,250,.97)!important;border-bottom
 .cta-sub{font-size:12px;color:var(--muted2);margin-top:2px}
 .cta-arrow{color:var(--accent);font-size:20px;flex-shrink:0}
 
-/* ── BOTTOM NAV ── */
-.bottom-nav{
-  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
-  width:100%;max-width:430px;
-  background:rgba(245,247,250,.97);
-  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  border-top:1px solid var(--border);
-  display:flex;padding:10px 0 24px;z-index:50;transition:background .3s;
-}
-body.dark .bottom-nav{background:rgba(8,11,18,.97)!important;border-top-color:#1c2236!important}
-body:not(.dark) .bottom-nav{background:rgba(245,247,250,.97)!important;border-top-color:#e8ecf2!important}
-.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;transition:all .2s;padding:4px 0;}
-.nav-icon{font-size:22px;transition:transform .2s}
-.nav-label{font-size:9px;color:var(--muted);font-weight:600;letter-spacing:.3px}
-.nav-item.active .nav-label{color:var(--accent)}
-.nav-item.active .nav-icon{transform:translateY(-2px)}
-.nav-dot{width:4px;height:4px;border-radius:50%;background:var(--accent);margin-top:-2px;opacity:0;transition:opacity .2s}
-.nav-item.active .nav-dot{opacity:1}
+/* Transição e nav premium */
+body.sd-leaving .content{opacity:0;transform:translateY(6px);transition:opacity .15s ease,transform .15s ease;pointer-events:none;}
+body.sd-leaving .header{opacity:0;transition:opacity .15s ease;}
 .nav-item.nav-premium .nav-label{color:var(--yellow)}
 .nav-item.nav-premium-warn .nav-label{color:var(--orange)}
 .nav-item.nav-premium-expired .nav-label{color:var(--red)}
-
-/* ── TOAST ── */
-.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--text);color:var(--card);padding:11px 22px;border-radius:50px;font-size:13px;font-weight:600;z-index:9000;pointer-events:none;opacity:0;transition:all .3s;max-width:300px;text-align:center;white-space:nowrap;box-shadow:var(--shadow-lg);}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-
-/* ── TRANSIÇÃO ── */
-body.sd-leaving .content{opacity:0;transform:translateY(6px);transition:opacity .15s ease,transform .15s ease;pointer-events:none;}
-body.sd-leaving .header{opacity:0;transition:opacity .15s ease;}
-
-/* ── DARK OVERRIDES ── */
-body.dark .coming-hero{box-shadow:0 8px 32px rgba(99,102,241,.22)}
 </style>
 </head>
 
@@ -305,116 +123,77 @@ body.dark .coming-hero{box-shadow:0 8px 32px rgba(99,102,241,.22)}
 })();
 </script>
 
-<!-- ══ FIREBASE ══ -->
 <script type="module">
 import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-const FB={
-  apiKey:"AIzaSyAGHvkDpeSbCTriZCvRf-jJ6z8PQSSWLHI",
-  authDomain:"streamdesk-5350d.firebaseapp.com",
-  projectId:"streamdesk-5350d",
-  storageBucket:"streamdesk-5350d.firebasestorage.app",
-  messagingSenderId:"36684694847",
-  appId:"1:36684694847:web:0f6f3a27933e3d84cfff8a"
-};
-const app  = getApps().length ? getApp() : initializeApp(FB);
-const auth = getAuth(app);
-const db   = getFirestore(app);
+const FB={apiKey:"AIzaSyAGHvkDpeSbCTriZCvRf-jJ6z8PQSSWLHI",authDomain:"streamdesk-5350d.firebaseapp.com",projectId:"streamdesk-5350d",storageBucket:"streamdesk-5350d.firebasestorage.app",messagingSenderId:"36684694847",appId:"1:36684694847:web:0f6f3a27933e3d84cfff8a"};
+const app=getApps().length?getApp():initializeApp(FB);
+const auth=getAuth(app);
+const db=getFirestore(app);
 
-function getGreeting(){
-  var h=new Date().getHours();
-  if(h<12) return 'Bom dia';
-  if(h<18) return 'Boa tarde';
-  return 'Boa noite';
-}
 function fromStr(s){if(!s)return null;var p=s.split('-');return new Date(+p[0],+p[1]-1,+p[2]);}
 function diffDays(a,b){return Math.round((b-a)/86400000);}
 
-function mostrarBannerVenc(vencimento){
-  if(!vencimento) return;
-  var hoje=new Date();hoje.setHours(0,0,0,0);
-  var p=vencimento.split('-');
-  var venc=new Date(p[0],p[1]-1,p[2]);
-  var dias=Math.round((venc-hoje)/86400000);
-  var el=document.getElementById('bannerVenc');
-  if(!el) return;
-  if(dias<0){
-    el.className='banner-venc vencido';el.style.display='block';
-    document.getElementById('bannerTitulo').textContent='Sua assinatura venceu há '+Math.abs(dias)+' dia'+(Math.abs(dias)!==1?'s':'');
-  } else if(dias<=7){
-    el.className='banner-venc vencendo';el.style.display='block';
-    document.getElementById('bannerTitulo').textContent=dias===0?'Sua assinatura vence hoje!':'Sua assinatura vence em '+dias+' dia'+(dias!==1?'s':'');
-  }
+function mostrarBannerVenc(v){
+  if(!v)return;
+  var h=new Date();h.setHours(0,0,0,0);
+  var p=v.split('-'),venc=new Date(p[0],p[1]-1,p[2]);
+  var dias=Math.round((venc-h)/86400000);
+  var el=document.getElementById('bannerVenc');if(!el)return;
+  if(dias<0){el.className='banner-venc vencido';el.style.display='block';document.getElementById('bannerTitulo').textContent='Sua assinatura venceu há '+Math.abs(dias)+' dia'+(Math.abs(dias)!==1?'s':'');}
+  else if(dias<=7){el.className='banner-venc vencendo';el.style.display='block';document.getElementById('bannerTitulo').textContent=dias===0?'Sua assinatura vence hoje!':'Sua assinatura vence em '+dias+' dia'+(dias!==1?'s':'');}
 }
 
-function updatePremiumNav(expiracao){
-  var el=document.getElementById('premiumNav');
-  var ico=document.getElementById('premiumIcon');
-  var lbl=document.getElementById('premiumLabel');
-  if(!el||!ico||!lbl) return;
-  if(!expiracao){el.className='nav-item';ico.textContent='⚙️';lbl.textContent='Config.';return;}
-  var hoje=new Date();hoje.setHours(0,0,0,0);
-  var exp=fromStr(expiracao);
-  var dias=diffDays(hoje,exp);
+function updatePremiumNav(exp){
+  var el=document.getElementById('premiumNav'),ico=document.getElementById('premiumIcon'),lbl=document.getElementById('premiumLabel');
+  if(!el||!ico||!lbl)return;
+  if(!exp){el.className='nav-item';ico.textContent='⚙️';lbl.textContent='Config.';return;}
+  var h=new Date();h.setHours(0,0,0,0);
+  var dias=diffDays(h,fromStr(exp));
   if(dias<0){el.classList.add('nav-premium-expired');ico.textContent='🔴';lbl.textContent='Expirou';}
   else if(dias<=7){el.classList.add('nav-premium-warn');ico.textContent='⚠️';lbl.textContent=dias+'d';}
   else if(dias<=14){el.classList.add('nav-premium');ico.textContent='💳';lbl.textContent='Renovar';}
 }
 
-onAuthStateChanged(auth, async function(user){
-  if(!user){location.href='login.html';return;}
-  var nome=user.displayName?user.displayName.split(' ')[0]:(user.email||'').split('@')[0];
-  var gr=getGreeting();
-  var gTitle=document.getElementById('greetingTitle');
-  var gSub=document.getElementById('greetingSub');
-  var logoSub=document.getElementById('logoSub');
-  if(gTitle) gTitle.textContent=gr+', '+nome+'! 📢';
-  if(gSub)   gSub.textContent='Confira as novidades e funcionalidades do app.';
-  if(logoSub) logoSub.textContent=gr+', '+nome;
+function updateTime(){var d=new Date(),el=document.getElementById('updateTime');if(el)el.textContent=d.getHours()+':'+String(d.getMinutes()).padStart(2,'0');}
 
+onAuthStateChanged(auth,async function(user){
+  if(!user){location.href='login.html';return;}
+  updateTime();
   try{
     var snap=await getDoc(doc(db,'usuarios',user.uid));
     var data=snap.exists()?snap.data():{};
     var venc=data.expiracao||data.vencimento||null;
-    mostrarBannerVenc(venc);
-    updatePremiumNav(venc);
-  }catch(e){console.warn('Erro ao carregar dados:',e);}
-
+    mostrarBannerVenc(venc);updatePremiumNav(venc);
+  }catch(e){console.warn('Erro:',e);}
   setTimeout(function(){
     document.querySelectorAll('.feature-skel').forEach(function(el){el.style.display='none'});
     document.querySelectorAll('.feature-card').forEach(function(el){el.style.display='flex'});
-  }, 600);
+  },600);
 });
 </script>
 
-<!-- TOAST -->
-<div class="toast" id="toast"></div>
-
-
 <!-- ══ HEADER ══ -->
 <div class="header" style="padding-bottom:12px">
-  <div class="cl-header-top">
-    <div class="cl-title-block">
+  <div class="av-header-top">
+    <div class="av-title-block">
       <h1>Avisos 📢</h1>
       <p>Novidades e funcionalidades do app</p>
     </div>
-    <div class="cl-header-right">
+    <div class="av-header-right">
       <div class="live-badge" style="margin:0">
-        <div class="live-dot"></div>
+        <div class="live-dot" style="background:var(--yellow);box-shadow:0 0 0 3px var(--yellow-bg)"></div>
         <span id="updateTime">agora</span>
       </div>
     </div>
   </div>
 </div>
 
-
-  
 <!-- ══ CONTENT ══ -->
 <div class="content">
 
-  <!-- Banner plano -->
   <div class="banner-venc" id="bannerVenc" onclick="sdNavigate('config.html')">
     <div class="banner-venc-row">
       <div class="banner-venc-icon" id="bannerIcon">⚠️</div>
@@ -426,22 +205,15 @@ onAuthStateChanged(auth, async function(user){
     </div>
   </div>
 
-
-  <!-- ══ HERO ══ -->
   <div class="coming-hero">
     <div class="ch-top">
       <div class="ch-icon-wrap">📢</div>
-      <div class="ch-badge">
-        <div class="ch-badge-dot"></div>
-        Em desenvolvimento
-      </div>
+      <div class="ch-badge"><div class="ch-badge-dot"></div>Em desenvolvimento</div>
     </div>
     <div class="ch-body">
       <div class="ch-label">Nova funcionalidade</div>
       <div class="ch-title">Central de Avisos</div>
-      <div class="ch-sub">
-        Envie mensagens em massa para todos os seus clientes com um toque. Filtros inteligentes, templates prontos e histórico de envios — tudo integrado ao WhatsApp.
-      </div>
+      <div class="ch-sub">Envie mensagens em massa para todos os seus clientes com um toque. Filtros inteligentes, templates prontos e histórico de envios — tudo integrado ao WhatsApp.</div>
       <div class="ch-footer">
         <div class="ch-pill">⚡ WhatsApp nativo</div>
         <div class="ch-pill">🎯 Filtros avançados</div>
@@ -450,159 +222,47 @@ onAuthStateChanged(auth, async function(user){
     </div>
   </div>
 
-  <!-- ══ FEATURES ══ -->
   <div class="features-section">
-    <div class="section-header">
-      <div class="section-title">O que está chegando</div>
-    </div>
-
-    <div class="feature-skel">
-      <div class="skel-icon skeleton"></div>
-      <div class="skel-body"><div class="skel-line long skeleton"></div><div class="skel-line short skeleton"></div></div>
-    </div>
-    <div class="feature-skel">
-      <div class="skel-icon skeleton"></div>
-      <div class="skel-body"><div class="skel-line long skeleton"></div><div class="skel-line short skeleton"></div></div>
-    </div>
-    <div class="feature-skel">
-      <div class="skel-icon skeleton"></div>
-      <div class="skel-body"><div class="skel-line long skeleton"></div><div class="skel-line short skeleton"></div></div>
-    </div>
-
-    <div class="feature-card fc-purple" style="display:none">
-      <div class="fc-icon-wrap purple">📢</div>
-      <div class="fc-body">
-        <div class="fc-title">Envio em massa via WhatsApp</div>
-        <div class="fc-sub">Selecione todos os clientes ou filtre por grupo e dispare mensagens com um toque. Sem abrir contato por contato.</div>
-      </div>
-      <div class="fc-right"><div class="fc-tag mvp">Em breve</div></div>
-    </div>
-
-    <div class="feature-card fc-accent" style="display:none">
-      <div class="fc-icon-wrap accent">🎯</div>
-      <div class="fc-body">
-        <div class="fc-title">Filtros inteligentes por grupo</div>
-        <div class="fc-sub">Avise só os vencidos, os que vencem hoje, por servidor ou todos de uma vez. Precisão máxima, sem esforço.</div>
-      </div>
-      <div class="fc-right"><div class="fc-tag soon">Em breve</div></div>
-    </div>
-
-    <div class="feature-card fc-green" style="display:none">
-      <div class="fc-icon-wrap green">📝</div>
-      <div class="fc-body">
-        <div class="fc-title">Templates prontos para usar</div>
-        <div class="fc-sub">Mensagens pré-escritas de renovação, aviso de vencimento e comunicados gerais. Edite e salve os seus favoritos.</div>
-      </div>
-      <div class="fc-right"><div class="fc-tag planned">Planejado</div></div>
-    </div>
-
-    <div class="feature-card fc-yellow" style="display:none">
-      <div class="fc-icon-wrap yellow">📊</div>
-      <div class="fc-body">
-        <div class="fc-title">Relatório de envios</div>
-        <div class="fc-sub">Saiba quantas mensagens foram enviadas, quais clientes responderam e acompanhe o histórico de comunicações.</div>
-      </div>
-      <div class="fc-right"><div class="fc-tag planned">Planejado</div></div>
-    </div>
-
-    <div class="feature-card fc-orange" style="display:none">
-      <div class="fc-icon-wrap orange">⏰</div>
-      <div class="fc-body">
-        <div class="fc-title">Agendamento automático</div>
-        <div class="fc-sub">Configure o app para enviar avisos automaticamente X dias antes do vencimento. Sem precisar lembrar de nada.</div>
-      </div>
-      <div class="fc-right"><div class="fc-tag planned">Futuro</div></div>
-    </div>
+    <div class="section-header"><div class="section-title">O que está chegando</div></div>
+    <div class="feature-skel"><div class="skel-icon"></div><div class="skel-body"><div class="skel-line long"></div><div class="skel-line short"></div></div></div>
+    <div class="feature-skel"><div class="skel-icon"></div><div class="skel-body"><div class="skel-line long"></div><div class="skel-line short"></div></div></div>
+    <div class="feature-skel"><div class="skel-icon"></div><div class="skel-body"><div class="skel-line long"></div><div class="skel-line short"></div></div></div>
+    <div class="feature-card fc-purple" style="display:none"><div class="fc-icon-wrap purple">📢</div><div class="fc-body"><div class="fc-title">Envio em massa via WhatsApp</div><div class="fc-sub">Selecione todos os clientes ou filtre por grupo e dispare mensagens com um toque.</div></div><div class="fc-right"><div class="fc-tag mvp">Em breve</div></div></div>
+    <div class="feature-card fc-accent" style="display:none"><div class="fc-icon-wrap accent">🎯</div><div class="fc-body"><div class="fc-title">Filtros inteligentes por grupo</div><div class="fc-sub">Avise só os vencidos, os que vencem hoje, por servidor ou todos de uma vez.</div></div><div class="fc-right"><div class="fc-tag soon">Em breve</div></div></div>
+    <div class="feature-card fc-green" style="display:none"><div class="fc-icon-wrap green">📝</div><div class="fc-body"><div class="fc-title">Templates prontos para usar</div><div class="fc-sub">Mensagens pré-escritas de renovação, aviso de vencimento e comunicados gerais.</div></div><div class="fc-right"><div class="fc-tag planned">Planejado</div></div></div>
+    <div class="feature-card fc-yellow" style="display:none"><div class="fc-icon-wrap yellow">📊</div><div class="fc-body"><div class="fc-title">Relatório de envios</div><div class="fc-sub">Saiba quantas mensagens foram enviadas e acompanhe o histórico de comunicações.</div></div><div class="fc-right"><div class="fc-tag planned">Planejado</div></div></div>
+    <div class="feature-card fc-orange" style="display:none"><div class="fc-icon-wrap orange">⏰</div><div class="fc-body"><div class="fc-title">Agendamento automático</div><div class="fc-sub">Configure o app para enviar avisos automaticamente X dias antes do vencimento.</div></div><div class="fc-right"><div class="fc-tag planned">Futuro</div></div></div>
   </div>
 
-  <!-- ══ ROADMAP ══ -->
   <div style="margin-top:8px">
-    <div class="section-header" style="margin-bottom:12px">
-      <div class="section-title">Roadmap</div>
-    </div>
+    <div class="section-header" style="margin-bottom:12px"><div class="section-title">Roadmap</div></div>
     <div class="roadmap-card">
       <div class="roadmap-title">Progresso do desenvolvimento</div>
-      <div class="roadmap-step">
-        <div class="rs-dot done">✓</div>
-        <div class="rs-body">
-          <div class="rs-label">Gestão de clientes</div>
-          <div class="rs-sub">Cadastro, vencimento e histórico completo</div>
-          <div class="rs-badge done">Lançado</div>
-        </div>
-      </div>
-      <div class="roadmap-step">
-        <div class="rs-dot done">✓</div>
-        <div class="rs-body">
-          <div class="rs-label">Painel financeiro</div>
-          <div class="rs-sub">Receita, despesas e lucro por mês</div>
-          <div class="rs-badge done">Lançado</div>
-        </div>
-      </div>
-      <div class="roadmap-step">
-        <div class="rs-dot current">📢</div>
-        <div class="rs-body">
-          <div class="rs-label">Central de Avisos</div>
-          <div class="rs-sub">Envio em massa e templates de mensagens</div>
-          <div class="rs-badge current">Em desenvolvimento</div>
-        </div>
-      </div>
-      <div class="roadmap-step">
-        <div class="rs-dot next">⏳</div>
-        <div class="rs-body">
-          <div class="rs-label">Agendamento automático</div>
-          <div class="rs-sub">Avisos programados sem intervenção manual</div>
-          <div class="rs-badge next">Próxima fase</div>
-        </div>
-      </div>
+      <div class="roadmap-step"><div class="rs-dot done">✓</div><div class="rs-body"><div class="rs-label">Gestão de clientes</div><div class="rs-sub">Cadastro, vencimento e histórico completo</div><div class="rs-badge done">Lançado</div></div></div>
+      <div class="roadmap-step"><div class="rs-dot done">✓</div><div class="rs-body"><div class="rs-label">Painel financeiro</div><div class="rs-sub">Receita, despesas e lucro por mês</div><div class="rs-badge done">Lançado</div></div></div>
+      <div class="roadmap-step"><div class="rs-dot current">📢</div><div class="rs-body"><div class="rs-label">Central de Avisos</div><div class="rs-sub">Envio em massa e templates de mensagens</div><div class="rs-badge current">Em desenvolvimento</div></div></div>
+      <div class="roadmap-step"><div class="rs-dot next">⏳</div><div class="rs-body"><div class="rs-label">Agendamento automático</div><div class="rs-sub">Avisos programados sem intervenção manual</div><div class="rs-badge next">Próxima fase</div></div></div>
     </div>
   </div>
 
-  <!-- ══ CTA ══ -->
   <div style="margin-top:8px">
     <div class="cta-card" onclick="sdNavigate('index.html')">
       <div class="cta-icon">💬</div>
-      <div class="cta-body">
-        <div class="cta-title">Cobrar clientes agora</div>
-        <div class="cta-sub">Enquanto esta seção chega, use a Home para enviar cobranças via WhatsApp</div>
-      </div>
+      <div class="cta-body"><div class="cta-title">Cobrar clientes agora</div><div class="cta-sub">Enquanto esta seção chega, use a Home para enviar cobranças via WhatsApp</div></div>
       <div class="cta-arrow">›</div>
     </div>
   </div>
 
-</div><!-- /content -->
+</div>
 
 <!-- ══ BOTTOM NAV ══ -->
 <div class="bottom-nav">
-  <div class="nav-item" onclick="sdNavigate('index.html')">
-    <div class="nav-icon">🏠</div>
-    <div class="nav-label">Início</div>
-    <div class="nav-dot"></div>
-  </div>
-  <div class="nav-item" onclick="sdNavigate('clientes.html')">
-    <div class="nav-icon">👥</div>
-    <div class="nav-label">Clientes</div>
-    <div class="nav-dot"></div>
-  </div>
-  <div class="nav-item" onclick="sdNavigate('servidor.html')">
-    <div class="nav-icon">🖥️</div>
-    <div class="nav-label">Servidor</div>
-    <div class="nav-dot"></div>
-  </div>
-  <div class="nav-item" onclick="sdNavigate('financas.html')">
-    <div class="nav-icon">💰</div>
-    <div class="nav-label">Finanças</div>
-    <div class="nav-dot"></div>
-  </div>
-  <div class="nav-item active">
-    <div class="nav-icon">📢</div>
-    <div class="nav-label">Avisos</div>
-    <div class="nav-dot"></div>
-  </div>
-  <div class="nav-item" id="premiumNav" onclick="sdNavigate('config.html')">
-    <div class="nav-icon" id="premiumIcon">⚙️</div>
-    <div class="nav-label" id="premiumLabel">Config.</div>
-    <div class="nav-dot"></div>
-  </div>
+  <div class="nav-item" onclick="sdNavigate('index.html')"><div class="nav-icon">🏠</div><div class="nav-label">Início</div><div class="nav-dot"></div></div>
+  <div class="nav-item" onclick="sdNavigate('clientes.html')"><div class="nav-icon">👥</div><div class="nav-label">Clientes</div><div class="nav-dot"></div></div>
+  <div class="nav-item" onclick="sdNavigate('servidor.html')"><div class="nav-icon">🖥️</div><div class="nav-label">Servidor</div><div class="nav-dot"></div></div>
+  <div class="nav-item" onclick="sdNavigate('financas.html')"><div class="nav-icon">💰</div><div class="nav-label">Finanças</div><div class="nav-dot"></div></div>
+  <div class="nav-item active"><div class="nav-icon">📢</div><div class="nav-label">Avisos</div><div class="nav-dot"></div></div>
+  <div class="nav-item" id="premiumNav" onclick="sdNavigate('config.html')"><div class="nav-icon" id="premiumIcon">⚙️</div><div class="nav-label" id="premiumLabel">Config.</div><div class="nav-dot"></div></div>
 </div>
 
 <script>
