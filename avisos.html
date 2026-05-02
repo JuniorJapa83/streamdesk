@@ -361,9 +361,6 @@ body:not(.dark) .header{background:rgba(245,247,250,.97)!important;border-bottom
 }
 body.dark .bottom-nav{background:rgba(8,11,18,.97)!important;border-top-color:#1c2236!important}
 body:not(.dark) .bottom-nav{background:rgba(245,247,250,.97)!important;border-top-color:#e8ecf2!important}
-body.sd-leaving .content{opacity:0;transform:translateY(6px);transition:opacity .15s ease,transform .15s ease;pointer-events:none;}
-body.sd-leaving .header{opacity:0;transition:opacity .15s ease;}
-.content { animation: fadeIn .3s ease both; }
 
 .nav-item{
   flex:1;display:flex;flex-direction:column;
@@ -399,26 +396,6 @@ body.dark .coming-hero{box-shadow:0 8px 32px rgba(99,102,241,.22)}
 </head>
 
 <body>
-
-  <!-- ══════════════════════════════════════════════════
-     HEADER — topo premium
-══════════════════════════════════════════════════ -->
-<div class="header" style="padding-bottom:12px">
-  <!-- Linha 1: título + badge -->
-  <div class="cl-header-top">
-    <div class="cl-title-block">
-      <h1>Clientes 👥</h1>
-      <p>Gerencie sua base de assinantes</p>
-    </div>
-    <div class="cl-header-right">
-      <div class="live-badge" style="margin:0">
-        <div class="live-dot"></div>
-        <span id="updateTime">agora</span>
-      </div>
-      <div class="total-badge"><strong id="totalCount">—</strong></div>
-    </div>
-  </div>
-    
 <!-- Aplica tema antes de renderizar -->
 <script>
 (function(){
@@ -546,6 +523,18 @@ onAuthStateChanged(auth, async function(user){
         <div class="banner-venc-sub">Toque para renovar sua assinatura</div>
       </div>
       <div class="banner-venc-arrow">›</div>
+    </div>
+  </div>
+
+  <!-- GREETING -->
+  <div class="greeting-row">
+    <div class="greeting-text">
+      <h2 id="greetingTitle">Carregando... 📢</h2>
+      <p id="greetingSub">Novidades e funcionalidades do app.</p>
+    </div>
+    <div class="live-badge">
+      <div class="live-dot"></div>
+      <span>em breve</span>
     </div>
   </div>
 
@@ -720,22 +709,22 @@ onAuthStateChanged(auth, async function(user){
 
 <!-- ══ BOTTOM NAV ══ -->
 <div class="bottom-nav">
-  <div class="nav-item" onclick="sdNavigate('index.html')">
+  <div class="nav-item" onclick="location.href='index.html'">
     <div class="nav-icon">🏠</div>
     <div class="nav-label">Início</div>
     <div class="nav-dot"></div>
   </div>
-  <div class="nav-item" onclick="sdNavigate('clientes.html')">
+  <div class="nav-item" onclick="location.href='clientes.html'">
     <div class="nav-icon">👥</div>
     <div class="nav-label">Clientes</div>
     <div class="nav-dot"></div>
   </div>
-  <div class="nav-item" onclick="sdNavigate('servidor.html')">
+  <div class="nav-item" onclick="location.href='servidor.html'">
     <div class="nav-icon">🖥️</div>
     <div class="nav-label">Servidor</div>
     <div class="nav-dot"></div>
   </div>
-  <div class="nav-item" onclick="sdNavigate('financas.html')">
+  <div class="nav-item" onclick="location.href='financas.html'">
     <div class="nav-icon">💰</div>
     <div class="nav-label">Finanças</div>
     <div class="nav-dot"></div>
@@ -745,7 +734,7 @@ onAuthStateChanged(auth, async function(user){
     <div class="nav-label">Avisos</div>
     <div class="nav-dot"></div>
   </div>
-  <div class="nav-item" id="premiumNav" onclick="sdNavigate('config.html')">
+  <div class="nav-item" id="premiumNav" onclick="location.href='config.html'">
     <div class="nav-icon" id="premiumIcon">⚙️</div>
     <div class="nav-label" id="premiumLabel">Config.</div>
     <div class="nav-dot"></div>
@@ -753,11 +742,6 @@ onAuthStateChanged(auth, async function(user){
 </div>
 
 <script>
-function sdNavigate(url){
-  if(window.location.pathname.endsWith(url))return;
-  document.body.classList.add('sd-leaving');
-  setTimeout(()=>{ window.location.href=url; },160);
-}
 if('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js');
 </script>
 </body>
