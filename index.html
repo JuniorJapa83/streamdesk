@@ -1438,19 +1438,29 @@ async function loadFinancas(user) {
     var docs      = fSnap.docs.map(d=>({id:d.id,...d.data()}));
     var servidores= sSnap.docs.map(d=>({id:d.id,...d.data()}));
 
-    // Helper: custo do servidor (igual ao financas.html original)
-    function getCusto(plat) {
-      var s = servidores.find(x=>x.nome===plat);
-      return s ? parseFloat(s.custo)||0 : 0;
+    // Helper: custo por servidores únicos (mesmo cálculo do financas.html)
+    function calcCustoCorreto(pays) {
+      var ids = new Set();
+      pays.forEach(function(f) {
+        var id = f.servidorId || f.plataforma || null;
+        if (id) ids.add(id);
+      });
+      var custo = 0;
+      ids.forEach(function(id) {
+        var srv = servidores.find(function(s){ return s.id === id; })
+               || servidores.find(function(s){ return (s.nome||'').toLowerCase() === (id||'').toLowerCase(); });
+        custo += parseFloat(srv && srv.custo)||0;
+      });
+      return custo;
     }
 
     // Filtra mês atual (campo 'data' no formato YYYY-MM-DD)
     var mesAtual = docs.filter(d=>d.data && d.data.startsWith(ym));
 
     // Receita = soma de todos os valores do mês
-    // Custo   = soma dos custos do servidor para cada pagamento
+    // Custo   = soma dos custos por servidor único (não por pagamento)
     var receita  = mesAtual.reduce((a,d)=>a+(parseFloat(d.valor)||0), 0);
-    var despesas = mesAtual.reduce((a,d)=>a+getCusto(d.plataforma), 0);
+    var despesas = calcCustoCorreto(mesAtual);
     var lucro    = receita - despesas;
 
     document.getElementById('finReceita').textContent  = fmtBRL(receita);
@@ -1463,7 +1473,7 @@ async function loadFinancas(user) {
     var ym2       = prevMonth.getFullYear()+'-'+String(prevMonth.getMonth()+1).padStart(2,'0');
     var mesAnt    = docs.filter(d=>d.data && d.data.startsWith(ym2));
     var recAnt    = mesAnt.reduce((a,d)=>a+(parseFloat(d.valor)||0), 0);
-    var despAnt   = mesAnt.reduce((a,d)=>a+getCusto(d.plataforma), 0);
+    var despAnt   = calcCustoCorreto(mesAnt);
     var lucroAnt  = recAnt - despAnt;
 
     if (lucroAnt > 0 && lucro !== 0) {
