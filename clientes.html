@@ -991,6 +991,7 @@ body.dark { background: #080b12 !important; }
 <script type="module">
 import * as SD from './sd-core.js';
 import { doc, addDoc, setDoc, deleteDoc } from './sd-core.js';
+  import { EmptyState } from './onboarding.js';
 
 // ── CONSTANTES ───────────────────────────────────────────────
 const PAGE_SIZE = 10;
@@ -1269,28 +1270,13 @@ function renderList() {
 }
 
 function buildEmptyState(query) {
-  if (!S.clientes.length) {
-    return `<div class="cl-empty">
-      <span class="cl-empty-icon">👥</span>
-      <div class="cl-empty-title">Nenhum cliente cadastrado ainda</div>
-      <div class="cl-empty-sub">Adicione seu primeiro assinante e comece a<br>gerenciar sua base com facilidade.</div>
-      <button class="cl-empty-btn" onclick="CL.openModal()">＋ Adicionar cliente</button>
-    </div>`;
-  }
-  if (query) {
-    return `<div class="cl-empty">
-      <span class="cl-empty-icon">🔍</span>
-      <div class="cl-empty-title">Nenhum resultado para "${query}"</div>
-      <div class="cl-empty-sub">Verifique a ortografia ou tente um<br>termo diferente.</div>
-      <button class="cl-empty-btn" onclick="CL.clearSearch()">Limpar busca</button>
-    </div>`;
-  }
-  return `<div class="cl-empty">
-    <span class="cl-empty-icon">📭</span>
-    <div class="cl-empty-title">Nenhum cliente neste filtro</div>
-    <div class="cl-empty-sub">Tente ajustar os filtros acima ou<br>selecione "Todos" para ver sua lista completa.</div>
-    <button class="cl-empty-btn" onclick="CL.setFilterById('todos')">Ver todos</button>
-  </div>`;
+    if (!S.servidores.length)
+    return EmptyState.html('clientes-no-server');
+  if (!S.clientes.length)
+    return EmptyState.html('clientes-empty');
+  if (query)
+    return EmptyState.html('clientes-search');
+  return EmptyState.html('clientes-filter');
 }
 
 // ──────────────────────────────────────────────────────────────
