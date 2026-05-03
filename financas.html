@@ -768,21 +768,14 @@ function getServerName(f) {
   return f.nomeServidor || getSrv(f)?.nome || f.plataforma || '—';
 }
 
-/* ─── CUSTO: por servidores únicos (CORRIGIDO) ─── */
+/* ─── CUSTO: soma custoServidor de cada pagamento (por operação) ─── */
 function calcCustoCorreto(pays) {
-  // Coleta IDs únicos de servidor presentes nos pagamentos do mês
-  const ids = new Set();
-  pays.forEach(f => {
-    const id = f.servidorId || (getSrv(f)?.id) || f.plataforma || null;
-    if(id) ids.add(id);
-  });
-  let custo = 0;
-  ids.forEach(id => {
-    const srv = servidores.find(s => s.id === id)
-              || servidores.find(s => (s.nome||'').toLowerCase() === (id||'').toLowerCase());
-    custo += parseFloat(srv?.custo)||0;
-  });
-  return custo;
+  return pays.reduce((total, f) => {
+    // Usa custoServidor salvo no documento (custo da operação)
+    // Fallback: custo atual do servidor cadastrado
+    const custo = parseFloat(f.custoServidor) || parseFloat(getSrv(f)?.custo) || 0;
+    return total + custo;
+  }, 0);
 }
 
 /* ─── Custo por servidor único (para ranking) ─── */
@@ -908,16 +901,16 @@ function buildRanking(pays) {
     // custo alocado depois
     if(!map[key]) map[key] = {
       id: key, srvId: srv?.id, nome, cor,
-      receita: 0, clientes: 0, srv
+      receita: 0, custoTotal: 0, clientes: 0, srv
     };
     map[key].receita += (f.valor||0);
+    map[key].custoTotal += parseFloat(f.custoServidor) || parseFloat(getSrv(f)?.custo) || 0;
     map[key].clientes++;
   });
 
-  // Calcula custo por servidor único (snapshot do servidor)
+  // Calcula custo por servidor somando custoServidor de cada pagamento
   Object.values(map).forEach(item => {
-    const srv = item.srv || getSrvById(item.srvId);
-    item.custo = parseFloat(srv?.custo)||0;
+    item.custo = item.custoTotal || 0;
     item.lucro = item.receita - item.custo;
     item.margem = item.receita > 0
       ? Math.round((item.lucro/item.receita)*100) : 0;
@@ -932,15 +925,9 @@ servidores.forEach(s => {
   const exists = Object.values(map).find(i => i.id === s.id);
   if (!exists) {
     map[s.id] = {
-      id: s.id,
-      srvId: s.id,
-      nome: s.nome,
-      cor: s.cor || '#999',
-      receita: 0,
-      clientes: 0,
-      custo: parseFloat(s.custo) || 0,
-      lucro: -(parseFloat(s.custo) || 0),
-      margem: 0
+      id: s.id, srvId: s.id, nome: s.nome, cor: s.cor || '#999',
+      receita: 0, custoTotal: 0, clientes: 0,
+      custo: 0, lucro: 0, margem: 0
     };
   }
 });
