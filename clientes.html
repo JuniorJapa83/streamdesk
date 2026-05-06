@@ -315,6 +315,7 @@
 .btn-del   { background: var(--red-bg);     color: var(--red); }
 .btn-wa    { background: rgba(37,211,102,.1); color: #25d366; }
 .btn-renew { background: var(--yellow-bg);  color: var(--yellow); grid-column: 1 / -1; padding: 12px; font-size: 14px; }
+.btn-pagto { background: var(--green-bg);   color: var(--green);  border-color: var(--green-border); grid-column: 1 / -1; padding: 12px; font-size: 14px; }
 
 /* — Botão arquivar (ocupa linha inteira, tom neutro/warning) — */
 .btn-archive {
@@ -898,6 +899,34 @@ body.dark { background: #080b12 !important; }
   </div>
 </div>
 
+<!-- ── Modal: Confirmar Pagamento ── -->
+<div class="modal-overlay" id="pagtoOverlay" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">💰 Confirmar Pagamento</div>
+    <div class="modal-sub">Registre o pagamento sem alterar o vencimento</div>
+    <input type="hidden" id="pagtoId">
+    <div class="renew-info-box" id="pagtoInfo"></div>
+    <div class="form-group">
+      <label class="form-label">Valor Pago (R$)</label>
+      <input class="form-input" id="pagtoValor" type="number" placeholder="0,00" step="0.01">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Forma de Pagamento</label>
+      <select class="form-select" id="pagtoPagamento">
+        <option>PIX</option><option>Dinheiro</option><option>Cartão</option>
+        <option>Transferência</option><option>Outro</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Observação (opcional)</label>
+      <input class="form-input" id="pagtoObs" placeholder="Ex: Pagamento referente ao mês de maio...">
+    </div>
+    <button class="renew-btn" id="btnPagto" onclick="CL.confirmPagto()" style="background:linear-gradient(135deg,#10b981,#059669)">💰 Confirmar Pagamento</button>
+    <button class="cancel-btn" onclick="document.getElementById('pagtoOverlay').classList.remove('open')">Cancelar</button>
+  </div>
+</div>
+
 <!-- ══ MODAL: COBRAR TODOS ══ -->
 <div class="cobrar-overlay" id="cobrarOverlay" onclick="if(event.target===this)CL.closeCobrar()">
   <div class="cobrar-sheet">
@@ -1251,6 +1280,7 @@ function renderList() {
             <button class="det-btn btn-wa"    onclick="CL.sendWA('${c.id}')">📲 WhatsApp</button>
             <button class="det-btn btn-del"   onclick="CL.deleteClient('${c.id}')">🗑️ Excluir</button>
             <button class="det-btn btn-renew" onclick="CL.openRenew('${c.id}')">🔄 Renovar Plano</button>
+            <button class="det-btn btn-pagto" onclick="CL.openPagto('${c.id}')">💰 Confirmar Pagamento</button>
             ${s === 'vencido' ? `<button class="det-btn btn-archive" onclick="CL.arquivarCliente('${c.id}')">🗂️ Arquivar cliente</button>` : ''}
           </div>
         </div>
@@ -1501,6 +1531,54 @@ async function confirmRenew() {
     await loadData();
   } finally {
     btn.disabled = false; btn.textContent = '✓ Confirmar Renovação';
+  }
+}
+
+// ──────────────────────────────────────────────────────────────
+// CONFIRMAR PAGAMENTO (sem alterar vencimento)
+// ──────────────────────────────────────────────────────────────
+function openPagto(id) {
+  const c = S.clientes.find(c => c.id === id);
+  if (!c) return;
+  document.getElementById('pagtoId').value    = id;
+  document.getElementById('pagtoValor').value = c.plano || '';
+  document.getElementById('pagtoObs').value   = '';
+  document.getElementById('pagtoPagamento').value = 'PIX';
+  document.getElementById('pagtoInfo').innerHTML =
+    `<div class="renew-info-name">${c.pais || ''} ${c.nome}</div>
+     <div class="renew-info-sub">${c.plataforma} · Vence em <b>${SD.formatDate(c.vencimento)}</b></div>`;
+  document.getElementById('pagtoOverlay').classList.add('open');
+}
+
+async function confirmPagto() {
+  const id  = document.getElementById('pagtoId').value;
+  const c   = S.clientes.find(c => c.id === id);
+  if (!c) return;
+
+  const val = parseFloat(document.getElementById('pagtoValor').value || '0');
+  if (!val || val <= 0) { toast('⚠️ Informe o valor pago!'); return; }
+
+  const btn = document.getElementById('btnPagto');
+  btn.disabled = true; btn.textContent = 'Salvando...';
+
+  try {
+    await addDoc(fCol(), {
+      data:       SD.today(),
+      cliente:    c.nome,
+      plataforma: c.plataforma,
+      valor:      val,
+      pagamento:  document.getElementById('pagtoPagamento').value,
+      obs:        document.getElementById('pagtoObs').value || `Pagamento confirmado — vence ${SD.formatDate(c.vencimento)}`,
+    });
+    document.getElementById('pagtoOverlay').classList.remove('open');
+    S.openCardId = null;
+    toast('💰 Pagamento registrado com sucesso!');
+    await loadData();
+  } catch(e) {
+    console.error('Erro ao confirmar pagamento:', e);
+    toast('❌ Erro ao registrar pagamento.');
+  } finally {
+    btn.disabled = false; btn.textContent = '💰 Confirmar Pagamento';
   }
 }
 
@@ -1876,6 +1954,7 @@ window.CL = {
   toggleCard, changePage, insightAction,
   openModal, saveClient, editClient, deleteClient,
   openRenew, confirmRenew,
+  openPagto, confirmPagto,
   openCobrar, closeCobrar, cobrarToggleItem, cobrarToggleAll, cobrarEnviar,
   sendWA, startWAQueue, waOpenCurrent, waNext, waClose,
   // ── Arquivamento ──
