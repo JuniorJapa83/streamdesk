@@ -1259,9 +1259,9 @@ function render(clientes, servidores, config) {
     </div>`;
   }).join('');
 
-  // ── ATENÇÃO HOJE (vencidos + hoje + amanhã) — sem arquivados
+  // ── ATENÇÃO HOJE (hoje + amanhã) — sem arquivados, sem vencidos
   var urgent = ativos
-    .filter(c => c.vencimento <= tm)
+    .filter(c => c.vencimento >= t && c.vencimento <= tm)
     .sort((a,b) => a.vencimento.localeCompare(b.vencimento))
     .slice(0, 8);
 
@@ -1272,12 +1272,8 @@ function render(clientes, servidores, config) {
   }
 
   document.getElementById('attentionList').innerHTML = urgent.map(function(c) {
-    var stripeClass = c.vencimento < t ? 'vencido' : c.vencimento === t ? 'hoje' : 'amanha';
-    var statusTxt   = c.vencimento < t ? 'Venceu' : c.vencimento === t ? 'Vence hoje' : 'Vence amanhã';
-    if (c.vencimento < t) {
-      var diff = Math.round((new Date(t.replace(/-/g,'/')) - new Date(c.vencimento.replace(/-/g,'/'))) / 86400000);
-      statusTxt = 'Venceu há ' + diff + 'd';
-    }
+    var stripeClass = c.vencimento === t ? 'hoje' : 'amanha';
+    var statusTxt   = c.vencimento === t ? 'Vence hoje' : 'Vence amanhã';
     var ini  = initials(c.nome);
     var valor = fmtBRL(parseFloat(c.plano)||0);
     return `<div class="att-card">
